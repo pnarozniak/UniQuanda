@@ -14,4 +14,10 @@
     <PackageReference Include="MediatR" Version="10.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="NuGet.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
