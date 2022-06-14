@@ -13,25 +13,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{96A48281-ADF0-42B0-85DE-6B4E90DF13F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniQuanda.Core.Domain", "UniQuanda.Core.Domain\UniQuanda.Core.Domain.csproj", "{C2DA0003-79ED-43B4-8CB0-1728430C5EA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniQuanda.Core.Domain", "UniQuanda.Core.Domain\UniQuanda.Core.Domain.csproj", "{C2DA0003-79ED-43B4-8CB0-1728430C5EA1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D607A687-D1CC-47DA-8DCF-566E45E7D6C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniQuanda.Tests", "UniQuanda.Tests\UniQuanda.Tests.csproj", "{0A029C4C-2A12-4AEB-9609-54156F2F5C6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniQuanda.Tests", "UniQuanda.Tests\UniQuanda.Tests.csproj", "{0A029C4C-2A12-4AEB-9609-54156F2F5C6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniQuanda.Core.Application", "UniQuanda.Core.Application\UniQuanda.Core.Application.csproj", "{5E1023C4-2ADB-49E3-8ED6-1096406C8EBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniQuanda.Core.Application", "UniQuanda.Core.Application\UniQuanda.Core.Application.csproj", "{5E1023C4-2ADB-49E3-8ED6-1096406C8EBA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{3E2465B7-041D-423F-870B-AFE2A145CE5C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{1E79974B-BFA9-49D4-A86E-3BD8F7068CCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniQuanda.Infrastructure.Presistence", "UniQuanda.Infrastructure.Presistence\UniQuanda.Infrastructure.Presistence.csproj", "{C23CEF68-031D-4027-8E3B-8D63694B9297}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniQuanda.Infrastructure.Presistence", "UniQuanda.Infrastructure.Presistence\UniQuanda.Infrastructure.Presistence.csproj", "{C23CEF68-031D-4027-8E3B-8D63694B9297}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniQuanda.Infrastructure", "UniQuanda.Infrastructure\UniQuanda.Infrastructure.csproj", "{441DE02D-85A1-424C-836A-A58B71C18747}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniQuanda.Infrastructure", "UniQuanda.Infrastructure\UniQuanda.Infrastructure.csproj", "{441DE02D-85A1-424C-836A-A58B71C18747}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{6CCAE8E5-2F59-4850-9F60-61466509CFAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniQuanda.Presentation.API", "UniQuanda.Presentation.API\UniQuanda.Presentation.API.csproj", "{FFAA4FAA-17D2-4F30-8814-A1546FCBC2B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniQuanda.Presentation.API", "UniQuanda.Presentation.API\UniQuanda.Presentation.API.csproj", "{FFAA4FAA-17D2-4F30-8814-A1546FCBC2B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
