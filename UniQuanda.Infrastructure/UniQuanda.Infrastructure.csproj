@@ -16,4 +16,10 @@
     <ProjectReference Include="..\UniQuanda.Infrastructure.Presistence\UniQuanda.Infrastructure.Presistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="NuGet.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
