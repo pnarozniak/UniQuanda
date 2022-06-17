@@ -1,5 +1,6 @@
 using MediatR;
 using UniQuanda.Infrastructure;
+using UniQuanda.Infrastructure.Presistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructurePersistence(builder.Configuration);
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
