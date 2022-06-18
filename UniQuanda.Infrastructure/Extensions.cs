@@ -16,6 +16,7 @@ namespace UniQuanda.Infrastructure
         {
             // Options
             services.AddSingleton(new SendGridOptions(configuration));
+            services.AddSingleton(new DataExpirationOptions(configuration));
 
             // Repositories
             services.AddScoped<IQuestionRepository, QuestionRepository>();
@@ -25,6 +26,7 @@ namespace UniQuanda.Infrastructure
             services.AddScoped<IPasswordsService, PasswordsService>();
             services.AddScoped<ITokensService, TokensService>();
             services.AddScoped<IEmailService, SendGridService>();
+            services.AddScoped<IExpirationService, ExpirationService>();
 
             return services;
         }

@@ -12,7 +12,6 @@ namespace UniQuanda.Infrastructure.Presistence
         {
             var authDbOptions = new AuthDbOptions(configuration);
             services.AddSingleton(authDbOptions);
-            services.AddSingleton(new AuthDbDataExpirationOptions(configuration));
 
             services.AddDbContext<AuthDbContext>(options => {
                 options.UseNpgsql(authDbOptions.ConnectionString);
