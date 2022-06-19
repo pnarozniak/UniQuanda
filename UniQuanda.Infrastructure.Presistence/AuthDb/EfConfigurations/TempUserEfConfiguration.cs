@@ -10,9 +10,6 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.EfConfigurations
         {
             builder.HasKey(tu => tu.IdUser);
 
-            builder.Property(tu => tu.Email).HasMaxLength(320).IsRequired();
-            builder.HasIndex(tu => tu.Email).IsUnique();
-
             builder.Property(tu => tu.EmailConfirmationCode).HasMaxLength(6).IsRequired();
 
             builder.Property(tu => tu.ExistsTo).IsRequired();

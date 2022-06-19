@@ -2,7 +2,6 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Models
 {
     public class TempUser
     {
-        public string Email { get; set; }
         public string EmailConfirmationCode { get; set; }
         public DateTime ExistsTo { get; set; }
         public string? FirstName { get; set; }

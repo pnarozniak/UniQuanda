@@ -4,6 +4,7 @@ using UniQuanda.Core.Domain.Entities;
 using UniQuanda.Core.Domain.ValueObjects;
 using UniQuanda.Infrastructure.Presistence.AuthDb;
 using UniQuanda.Infrastructure.Presistence.AuthDb.Models;
+using UserEmail = UniQuanda.Infrastructure.Presistence.AuthDb.Models.UserEmail;
 
 namespace UniQuanda.Infrastructure.Repositories
 {
@@ -17,9 +18,7 @@ namespace UniQuanda.Infrastructure.Repositories
         public async Task<bool> IsEmailUsedAsync(string email)
         {
             return await _authContext.Users
-                .AnyAsync(u => 
-                    EF.Functions.ILike(u.IdTempUserNavigation.Email, email) ||
-                    u.Emails.Any(ue => EF.Functions.ILike(ue.Value, email)));
+                .AnyAsync(u => u.Emails.Any(ue => EF.Functions.ILike(ue.Value, email)));
         }
 
         public async Task<bool> IsNicknameUsedAsync(string nickname)
@@ -36,7 +35,6 @@ namespace UniQuanda.Infrastructure.Repositories
                 HashedPassword = newUser.HashedPassword,
                 IdTempUserNavigation = new TempUser()
                 {
-                    Email = newUser.Email,
                     EmailConfirmationCode = newUser.EmailConfirmationToken,
                     Birthdate = newUser.OptionalInfo.Birthdate,
                     FirstName = newUser.OptionalInfo.FirstName,
@@ -44,13 +42,21 @@ namespace UniQuanda.Infrastructure.Repositories
                     PhoneNumber = newUser.OptionalInfo.PhoneNumber,
                     City = newUser.OptionalInfo.City,
                     ExistsTo = newUser.ExistsTo
+                },
+                Emails = new List<UserEmail>()
+                {
+                    new()
+                    {
+                        IsMain = true,
+                        Value = newUser.Email
+                    }
                 }
             };
 
             try
             {
                 await _authContext.Users.AddAsync(userToRegister);
-                return await _authContext.SaveChangesAsync() >= 2;
+                return await _authContext.SaveChangesAsync() >= 3;
             }
             catch
             {
@@ -61,9 +67,7 @@ namespace UniQuanda.Infrastructure.Repositories
         public async Task<AppUser?> GetUserByEmailAsync(string email)
         {
             var appUser = await _authContext.Users
-                .Where(u =>
-                    EF.Functions.ILike(u.IdTempUserNavigation.Email, email) ||
-                    u.Emails.Any(ue => EF.Functions.ILike(ue.Value, email)))
+                .Where(u => u.Emails.Any(ue => EF.Functions.ILike(ue.Value, email)))
                 .Select(u => new AppUser()
                 {
                     Id = u.Id,
