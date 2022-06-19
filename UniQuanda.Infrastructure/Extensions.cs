@@ -17,6 +17,7 @@ namespace UniQuanda.Infrastructure
             // Options
             services.AddSingleton(new SendGridOptions(configuration));
             services.AddSingleton(new DataExpirationOptions(configuration));
+            services.AddSingleton(new TokensOptions(configuration));
 
             // Repositories
             services.AddScoped<IQuestionRepository, QuestionRepository>();

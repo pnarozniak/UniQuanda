@@ -24,5 +24,21 @@ namespace UniQuanda.Core.Application.Repositories
         /// <param name="newUser">User to add</param>
         /// <returns>True if user has been successfully added to db, otherwise False</returns>
         Task<bool> RegisterNewUserAsync(NewUser newUser);
+
+        /// <summary>
+        /// Gets registered user by e-mail address
+        /// </summary>
+        /// <param name="email">Email by which user will be search</param>
+        /// <returns>User if found, otherwise NULL</returns>
+        Task<AppUser?> GetUserByEmailAsync(string email);
+
+        /// <summary>
+        /// Updates user refresh token
+        /// </summary>
+        /// <param name="idUser">Id of user to update</param>
+        /// <param name="refreshToken">Refresh token to be updated</param>
+        /// <param name="refreshTokenExp">Date and time of refresh token expiration</param>
+        /// <returns>True if refresh token was updated, NULL if user was not found, otherwise False</returns>
+        Task<bool?> UpdateUserRefreshTokenAsync(int idUser, string refreshToken, DateTime refreshTokenExp);
     }
 }

@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Register;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.IsEmailFree;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.IsNicknameFree;
@@ -53,6 +54,23 @@ namespace UniQuanda.Presentation.API.Controllers
             var command = new RegisterCommand(request);
             var isRegistered = await _mediator.Send(command);
             return isRegistered ? StatusCode(StatusCodes.Status201Created) : Conflict();
+        }
+
+        /// <summary>
+        /// Performs login operation and returns JWT access token and refresh token
+        /// </summary>
+        [HttpPost("login")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponseDTO))]
+        public async Task<IActionResult> Login([FromBody] LoginRequestDTO request)
+        {
+            var command = new LoginCommand(request);
+            var loginResult = await _mediator.Send(command);
+            return loginResult.Status switch
+            {
+                LoginResponseDTO.LoginStatus.InvalidCredentials => NotFound(),
+                _ => Ok(loginResult)
+            };
         }
     }
 }
