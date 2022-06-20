@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Register;
-using UniQuanda.Core.Application.CQRS.Queries.Auth.IsEmailFree;
-using UniQuanda.Core.Application.CQRS.Queries.Auth.IsNicknameFree;
+using UniQuanda.Core.Application.CQRS.Queries.Auth.IsEmailAndNicknameAvailable;
 
 namespace UniQuanda.Presentation.API.Controllers
 {
@@ -20,27 +19,15 @@ namespace UniQuanda.Presentation.API.Controllers
         }
 
         /// <summary>
-        /// Checks if given e-mail address is already used by any user
+        /// Checks if given e-mail address and given nickname are already used by any users
         /// </summary>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
-        [HttpPost("is-email-free")]
-        public async Task<IActionResult> IsEmailFree([FromBody] IsEmailFreeRequestDTO request)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IsEmailAndNicknameAvailableResponseDTO))]
+        [HttpGet("is-email-and-nickname-available")]
+        public async Task<IActionResult> IsEmailAndNicknameAvailable([FromQuery] IsEmailAndNicknameAvailableRequestDTO request)
         {
-            var query = new IsEmailFreeQuery(request);
-            var isEmailFree = await _mediator.Send(query);
-            return Ok(isEmailFree);
-        }
-
-        /// <summary>
-        /// Checks if given nickname is already used by any user
-        /// </summary>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
-        [HttpPost("is-nickname-free")]
-        public async Task<IActionResult> IsNicknameFree([FromBody] IsNicknameFreeRequestDTO request)
-        {
-            var query = new IsNicknameFreeQuery(request);
-            var isNicknameFree = await _mediator.Send(query);
-            return Ok(isNicknameFree);
+            var query = new IsEmailAndNicknameAvailableQuery(request);
+            var isEmailAndNicknameAvailable = await _mediator.Send(query);
+            return Ok(isEmailAndNicknameAvailable);
         }
 
         /// <summary>
