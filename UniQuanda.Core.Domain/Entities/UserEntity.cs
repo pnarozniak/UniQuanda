@@ -2,7 +2,7 @@
 
 namespace UniQuanda.Core.Domain.Entities
 {
-    public class AppUser
+    public class UserEntity
     {
         public int Id { get; set; }
         public string Nickname { get; set; }

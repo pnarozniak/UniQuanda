@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UniQuanda.Core.Application.CQRS.Commands.Auth.ConfirmRegister;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Register;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.IsEmailAndNicknameAvailable;
@@ -58,6 +59,19 @@ namespace UniQuanda.Presentation.API.Controllers
                 LoginResponseDTO.LoginStatus.InvalidCredentials => NotFound(),
                 _ => Ok(loginResult)
             };
+        }
+
+        /// <summary>
+        /// Confirms user registration process
+        /// </summary>
+        [HttpPost("confirm-register")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> ConfirmRegister([FromBody] ConfirmRegisterRequestDTO request)
+        {
+            var command = new ConfirmRegisterCommand(request);
+            var isConfirmed = await _mediator.Send(command);
+            return isConfirmed ? NoContent() : NotFound();
         }
     }
 }

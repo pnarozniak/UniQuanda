@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="AppDb\Migrations\" />
     <Folder Include="AuthDb\Migrations\" />
   </ItemGroup>
 </Project>

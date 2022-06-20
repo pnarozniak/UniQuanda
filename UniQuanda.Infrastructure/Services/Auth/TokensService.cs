@@ -32,7 +32,7 @@ namespace UniQuanda.Infrastructure.Services.Auth
             return new Tuple<string, DateTime>(refreshToken, refreshTokenExp);
         }
 
-        public string GenerateAccessToken(AppUser user)
+        public string GenerateAccessToken(UserEntity user)
         {
             var userClaims = new List<Claim>
             {

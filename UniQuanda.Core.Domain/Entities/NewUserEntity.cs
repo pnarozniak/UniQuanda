@@ -2,7 +2,7 @@
 
 namespace UniQuanda.Core.Domain.Entities
 {
-    public class NewUser
+    public class NewUserEntity
     {
         public string Nickname { get; set; }
         public string HashedPassword { get; set; }

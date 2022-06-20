@@ -3,7 +3,7 @@ using UniQuanda.Infrastructure;
 using UniQuanda.Infrastructure.Presistence;
 
 var builder = WebApplication.CreateBuilder(args);
-
+// CORS // JWT
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -13,6 +13,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddInfrastructurePersistence(builder.Configuration);
+/* */
 
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 

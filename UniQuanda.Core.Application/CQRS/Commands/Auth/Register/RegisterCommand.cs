@@ -6,14 +6,14 @@ namespace UniQuanda.Core.Application.CQRS.Commands.Auth.Register
 {
     public class RegisterCommand : IRequest<bool>
     {
-        public NewUser NewUser { get; set; }
+        public NewUserEntity NewUser { get; set; }
         public string PlainPassword { get; set; }
 
         public RegisterCommand(RegisterRequestDTO request)
         {
             this.PlainPassword = request.Password;
             
-            this.NewUser = new NewUser()
+            this.NewUser = new NewUserEntity()
             {
                 Nickname = request.Nickname,
                 Email = request.Email,

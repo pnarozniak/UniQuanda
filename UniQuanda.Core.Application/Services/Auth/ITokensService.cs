@@ -20,6 +20,6 @@ namespace UniQuanda.Core.Application.Services.Auth
         /// Generates access token for given user
         /// </summary>
         /// <returns>Access token as string</returns>
-        string GenerateAccessToken(AppUser user);
+        string GenerateAccessToken(UserEntity user);
     }
 }
