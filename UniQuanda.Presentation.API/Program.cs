@@ -1,20 +1,26 @@
 using MediatR;
 using UniQuanda.Infrastructure;
 using UniQuanda.Infrastructure.Presistence;
+using UniQuanda.Presentation.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-// CORS // JWT
-// Add services to the container.
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Layers
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddInfrastructurePersistence(builder.Configuration);
-/* */
 
+// Configure CORS
+builder.Services.AddCORS(builder.Configuration);
+
+// Configure authentication
+builder.Services.AddJwtBearerAuth(builder.Configuration);
+
+// Configure MediatR
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
@@ -27,6 +33,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCORS();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
