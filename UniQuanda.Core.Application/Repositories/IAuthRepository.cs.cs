@@ -44,9 +44,9 @@ namespace UniQuanda.Core.Application.Repositories
         /// <summary>
         /// Confirms user registration by given confirmation code and e-mail
         /// </summary>
-        /// <param name="requestEmail">E-mail to confirm</param>
-        /// <param name="requestConfirmationCode">E-mail confirmation code</param>
+        /// <param name="email">E-mail to confirm</param>
+        /// <param name="confirmationCode">E-mail confirmation code</param>
         /// <returns>True if user registration has been confirmed successfully, otherwise False</returns>
-        Task<bool> ConfirmUserRegistrationAsync(string requestEmail, string requestConfirmationCode);
+        Task<bool> ConfirmUserRegistrationAsync(string email, string confirmationCode);
     }
 }

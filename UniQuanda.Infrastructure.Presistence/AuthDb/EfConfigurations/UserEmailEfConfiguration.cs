@@ -12,6 +12,7 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.EfConfigurations
             builder.Property(ue => ue.Id).ValueGeneratedOnAdd();
 
             builder.Property(ue => ue.Value).HasMaxLength(320).IsRequired();
+            builder.HasIndex(ue => ue.Value).IsUnique();
 
             builder.Property(ue => ue.IsMain).IsRequired();
         }

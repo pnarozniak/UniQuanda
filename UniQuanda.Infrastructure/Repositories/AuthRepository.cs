@@ -101,12 +101,12 @@ namespace UniQuanda.Infrastructure.Repositories
             return await _authContext.SaveChangesAsync() >= 1;
         }
 
-        public async Task<bool> ConfirmUserRegistrationAsync(string requestEmail, string requestConfirmationCode)
+        public async Task<bool> ConfirmUserRegistrationAsync(string email, string confirmationCode)
         {
             var userToConfirm = await _authContext.Users
                 .Include(u => u.IdTempUserNavigation)
-                .Where(u => EF.Functions.Like(u.IdTempUserNavigation.EmailConfirmationCode, requestConfirmationCode))
-                .Where(u => EF.Functions.ILike(u.Emails.Select(ue => ue.Value).First(), requestEmail))
+                .Where(u => EF.Functions.Like(u.IdTempUserNavigation.EmailConfirmationCode, confirmationCode))
+                .Where(u => EF.Functions.ILike(u.Emails.Select(ue => ue.Value).First(), email))
                 .SingleOrDefaultAsync();
 
             if (userToConfirm is null) return false;
