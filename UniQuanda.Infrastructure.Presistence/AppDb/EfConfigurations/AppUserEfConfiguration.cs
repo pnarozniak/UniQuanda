@@ -13,15 +13,15 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.EfConfigurations
             builder.Property(u => u.Nickname).HasMaxLength(30).IsRequired();
             builder.HasIndex(u => u.Nickname).IsUnique();
 
-            builder.Property(u => u.FirstName).HasMaxLength(30).IsRequired(false);
+            builder.Property(u => u.FirstName).HasMaxLength(35).IsRequired(false);
 
-            builder.Property(u => u.LastName).HasMaxLength(30).IsRequired(false);
+            builder.Property(u => u.LastName).HasMaxLength(51).IsRequired(false);
 
             builder.Property(u => u.Birthdate).IsRequired(false);
 
-            builder.Property(u => u.PhoneNumber).HasMaxLength(9).IsRequired(false);
+            builder.Property(u => u.PhoneNumber).HasMaxLength(22).IsRequired(false);
 
-            builder.Property(u => u.City).HasMaxLength(30).IsRequired(false);
+            builder.Property(u => u.City).HasMaxLength(57).IsRequired(false);
         }
     }
 }

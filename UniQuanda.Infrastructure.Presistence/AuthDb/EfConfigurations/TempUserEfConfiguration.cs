@@ -14,15 +14,15 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.EfConfigurations
 
             builder.Property(tu => tu.ExistsTo).IsRequired();
             
-            builder.Property(tu => tu.FirstName).HasMaxLength(30).IsRequired(false);
+            builder.Property(tu => tu.FirstName).HasMaxLength(35).IsRequired(false);
 
-            builder.Property(tu => tu.LastName).HasMaxLength(30).IsRequired(false);
+            builder.Property(tu => tu.LastName).HasMaxLength(51).IsRequired(false);
 
             builder.Property(tu => tu.Birthdate).IsRequired(false);
 
-            builder.Property(tu => tu.PhoneNumber).HasMaxLength(9).IsRequired(false);
+            builder.Property(tu => tu.PhoneNumber).HasMaxLength(22).IsRequired(false);
             
-            builder.Property(tu => tu.City).HasMaxLength(30).IsRequired(false);
+            builder.Property(tu => tu.City).HasMaxLength(57).IsRequired(false);
         }
     }
 }
