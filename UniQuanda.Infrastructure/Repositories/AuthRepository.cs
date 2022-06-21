@@ -129,5 +129,17 @@ namespace UniQuanda.Infrastructure.Repositories
             await _authContext.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool?> UpdateTempUserEmailConfirmationCodeAsync(string email, string confirmationCode)
+        {
+            var tempUser = await _authContext.TempUsers
+                .Where(tu => EF.Functions.ILike(tu.IdUserNavigation.Emails.Select(e => e.Value).First(), email))
+                .SingleOrDefaultAsync();
+
+            if (tempUser is null) return null;
+
+            tempUser.EmailConfirmationCode = confirmationCode;
+            return await _authContext.SaveChangesAsync() >= 1;
+        }
     }
 }

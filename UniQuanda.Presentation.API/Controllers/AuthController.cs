@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ConfirmRegister;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Register;
+using UniQuanda.Core.Application.CQRS.Commands.Auth.ResendRegisterConfirmationCode;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.IsEmailAndNicknameAvailable;
 
 namespace UniQuanda.Presentation.API.Controllers
@@ -72,6 +73,18 @@ namespace UniQuanda.Presentation.API.Controllers
             var command = new ConfirmRegisterCommand(request);
             var isConfirmed = await _mediator.Send(command);
             return isConfirmed ? NoContent() : NotFound();
+        }
+
+        /// <summary>
+        /// Resets and re-sends e-mail confirmation code for given user
+        /// </summary>
+        [HttpPost("resend-register-confirmation-code")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> ResendRegisterConfirmationCode([FromBody] ResendRegisterConfirmationCodeRequestDTO request)
+        {
+            var command = new ResendRegisterConfirmationCodeCommand(request);
+            await _mediator.Send(command);
+            return NoContent();
         }
     }
 }

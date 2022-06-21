@@ -48,5 +48,13 @@ namespace UniQuanda.Core.Application.Repositories
         /// <param name="confirmationCode">E-mail confirmation code</param>
         /// <returns>True if user registration has been confirmed successfully, otherwise False</returns>
         Task<bool> ConfirmUserRegistrationAsync(string email, string confirmationCode);
+
+        /// <summary>
+        /// Updates TempUser e-mail confirmation code
+        /// </summary>
+        /// <param name="email">E-mail of TempUser to update</param>
+        /// <param name="confirmationCode">E-mail confirmation code to be updated</param>
+        /// <returns>True if confirmation code has been updated successfully, NULL if TempUser was not found, otherwise False</returns>
+        Task<bool?> UpdateTempUserEmailConfirmationCodeAsync(string email, string confirmationCode);
     }
 }
