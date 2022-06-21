@@ -11,7 +11,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Auth.IsEmailAndNicknameAvailab
 
         [Required]
         [MinLength(6)]
-        [MaxLength(32)]
+        [MaxLength(30)]
         public string Nickname { get; set; }
     }
 

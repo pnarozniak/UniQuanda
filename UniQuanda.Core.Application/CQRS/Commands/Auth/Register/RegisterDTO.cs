@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using UniQuanda.Core.Application.Validators;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.Register
 {
@@ -10,9 +11,7 @@ namespace UniQuanda.Core.Application.CQRS.Commands.Auth.Register
         public string Nickname { get; set; }
         
         [Required]
-        [RegularExpression("^.*[A-Z]+[a-z]+[0-9]+.*")]
-        [MinLength(8)]
-        [MaxLength(30)]
+        [PasswordValidator]
         public string Password { get; set; }
 
         [Required]
@@ -20,18 +19,19 @@ namespace UniQuanda.Core.Application.CQRS.Commands.Auth.Register
         [EmailAddress]
         public string Email { get; set; }
 
-        [MaxLength(30)]
+        [MaxLength(35)]
         public string? FirstName { get; set; }
 
-        [MaxLength(30)]
+        [MaxLength(51)]
         public string? LastName { get; set; }
 
+        [DateTimeEarlierThanCurrentValidator]
         public DateTime? Birthdate { get; set; }
 
-        [MaxLength(9)]
+        [MaxLength(22)]
         public string? PhoneNumber { get; set; }
 
-        [MaxLength(30)]
+        [MaxLength(57)]
         public string? City { get; set; }
     }
 }

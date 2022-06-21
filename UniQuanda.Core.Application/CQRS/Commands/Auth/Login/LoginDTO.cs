@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using UniQuanda.Core.Application.Validators;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.Login
 {
@@ -11,9 +12,7 @@ namespace UniQuanda.Core.Application.CQRS.Commands.Auth.Login
 
 
         [Required]
-        [RegularExpression("^.*[A-Z]+[a-z]+[0-9]+.*")]
-        [MinLength(8)]
-        [MaxLength(30)]
+        [PasswordValidator]
         public string Password { get; set; }
     }
 
