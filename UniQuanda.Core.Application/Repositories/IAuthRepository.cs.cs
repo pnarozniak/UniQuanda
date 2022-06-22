@@ -5,14 +5,14 @@ namespace UniQuanda.Core.Application.Repositories
     public interface IAuthRepository
     {
         /// <summary>
-        /// Checks if given e-mail is currently being used by any user
+        /// Checks if given e-mail is currently used by any user
         /// </summary>
         /// <param name="email">E-mail to check</param>
         /// <returns>True if e-mail is already in use, otherwise False</returns>
         Task<bool> IsEmailUsedAsync(string email);
 
         /// <summary>
-        /// Checks if given nickname is currently being used by any user
+        /// Checks if given nickname is currently used by any user
         /// </summary>
         /// <param name="nickname">Nickname to check</param>
         /// <returns>True if nickname is already in use, otherwise False</returns>
@@ -28,7 +28,7 @@ namespace UniQuanda.Core.Application.Repositories
         /// <summary>
         /// Gets registered user by e-mail address
         /// </summary>
-        /// <param name="email">Email by which user will be search</param>
+        /// <param name="email">Email by which user will be searched</param>
         /// <returns>User if found, otherwise NULL</returns>
         Task<UserEntity?> GetUserByEmailAsync(string email);
 

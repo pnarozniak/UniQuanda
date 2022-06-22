@@ -49,8 +49,8 @@ namespace UniQuanda.Presentation.API.Controllers
         /// Performs login operation and returns JWT access token and refresh token
         /// </summary>
         [HttpPost("login")]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponseDTO))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO request)
         {
             var command = new LoginCommand(request);
@@ -67,7 +67,7 @@ namespace UniQuanda.Presentation.API.Controllers
         /// </summary>
         [HttpPost("confirm-register")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ConfirmRegister([FromBody] ConfirmRegisterRequestDTO request)
         {
             var command = new ConfirmRegisterCommand(request);
