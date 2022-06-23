@@ -1,41 +1,41 @@
 ﻿using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Domain.Entities;
 
-namespace UniQuanda.Infrastructure.Repositories
+namespace UniQuanda.Infrastructure.Repositories;
+
+public class QuestionRepository : IQuestionRepository
 {
-    public class QuestionRepository : IQuestionRepository
+    private IEnumerable<Question> questions = new List<Question>
     {
-        private IEnumerable<Question> questions =  new List<Question>()
+        new()
         {
-            new ()
-            {
-                Id = 1,
-                Content = "Siemanko",
-                Title = "Jakis tytul"
-            },
-            new ()
-            {
-                Id = 2,
-                Content = "Elo",
-                Title = "UniQuanda Works"
-            }
-        };
-        public async Task<IEnumerable<Question>> GetQuestionsAsync()
+            Id = 1,
+            Content = "Siemanko",
+            Title = "Jakis tytul"
+        },
+        new()
         {
-            return await Task.FromResult(questions);
+            Id = 2,
+            Content = "Elo",
+            Title = "UniQuanda Works"
         }
+    };
 
-        public async Task<Question> GetQuestionByIdAndTitleAsync(int id, string title)
-        {
-            return await Task.FromResult(questions.FirstOrDefault(q => q.Id == id && q.Title == title));
-        }
+    public async Task<IEnumerable<Question>> GetQuestionsAsync()
+    {
+        return await Task.FromResult(questions);
+    }
 
-        public async Task<bool> AddQuestionAsync(Question question)
-        {
-            var newQuestions = new List<Question>(questions);
-            newQuestions.Add(question);
-            this.questions = newQuestions;
-            return await Task.FromResult(true);
-        }
+    public async Task<Question> GetQuestionByIdAndTitleAsync(int id, string title)
+    {
+        return await Task.FromResult(questions.FirstOrDefault(q => q.Id == id && q.Title == title));
+    }
+
+    public async Task<bool> AddQuestionAsync(Question question)
+    {
+        var newQuestions = new List<Question>(questions);
+        newQuestions.Add(question);
+        questions = newQuestions;
+        return await Task.FromResult(true);
     }
 }

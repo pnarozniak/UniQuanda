@@ -1,11 +1,10 @@
 ﻿using UniQuanda.Core.Domain.Entities;
 
-namespace UniQuanda.Core.Application.Repositories
+namespace UniQuanda.Core.Application.Repositories;
+
+public interface IQuestionRepository
 {
-    public interface IQuestionRepository
-    {
-        Task<IEnumerable<Question>> GetQuestionsAsync();
-        Task<Question> GetQuestionByIdAndTitleAsync(int id, string title);
-        Task<bool> AddQuestionAsync(Question question);
-    }
+    Task<IEnumerable<Question>> GetQuestionsAsync();
+    Task<Question> GetQuestionByIdAndTitleAsync(int id, string title);
+    Task<bool> AddQuestionAsync(Question question);
 }

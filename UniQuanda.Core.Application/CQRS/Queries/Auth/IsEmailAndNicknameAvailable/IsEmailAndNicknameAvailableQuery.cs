@@ -1,15 +1,15 @@
 ﻿using MediatR;
 
-namespace UniQuanda.Core.Application.CQRS.Queries.Auth.IsEmailAndNicknameAvailable
+namespace UniQuanda.Core.Application.CQRS.Queries.Auth.IsEmailAndNicknameAvailable;
+
+public class IsEmailAndNicknameAvailableQuery : IRequest<IsEmailAndNicknameAvailableResponseDTO>
 {
-    public class IsEmailAndNicknameAvailableQuery : IRequest<IsEmailAndNicknameAvailableResponseDTO>
+    public IsEmailAndNicknameAvailableQuery(IsEmailAndNicknameAvailableRequestDTO request)
     {
-        public string Email { get; set; }
-        public string Nickname { get; set; }
-        public IsEmailAndNicknameAvailableQuery(IsEmailAndNicknameAvailableRequestDTO request)
-        {
-            this.Email = request.Email;
-            this.Nickname = request.Nickname;
-        }
+        Email = request.Email;
+        Nickname = request.Nickname;
     }
+
+    public string Email { get; set; }
+    public string Nickname { get; set; }
 }

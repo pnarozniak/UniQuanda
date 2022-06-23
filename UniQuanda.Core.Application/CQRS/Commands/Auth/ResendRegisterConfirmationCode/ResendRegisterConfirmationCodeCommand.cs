@@ -1,13 +1,13 @@
 ﻿using MediatR;
 
-namespace UniQuanda.Core.Application.CQRS.Commands.Auth.ResendRegisterConfirmationCode
+namespace UniQuanda.Core.Application.CQRS.Commands.Auth.ResendRegisterConfirmationCode;
+
+public class ResendRegisterConfirmationCodeCommand : IRequest<bool>
 {
-    public class ResendRegisterConfirmationCodeCommand : IRequest<bool>
+    public ResendRegisterConfirmationCodeCommand(ResendRegisterConfirmationCodeRequestDTO request)
     {
-        public string Email { get; set; }
-        public ResendRegisterConfirmationCodeCommand(ResendRegisterConfirmationCodeRequestDTO request)
-        {
-            this.Email = request.Email;
-        }
+        Email = request.Email;
     }
+
+    public string Email { get; set; }
 }

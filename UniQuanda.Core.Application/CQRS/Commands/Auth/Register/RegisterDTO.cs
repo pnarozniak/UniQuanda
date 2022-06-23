@@ -1,37 +1,29 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using UniQuanda.Core.Application.Validators;
 
-namespace UniQuanda.Core.Application.CQRS.Commands.Auth.Register
+namespace UniQuanda.Core.Application.CQRS.Commands.Auth.Register;
+
+public class RegisterRequestDTO
 {
-    public class RegisterRequestDTO
-    {
-        [Required]
-        [MinLength(6)]
-        [MaxLength(30)]
-        public string Nickname { get; set; }
-        
-        [Required]
-        [PasswordValidator]
-        public string Password { get; set; }
+    [Required]
+    [MinLength(3)]
+    [MaxLength(30)]
+    public string Nickname { get; set; }
 
-        [Required]
-        [MaxLength(320)]
-        [EmailAddress]
-        public string Email { get; set; }
+    [Required] [PasswordValidator] public string Password { get; set; }
 
-        [MaxLength(35)]
-        public string? FirstName { get; set; }
+    [Required]
+    [MaxLength(320)]
+    [EmailAddress]
+    public string Email { get; set; }
 
-        [MaxLength(51)]
-        public string? LastName { get; set; }
+    [MaxLength(35)] public string? FirstName { get; set; }
 
-        [DateTimeEarlierThanCurrentValidator]
-        public DateTime? Birthdate { get; set; }
+    [MaxLength(51)] public string? LastName { get; set; }
 
-        [MaxLength(22)]
-        public string? PhoneNumber { get; set; }
+    [DateTimeEarlierThanCurrentValidator] public DateTime? Birthdate { get; set; }
 
-        [MaxLength(57)]
-        public string? City { get; set; }
-    }
+    [MaxLength(22)] public string? PhoneNumber { get; set; }
+
+    [MaxLength(57)] public string? City { get; set; }
 }

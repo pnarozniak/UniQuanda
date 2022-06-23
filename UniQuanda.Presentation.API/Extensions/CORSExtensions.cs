@@ -1,36 +1,35 @@
 ﻿using UniQuanda.Presentation.API.Options;
 
-namespace UniQuanda.Presentation.API.Extensions
+namespace UniQuanda.Presentation.API.Extensions;
+
+public static class CORSExtensions
 {
-    public static class CORSExtensions
+    private const string PolicyName = "AllowOrigins";
+
+    public static IServiceCollection AddCORS(this IServiceCollection services, IConfiguration configuration)
     {
-        private const string PolicyName = "AllowOrigins";
+        var corsOptions = new CORSOptions(configuration);
+        services.AddSingleton(corsOptions);
 
-        public static IServiceCollection AddCORS(this IServiceCollection services, IConfiguration configuration)
+        services.AddCors(opt =>
         {
-            var corsOptions = new CORSOptions(configuration);
-            services.AddSingleton(corsOptions);
+            opt.AddPolicy(PolicyName,
+                builder =>
+                {
+                    builder.WithOrigins(corsOptions.Url)
+                        .AllowCredentials()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+        });
 
-            services.AddCors(opt =>
-            {
-                opt.AddPolicy(PolicyName,
-                    builder =>
-                    {
-                        builder.WithOrigins(corsOptions.Url)
-                            .AllowCredentials()
-                            .AllowAnyMethod()
-                            .AllowAnyHeader();
-                    });
-            });
+        return services;
+    }
 
-            return services;
-        }
+    public static IApplicationBuilder UseCORS(this IApplicationBuilder app)
+    {
+        app.UseCors(PolicyName);
 
-        public static IApplicationBuilder UseCORS(this IApplicationBuilder app)
-        {
-            app.UseCors(PolicyName);
-
-            return app;
-        }
+        return app;
     }
 }

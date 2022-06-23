@@ -1,15 +1,15 @@
 ﻿using MediatR;
 
-namespace UniQuanda.Core.Application.CQRS.Commands.Auth.Login
+namespace UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
+
+public class LoginCommand : IRequest<LoginResponseDTO>
 {
-    public class LoginCommand : IRequest<LoginResponseDTO>
+    public LoginCommand(LoginRequestDTO request)
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public LoginCommand(LoginRequestDTO request)
-        {
-            this.Email = request.Email;
-            this.Password = request.Password;
-        }
+        Email = request.Email;
+        Password = request.Password;
     }
+
+    public string Email { get; set; }
+    public string Password { get; set; }
 }
