@@ -9,5 +9,5 @@ public class NewUserEntity
     public UserOptionalInfo OptionalInfo { get; set; }
     public string Email { get; set; }
     public string EmailConfirmationToken { get; set; }
-    public DateTime ExistsTo { get; set; }
+    public DateTime ExistsUntil { get; set; }
 }

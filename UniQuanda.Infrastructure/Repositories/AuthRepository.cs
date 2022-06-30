@@ -46,7 +46,7 @@ public class AuthRepository : IAuthRepository
                 LastName = newUser.OptionalInfo.LastName,
                 PhoneNumber = newUser.OptionalInfo.PhoneNumber,
                 City = newUser.OptionalInfo.City,
-                ExistsTo = newUser.ExistsTo
+                ExistsUntil = newUser.ExistsUntil
             },
             Emails = new List<UserEmail>
             {

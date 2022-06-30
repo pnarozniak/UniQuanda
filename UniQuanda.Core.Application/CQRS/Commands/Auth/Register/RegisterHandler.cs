@@ -33,7 +33,7 @@ public class RegisterHandler : IRequestHandler<RegisterCommand, bool>
 
         request.NewUser.EmailConfirmationToken = confirmationToken;
         request.NewUser.HashedPassword = _passwordsService.HashPassword(request.PlainPassword);
-        request.NewUser.ExistsTo = DateTime.UtcNow.AddHours(_expirationService.GetNewUserExpirationInHours());
+        request.NewUser.ExistsUntil = DateTime.UtcNow.AddHours(_expirationService.GetNewUserExpirationInHours());
 
         var isRegistered = await _authRepository.RegisterNewUserAsync(request.NewUser);
         if (!isRegistered)

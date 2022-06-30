@@ -12,7 +12,7 @@ public class TempUserEfConfiguration : IEntityTypeConfiguration<TempUser>
 
         builder.Property(tu => tu.EmailConfirmationCode).HasMaxLength(6).IsRequired();
 
-        builder.Property(tu => tu.ExistsTo).IsRequired();
+        builder.Property(tu => tu.ExistsUntil).IsRequired();
 
         builder.Property(tu => tu.FirstName).HasMaxLength(35).IsRequired(false);
 
