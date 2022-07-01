@@ -20,7 +20,6 @@ public static class Extensions
         services.AddSingleton(new TokensOptions(configuration));
 
         // Repositories
-        services.AddScoped<IQuestionRepository, QuestionRepository>();
         services.AddScoped<IAuthRepository, AuthRepository>();
 
         // Services
