@@ -8,9 +8,18 @@ public class PasswordValidator : ValidationAttribute
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
         if (value is null)
-            return null;
+            return ValidationResult.Success;
 
-        var password = (string)value;
+        string password;
+        try
+        { 
+            password = (string)value;
+        }
+        catch
+        {
+            return new ValidationResult("The type of field Password can't be recognized and converted to string.");
+        }
+
         if (password.Length < 8)
             return new ValidationResult("The field Password must be a string with a minimum length of '8'.");
 
