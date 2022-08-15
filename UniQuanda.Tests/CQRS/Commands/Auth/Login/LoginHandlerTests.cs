@@ -66,6 +66,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
             result.AccessToken.Should().NotBeNull();
             result.RefreshToken.Should().NotBeNull();
             result.Nickname.Should().NotBeNull();
+            result.Avatar.Should().BeNull();
         }
 
         [Test]
@@ -79,6 +80,10 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
             var result = await loginHandler.Handle(this.loginCommand, CancellationToken.None);
 
             result.Status.Should().Be(LoginResponseDTO.LoginStatus.InvalidCredentials);
+            result.AccessToken.Should().BeNull();
+            result.RefreshToken.Should().BeNull();
+            result.Nickname.Should().BeNull();
+            result.Avatar.Should().BeNull();
         }
 
         [Test]
@@ -95,6 +100,10 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
             var result = await loginHandler.Handle(this.loginCommand, CancellationToken.None);
 
             result.Status.Should().Be(LoginResponseDTO.LoginStatus.InvalidCredentials);
+            result.AccessToken.Should().BeNull();
+            result.RefreshToken.Should().BeNull();
+            result.Nickname.Should().BeNull();
+            result.Avatar.Should().BeNull();
         }
 
         [Test]
@@ -111,6 +120,10 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
             var result = await loginHandler.Handle(this.loginCommand, CancellationToken.None);
 
             result.Status.Should().Be(LoginResponseDTO.LoginStatus.EmailNotConfirmed);
+            result.AccessToken.Should().BeNull();
+            result.RefreshToken.Should().BeNull();
+            result.Nickname.Should().BeNull();
+            result.Avatar.Should().BeNull();
         }
 
         private void SetupLoginCommand()
