@@ -20,7 +20,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
         private const string UserEmail = "email@email.com";
         private const string PlainPassword = "PlainPassword";
         private const string HashedPassword = "HashedPassword";
-        private readonly DateTime _expirationRefreshTokne = new DateTime().AddDays(1);
+        private readonly DateTime _expirationRefreshToken = new DateTime().AddDays(1);
 
         private LoginHandler loginHandler;
         private LoginCommand loginCommand;
@@ -41,7 +41,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
                 .Returns(AccessToken);
             this.tokensService
                 .Setup(ts => ts.GenerateRefreshToken())
-                .Returns(new Tuple<string, DateTime>(RefreshToken, _expirationRefreshTokne));
+                .Returns(new Tuple<string, DateTime>(RefreshToken, _expirationRefreshToken));
 
             this.loginHandler = new LoginHandler(this.authRepository.Object, this.passwordsService.Object, this.tokensService.Object);
         }
