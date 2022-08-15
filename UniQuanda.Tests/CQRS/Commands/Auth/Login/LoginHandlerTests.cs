@@ -51,13 +51,13 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
         {
             var userEntity = GetUserEntity();
             this.passwordsService
-                .Setup(ps => ps.VerifyPassword(It.Is<string>(s => s == PlainPassword), It.Is<string>(s => s == HashedPassword)))
+                .Setup(ps => ps.VerifyPassword(PlainPassword, HashedPassword))
                 .Returns(true);
             this.authRepository
-                .Setup(ar => ar.GetUserByEmailAsync(It.Is<string>(s => s == UserEmail)))
+                .Setup(ar => ar.GetUserByEmailAsync(UserEmail, CancellationToken.None))
                 .ReturnsAsync(userEntity);
             this.authRepository
-                .Setup(ar => ar.UpdateUserRefreshTokenAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<DateTime>()))
+                .Setup(ar => ar.UpdateUserRefreshTokenAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<DateTime>(), CancellationToken.None))
                 .ReturnsAsync(true);
 
             var result = await loginHandler.Handle(this.loginCommand, CancellationToken.None);
@@ -73,7 +73,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
         {
             UserEntity? userEntity = null;
             this.authRepository
-                .Setup(ar => ar.GetUserByEmailAsync(It.Is<string>(s => s == UserEmail)))
+                .Setup(ar => ar.GetUserByEmailAsync(UserEmail, CancellationToken.None))
                 .ReturnsAsync(userEntity);
 
             var result = await loginHandler.Handle(this.loginCommand, CancellationToken.None);
@@ -86,10 +86,10 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
         {
             var userEntity = GetUserEntity();
             this.authRepository
-                .Setup(ar => ar.GetUserByEmailAsync(It.Is<string>(s => s == UserEmail)))
+                .Setup(ar => ar.GetUserByEmailAsync(UserEmail, CancellationToken.None))
                 .ReturnsAsync(userEntity);
             this.passwordsService
-                .Setup(ps => ps.VerifyPassword(It.Is<string>(s => s == PlainPassword), It.Is<string>(s => s == HashedPassword)))
+                .Setup(ps => ps.VerifyPassword(PlainPassword,HashedPassword))
                 .Returns(false);
 
             var result = await loginHandler.Handle(this.loginCommand, CancellationToken.None);
@@ -102,10 +102,10 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
         {
             var userEntity = GetUserEntity(false);
             this.authRepository
-                .Setup(ar => ar.GetUserByEmailAsync(It.Is<string>(s => s == UserEmail)))
+                .Setup(ar => ar.GetUserByEmailAsync(UserEmail, CancellationToken.None))
                 .ReturnsAsync(userEntity);
             this.passwordsService
-                .Setup(ps => ps.VerifyPassword(It.Is<string>(s => s == PlainPassword), It.Is<string>(s => s == HashedPassword)))
+                .Setup(ps => ps.VerifyPassword(PlainPassword, HashedPassword))
                 .Returns(true);
 
             var result = await loginHandler.Handle(this.loginCommand, CancellationToken.None);

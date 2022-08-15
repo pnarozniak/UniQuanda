@@ -41,7 +41,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Register
                 .Setup(ts => ts.GenerateEmailConfirmationToken())
                 .Returns(EmailConfirmationToken);
             this.passwordsService
-                .Setup(ps => ps.HashPassword(It.Is<string>(s => s == PlainPassword)))
+                .Setup(ps => ps.HashPassword(PlainPassword))
                 .Returns(HashedPassword);
             this.expirationService
                 .Setup(es => es.GetNewUserExpirationInHours())
@@ -54,7 +54,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Register
         public async Task Register_ShouldReturnTrue_WhenRequestDataAreValid()
         {
             this.authRepository
-                .Setup(ar => ar.RegisterNewUserAsync(It.IsAny<NewUserEntity>()))
+                .Setup(ar => ar.RegisterNewUserAsync(It.IsAny<NewUserEntity>(), CancellationToken.None))
                 .ReturnsAsync(true);
 
             var result = await registerHandler.Handle(this.registerCommand, CancellationToken.None);
@@ -66,7 +66,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Register
         public async Task Register_ShouldReturnTrue_WhenUserIsAlreadyRegistered()
         {
             this.authRepository
-                .Setup(ar => ar.RegisterNewUserAsync(It.IsAny<NewUserEntity>()))
+                .Setup(ar => ar.RegisterNewUserAsync(It.IsAny<NewUserEntity>(), CancellationToken.None))
                 .ReturnsAsync(false);
 
             var result = await registerHandler.Handle(this.registerCommand, CancellationToken.None);

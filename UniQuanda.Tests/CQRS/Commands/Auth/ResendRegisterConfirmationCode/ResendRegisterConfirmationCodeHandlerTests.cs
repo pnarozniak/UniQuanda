@@ -41,7 +41,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ResendRegisterConfirmationCode
         public async Task ResendRegisterConfirmationCode_ShouldReturnTrue_WhenUpdateIsSuccesful()
         {
             this.authRepository
-                .Setup(ar => ar.UpdateTempUserEmailConfirmationCodeAsync(It.Is<string>(s => s == UserEmail), It.Is<string>(s => s == EmailConfirmationToken)))
+                .Setup(ar => ar.UpdateTempUserEmailConfirmationCodeAsync(UserEmail, EmailConfirmationToken, CancellationToken.None))
                 .ReturnsAsync(true);
 
             var result = await resendRegisterConfirmationCodeHandler.Handle(this.resendRegisterConfirmationCodeCommand, CancellationToken.None);
@@ -52,7 +52,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ResendRegisterConfirmationCode
         public async Task ResendRegisterConfirmationCode_ShouldReturnTrue_WhenTempUserNotFinded()
         {
             this.authRepository
-                .Setup(ar => ar.UpdateTempUserEmailConfirmationCodeAsync(It.Is<string>(s => s == UserEmail), It.Is<string>(s => s == EmailConfirmationToken)))
+                .Setup(ar => ar.UpdateTempUserEmailConfirmationCodeAsync(UserEmail, EmailConfirmationToken, CancellationToken.None))
                 .ReturnsAsync((bool?)null);
 
             var result = await resendRegisterConfirmationCodeHandler.Handle(this.resendRegisterConfirmationCodeCommand, CancellationToken.None);
@@ -64,7 +64,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ResendRegisterConfirmationCode
         public async Task ResendRegisterConfirmationCode_ShouldReturnTrue_WhenUpdateEmailConfirmationCodeIsNotSuccessful()
         {
             this.authRepository
-                .Setup(ar => ar.UpdateTempUserEmailConfirmationCodeAsync(It.Is<string>(s => s == UserEmail), It.Is<string>(s => s == EmailConfirmationToken)))
+                .Setup(ar => ar.UpdateTempUserEmailConfirmationCodeAsync(UserEmail, EmailConfirmationToken, CancellationToken.None))
                 .ReturnsAsync(false);
 
             var result = await resendRegisterConfirmationCodeHandler.Handle(this.resendRegisterConfirmationCodeCommand, CancellationToken.None);
