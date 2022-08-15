@@ -12,8 +12,8 @@ public class ConfirmRegisterHandler : IRequestHandler<ConfirmRegisterCommand, bo
         _authRepository = authRepository;
     }
 
-    public async Task<bool> Handle(ConfirmRegisterCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(ConfirmRegisterCommand request, CancellationToken ct)
     {
-        return await _authRepository.ConfirmUserRegistrationAsync(request.Email, request.ConfirmationCode);
+        return await _authRepository.ConfirmUserRegistrationAsync(request.Email, request.ConfirmationCode, ct);
     }
 }

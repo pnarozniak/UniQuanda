@@ -27,7 +27,7 @@ public class RegisterHandler : IRequestHandler<RegisterCommand, bool>
         _expirationService = expirationService;
     }
 
-    public async Task<bool> Handle(RegisterCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(RegisterCommand request, CancellationToken ct)
     {
         var confirmationToken = _tokensService.GenerateEmailConfirmationToken();
 
@@ -35,7 +35,7 @@ public class RegisterHandler : IRequestHandler<RegisterCommand, bool>
         request.NewUser.HashedPassword = _passwordsService.HashPassword(request.PlainPassword);
         request.NewUser.ExistsUntil = DateTime.UtcNow.AddHours(_expirationService.GetNewUserExpirationInHours());
 
-        var isRegistered = await _authRepository.RegisterNewUserAsync(request.NewUser);
+        var isRegistered = await _authRepository.RegisterNewUserAsync(request.NewUser, ct);
         if (!isRegistered)
             return false;
 

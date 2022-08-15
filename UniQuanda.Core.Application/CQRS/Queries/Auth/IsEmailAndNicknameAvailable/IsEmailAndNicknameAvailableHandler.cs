@@ -15,12 +15,12 @@ public class
     }
 
     public async Task<IsEmailAndNicknameAvailableResponseDTO> Handle(IsEmailAndNicknameAvailableQuery request,
-        CancellationToken cancellationToken)
+        CancellationToken ct)
     {
         return new IsEmailAndNicknameAvailableResponseDTO
         {
-            IsEmailAvailable = !await _authRepository.IsEmailUsedAsync(request.Email),
-            IsNicknameAvailable = !await _authRepository.IsNicknameUsedAsync(request.Nickname)
+            IsEmailAvailable = !await _authRepository.IsEmailUsedAsync(request.Email, ct),
+            IsNicknameAvailable = !await _authRepository.IsNicknameUsedAsync(request.Nickname, ct)
         };
     }
 }

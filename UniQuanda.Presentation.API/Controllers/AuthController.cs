@@ -27,10 +27,11 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IsEmailAndNicknameAvailableResponseDTO))]
     [HttpGet("is-email-and-nickname-available")]
     public async Task<IActionResult> IsEmailAndNicknameAvailable(
-        [FromQuery] IsEmailAndNicknameAvailableRequestDTO request)
+        [FromQuery] IsEmailAndNicknameAvailableRequestDTO request,
+        CancellationToken ct)
     {
         var query = new IsEmailAndNicknameAvailableQuery(request);
-        var isEmailAndNicknameAvailable = await _mediator.Send(query);
+        var isEmailAndNicknameAvailable = await _mediator.Send(query, ct);
         return Ok(isEmailAndNicknameAvailable);
     }
 
@@ -40,10 +41,12 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> Register([FromBody] RegisterRequestDTO request)
+    public async Task<IActionResult> Register(
+        [FromBody] RegisterRequestDTO request,
+        CancellationToken ct)
     {
         var command = new RegisterCommand(request);
-        var isRegistered = await _mediator.Send(command);
+        var isRegistered = await _mediator.Send(command, ct);
         return isRegistered ? StatusCode(StatusCodes.Status201Created) : Conflict();
     }
 
@@ -53,10 +56,12 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponseDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Login([FromBody] LoginRequestDTO request)
+    public async Task<IActionResult> Login(
+        [FromBody] LoginRequestDTO request,
+        CancellationToken ct)
     {
         var command = new LoginCommand(request);
-        var loginResult = await _mediator.Send(command);
+        var loginResult = await _mediator.Send(command, ct);
         return loginResult.Status switch
         {
             LoginResponseDTO.LoginStatus.InvalidCredentials => NotFound(),
@@ -70,10 +75,12 @@ public class AuthController : ControllerBase
     [HttpPost("confirm-register")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> ConfirmRegister([FromBody] ConfirmRegisterRequestDTO request)
+    public async Task<IActionResult> ConfirmRegister(
+        [FromBody] ConfirmRegisterRequestDTO request,
+        CancellationToken ct)
     {
         var command = new ConfirmRegisterCommand(request);
-        var isConfirmed = await _mediator.Send(command);
+        var isConfirmed = await _mediator.Send(command, ct);
         return isConfirmed ? NoContent() : NotFound();
     }
 
@@ -83,10 +90,11 @@ public class AuthController : ControllerBase
     [HttpPost("resend-register-confirmation-code")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> ResendRegisterConfirmationCode(
-        [FromBody] ResendRegisterConfirmationCodeRequestDTO request)
+        [FromBody] ResendRegisterConfirmationCodeRequestDTO request,
+        CancellationToken ct)
     {
         var command = new ResendRegisterConfirmationCodeCommand(request);
-        await _mediator.Send(command);
+        await _mediator.Send(command, ct);
         return NoContent();
     }
 }
