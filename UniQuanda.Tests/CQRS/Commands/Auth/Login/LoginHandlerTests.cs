@@ -94,7 +94,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
                 .Setup(ar => ar.GetUserByEmailAsync(UserEmail, CancellationToken.None))
                 .ReturnsAsync(userEntity);
             this.passwordsService
-                .Setup(ps => ps.VerifyPassword(PlainPassword,HashedPassword))
+                .Setup(ps => ps.VerifyPassword(PlainPassword, HashedPassword))
                 .Returns(false);
 
             var result = await loginHandler.Handle(this.loginCommand, CancellationToken.None);
