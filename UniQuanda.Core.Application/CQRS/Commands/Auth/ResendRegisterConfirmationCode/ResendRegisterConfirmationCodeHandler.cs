@@ -21,10 +21,11 @@ public class ResendRegisterConfirmationCodeHandler : IRequestHandler<ResendRegis
         _tokensService = tokensService;
     }
 
-    public async Task<bool> Handle(ResendRegisterConfirmationCodeCommand command, CancellationToken cancellationToken)
+    public async Task<bool> Handle(ResendRegisterConfirmationCodeCommand command, CancellationToken ct)
     {
         var confirmationCode = _tokensService.GenerateEmailConfirmationToken();
-        var isUpdated = await _authRepository.UpdateTempUserEmailConfirmationCodeAsync(command.Email, confirmationCode);
+        var isUpdated =
+            await _authRepository.UpdateTempUserEmailConfirmationCodeAsync(command.Email, confirmationCode, ct);
         if (isUpdated is null or false) return false;
 
         await _emailService.SendRegisterConfirmationEmailAsync(command.Email, confirmationCode);

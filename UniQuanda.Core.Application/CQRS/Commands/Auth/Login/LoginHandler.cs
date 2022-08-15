@@ -20,9 +20,9 @@ public class LoginHandler : IRequestHandler<LoginCommand, LoginResponseDTO>
         _tokensService = tokensService;
     }
 
-    public async Task<LoginResponseDTO> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<LoginResponseDTO> Handle(LoginCommand request, CancellationToken ct)
     {
-        var appUser = await _authRepository.GetUserByEmailAsync(request.Email);
+        var appUser = await _authRepository.GetUserByEmailAsync(request.Email, ct);
         if (appUser is null || !_passwordsService.VerifyPassword(request.Password, appUser.HashedPassword))
             return new LoginResponseDTO
             {
@@ -37,7 +37,7 @@ public class LoginHandler : IRequestHandler<LoginCommand, LoginResponseDTO>
 
         var accessToken = _tokensService.GenerateAccessToken(appUser);
         var (refreshToken, refreshTokenExp) = _tokensService.GenerateRefreshToken();
-        await _authRepository.UpdateUserRefreshTokenAsync(appUser.Id, refreshToken, refreshTokenExp);
+        await _authRepository.UpdateUserRefreshTokenAsync(appUser.Id, refreshToken, refreshTokenExp, ct);
 
         return new LoginResponseDTO
         {
