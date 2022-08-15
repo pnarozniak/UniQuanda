@@ -140,14 +140,14 @@ public class AuthRepository : IAuthRepository
             await _authContext.SaveChangesAsync(ct);
 
             await tran.CommitAsync(ct);
+            return true;
         }
-        catch
+        catch (Exception exc)
         {
             await tran.RollbackAsync(ct);
+            if (exc.InnerException is OperationCanceledException) throw;
             return false;
         }
-
-        return true;
     }
 
     public async Task<bool?> UpdateTempUserEmailConfirmationCodeAsync(string email, string confirmationCode,
