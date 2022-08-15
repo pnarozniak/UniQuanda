@@ -144,6 +144,7 @@ public class AuthRepository : IAuthRepository
         catch
         {
             await tran.RollbackAsync(ct);
+            return false;
         }
 
         return true;
