@@ -1,15 +1,26 @@
 using MediatR;
 using UniQuanda.Infrastructure;
+using UniQuanda.Infrastructure.Presistence;
+using UniQuanda.Presentation.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddInfrastructure();
+
+// Layers
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddInfrastructurePersistence(builder.Configuration);
+
+// Configure CORS
+builder.Services.AddCORS(builder.Configuration);
+
+// Configure authentication
+builder.Services.AddJwtBearerAuth(builder.Configuration);
+
+// Configure MediatR
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
@@ -21,7 +32,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (app.Environment.IsProduction())
+{
+    app.UseHttpsRedirection();
+}
+
+app.UseCORS();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
