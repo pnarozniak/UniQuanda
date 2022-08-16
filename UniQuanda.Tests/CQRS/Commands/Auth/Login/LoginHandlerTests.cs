@@ -9,6 +9,7 @@ using UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Entities;
+using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
 {
@@ -18,6 +19,8 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
         private const string AccessToken = "AccessToken";
         private const string RefreshToken = "RefreshToken";
         private const string UserEmail = "email@email.com";
+        private const string Nickname = "Nickname";
+        private const string Avatar = "AvatarUrl";
         private const string PlainPassword = "PlainPassword";
         private const string HashedPassword = "HashedPassword";
         private readonly DateTime _expirationRefreshToken = new DateTime().AddDays(1);
@@ -63,10 +66,10 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
             var result = await loginHandler.Handle(this.loginCommand, CancellationToken.None);
 
             result.Status.Should().Be(LoginResponseDTO.LoginStatus.Success);
-            result.AccessToken.Should().NotBeNull();
-            result.RefreshToken.Should().NotBeNull();
-            result.Nickname.Should().NotBeNull();
-            result.Avatar.Should().BeNull();
+            result.AccessToken.Should().Be(AccessToken);
+            result.RefreshToken.Should().Be(RefreshToken);
+            result.Nickname.Should().Be(Nickname);
+            result.Avatar.Should().Be(Avatar);
         }
 
         [Test]
@@ -141,10 +144,14 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
             return new()
             {
                 Id = 1,
-                Nickname = "Nickname",
+                Nickname = Nickname,
                 HashedPassword = HashedPassword,
                 Emails = new List<string>() { UserEmail },
-                IsEmailConfirmed = isEmailConfirmed
+                IsEmailConfirmed = isEmailConfirmed,
+                OptionalInfo = new UserOptionalInfo
+                {
+                    Avatar = Avatar
+                }
             };
         }
     }
