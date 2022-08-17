@@ -18,6 +18,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D607A687-D1CC-47DA-8DCF-566E45E7D6C5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniQuanda.Tests", "UniQuanda.Tests\UniQuanda.Tests.csproj", "{0A029C4C-2A12-4AEB-9609-54156F2F5C6F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{441DE02D-85A1-424C-836A-A58B71C18747} = {441DE02D-85A1-424C-836A-A58B71C18747}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniQuanda.Core.Application", "UniQuanda.Core.Application\UniQuanda.Core.Application.csproj", "{5E1023C4-2ADB-49E3-8ED6-1096406C8EBA}"
 EndProject
