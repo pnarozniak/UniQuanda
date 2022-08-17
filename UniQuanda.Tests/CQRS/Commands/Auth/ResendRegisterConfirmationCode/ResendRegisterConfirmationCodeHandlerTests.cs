@@ -49,7 +49,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ResendRegisterConfirmationCode
             result.Should().Be(true);
         }
         [Test]
-        public async Task ResendRegisterConfirmationCode_ShouldReturnTrue_WhenTempUserNotFinded()
+        public async Task ResendRegisterConfirmationCode_ShouldReturnFalse_WhenTempUserNotFinded()
         {
             this.authRepository
                 .Setup(ar => ar.UpdateTempUserEmailConfirmationCodeAsync(UserEmail, EmailConfirmationToken, CancellationToken.None))
@@ -61,7 +61,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ResendRegisterConfirmationCode
         }
 
         [Test]
-        public async Task ResendRegisterConfirmationCode_ShouldReturnTrue_WhenUpdateEmailConfirmationCodeIsNotSuccessful()
+        public async Task ResendRegisterConfirmationCode_ShouldReturnFalse_WhenUpdateEmailConfirmationCodeIsNotSuccessful()
         {
             this.authRepository
                 .Setup(ar => ar.UpdateTempUserEmailConfirmationCodeAsync(UserEmail, EmailConfirmationToken, CancellationToken.None))

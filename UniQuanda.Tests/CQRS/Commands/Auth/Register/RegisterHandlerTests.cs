@@ -63,7 +63,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Register
         }
 
         [Test]
-        public async Task Register_ShouldReturnTrue_WhenUserIsAlreadyRegistered()
+        public async Task Register_ShouldReturnFalse_WhenUserIsAlreadyRegistered()
         {
             this.authRepository
                 .Setup(ar => ar.RegisterNewUserAsync(It.IsAny<NewUserEntity>(), CancellationToken.None))
