@@ -1,0 +1,13 @@
+﻿namespace UniQuanda.Infrastructure.Presistence.AppDb.Models;
+
+public class Answer
+{
+    public int Id { get; set; }
+    public int ParentQuestionId { get; set; }
+    public int? ParentAnswerId { get; set; }
+    public bool IsDeleted { get; set; }
+    public virtual Question ParentQuestionIdNavigation { get; set; }
+    public virtual Answer? ParentIdNavigation { get; set; }
+    public virtual ICollection<Answer> Comments { get; set; }
+    public virtual ICollection<AppUserAnswerInteraction> AppUsersAnswerInteractions { get; set; }
+}
