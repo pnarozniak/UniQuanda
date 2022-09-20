@@ -6,6 +6,6 @@ public class UserPointsInTag
     public int AppUserId { get; set; }
     public int TagId { get; set; }
     public int Points { get; set; }
-    public virtual Tag ParentTagIdNavigation { get; set; }
+    public virtual Tag TagIdNavigation { get; set; }
     public virtual AppUser AppUserIdNavigation { get; set; }
 }
