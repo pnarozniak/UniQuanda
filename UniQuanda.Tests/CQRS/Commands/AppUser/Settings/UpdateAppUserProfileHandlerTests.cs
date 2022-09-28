@@ -16,14 +16,14 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
     {
         private UpdateAppUserProfileHandler updateAppUserProfileHandler;
         private UpdateAppUserProfileCommand updateAppUserProfileCommand;
-        private Mock<IAppUserRepository> appUserRepository;
+        private Mock<IAppUserProfileRepository> appUserRepository;
 
         private readonly int _idAppUser = 1;
         private readonly string _avatarUrl = "AvatarUrl";
         [SetUp]
         public void SetupTests()
         {
-            this.appUserRepository = new Mock<IAppUserRepository>();
+            this.appUserRepository = new Mock<IAppUserProfileRepository>();
             this.updateAppUserProfileHandler = new UpdateAppUserProfileHandler(this.appUserRepository.Object);
         }
 

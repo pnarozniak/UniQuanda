@@ -3,7 +3,7 @@ using UniQuanda.Core.Domain.Utils;
 
 namespace UniQuanda.Core.Application.Repositories;
 
-public interface IAppUserRepository
+public interface IAppUserProfileRepository
 {
     /// <summary>
     ///     Get AppUser by id for settings profile

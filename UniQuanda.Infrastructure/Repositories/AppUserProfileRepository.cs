@@ -7,11 +7,11 @@ using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 
 namespace UniQuanda.Infrastructure.Repositories;
 
-public class AppUserRepository : IAppUserRepository
+public class AppUserProfileRepository : IAppUserProfileRepository
 {
     private readonly AppDbContext _appContext;
 
-    public AppUserRepository(AppDbContext appContext)
+    public AppUserProfileRepository(AppDbContext appContext)
     {
         _appContext = appContext;
     }

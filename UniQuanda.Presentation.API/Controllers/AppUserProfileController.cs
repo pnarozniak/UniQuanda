@@ -62,7 +62,7 @@ public class AppUserProfileController : ControllerBase
         {
             null => NotFound(),
             false => Conflict(),
-            true => Ok(new { avatarUrl = result })
+            true => Ok(new { avatarUrl = result.AvatarUrl })
         };
     }
 }
