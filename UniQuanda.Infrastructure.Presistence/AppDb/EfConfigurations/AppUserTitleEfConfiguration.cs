@@ -22,7 +22,7 @@ public class AppUserTitleEfConfiguration : IEntityTypeConfiguration<AppUserTitle
         builder.Property(uu => uu.Order).IsRequired();
 
         builder.HasIndex(ut => new { ut.AppUserId, ut.AcademicTitleId }).IsUnique();
-        builder.HasIndex(ut => new {ut.AppUserId, ut.Order}).IsUnique();
+        builder.HasIndex(ut => new { ut.AppUserId, ut.Order }).IsUnique();
 
 
     }

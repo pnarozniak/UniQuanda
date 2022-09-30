@@ -19,6 +19,6 @@ public class AcademicTitleEfConfiguration : IEntityTypeConfiguration<AcademicTit
         builder.Property(at => at.Name).IsRequired(true);
         builder.Property(at => at.AcademicTitleType);
 
-        builder.HasIndex(at => new {at.AcademicTitleType, at.Name}).IsUnique();
+        builder.HasIndex(at => new { at.AcademicTitleType, at.Name }).IsUnique();
     }
 }

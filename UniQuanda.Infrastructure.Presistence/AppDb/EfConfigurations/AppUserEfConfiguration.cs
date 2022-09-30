@@ -22,7 +22,7 @@ public class AppUserEfConfiguration : IEntityTypeConfiguration<AppUser>
         builder.Property(u => u.PhoneNumber).HasMaxLength(22).IsRequired(false);
 
         builder.Property(u => u.Avatar).IsRequired(false);
-        
+
         builder.Property(u => u.Banner).IsRequired(false);
 
         builder.Property(u => u.City).HasMaxLength(57).IsRequired(false);
