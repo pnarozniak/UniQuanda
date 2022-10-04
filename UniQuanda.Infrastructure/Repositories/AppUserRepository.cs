@@ -20,6 +20,14 @@ public class AppUserRepository : IAppUserRepository
         this._cacheService = _cacheService;
     }
 
+    public async Task<string?> GetUserAvatar(int uid, CancellationToken ct)
+    {
+        return await _appContext.AppUsers
+            .Where(u => u.Id == uid)
+            .Select(u => u.Avatar)
+            .FirstOrDefaultAsync(ct);
+    }
+
     public async Task<AppUserEntity?> GetUserProfile(int uid, CancellationToken ct)
     {
         var cacheKey = "user-profile-statistics";

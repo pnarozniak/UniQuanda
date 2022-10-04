@@ -82,13 +82,6 @@ public class AuthRepository : IAuthRepository
                 Id = u.Id,
                 Nickname = u.Nickname,
                 HashedPassword = u.HashedPassword,
-                OptionalInfo = new UserOptionalInfo
-                {
-                    //TODO This is mocked part of the code, should be replaced in the future
-                    Avatar = _authContext.TempUsers.Any(tu => tu.IdUser == u.Id)
-                        ? null
-                        : $"https://robohash.org/{u.Nickname}"
-                },
                 IsEmailConfirmed = !_authContext.TempUsers.Any(tu => tu.IdUser == u.Id)
             })
             .SingleOrDefaultAsync(ct);
