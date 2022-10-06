@@ -117,16 +117,5 @@ public class AppUserRepository : IAppUserRepository
             user.Points = cacheResult.Points;
             return user;
         }
-
-
-        /*            return await _appContext.AppUsers.Where(u => u.Id == uid).Select(u => new AppUserEntity
-                {
-                    Id = u.Id,
-                    Avatar = u.Avatar,
-                    Banner = u.Banner,
-                    Nickname = u.Nickname,
-                    FirstName = u.FirstName,
-                    LastName = u.LastName
-                }).SingleOrDefaultAsync(ct);*/
     }
 }

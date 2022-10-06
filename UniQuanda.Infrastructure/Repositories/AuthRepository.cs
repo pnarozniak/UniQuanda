@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Domain.Entities;
-using UniQuanda.Core.Domain.ValueObjects;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 using UniQuanda.Infrastructure.Presistence.AuthDb;
