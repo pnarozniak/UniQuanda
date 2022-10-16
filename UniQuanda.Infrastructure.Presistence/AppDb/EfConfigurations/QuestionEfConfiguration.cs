@@ -25,7 +25,5 @@ public class QuestionEfConfiguration : IEntityTypeConfiguration<Question>
             .WithOne(tiq => tiq.QuestionIdNavigation)
             .HasForeignKey(tiq => tiq.QuestionId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Property(q => q.IsDeleted).HasDefaultValue(false).IsRequired();
     }
 }

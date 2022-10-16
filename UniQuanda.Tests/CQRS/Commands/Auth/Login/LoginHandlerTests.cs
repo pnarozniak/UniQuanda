@@ -48,7 +48,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
                 .Setup(ts => ts.GenerateRefreshToken())
                 .Returns(new Tuple<string, DateTime>(RefreshToken, _expirationRefreshToken));
             this.appUserRepository
-                .Setup(aur => aur.GetUserAvatar(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                .Setup(aur => aur.GetUserAvatarAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Avatar);
 
             this.loginHandler = new LoginHandler(this.authRepository.Object, this.passwordsService.Object, this.tokensService.Object, this.appUserRepository.Object);
@@ -91,7 +91,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
                 .Setup(ar => ar.UpdateUserRefreshTokenAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<DateTime>(), CancellationToken.None))
                 .ReturnsAsync(true);
             this.appUserRepository
-                .Setup(aur => aur.GetUserAvatar(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                .Setup(aur => aur.GetUserAvatarAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(null as string);
 
             var result = await loginHandler.Handle(this.loginCommand, CancellationToken.None);

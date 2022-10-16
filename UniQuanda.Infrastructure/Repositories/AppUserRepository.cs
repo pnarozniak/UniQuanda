@@ -20,7 +20,7 @@ public class AppUserRepository : IAppUserRepository
         this._cacheService = _cacheService;
     }
 
-    public async Task<string?> GetUserAvatar(int uid, CancellationToken ct)
+    public async Task<string?> GetUserAvatarAsync(int uid, CancellationToken ct)
     {
         return await _appContext.AppUsers
             .Where(u => u.Id == uid)
@@ -28,7 +28,7 @@ public class AppUserRepository : IAppUserRepository
             .FirstOrDefaultAsync(ct);
     }
 
-    public async Task<AppUserEntity?> GetUserProfile(int uid, CancellationToken ct)
+    public async Task<AppUserEntity?> GetUserProfileAsync(int uid, CancellationToken ct)
     {
         var cacheKey = "user-profile-statistics";
         var cacheDuration = DurationEnum.THREE_HOURS;
@@ -36,7 +36,7 @@ public class AppUserRepository : IAppUserRepository
         var query = _appContext.AppUsers.Where(u => u.Id == uid);
         var cacheResult = await _cacheService.GetFromCache<(int Points, int QuestionAmount, int AnswersAmount)>($"{cacheKey}-{uid}", ct);
         AppUserEntity? user = null;
-        if (object.Equals(cacheResult, default((int Points, int QuestionAmount, int AnswersAmount))))
+        if (Equals(cacheResult, default((int Points, int QuestionAmount, int AnswersAmount))))
         {
             user = await query.Select(u => new AppUserEntity()
             {

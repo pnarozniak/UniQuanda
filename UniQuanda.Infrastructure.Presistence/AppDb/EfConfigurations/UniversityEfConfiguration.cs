@@ -16,7 +16,6 @@ public class UniversityEfConfiguration : IEntityTypeConfiguration<University>
             .HasForeignKey(uu => uu.UniversityId)
             .OnDelete(DeleteBehavior.Cascade);
 
-
         builder.Property(u => u.Name).IsRequired();
         builder.Property(u => u.Logo).IsRequired();
     }

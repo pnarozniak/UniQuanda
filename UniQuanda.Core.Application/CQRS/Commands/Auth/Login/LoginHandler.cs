@@ -41,7 +41,7 @@ public class LoginHandler : IRequestHandler<LoginCommand, LoginResponseDTO>
         var accessToken = _tokensService.GenerateAccessToken(appUser);
         var (refreshToken, refreshTokenExp) = _tokensService.GenerateRefreshToken();
         await _authRepository.UpdateUserRefreshTokenAsync(appUser.Id, refreshToken, refreshTokenExp, ct);
-        var avatar = await _appUserRepository.GetUserAvatar(appUser.Id, ct);
+        var avatar = await _appUserRepository.GetUserAvatarAsync(appUser.Id, ct);
         return new LoginResponseDTO
         {
             Status = LoginResponseDTO.LoginStatus.Success,

@@ -11,14 +11,6 @@ public class AppUserInUniversityEfConfiguration : IEntityTypeConfiguration<AppUs
         builder.HasKey(uu => uu.Id);
         builder.Property(uu => uu.Id).ValueGeneratedOnAdd();
 
-        builder.HasOne(uu => uu.UniversityIdNavigation)
-            .WithMany(u => u.AppUsersInUniversity)
-            .HasForeignKey(uu => uu.UniversityId);
-
-        builder.HasOne(uu => uu.AppUserIdNavigation)
-            .WithMany(u => u.AppUserInUniversities)
-            .HasForeignKey(uu => uu.AppUserId);
-
         builder.HasIndex(uu => new { uu.UniversityId, uu.AppUserId }).IsUnique();
         builder.HasIndex(uu => new { uu.Order, uu.AppUserId }).IsUnique();
 

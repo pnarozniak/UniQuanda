@@ -11,14 +11,6 @@ public class UserPointsInTagEfConfiguration : IEntityTypeConfiguration<UserPoint
         builder.HasKey(tiq => tiq.Id);
         builder.Property(tiq => tiq.Id).ValueGeneratedOnAdd();
 
-        builder.HasOne(ut => ut.TagIdNavigation)
-            .WithMany(t => t.UsersPointsInTag)
-            .HasForeignKey(ut => ut.TagId);
-
-        builder.HasOne(ut => ut.AppUserIdNavigation)
-            .WithMany(u => u.UserPointsInTags)
-            .HasForeignKey(ut => ut.AppUserId);
-
         builder.HasIndex(ut => new { ut.AppUserId, ut.TagId }).IsUnique();
 
         builder.Property(ut => ut.Points).IsRequired();

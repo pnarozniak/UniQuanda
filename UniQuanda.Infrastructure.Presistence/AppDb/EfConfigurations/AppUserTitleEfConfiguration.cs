@@ -11,14 +11,6 @@ public class AppUserTitleEfConfiguration : IEntityTypeConfiguration<AppUserTitle
         builder.HasKey(ut => ut.Id);
         builder.Property(ut => ut.Id).ValueGeneratedOnAdd();
 
-        builder.HasOne(ut => ut.AppUserIdNavigation)
-            .WithMany(u => u.AppUserTitles)
-            .HasForeignKey(ut => ut.AppUserId);
-
-        builder.HasOne(ut => ut.AcademicTitleIdNavigation)
-            .WithMany(at => at.UsersTitle)
-            .HasForeignKey(ut => ut.AcademicTitleId);
-
         builder.Property(uu => uu.Order).IsRequired();
 
         builder.HasIndex(ut => new { ut.AppUserId, ut.AcademicTitleId }).IsUnique();

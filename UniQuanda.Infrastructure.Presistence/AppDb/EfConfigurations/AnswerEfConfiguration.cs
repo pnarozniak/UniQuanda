@@ -21,12 +21,6 @@ public class AnswerEfConfiguration : IEntityTypeConfiguration<Answer>
             .HasForeignKey(a => a.ParentAnswerId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(a => a.ParentAnswerIdNavigation)
-            .WithMany(a => a.Comments);
-
-        builder.HasOne(a => a.ParentQuestionIdNavigation)
-            .WithMany(q => q.Answers);
-
         builder.Property(q => q.IsDeleted).HasDefaultValue(false).IsRequired();
     }
 }

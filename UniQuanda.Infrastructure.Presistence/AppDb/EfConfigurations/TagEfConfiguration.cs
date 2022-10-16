@@ -26,9 +26,6 @@ public class TagEfConfiguration : IEntityTypeConfiguration<Tag>
             .HasForeignKey(ct => ct.ParentTagId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(t => t.ParentTagIdNavigation)
-            .WithMany(pt => pt.ChildTags);
-
         builder.Property(t => t.IsDeleted).HasDefaultValue(false).IsRequired();
     }
 }

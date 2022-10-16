@@ -15,7 +15,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile
         }
         public async Task<GetProfileResponseDTO?> Handle(GetProfileQuery request, CancellationToken cancellationToken)
         {
-            var user = await _appUserRepository.GetUserProfile(request.UserId, cancellationToken);
+            var user = await _appUserRepository.GetUserProfileAsync(request.UserId, cancellationToken);
             if (user == null) return null;
 
             return new GetProfileResponseDTO()
