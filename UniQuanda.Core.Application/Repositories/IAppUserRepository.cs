@@ -3,7 +3,7 @@ using UniQuanda.Core.Domain.Utils;
 
 namespace UniQuanda.Core.Application.Repositories;
 
-public interface IAppUserProfileRepository
+public interface IAppUserRepository
 {
     /// <summary>
     /// Returns user data needed to display profile
@@ -35,5 +35,5 @@ public interface IAppUserProfileRepository
     /// <param name="appUser">New data</param>
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>If AppUser isn't found then IsSuccessful NULL, otherwise true/false based on success of update. If it is successful, returned is avatar url</returns>    
-    Task<AppUserProfileUpdateResult> UpdateAppUserAsync(AppUserEntity appUser, CancellationToken ct);
+    Task<AppUserUpdateResult> UpdateAppUserAsync(AppUserEntity appUser, CancellationToken ct);
 }

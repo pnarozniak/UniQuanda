@@ -1,6 +1,6 @@
 ﻿namespace UniQuanda.Core.Domain.Utils;
 
-public class AppUserProfileUpdateResult
+public class AppUserUpdateResult
 {
     public bool? IsSuccessful { get; set; }
     public string? AvatarUrl { get; set; }

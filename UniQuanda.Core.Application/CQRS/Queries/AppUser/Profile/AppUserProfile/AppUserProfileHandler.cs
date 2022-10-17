@@ -5,9 +5,9 @@ namespace UniQuanda.Core.Application.CQRS.Queries.AppUser.Profile.AppUserProfile
 
 public class AppUserProfileHandler : IRequestHandler<AppUserProfileQuery, AppUserProfileResponseDTO>
 {
-    private readonly IAppUserProfileRepository _appUserRepository;
+    private readonly IAppUserRepository _appUserRepository;
 
-    public AppUserProfileHandler(IAppUserProfileRepository appUserRepository)
+    public AppUserProfileHandler(IAppUserRepository appUserRepository)
     {
         _appUserRepository = appUserRepository;
     }

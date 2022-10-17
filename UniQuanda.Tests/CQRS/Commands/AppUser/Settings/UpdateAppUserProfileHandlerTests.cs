@@ -16,14 +16,14 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
     {
         private UpdateAppUserProfileHandler updateAppUserProfileHandler;
         private UpdateAppUserProfileCommand updateAppUserProfileCommand;
-        private Mock<IAppUserProfileRepository> appUserRepository;
+        private Mock<IAppUserRepository> appUserRepository;
 
         private readonly int _idAppUser = 1;
         private readonly string _avatarUrl = "AvatarUrl";
         [SetUp]
         public void SetupTests()
         {
-            this.appUserRepository = new Mock<IAppUserProfileRepository>();
+            this.appUserRepository = new Mock<IAppUserRepository>();
             this.updateAppUserProfileHandler = new UpdateAppUserProfileHandler(this.appUserRepository.Object);
         }
 
@@ -154,9 +154,9 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
             };
         }
 
-        private static AppUserProfileUpdateResult GetAppUserProfileUpdateResult(bool? isSuccessful, string? avatarUrl)
+        private static AppUserUpdateResult GetAppUserProfileUpdateResult(bool? isSuccessful, string? avatarUrl)
         {
-            return new AppUserProfileUpdateResult
+            return new AppUserUpdateResult
             {
                 IsSuccessful = isSuccessful,
                 AvatarUrl = avatarUrl

@@ -9,12 +9,12 @@ using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 
 namespace UniQuanda.Infrastructure.Repositories;
 
-public class AppUserProfileRepository : IAppUserProfileRepository
+public class AppUserRepository : IAppUserRepository
 {
     private readonly AppDbContext _appContext;
     private readonly ICacheService _cacheService;
 
-    public AppUserProfileRepository(AppDbContext appContext, ICacheService cacheService)
+    public AppUserRepository(AppDbContext appContext, ICacheService cacheService)
     {
         this._appContext = appContext;
         this._cacheService = cacheService;
@@ -134,13 +134,13 @@ public class AppUserProfileRepository : IAppUserProfileRepository
         return appUser;
     }
 
-    public async Task<AppUserProfileUpdateResult> UpdateAppUserAsync(AppUserEntity appUserEntity, CancellationToken ct)
+    public async Task<AppUserUpdateResult> UpdateAppUserAsync(AppUserEntity appUserEntity, CancellationToken ct)
     {
         var appUser = await _appContext.AppUsers.SingleOrDefaultAsync(u => u.Id == appUserEntity.Id, ct);
         if (appUser is null)
-            return new AppUserProfileUpdateResult { IsSuccessful = null };
+            return new AppUserUpdateResult { IsSuccessful = null };
         if (!IsDataToUpdate(appUserEntity, appUser))
-            return new AppUserProfileUpdateResult { IsSuccessful = true };
+            return new AppUserUpdateResult { IsSuccessful = true };
 
         appUser.FirstName = appUserEntity.FirstName;
         appUser.LastName = appUserEntity.LastName;
@@ -153,8 +153,8 @@ public class AppUserProfileRepository : IAppUserProfileRepository
         appUser.AboutText = appUserEntity.AboutText;
 
         if (!(await _appContext.SaveChangesAsync(ct) > 0))
-            return new AppUserProfileUpdateResult { IsSuccessful = false };
-        return new AppUserProfileUpdateResult { IsSuccessful = true, AvatarUrl = appUser.Avatar };
+            return new AppUserUpdateResult { IsSuccessful = false };
+        return new AppUserUpdateResult { IsSuccessful = true, AvatarUrl = appUser.Avatar };
     }
 
     private static bool IsDataToUpdate(AppUserEntity newAppUser, AppUser oldAppUser)

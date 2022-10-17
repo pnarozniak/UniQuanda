@@ -30,7 +30,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
         private Mock<IAuthRepository> authRepository;
         private Mock<IPasswordsService> passwordsService;
         private Mock<ITokensService> tokensService;
-        private Mock<IAppUserProfileRepository> appUserProfileRepository;
+        private Mock<IAppUserRepository> appUserProfileRepository;
 
         [SetUp]
         public void SetupTests()
@@ -38,7 +38,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
             this.authRepository = new Mock<IAuthRepository>();
             this.passwordsService = new Mock<IPasswordsService>();
             this.tokensService = new Mock<ITokensService>();
-            this.appUserProfileRepository = new Mock<IAppUserProfileRepository>();
+            this.appUserProfileRepository = new Mock<IAppUserRepository>();
 
             SetupLoginCommand();
             this.tokensService

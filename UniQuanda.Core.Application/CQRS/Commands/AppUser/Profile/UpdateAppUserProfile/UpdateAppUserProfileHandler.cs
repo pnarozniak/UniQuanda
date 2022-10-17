@@ -5,9 +5,9 @@ namespace UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUser
 
 public class UpdateAppUserProfileHandler : IRequestHandler<UpdateAppUserProfileCommand, UpdateAppUserProfileResponseDTO>
 {
-    private readonly IAppUserProfileRepository _appUserRepository;
+    private readonly IAppUserRepository _appUserRepository;
 
-    public UpdateAppUserProfileHandler(IAppUserProfileRepository appUserRepository)
+    public UpdateAppUserProfileHandler(IAppUserRepository appUserRepository)
     {
         _appUserRepository = appUserRepository;
     }

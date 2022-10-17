@@ -15,7 +15,7 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
     [TestFixture]
     public class GetProfileHandlerTests
     {
-        private Mock<IAppUserProfileRepository> appUserProfileRepository;
+        private Mock<IAppUserRepository> appUserRepository;
         private GetProfileQuery getProfileQuery;
 
         private int UserId = 1;
@@ -35,7 +35,7 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
         [SetUp]
         public void SetupTests()
         {
-            appUserProfileRepository = new Mock<IAppUserProfileRepository>();
+            appUserRepository = new Mock<IAppUserRepository>();
             getProfileQuery = new GetProfileQuery(new GetProfileRequestDTO
             {
                 UserId = UserId
@@ -44,10 +44,10 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
         [Test]
         public async Task GetProfile_ShouldReturnNull_WhenProfileDoesntExist()
         {
-            appUserProfileRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+            appUserRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(null as AppUserEntity);
 
-            var getProfileHandler = new GetProfileHandler(appUserProfileRepository.Object);
+            var getProfileHandler = new GetProfileHandler(appUserRepository.Object);
             var result = await getProfileHandler.Handle(getProfileQuery, new CancellationToken());
             result.Should().Be(null);
         }
@@ -56,10 +56,10 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
         public async Task GetProfile_ShouldReturnProfileWithoutTitlesAndUniversities_WhenProfileExists()
         {
             var appUserEntity = GetDefaultAppUserEntity();
-            appUserProfileRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+            appUserRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(appUserEntity);
 
-            var getProfileHandler = new GetProfileHandler(appUserProfileRepository.Object);
+            var getProfileHandler = new GetProfileHandler(appUserRepository.Object);
             var result = await getProfileHandler.Handle(getProfileQuery, new CancellationToken());
 
             result.UserData.Id.Should().Be(UserId);
@@ -81,10 +81,10 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
         {
             var appUserEntity = GetDefaultAppUserEntity();
             appUserEntity.Titles = GetAcademicTitles(2);
-            appUserProfileRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+            appUserRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(appUserEntity);
 
-            var getProfileHandler = new GetProfileHandler(appUserProfileRepository.Object);
+            var getProfileHandler = new GetProfileHandler(appUserRepository.Object);
             var result = await getProfileHandler.Handle(getProfileQuery, new CancellationToken());
 
             var orders = result.AcademicTitles.Select(t => t.Order).ToArray();
@@ -114,10 +114,10 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
             var appUserEntity = GetDefaultAppUserEntity();
             appUserEntity.Universities = GetUniversities(2);
 
-            appUserProfileRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+            appUserRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(appUserEntity);
 
-            var getProfileHandler = new GetProfileHandler(appUserProfileRepository.Object);
+            var getProfileHandler = new GetProfileHandler(appUserRepository.Object);
             var result = await getProfileHandler.Handle(getProfileQuery, new CancellationToken());
 
             var orders = result.Universities.Select(t => t.Order).ToArray();
