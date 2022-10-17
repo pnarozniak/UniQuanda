@@ -25,7 +25,7 @@ public class AppUserRepository : IAppUserRepository
         return await _appContext.AppUsers
             .Where(u => u.Id == uid)
             .Select(u => u.Avatar)
-            .FirstOrDefaultAsync(ct);
+            .SingleOrDefaultAsync(ct);
     }
 
     public async Task<AppUserEntity?> GetUserProfileAsync(int uid, CancellationToken ct)
@@ -46,8 +46,7 @@ public class AppUserRepository : IAppUserRepository
                 Nickname = u.Nickname,
                 Avatar = u.Avatar,
                 Banner = u.Banner,
-                Titles = _appContext.AppUsersTitles
-                    .Include(ut => ut.AcademicTitleIdNavigation)
+                Titles = u.AppUserTitles
                     .Where(ut => ut.AppUserId == u.Id)
                     .Select(t => new AcademicTitleEntity()
                     {
@@ -57,8 +56,7 @@ public class AppUserRepository : IAppUserRepository
                         Order = t.Order
                     })
                     .ToList(),
-                Universities = _appContext.AppUsersInUniversities
-                    .Include(uu => uu.UniversityIdNavigation)
+                Universities = u.AppUserInUniversities
                     .Where(uu => uu.AppUserId == uid)
                     .Select(uu => new UniversityEntity()
                     {
@@ -67,12 +65,12 @@ public class AppUserRepository : IAppUserRepository
                         Logo = uu.UniversityIdNavigation.Logo,
                         Order = uu.Order
                     }).ToList(),
-                AnswersAmount = _appContext.AppUsersAnswersInteractions.Where(a => a.AppUserId == uid && a.IsCreator).Count(),
-                QuestionsAmount = _appContext.AppUsersQuestionsInteractions.Where(q => q.AppUserId == uid && q.IsCreator).Count(),
+                AnswersAmount = u.AppUserAnswersInteractions.Where(a => a.AppUserId == uid && a.IsCreator).Count(),
+                QuestionsAmount = u.AppUserQuestionsInteractions.Where(q => q.AppUserId == uid && q.IsCreator).Count(),
                 Points = _appContext.UsersPointsInTags.Where(p => p.AppUserId == uid).Sum(p => p.Points),
             }).SingleOrDefaultAsync(ct);
 
-            if (object.Equals(user, default(AppUserEntity))) return null;
+            if (Equals(user, default(AppUserEntity))) return null;
 
             (int Points, int QuestionAmount, int AnswersAmount) statistics = (user.Points ?? 0, user.QuestionsAmount ?? 0, user.AnswersAmount ?? 0);
             await _cacheService.SetToCache($"{cacheKey}-{uid}", statistics, cacheDuration, ct);
@@ -88,8 +86,7 @@ public class AppUserRepository : IAppUserRepository
                 Nickname = u.Nickname,
                 Avatar = u.Avatar,
                 Banner = u.Banner,
-                Titles = _appContext.AppUsersTitles
-                    .Include(ut => ut.AcademicTitleIdNavigation)
+                Titles = u.AppUserTitles
                     .Where(ut => ut.AppUserId == u.Id)
                     .Select(t => new AcademicTitleEntity()
                     {
@@ -99,8 +96,7 @@ public class AppUserRepository : IAppUserRepository
                         Order = t.Order
                     })
                     .ToList(),
-                Universities = _appContext.AppUsersInUniversities
-                    .Include(uu => uu.UniversityIdNavigation)
+                Universities = u.AppUserInUniversities
                     .Where(uu => uu.AppUserId == uid)
                     .Select(uu => new UniversityEntity()
                     {
@@ -110,7 +106,7 @@ public class AppUserRepository : IAppUserRepository
                         Order = uu.Order
                     }).ToList()
             }).SingleAsync(ct);
-            if (object.Equals(user, default(AppUserEntity))) return null;
+            if (Equals(user, default(AppUserEntity))) return null;
 
             user.QuestionsAmount = cacheResult.QuestionAmount;
             user.AnswersAmount = cacheResult.AnswersAmount;
