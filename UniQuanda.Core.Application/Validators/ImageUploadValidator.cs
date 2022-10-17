@@ -7,7 +7,7 @@ public class ImageUploadValidator : ValidationAttribute
 {
     private readonly int _maxSizeImage = 10 * 1024 * 1024;
 
-    private readonly List<string> _allowedImageTypes = new() { "image/jpeg", "image/png", "image/svg" ,"image/svg+xml" };
+    private readonly List<string> _allowedImageTypes = new() { "image/jpeg", "image/png", "image/svg", "image/svg+xml" };
 
     private readonly string _fieldName;
 
