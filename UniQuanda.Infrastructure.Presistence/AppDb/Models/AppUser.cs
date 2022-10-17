@@ -13,4 +13,9 @@ public class AppUser
     public string? Banner { get; set; }
     public string? SemanticScholarProfile { get; set; }
     public string? AboutText { get; set; }
+    public virtual ICollection<AppUserInUniversity> AppUserInUniversities { get; set; }
+    public virtual ICollection<UserPointsInTag> UserPointsInTags { get; set; }
+    public virtual ICollection<AppUserQuestionInteraction> AppUserQuestionsInteractions { get; set; }
+    public virtual ICollection<AppUserAnswerInteraction> AppUserAnswersInteractions { get; set; }
+    public virtual ICollection<AppUserTitle> AppUserTitles { get; set; }
 }

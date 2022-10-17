@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using UniQuanda.Core.Domain.Enums;
@@ -12,9 +13,10 @@ using UniQuanda.Infrastructure.Presistence.AppDb;
 namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220920181153_AddedUserProfileTables")]
+    partial class AddedUserProfileTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,10 +85,6 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AboutText")
-                        .HasMaxLength(4000)
-                        .HasColumnType("character varying(4000)");
-
                     b.Property<string>("Avatar")
                         .HasColumnType("text");
 
@@ -94,7 +92,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("Birthdate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("City")
                         .HasMaxLength(57)
@@ -117,23 +115,12 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         .HasMaxLength(22)
                         .HasColumnType("character varying(22)");
 
-                    b.Property<string>("SemanticScholarProfile")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Nickname")
                         .IsUnique();
 
                     b.ToTable("AppUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            FirstName = "Roman",
-                            Nickname = "Programista"
-                        });
                 });
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.AppUserAnswerInteraction", b =>
@@ -257,6 +244,11 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.HasKey("Id");
 

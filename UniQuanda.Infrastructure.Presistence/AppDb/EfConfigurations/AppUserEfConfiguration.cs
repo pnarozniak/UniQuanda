@@ -21,14 +21,47 @@ public class AppUserEfConfiguration : IEntityTypeConfiguration<AppUser>
 
         builder.Property(u => u.PhoneNumber).HasMaxLength(22).IsRequired(false);
 
-        builder.Property(u => u.City).HasMaxLength(57).IsRequired(false);
+        builder.Property(u => u.SemanticScholarProfile).IsRequired(false);
+
+        builder.Property(u => u.AboutText).HasMaxLength(4000).IsRequired(false);
 
         builder.Property(u => u.Avatar).IsRequired(false);
 
         builder.Property(u => u.Banner).IsRequired(false);
 
-        builder.Property(u => u.SemanticScholarProfile).IsRequired(false);
+        builder.Property(u => u.City).HasMaxLength(57).IsRequired(false);
 
-        builder.Property(u => u.AboutText).HasMaxLength(4000).IsRequired(false);
+        builder.HasMany(u => u.AppUserInUniversities)
+            .WithOne(uu => uu.AppUserIdNavigation)
+            .HasForeignKey(u => u.AppUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(u => u.AppUserTitles)
+            .WithOne(at => at.AppUserIdNavigation)
+            .HasForeignKey(at => at.AppUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(u => u.AppUserAnswersInteractions)
+            .WithOne(uai => uai.AppUserIdNavigation)
+            .HasForeignKey(uai => uai.AppUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(u => u.AppUserQuestionsInteractions)
+            .WithOne(uqi => uqi.AppUserIdNavigation)
+            .HasForeignKey(uqi => uqi.AppUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(u => u.UserPointsInTags)
+            .WithOne(ut => ut.AppUserIdNavigation)
+            .HasForeignKey(ut => ut.AppUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // Only for development
+        var users = new List<AppUser>
+        {
+            new AppUser { Id = 1, Nickname = "Programista", FirstName="Roman" }
+        };
+
+        builder.HasData(users);
     }
 }
