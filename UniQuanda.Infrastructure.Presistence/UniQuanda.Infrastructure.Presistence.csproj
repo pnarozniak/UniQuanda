@@ -26,4 +26,8 @@
     <Folder Include="AppDb\Migrations\" />
     <Folder Include="AuthDb\Migrations\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UniQuanda.Core.Domain\UniQuanda.Core.Domain.csproj" />
+  </ItemGroup>
 </Project>

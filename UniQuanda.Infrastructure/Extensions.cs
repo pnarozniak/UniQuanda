@@ -21,12 +21,22 @@ public static class Extensions
 
         // Repositories
         services.AddScoped<IAuthRepository, AuthRepository>();
+        services.AddScoped<IAppUserRepository, AppUserRepository>();
 
         // Services
         services.AddScoped<IPasswordsService, PasswordsService>();
         services.AddScoped<ITokensService, TokensService>();
         services.AddScoped<IEmailService, SendGridService>();
         services.AddScoped<IExpirationService, ExpirationService>();
+        services.AddScoped<ICacheService, CacheService>();
+
+        // Cache
+        services.AddStackExchangeRedisCache(options =>
+        {
+            var cacheOptions = new CacheOptions(configuration);
+            options.Configuration = cacheOptions.ConnectionString;
+            options.InstanceName = "UniQuanda-";
+        });
 
         return services;
     }

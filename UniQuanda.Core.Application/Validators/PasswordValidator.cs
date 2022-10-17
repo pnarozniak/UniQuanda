@@ -12,7 +12,7 @@ public class PasswordValidator : ValidationAttribute
 
         string password;
         try
-        { 
+        {
             password = (string)value;
         }
         catch

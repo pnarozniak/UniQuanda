@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Domain.Entities;
-using UniQuanda.Core.Domain.ValueObjects;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 using UniQuanda.Infrastructure.Presistence.AuthDb;
@@ -82,13 +81,6 @@ public class AuthRepository : IAuthRepository
                 Id = u.Id,
                 Nickname = u.Nickname,
                 HashedPassword = u.HashedPassword,
-                OptionalInfo = new UserOptionalInfo
-                {
-                    //TODO This is mocked part of the code, should be replaced in the future
-                    Avatar = _authContext.TempUsers.Any(tu => tu.IdUser == u.Id)
-                        ? null
-                        : $"https://robohash.org/{u.Nickname}"
-                },
                 IsEmailConfirmed = !_authContext.TempUsers.Any(tu => tu.IdUser == u.Id)
             })
             .SingleOrDefaultAsync(ct);

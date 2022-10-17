@@ -10,7 +10,7 @@ public class RegisterRequestDTO
     [MaxLength(30)]
     public string Nickname { get; set; }
 
-    [Required] [PasswordValidator] public string Password { get; set; }
+    [Required][PasswordValidator] public string Password { get; set; }
 
     [Required]
     [MaxLength(320)]
