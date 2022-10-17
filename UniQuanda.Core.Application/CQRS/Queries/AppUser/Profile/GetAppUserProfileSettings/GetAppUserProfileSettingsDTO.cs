@@ -1,6 +1,6 @@
-﻿namespace UniQuanda.Core.Application.CQRS.Queries.AppUser.Profile.AppUserProfile;
+﻿namespace UniQuanda.Core.Application.CQRS.Queries.AppUser.Profile.GetAppUserProfileSettings;
 
-public class AppUserProfileResponseDTO
+public class GetAppUserProfileSettingsResponseDTO
 {
     public string? FirstName { get; set; }
     public string? LastName { get; set; }

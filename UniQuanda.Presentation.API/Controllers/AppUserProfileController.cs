@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProfile;
-using UniQuanda.Core.Application.CQRS.Queries.AppUser.Profile.AppUserProfile;
+using UniQuanda.Core.Application.CQRS.Queries.AppUser.Profile.GetAppUserProfileSettings;
 using UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile;
 using UniQuanda.Infrastructure.Helpers;
 
@@ -38,7 +38,7 @@ public class AppUserProfileController : ControllerBase
     /// <summary>
     ///     Get data of AppUser for update profile settings from Db
     /// </summary>
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AppUserProfileResponseDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetAppUserProfileSettingsResponseDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet("settings")]
@@ -49,7 +49,7 @@ public class AppUserProfileController : ControllerBase
         var idAppUser = JwtTokenHelper.GetAppUserIdFromToken(User);
         if (idAppUser == null)
             return Unauthorized();
-        var query = new AppUserProfileQuery(idAppUser.Value);
+        var query = new GetAppUserProfileSettingsQuery(idAppUser.Value);
         var appUserData = await _mediator.Send(query, ct);
         if (appUserData == null)
             return NotFound();

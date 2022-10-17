@@ -1,23 +1,23 @@
 ﻿using MediatR;
 using UniQuanda.Core.Application.Repositories;
 
-namespace UniQuanda.Core.Application.CQRS.Queries.AppUser.Profile.AppUserProfile;
+namespace UniQuanda.Core.Application.CQRS.Queries.AppUser.Profile.GetAppUserProfileSettings;
 
-public class AppUserProfileHandler : IRequestHandler<AppUserProfileQuery, AppUserProfileResponseDTO>
+public class GetAppUserProfileSettingsHandler : IRequestHandler<GetAppUserProfileSettingsQuery, GetAppUserProfileSettingsResponseDTO>
 {
     private readonly IAppUserRepository _appUserRepository;
 
-    public AppUserProfileHandler(IAppUserRepository appUserRepository)
+    public GetAppUserProfileSettingsHandler(IAppUserRepository appUserRepository)
     {
         _appUserRepository = appUserRepository;
     }
 
-    public async Task<AppUserProfileResponseDTO?> Handle(AppUserProfileQuery request, CancellationToken ct)
+    public async Task<GetAppUserProfileSettingsResponseDTO?> Handle(GetAppUserProfileSettingsQuery request, CancellationToken ct)
     {
         var appUser = await _appUserRepository.GetAppUserByIdForProfileSettingsAsync(request.IdAppUser, ct);
         if (appUser is null)
             return null;
-        return new AppUserProfileResponseDTO
+        return new GetAppUserProfileSettingsResponseDTO
         {
             FirstName = appUser.FirstName,
             LastName = appUser.LastName,
