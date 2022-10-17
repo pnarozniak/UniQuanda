@@ -1,6 +1,6 @@
 ﻿using UniQuanda.Core.Domain.ValueObjects;
 
-namespace UniQuanda.Core.Domain.Entities;
+namespace UniQuanda.Core.Domain.Entities.Auth;
 
 public class UserEntity
 {

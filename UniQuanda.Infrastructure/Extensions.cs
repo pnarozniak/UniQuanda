@@ -28,6 +28,15 @@ public static class Extensions
         services.AddScoped<ITokensService, TokensService>();
         services.AddScoped<IEmailService, SendGridService>();
         services.AddScoped<IExpirationService, ExpirationService>();
+        services.AddScoped<ICacheService, CacheService>();
+
+        // Cache
+        services.AddStackExchangeRedisCache(options =>
+        {
+            var cacheOptions = new CacheOptions(configuration);
+            options.Configuration = cacheOptions.ConnectionString;
+            options.InstanceName = "UniQuanda-";
+        });
 
         return services;
     }

@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using UniQuanda.Core.Domain.Entities;
+using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.Register;

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services.Auth;
-using UniQuanda.Core.Domain.Entities;
+using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
@@ -30,6 +30,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
         private Mock<IAuthRepository> authRepository;
         private Mock<IPasswordsService> passwordsService;
         private Mock<ITokensService> tokensService;
+        private Mock<IAppUserProfileRepository> appUserProfileRepository;
 
         [SetUp]
         public void SetupTests()
@@ -37,6 +38,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
             this.authRepository = new Mock<IAuthRepository>();
             this.passwordsService = new Mock<IPasswordsService>();
             this.tokensService = new Mock<ITokensService>();
+            this.appUserProfileRepository = new Mock<IAppUserProfileRepository>();
 
             SetupLoginCommand();
             this.tokensService
@@ -45,8 +47,11 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
             this.tokensService
                 .Setup(ts => ts.GenerateRefreshToken())
                 .Returns(new Tuple<string, DateTime>(RefreshToken, _expirationRefreshToken));
+            this.appUserProfileRepository
+                .Setup(aur => aur.GetUserAvatarAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(Avatar);
 
-            this.loginHandler = new LoginHandler(this.authRepository.Object, this.passwordsService.Object, this.tokensService.Object);
+            this.loginHandler = new LoginHandler(this.authRepository.Object, this.passwordsService.Object, this.tokensService.Object, this.appUserProfileRepository.Object);
         }
 
         [Test]
@@ -70,6 +75,32 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
             result.RefreshToken.Should().Be(RefreshToken);
             result.Nickname.Should().Be(Nickname);
             result.Avatar.Should().Be(Avatar);
+        }
+
+        [Test]
+        public async Task Login_ShouldReturnTokensAndUserDataWithoutAvatar_WhenCredentialsAreValidAndUserHasNoAvatar()
+        {
+            var userEntity = GetUserEntity();
+            this.passwordsService
+                .Setup(ps => ps.VerifyPassword(PlainPassword, HashedPassword))
+                .Returns(true);
+            this.authRepository
+                .Setup(ar => ar.GetUserByEmailAsync(UserEmail, CancellationToken.None))
+                .ReturnsAsync(userEntity);
+            this.authRepository
+                .Setup(ar => ar.UpdateUserRefreshTokenAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<DateTime>(), CancellationToken.None))
+                .ReturnsAsync(true);
+            this.appUserProfileRepository
+                .Setup(aur => aur.GetUserAvatarAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(null as string);
+
+            var result = await loginHandler.Handle(this.loginCommand, CancellationToken.None);
+
+            result.Status.Should().Be(LoginResponseDTO.LoginStatus.Success);
+            result.AccessToken.Should().Be(AccessToken);
+            result.RefreshToken.Should().Be(RefreshToken);
+            result.Nickname.Should().Be(Nickname);
+            result.Avatar.Should().BeNull();
         }
 
         [Test]

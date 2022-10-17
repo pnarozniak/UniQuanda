@@ -8,7 +8,7 @@ using UniQuanda.Core.Application.CQRS.Commands.Auth.Register;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
-using UniQuanda.Core.Domain.Entities;
+using UniQuanda.Core.Domain.Entities.Auth;
 
 namespace UniQuanda.Tests.CQRS.Commands.Auth.Register
 {

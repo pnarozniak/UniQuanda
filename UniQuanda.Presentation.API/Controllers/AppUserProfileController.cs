@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProfile;
 using UniQuanda.Core.Application.CQRS.Queries.AppUser.Profile.AppUserProfile;
+using UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile;
 using UniQuanda.Infrastructure.Helpers;
 
 namespace UniQuanda.Presentation.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = "user")]
 public class AppUserProfileController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -20,13 +20,30 @@ public class AppUserProfileController : ControllerBase
     }
 
     /// <summary>
+    ///     Checks if given e-mail address and given nickname are already used by any users
+    /// </summary>
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetProfileResponseDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet("get-profile")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetProfile(
+        [FromQuery] GetProfileRequestDTO request,
+        CancellationToken ct)
+    {
+        var query = new GetProfileQuery(request);
+        var profile = await _mediator.Send(query, ct);
+        return profile != null ? Ok(profile) : NotFound();
+    }
+
+    /// <summary>
     ///     Get data of AppUser for update profile settings from Db
     /// </summary>
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AppUserProfileResponseDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet("settings")]
-    public async Task<IActionResult> GetAppUserForEditProfileSettings(
+    [Authorize(Roles = "user")]
+    public async Task<IActionResult> GetAppUserProfileSettings(
         CancellationToken ct)
     {
         var idAppUser = JwtTokenHelper.GetAppUserIdFromToken(User);
@@ -48,6 +65,7 @@ public class AppUserProfileController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [HttpPut("settings")]
     [RequestSizeLimit(21 * 1024 * 1024)]
+    [Authorize(Roles = "user")]
     public async Task<IActionResult> UpdateAppUserProfileSettings(
         [FromForm] UpdateAppUserProfileRequestDTO request,
         CancellationToken ct)
