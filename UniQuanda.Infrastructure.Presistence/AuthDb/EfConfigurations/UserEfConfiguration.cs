@@ -32,11 +32,14 @@ public class UserEfConfiguration : IEntityTypeConfiguration<User>
             .OnDelete(DeleteBehavior.Cascade);
 
         // Only for development
-        var users = new List<User>
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
         {
-            new User { Id = 1, Nickname = "Programista", HashedPassword="$2a$12$bIkUNGSkHjgVl80kICadyezV4AgRo6oMwuIEC3X9ian.d7a6xJRIe", RefreshToken=Guid.NewGuid().ToString(), RefreshTokenExp=new DateTime().AddHours(1)} //Password "Admin1234"
-        };
+            var users = new List<User>
+            {
+                new User { Id = 1, Nickname = "Programista", HashedPassword="$2a$12$bIkUNGSkHjgVl80kICadyezV4AgRo6oMwuIEC3X9ian.d7a6xJRIe", RefreshToken=Guid.NewGuid().ToString(), RefreshTokenExp=new DateTime().AddHours(1)} //Password "Admin1234"
+            };
 
-        builder.HasData(users);
+            builder.HasData(users);
+        }
     }
 }

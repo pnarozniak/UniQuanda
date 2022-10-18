@@ -57,11 +57,14 @@ public class AppUserEfConfiguration : IEntityTypeConfiguration<AppUser>
             .OnDelete(DeleteBehavior.Cascade);
 
         // Only for development
-        var users = new List<AppUser>
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
         {
-            new AppUser { Id = 1, Nickname = "Programista", FirstName="Roman" }
-        };
+            var users = new List<AppUser>
+            {
+                new AppUser { Id = 1, Nickname = "Programista", FirstName="Roman" }
+            };
 
-        builder.HasData(users);
+            builder.HasData(users);
+        }
     }
 }

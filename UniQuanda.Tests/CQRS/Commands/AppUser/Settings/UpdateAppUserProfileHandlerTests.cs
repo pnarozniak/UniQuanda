@@ -145,15 +145,6 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
             return file.Object;
         }
 
-        private static ImageUploadResult GetImageUploadResult(bool isSuccessful, string? imageUrl)
-        {
-            return new ImageUploadResult
-            {
-                IsSuccessful = isSuccessful,
-                ImageUrl = imageUrl
-            };
-        }
-
         private static AppUserUpdateResult GetAppUserProfileUpdateResult(bool? isSuccessful, string? avatarUrl)
         {
             return new AppUserUpdateResult

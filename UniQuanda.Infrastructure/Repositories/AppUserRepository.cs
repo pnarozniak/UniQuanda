@@ -5,7 +5,6 @@ using UniQuanda.Core.Domain.Entities.App;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Infrastructure.Presistence.AppDb;
-using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 
 namespace UniQuanda.Infrastructure.Repositories;
 
@@ -31,7 +30,7 @@ public class AppUserRepository : IAppUserRepository
     public async Task<AppUserEntity?> GetUserProfileAsync(int uid, CancellationToken ct)
     {
         var cacheKey = CacheKey.GetUserProfileStatistics(uid);
-        var cacheDuration = DurationEnum.THREE_HOURS;
+        var cacheDuration = DurationEnum.ThreeHours;
 
         var query = _appContext.AppUsers.Where(u => u.Id == uid);
         var cacheResult = await _cacheService.GetFromCache<(int Points, int QuestionAmount, int AnswersAmount)>(cacheKey, ct);
@@ -139,8 +138,6 @@ public class AppUserRepository : IAppUserRepository
         var appUser = await _appContext.AppUsers.SingleOrDefaultAsync(u => u.Id == appUserEntity.Id, ct);
         if (appUser is null)
             return new AppUserUpdateResult { IsSuccessful = null };
-        if (!IsDataToUpdate(appUserEntity, appUser))
-            return new AppUserUpdateResult { IsSuccessful = true };
 
         appUser.FirstName = appUserEntity.FirstName;
         appUser.LastName = appUserEntity.LastName;
@@ -152,21 +149,12 @@ public class AppUserRepository : IAppUserRepository
         appUser.SemanticScholarProfile = appUserEntity.SemanticScholarProfile;
         appUser.AboutText = appUserEntity.AboutText;
 
+        var entity = _appContext.Entry(appUser);
+        if (entity.OriginalValues == entity.CurrentValues)
+            return new AppUserUpdateResult { IsSuccessful = true };
+
         if (!(await _appContext.SaveChangesAsync(ct) > 0))
             return new AppUserUpdateResult { IsSuccessful = false };
         return new AppUserUpdateResult { IsSuccessful = true, AvatarUrl = appUser.Avatar };
-    }
-
-    private static bool IsDataToUpdate(AppUserEntity newAppUser, AppUser oldAppUser)
-    {
-        return !(newAppUser.FirstName == oldAppUser.FirstName &&
-            newAppUser.LastName == oldAppUser.LastName &&
-            newAppUser.City == oldAppUser.City &&
-            newAppUser.PhoneNumber == oldAppUser.PhoneNumber &&
-            newAppUser.Birthdate == oldAppUser.Birthdate &&
-            newAppUser.SemanticScholarProfile == oldAppUser.SemanticScholarProfile &&
-            newAppUser.AboutText == oldAppUser.AboutText &&
-            newAppUser.Avatar == oldAppUser.Avatar &&
-            newAppUser.Banner == oldAppUser.Banner);
     }
 }

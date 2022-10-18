@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
+using UniQuanda.Core.Domain.Enums;
 
 namespace UniQuanda.Core.Application.Validators;
 
 public class ImageUploadValidator : ValidationAttribute
 {
-    private readonly int _maxSizeImage = 10 * 1024 * 1024;
+    private readonly int _maxSizeImage = 10 * (int)ByteSizeEnum.MegaByte;
 
     private readonly List<string> _allowedImageTypes = new() { "image/jpeg", "image/png", "image/svg", "image/svg+xml" };
 

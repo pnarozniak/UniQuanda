@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProfile;
 using UniQuanda.Core.Application.CQRS.Queries.AppUser.Profile.GetAppUserProfileSettings;
 using UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile;
+using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Infrastructure.Helpers;
 
 namespace UniQuanda.Presentation.API.Controllers;
@@ -46,7 +47,7 @@ public class AppUserProfileController : ControllerBase
     public async Task<IActionResult> GetAppUserProfileSettings(
         CancellationToken ct)
     {
-        var idAppUser = JwtTokenHelper.GetAppUserIdFromToken(User);
+        var idAppUser = User.GetId();
         if (idAppUser == null)
             return Unauthorized();
         var query = new GetAppUserProfileSettingsQuery(idAppUser.Value);
@@ -64,13 +65,13 @@ public class AppUserProfileController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [HttpPut("settings")]
-    [RequestSizeLimit(21 * 1024 * 1024)]
+    [RequestSizeLimit(21 * (int)ByteSizeEnum.MegaByte)]
     [Authorize(Roles = "user")]
     public async Task<IActionResult> UpdateAppUserProfileSettings(
         [FromForm] UpdateAppUserProfileRequestDTO request,
         CancellationToken ct)
     {
-        var idAppUser = JwtTokenHelper.GetAppUserIdFromToken(User);
+        var idAppUser = User.GetId(); ;
         if (idAppUser == null)
             return Unauthorized();
 

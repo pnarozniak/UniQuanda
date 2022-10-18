@@ -17,11 +17,14 @@ public class UserEmailEfConfiguration : IEntityTypeConfiguration<UserEmail>
         builder.Property(ue => ue.IsMain).IsRequired();
 
         // Only for development
-        var userEmails = new List<UserEmail>
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
         {
-            new UserEmail { Id = 1, Value = "user@uniquanda.pl", IsMain = true, IdUser = 1 }
-        };
+            var userEmails = new List<UserEmail>
+            {
+                new UserEmail { Id = 1, Value = "user@uniquanda.pl", IsMain = true, IdUser = 1 }
+            };
 
-        builder.HasData(userEmails);
+            builder.HasData(userEmails);
+        }
     }
 }

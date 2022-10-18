@@ -8,8 +8,8 @@ public static class JwtTokenHelper
     ///     Get id of AppUser from token
     /// </summary>
     /// <param name="claimPrincipal">AppUser JWT Token</param>
-    /// <returns></returns>
-    public static int? GetAppUserIdFromToken(ClaimsPrincipal claimPrincipal)
+    /// <returns>Id of AppUser if exists, otherwise null</returns>
+    public static int? GetId(this ClaimsPrincipal claimPrincipal)
     {
         var idAppUser = claimPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var canParse = int.TryParse(idAppUser, out var parsedIdAppUser);
