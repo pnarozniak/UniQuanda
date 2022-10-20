@@ -37,7 +37,7 @@ public class AppUserRepository : IAppUserRepository
         var cacheDuration = DurationEnum.ThreeHours;
 
         var query = _appContext.AppUsers.Where(u => u.Id == uid);
-        var cacheResult = await _cacheService.GetFromCache<(int Points, int QuestionAmount, int AnswersAmount)>(cacheKey, ct);
+        var cacheResult = await _cacheService.GetFromCacheAsync<(int Points, int QuestionAmount, int AnswersAmount)>(cacheKey, ct);
         AppUserEntity? user = null;
         if (Equals(cacheResult, default((int Points, int QuestionAmount, int AnswersAmount))))
         {
@@ -76,7 +76,7 @@ public class AppUserRepository : IAppUserRepository
             if (Equals(user, default(AppUserEntity))) return null;
 
             (int Points, int QuestionAmount, int AnswersAmount) statistics = (user.Points ?? 0, user.QuestionsAmount ?? 0, user.AnswersAmount ?? 0);
-            await _cacheService.SetToCache(cacheKey, statistics, cacheDuration, ct);
+            await _cacheService.SetToCacheAsync(cacheKey, statistics, cacheDuration, ct);
             return user;
         }
         else

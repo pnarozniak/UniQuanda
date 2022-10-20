@@ -71,7 +71,7 @@ public class AppUserProfileController : ControllerBase
         [FromForm] UpdateAppUserProfileRequestDTO request,
         CancellationToken ct)
     {
-        var idAppUser = User.GetId(); ;
+        var idAppUser = User.GetId();
         if (idAppUser == null)
             return Unauthorized();
 
