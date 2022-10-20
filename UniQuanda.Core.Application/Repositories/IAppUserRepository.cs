@@ -36,4 +36,13 @@ public interface IAppUserRepository
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>If AppUser isn't found then IsSuccessful NULL, otherwise true/false based on success of update. If it is successful, returned is avatar url</returns>    
     Task<AppUserUpdateResult> UpdateAppUserAsync(AppUserEntity appUser, CancellationToken ct);
+
+    /// <summary>
+    ///     Checks if given nickname is currently used by any user
+    /// </summary>
+    /// <param name="uid">Id User which make request to API</param>
+    /// <param name="nickname">Nickname to check</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>True if nickname is already in use, null when user is not exist, otherwise False</returns>
+    Task<bool?> IsNicknameUsedAsync(int uid, string nickname, CancellationToken ct);
 }

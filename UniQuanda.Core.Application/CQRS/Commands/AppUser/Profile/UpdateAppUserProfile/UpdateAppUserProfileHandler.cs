@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using UniQuanda.Core.Application.Repositories;
+using UniQuanda.Core.Domain.Enums;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProfile;
 
@@ -14,6 +15,12 @@ public class UpdateAppUserProfileHandler : IRequestHandler<UpdateAppUserProfileC
 
     public async Task<UpdateAppUserProfileResponseDTO> Handle(UpdateAppUserProfileCommand request, CancellationToken ct)
     {
+        var isNickNameUsed = await _appUserRepository.IsNicknameUsedAsync(request.AppUser.Id, request.AppUser.Nickname, ct);
+        if (isNickNameUsed is null)
+            return new UpdateAppUserProfileResponseDTO() { AppUserUpdateStatus = AppUserUpdateStatusEnum.AppUserNotExist };
+        else if (isNickNameUsed == true)
+            return new UpdateAppUserProfileResponseDTO() { AppUserUpdateStatus = AppUserUpdateStatusEnum.NickNameIsUsed };
+
         if (request.Avatar != null)
         {
             //In the future Call to S3
@@ -29,9 +36,9 @@ public class UpdateAppUserProfileHandler : IRequestHandler<UpdateAppUserProfileC
         var repoResult = await _appUserRepository.UpdateAppUserAsync(request.AppUser, ct);
         return repoResult.IsSuccessful switch
         {
-            null => new UpdateAppUserProfileResponseDTO() { IsSuccessful = null },
-            false => new UpdateAppUserProfileResponseDTO() { IsSuccessful = false },
-            true => new UpdateAppUserProfileResponseDTO() { IsSuccessful = true, AvatarUrl = request.AppUser.Avatar }
+            null => new UpdateAppUserProfileResponseDTO() { AppUserUpdateStatus = AppUserUpdateStatusEnum.AppUserNotExist },
+            false => new UpdateAppUserProfileResponseDTO() { AppUserUpdateStatus = AppUserUpdateStatusEnum.NotSuccessful },
+            true => new UpdateAppUserProfileResponseDTO() { AppUserUpdateStatus = AppUserUpdateStatusEnum.Successful, AvatarUrl = request.AppUser.Avatar }
         };
     }
 }

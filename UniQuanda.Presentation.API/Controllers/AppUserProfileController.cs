@@ -77,11 +77,12 @@ public class AppUserProfileController : ControllerBase
 
         var command = new UpdateAppUserProfileCommand(request, idAppUser.Value);
         var result = await _mediator.Send(command, ct);
-        return result.IsSuccessful switch
+        return result.AppUserUpdateStatus switch
         {
-            null => NotFound(),
-            false => Conflict(),
-            true => Ok(new { avatarUrl = result.AvatarUrl })
+            AppUserUpdateStatusEnum.AppUserNotExist => NotFound(),
+            AppUserUpdateStatusEnum.NickNameIsUsed => Conflict(new { isNickNameUsed = true }),
+            AppUserUpdateStatusEnum.NotSuccessful => Conflict(new { isNickNameUsed = false }),
+            AppUserUpdateStatusEnum.Successful => Ok(new { avatarUrl = result.AvatarUrl })
         };
     }
 }

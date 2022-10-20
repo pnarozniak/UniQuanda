@@ -5,16 +5,20 @@ using UniQuanda.Core.Domain.Entities.App;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Infrastructure.Presistence.AppDb;
+using UniQuanda.Infrastructure.Presistence.AppDb.Models;
+using UniQuanda.Infrastructure.Presistence.AuthDb;
 
 namespace UniQuanda.Infrastructure.Repositories;
 
 public class AppUserRepository : IAppUserRepository
 {
+    private readonly AuthDbContext _authContext;
     private readonly AppDbContext _appContext;
     private readonly ICacheService _cacheService;
 
-    public AppUserRepository(AppDbContext appContext, ICacheService cacheService)
+    public AppUserRepository(AuthDbContext authContext, AppDbContext appContext, ICacheService cacheService)
     {
+        this._authContext = authContext;
         this._appContext = appContext;
         this._cacheService = cacheService;
     }
@@ -120,6 +124,7 @@ public class AppUserRepository : IAppUserRepository
             .Where(u => u.Id == idAppUser)
             .Select(u => new AppUserEntity
             {
+                Nickname = u.Nickname,
                 FirstName = u.FirstName,
                 LastName = u.LastName,
                 Birthdate = u.Birthdate,
@@ -139,6 +144,7 @@ public class AppUserRepository : IAppUserRepository
         if (appUser is null)
             return new AppUserUpdateResult { IsSuccessful = null };
 
+        appUser.Nickname = appUserEntity.Nickname;
         appUser.FirstName = appUserEntity.FirstName;
         appUser.LastName = appUserEntity.LastName;
         appUser.City = appUserEntity.City;
@@ -149,12 +155,37 @@ public class AppUserRepository : IAppUserRepository
         appUser.SemanticScholarProfile = appUserEntity.SemanticScholarProfile;
         appUser.AboutText = appUserEntity.AboutText;
 
-        var entity = _appContext.Entry(appUser);
-        if (entity.OriginalValues == entity.CurrentValues)
+        if (!_appContext.ChangeTracker.HasChanges())
             return new AppUserUpdateResult { IsSuccessful = true };
 
         if (!(await _appContext.SaveChangesAsync(ct) > 0))
             return new AppUserUpdateResult { IsSuccessful = false };
+
         return new AppUserUpdateResult { IsSuccessful = true, AvatarUrl = appUser.Avatar };
+    }
+
+    public async Task<bool?> IsNicknameUsedAsync(int uid, string nickname, CancellationToken ct)
+    {
+        var appUser = await _appContext.AppUsers.SingleOrDefaultAsync(au => au.Id == uid, ct);
+        if (appUser is null)
+            return null;
+        if (appUser.Nickname == nickname)
+            return false;
+
+        return await _authContext.Users
+            .AnyAsync(u => EF.Functions.ILike(u.Nickname, nickname), ct);
+    }
+
+    private static bool IsDataToUpdate(AppUserEntity newAppUser, AppUser oldAppUser)
+    {
+        return !(newAppUser.FirstName == oldAppUser.FirstName &&
+            newAppUser.LastName == oldAppUser.LastName &&
+            newAppUser.City == oldAppUser.City &&
+            newAppUser.PhoneNumber == oldAppUser.PhoneNumber &&
+            newAppUser.Birthdate == oldAppUser.Birthdate &&
+            newAppUser.SemanticScholarProfile == oldAppUser.SemanticScholarProfile &&
+            newAppUser.AboutText == oldAppUser.AboutText &&
+            newAppUser.Avatar == oldAppUser.Avatar &&
+            newAppUser.Banner == oldAppUser.Banner);
     }
 }

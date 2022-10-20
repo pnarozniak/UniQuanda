@@ -11,6 +11,7 @@ public class UpdateAppUserProfileCommand : IRequest<UpdateAppUserProfileResponse
         AppUser = new AppUserEntity
         {
             Id = idAppUser,
+            Nickname = request.NickName,
             FirstName = request.FirstName,
             LastName = request.LastName,
             Birthdate = request.Birthdate,

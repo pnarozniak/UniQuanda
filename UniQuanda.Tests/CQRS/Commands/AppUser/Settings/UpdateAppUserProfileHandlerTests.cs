@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProfile;
 using UniQuanda.Core.Application.Repositories;
+using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Core.Domain.Utils;
 
 namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
@@ -28,97 +29,144 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
         }
 
         [Test]
-        public async Task UpdateAppUserProfile_ShouldReturnIsSuccessfulAsTrue_WhenUpdateIsSuccessfulAndContainsAvatarAndBanner()
+        public async Task UpdateAppUserProfile_ShouldReturnStatusAsSuccessful_WhenUpdateIsSuccessfulAndContainsAvatarAndBanner()
         {
             var avatar = GetImage("png");
             var banner = GetImage("png");
             var newAppUserData = GetNewAppUserData(avatar, banner);
             this.updateAppUserProfileCommand = new UpdateAppUserProfileCommand(newAppUserData, _idAppUser);
             this.appUserRepository
+                .Setup(ar => ar.IsNicknameUsedAsync(_idAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
+                .ReturnsAsync(false);
+            this.appUserRepository
                 .Setup(a => a.UpdateAppUserAsync(updateAppUserProfileCommand.AppUser, CancellationToken.None))
                 .ReturnsAsync(GetAppUserProfileUpdateResult(true, this._avatarUrl));
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.IsSuccessful.Should().Be(true);
+            result.AppUserUpdateStatus.Should().Be(AppUserUpdateStatusEnum.Successful);
             result.AvatarUrl.Should().NotBeNull();
         }
 
         [Test]
-        public async Task UpdateAppUserProfile_ShouldReturnIsSuccessfulAsTrue_WhenUpdateIsSuccessfulAndContainsAvatar()
+        public async Task UpdateAppUserProfile_ShouldReturnStatusAsSuccessful_WhenUpdateIsSuccessfulAndContainsAvatar()
         {
             var avatar = GetImage("png");
             var newAppUserData = GetNewAppUserData(avatar, null);
             this.updateAppUserProfileCommand = new UpdateAppUserProfileCommand(newAppUserData, _idAppUser);
             this.appUserRepository
+                .Setup(ar => ar.IsNicknameUsedAsync(_idAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
+                .ReturnsAsync(false);
+            this.appUserRepository
                 .Setup(a => a.UpdateAppUserAsync(updateAppUserProfileCommand.AppUser, CancellationToken.None))
                 .ReturnsAsync(GetAppUserProfileUpdateResult(true, this._avatarUrl));
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.IsSuccessful.Should().Be(true);
+            result.AppUserUpdateStatus.Should().Be(AppUserUpdateStatusEnum.Successful);
             result.AvatarUrl.Should().NotBeNull();
         }
 
         [Test]
-        public async Task UpdateAppUserProfile_ShouldReturnIsSuccessfulAsTrue_WhenUpdateIsSuccessfulAndContainsBanner()
+        public async Task UpdateAppUserProfile_ShouldReturnStatusAsSuccessful_WhenUpdateIsSuccessfulAndContainsBanner()
         {
             var banner = GetImage("png");
             var newAppUserData = GetNewAppUserData(null, banner);
             this.updateAppUserProfileCommand = new UpdateAppUserProfileCommand(newAppUserData, _idAppUser);
-
+            this.appUserRepository
+                .Setup(ar => ar.IsNicknameUsedAsync(_idAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
+                .ReturnsAsync(false);
             this.appUserRepository
                 .Setup(a => a.UpdateAppUserAsync(updateAppUserProfileCommand.AppUser, CancellationToken.None))
                 .ReturnsAsync(GetAppUserProfileUpdateResult(true, null));
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.IsSuccessful.Should().Be(true);
+            result.AppUserUpdateStatus.Should().Be(AppUserUpdateStatusEnum.Successful);
             result.AvatarUrl.Should().BeNull();
         }
 
         [Test]
-        public async Task UpdateAppUserProfile_ShouldReturnIsSuccessfulAsTrue_WhenUpdateIsSuccessfulAndNotContainsAvatarAndBanner()
+        public async Task UpdateAppUserProfile_ShouldReturnStatusAsSuccessful_WhenUpdateIsSuccessfulAndNotContainsAvatarAndBanner()
         {
             var newAppUserData = GetNewAppUserData(null, null);
             this.updateAppUserProfileCommand = new UpdateAppUserProfileCommand(newAppUserData, _idAppUser);
+            this.appUserRepository
+                .Setup(ar => ar.IsNicknameUsedAsync(_idAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
+                .ReturnsAsync(false);
             this.appUserRepository
                 .Setup(a => a.UpdateAppUserAsync(updateAppUserProfileCommand.AppUser, CancellationToken.None))
                 .ReturnsAsync(GetAppUserProfileUpdateResult(true, null));
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.IsSuccessful.Should().Be(true);
+            result.AppUserUpdateStatus.Should().Be(AppUserUpdateStatusEnum.Successful);
             result.AvatarUrl.Should().BeNull();
         }
 
         [Test]
-        public async Task UpdateAppUserProfile_ShouldReturnIsSuccessfulAsFalse_WhenUpdateAppUserIsNotSuccessful()
+        public async Task UpdateAppUserProfile_ShouldReturnStatusAsNotSuccessful_WhenUpdateAppUserIsNotSuccessful()
         {
             var newAppUserData = GetNewAppUserData(null, null);
             this.updateAppUserProfileCommand = new UpdateAppUserProfileCommand(newAppUserData, _idAppUser);
+            this.appUserRepository
+                .Setup(ar => ar.IsNicknameUsedAsync(_idAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
+                .ReturnsAsync(false);
             this.appUserRepository
                 .Setup(a => a.UpdateAppUserAsync(updateAppUserProfileCommand.AppUser, CancellationToken.None))
                 .ReturnsAsync(GetAppUserProfileUpdateResult(false, null));
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.IsSuccessful.Should().Be(false);
+            result.AppUserUpdateStatus.Should().Be(AppUserUpdateStatusEnum.NotSuccessful);
             result.AvatarUrl.Should().BeNull();
         }
 
         [Test]
-        public async Task UpdateAppUserProfile_ShouldReturnIsSuccessfulAsNull_WhenAppUserIsNotFound()
+        public async Task UpdateAppUserProfile_ShouldReturnStatusAsAppUserNotExist_WhenAppUserIsNotFound()
         {
             var newAppUserData = GetNewAppUserData(null, null);
             this.updateAppUserProfileCommand = new UpdateAppUserProfileCommand(newAppUserData, _idAppUser);
+            this.appUserRepository
+                .Setup(ar => ar.IsNicknameUsedAsync(_idAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
+                .ReturnsAsync(false);
             this.appUserRepository
                 .Setup(a => a.UpdateAppUserAsync(updateAppUserProfileCommand.AppUser, CancellationToken.None))
                 .ReturnsAsync(GetAppUserProfileUpdateResult(null, null));
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.IsSuccessful.Should().Be(null);
+            result.AppUserUpdateStatus.Should().Be(AppUserUpdateStatusEnum.AppUserNotExist);
+            result.AvatarUrl.Should().BeNull();
+        }
+
+        [Test]
+        public async Task UpdateAppUserProfile_ShouldReturnStatusAsNickNameIsUsed_WhenNickNameIsUsed()
+        {
+            var newAppUserData = GetNewAppUserData(null, null);
+            this.updateAppUserProfileCommand = new UpdateAppUserProfileCommand(newAppUserData, _idAppUser);
+            this.appUserRepository
+                .Setup(ar => ar.IsNicknameUsedAsync(_idAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
+                .ReturnsAsync(true);
+
+            var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
+
+            result.AppUserUpdateStatus.Should().Be(AppUserUpdateStatusEnum.NickNameIsUsed);
+            result.AvatarUrl.Should().BeNull();
+        }
+
+        [Test]
+        public async Task UpdateAppUserProfile_ShouldReturnStatusAsNickNameIsUsed_WhenCheckIfNickNameIsUsedNotFindUser()
+        {
+            var newAppUserData = GetNewAppUserData(null, null);
+            this.updateAppUserProfileCommand = new UpdateAppUserProfileCommand(newAppUserData, _idAppUser);
+            this.appUserRepository
+                .Setup(ar => ar.IsNicknameUsedAsync(_idAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
+                .ReturnsAsync((bool?)null);
+
+            var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
+
+            result.AppUserUpdateStatus.Should().Be(AppUserUpdateStatusEnum.AppUserNotExist);
             result.AvatarUrl.Should().BeNull();
         }
 
@@ -126,6 +174,7 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
         {
             return new UpdateAppUserProfileRequestDTO
             {
+                NickName = "NickName",
                 FirstName = "FirstName",
                 LastName = "LastName",
                 City = "City",

@@ -1,11 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 using UniQuanda.Core.Application.Validators;
+using UniQuanda.Core.Domain.Enums;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProfile;
 
 public class UpdateAppUserProfileRequestDTO
 {
+    [Required]
+    [MinLength(3)]
+    [MaxLength(30)]
+    public string NickName { get; set; }
+
     [MaxLength(35)]
     public string? FirstName { get; set; }
 
@@ -15,7 +21,7 @@ public class UpdateAppUserProfileRequestDTO
     [MaxLength(22)]
     public string? PhoneNumber { get; set; }
 
-    [MaxLength(300)]
+    [MaxLength(4000)]
     public string? City { get; set; }
 
     [DateTimeEarlierThanCurrentValidator]
@@ -35,6 +41,6 @@ public class UpdateAppUserProfileRequestDTO
 
 public class UpdateAppUserProfileResponseDTO
 {
-    public bool? IsSuccessful { get; set; }
+    public AppUserUpdateStatusEnum AppUserUpdateStatus { get; set; }
     public string? AvatarUrl { get; set; }
 }

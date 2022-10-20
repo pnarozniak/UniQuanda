@@ -19,6 +19,7 @@ public class GetAppUserProfileSettingsHandler : IRequestHandler<GetAppUserProfil
             return null;
         return new GetAppUserProfileSettingsResponseDTO
         {
+            NickName = appUser.Nickname,
             FirstName = appUser.FirstName,
             LastName = appUser.LastName,
             Birthdate = appUser.Birthdate,
