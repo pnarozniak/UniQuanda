@@ -144,6 +144,7 @@ public class AppUserRepository : IAppUserRepository
         if (appUser is null)
             return new AppUserUpdateResult { IsSuccessful = null };
 
+        var isNickNameToUpdate = appUser.Nickname != appUserEntity.Nickname;
         appUser.Nickname = appUserEntity.Nickname;
         appUser.FirstName = appUserEntity.FirstName;
         appUser.LastName = appUserEntity.LastName;
@@ -158,31 +159,38 @@ public class AppUserRepository : IAppUserRepository
         if (!_appContext.ChangeTracker.HasChanges())
             return new AppUserUpdateResult { IsSuccessful = true };
 
-        await using var tran = await _appContext.Database.BeginTransactionAsync(ct);
-        try
+        if (isNickNameToUpdate)
         {
-            var user = await _authContext.Users.SingleOrDefaultAsync(au => au.Id == appUserEntity.Id, ct);
-            if(user is null)
-                return new AppUserUpdateResult { IsSuccessful = null };
-            user.Nickname = appUserEntity.Nickname;
+            await using var tran = await _appContext.Database.BeginTransactionAsync(ct);
+            try
+            {
+                var user = await _authContext.Users.SingleOrDefaultAsync(au => au.Id == appUserEntity.Id, ct);
+                if (user is null)
+                    return new AppUserUpdateResult { IsSuccessful = null };
 
-            if (await _authContext.SaveChangesAsync(ct) == 0)
+                user.Nickname = appUserEntity.Nickname;
+                if (await _authContext.SaveChangesAsync(ct) == 0)
+                    return new AppUserUpdateResult { IsSuccessful = false };
+
+                if (await _appContext.SaveChangesAsync(ct) == 0)
+                    return new AppUserUpdateResult { IsSuccessful = false };
+
+                await tran.CommitAsync(ct);
+                return new AppUserUpdateResult { IsSuccessful = true, AvatarUrl = appUser.Avatar };
+            }
+            catch (Exception exc)
+            {
+                await tran.RollbackAsync(ct);
+                if (exc.InnerException is OperationCanceledException) throw;
                 return new AppUserUpdateResult { IsSuccessful = false };
-
+            }
+        }
+        else
+        {
             if (await _appContext.SaveChangesAsync(ct) == 0)
                 return new AppUserUpdateResult { IsSuccessful = false };
-
-            await tran.CommitAsync(ct);
             return new AppUserUpdateResult { IsSuccessful = true, AvatarUrl = appUser.Avatar };
         }
-        catch (Exception exc)
-        {
-            await tran.RollbackAsync(ct);
-            if (exc.InnerException is OperationCanceledException) throw;
-            return new AppUserUpdateResult { IsSuccessful = false };
-        }
-
-
     }
 
     public async Task<bool?> IsNicknameUsedAsync(int uid, string nickname, CancellationToken ct)
