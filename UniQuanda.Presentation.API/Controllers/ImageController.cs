@@ -28,7 +28,7 @@ public class ImageController : ControllerBase
         CancellationToken ct)
     {
         // TODO: Authorization for the resource based on User
-        var result = await _imageService.GetImageAsync(FileName, ImageFolder.FindByValue<ImageFolder>(FolderName), ct);
+        var result = await _imageService.GetImageAsync(FileName, ImageFolder.FindByValue(FolderName), ct);
         if (object.Equals(result, default((Stream DataStream, string ContentType)))) return NotFound();
         return File(result.DataStream, result.ContentType);
     }
@@ -47,7 +47,7 @@ public class ImageController : ControllerBase
     {
         if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development") return StatusCode(StatusCodes.Status423Locked);
 
-        var result = await _imageService.SaveImageAsync(file, FileName, ImageFolder.FindByValue<ImageFolder>(FolderName), ct);
+        var result = await _imageService.SaveImageAsync(file, FileName, ImageFolder.FindByValue(FolderName), ct);
         return result ? StatusCode(StatusCodes.Status201Created) : Conflict();
     }
 
@@ -64,7 +64,7 @@ public class ImageController : ControllerBase
     {
         if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development") return StatusCode(StatusCodes.Status423Locked);
 
-        var result = await _imageService.RemoveImageAsync(FileName, ImageFolder.FindByValue<ImageFolder>(FolderName), ct);
+        var result = await _imageService.RemoveImageAsync(FileName, ImageFolder.FindByValue(FolderName), ct);
         return result ? StatusCode(StatusCodes.Status204NoContent) : NotFound();
     }
 
