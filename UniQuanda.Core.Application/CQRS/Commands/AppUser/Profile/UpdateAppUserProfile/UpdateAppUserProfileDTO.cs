@@ -21,7 +21,7 @@ public class UpdateAppUserProfileRequestDTO
     [MaxLength(22)]
     public string? PhoneNumber { get; set; }
 
-    [MaxLength(4000)]
+    [MaxLength(57)]
     public string? City { get; set; }
 
     [DateTimeEarlierThanCurrentValidator]
@@ -30,6 +30,7 @@ public class UpdateAppUserProfileRequestDTO
     [RegularExpression("^https://www.semanticscholar.org/author/.*/.*$")]
     public string? SemanticScholarProfile { get; set; }
 
+    [MaxLength(4000)]
     public string? AboutText { get; set; }
 
     [ImageUploadValidator("Avatar")]
