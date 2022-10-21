@@ -158,10 +158,31 @@ public class AppUserRepository : IAppUserRepository
         if (!_appContext.ChangeTracker.HasChanges())
             return new AppUserUpdateResult { IsSuccessful = true };
 
-        if (!(await _appContext.SaveChangesAsync(ct) > 0))
-            return new AppUserUpdateResult { IsSuccessful = false };
+        await using var tran = await _appContext.Database.BeginTransactionAsync(ct);
+        try
+        {
+            var user = await _authContext.Users.SingleOrDefaultAsync(au => au.Id == appUserEntity.Id, ct);
+            if(user is null)
+                return new AppUserUpdateResult { IsSuccessful = null };
+            user.Nickname = appUserEntity.Nickname;
 
-        return new AppUserUpdateResult { IsSuccessful = true, AvatarUrl = appUser.Avatar };
+            if (await _authContext.SaveChangesAsync(ct) == 0)
+                return new AppUserUpdateResult { IsSuccessful = false };
+
+            if (await _appContext.SaveChangesAsync(ct) == 0)
+                return new AppUserUpdateResult { IsSuccessful = false };
+
+            await tran.CommitAsync(ct);
+            return new AppUserUpdateResult { IsSuccessful = true, AvatarUrl = appUser.Avatar };
+        }
+        catch (Exception exc)
+        {
+            await tran.RollbackAsync(ct);
+            if (exc.InnerException is OperationCanceledException) throw;
+            return new AppUserUpdateResult { IsSuccessful = false };
+        }
+
+
     }
 
     public async Task<bool?> IsNicknameUsedAsync(int uid, string nickname, CancellationToken ct)
