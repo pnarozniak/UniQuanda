@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using UniQuanda.Core.Application.Services.Auth;
-using UniQuanda.Core.Domain.Entities;
+using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Infrastructure.Options;
 
 namespace UniQuanda.Infrastructure.Services.Auth;

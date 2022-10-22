@@ -2,8 +2,8 @@
 {
     public enum AcademicTitleEnum
     {
-        ENGINEER,
-        BACHELOR,
-        ACADEMIC
+        Engineer,
+        Bachelor,
+        Academic
     }
 }

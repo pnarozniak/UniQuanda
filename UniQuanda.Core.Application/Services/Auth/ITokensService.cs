@@ -1,4 +1,4 @@
-﻿using UniQuanda.Core.Domain.Entities;
+﻿using UniQuanda.Core.Domain.Entities.Auth;
 
 namespace UniQuanda.Core.Application.Services.Auth;
 

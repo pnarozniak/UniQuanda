@@ -15,5 +15,15 @@ public class UserEmailEfConfiguration : IEntityTypeConfiguration<UserEmail>
         builder.HasIndex(ue => ue.Value).IsUnique();
 
         builder.Property(ue => ue.IsMain).IsRequired();
+
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+        {
+            var userEmails = new List<UserEmail>
+            {
+                new UserEmail { Id = 1, Value = "user@uniquanda.pl", IsMain = true, IdUser = 1 }
+            };
+
+            builder.HasData(userEmails);
+        }
     }
 }

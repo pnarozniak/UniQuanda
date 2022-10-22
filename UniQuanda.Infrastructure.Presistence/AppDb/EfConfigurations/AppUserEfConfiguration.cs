@@ -21,6 +21,10 @@ public class AppUserEfConfiguration : IEntityTypeConfiguration<AppUser>
 
         builder.Property(u => u.PhoneNumber).HasMaxLength(22).IsRequired(false);
 
+        builder.Property(u => u.SemanticScholarProfile).IsRequired(false);
+
+        builder.Property(u => u.AboutText).HasMaxLength(4000).IsRequired(false);
+
         builder.Property(u => u.Avatar).IsRequired(false);
 
         builder.Property(u => u.Banner).IsRequired(false);
@@ -51,5 +55,15 @@ public class AppUserEfConfiguration : IEntityTypeConfiguration<AppUser>
             .WithOne(ut => ut.AppUserIdNavigation)
             .HasForeignKey(ut => ut.AppUserId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+        {
+            var users = new List<AppUser>
+            {
+                new AppUser { Id = 1, Nickname = "Programista", FirstName="Roman" }
+            };
+
+            builder.HasData(users);
+        }
     }
 }
