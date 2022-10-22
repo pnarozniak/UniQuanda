@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Domain.Enums;
 
 namespace UniQuanda.Core.Application.Services
@@ -33,5 +32,11 @@ namespace UniQuanda.Core.Application.Services
         /// <param name="ct">Cancellation Token</param>
         /// <returns>true if image was added</returns>
         public Task<bool> SaveImageAsync(IFormFile file, string FileName, ImageFolder FolderName, CancellationToken ct);
+
+        /// <summary>
+        ///     Returns image endpoind adress. 
+        /// </summary>
+        /// <returns>string with image endpoint adress</returns>
+        public string GetImageURL();
     }
 }

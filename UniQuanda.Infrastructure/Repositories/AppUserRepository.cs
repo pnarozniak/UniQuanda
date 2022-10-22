@@ -204,17 +204,4 @@ public class AppUserRepository : IAppUserRepository
         return await _authContext.Users
             .AnyAsync(u => EF.Functions.ILike(u.Nickname, nickname), ct);
     }
-
-    private static bool IsDataToUpdate(AppUserEntity newAppUser, AppUser oldAppUser)
-    {
-        return !(newAppUser.FirstName == oldAppUser.FirstName &&
-            newAppUser.LastName == oldAppUser.LastName &&
-            newAppUser.City == oldAppUser.City &&
-            newAppUser.PhoneNumber == oldAppUser.PhoneNumber &&
-            newAppUser.Birthdate == oldAppUser.Birthdate &&
-            newAppUser.SemanticScholarProfile == oldAppUser.SemanticScholarProfile &&
-            newAppUser.AboutText == oldAppUser.AboutText &&
-            newAppUser.Avatar == oldAppUser.Avatar &&
-            newAppUser.Banner == oldAppUser.Banner);
-    }
 }
