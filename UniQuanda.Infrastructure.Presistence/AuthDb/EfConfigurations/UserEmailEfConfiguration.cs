@@ -16,7 +16,6 @@ public class UserEmailEfConfiguration : IEntityTypeConfiguration<UserEmail>
 
         builder.Property(ue => ue.IsMain).IsRequired();
 
-        // Only for development
         if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
         {
             var userEmails = new List<UserEmail>

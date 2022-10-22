@@ -31,7 +31,6 @@ public class UserEfConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey(ue => ue.IdUser)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Only for development
         if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
         {
             var users = new List<User>
