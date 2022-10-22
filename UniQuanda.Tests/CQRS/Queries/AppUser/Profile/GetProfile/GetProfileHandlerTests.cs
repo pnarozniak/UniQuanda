@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile;
 using UniQuanda.Core.Application.Repositories;
-using UniQuanda.Core.Domain.Entities;
 using UniQuanda.Core.Domain.Entities.App;
 using UniQuanda.Core.Domain.Enums;
 
@@ -162,11 +161,11 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
             var academicTitles = new List<AcademicTitleEntity>();
             for (var i = 0; i < amount; i++)
             {
-                var type = AcademicTitleEnum.ENGINEER;
+                var type = AcademicTitleEnum.Engineer;
                 if (i % 3 == 1)
-                    type = AcademicTitleEnum.BACHELOR;
+                    type = AcademicTitleEnum.Bachelor;
                 else if (i % 3 == 2)
-                    type = AcademicTitleEnum.ACADEMIC;
+                    type = AcademicTitleEnum.Academic;
                 academicTitles.Add(new AcademicTitleEntity
                 {
                     Id = i,

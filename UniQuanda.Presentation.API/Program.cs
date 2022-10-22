@@ -10,6 +10,9 @@ builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Fix DateTime issue
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 // Layers
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddInfrastructurePersistence(builder.Configuration);

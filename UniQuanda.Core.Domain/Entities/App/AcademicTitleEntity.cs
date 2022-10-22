@@ -1,6 +1,6 @@
 ﻿using UniQuanda.Core.Domain.Enums;
 
-namespace UniQuanda.Core.Domain.Entities
+namespace UniQuanda.Core.Domain.Entities.App
 {
     public class AcademicTitleEntity
     {

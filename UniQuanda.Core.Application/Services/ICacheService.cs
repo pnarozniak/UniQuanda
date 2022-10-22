@@ -11,7 +11,7 @@ namespace UniQuanda.Core.Application.Services
         /// <param name="key">How to identify object</param>
         /// <param name="ct">Cancellation Token</param>
         /// <returns>Object type of T if found, default otherwise</returns>
-        public Task<T?> GetFromCache<T>(string key, CancellationToken ct);
+        public Task<T?> GetFromCacheAsync<T>(string key, CancellationToken ct);
         /// <summary>
         /// Saves object to cache
         /// </summary>
@@ -21,6 +21,6 @@ namespace UniQuanda.Core.Application.Services
         /// <param name="duration">Enum that defines how long to store a object</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>True if saved, false otherwise</returns>
-        public Task<bool> SetToCache<T>(string key, T value, DurationEnum duration, CancellationToken ct);
+        public Task<bool> SetToCacheAsync<T>(string key, T value, DurationEnum duration, CancellationToken ct);
     }
 }

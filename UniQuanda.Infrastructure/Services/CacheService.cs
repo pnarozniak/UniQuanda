@@ -12,13 +12,13 @@ public class CacheService : ICacheService
     {
         _context = context;
     }
-    public async Task<T?> GetFromCache<T>(string key, CancellationToken ct)
+    public async Task<T?> GetFromCacheAsync<T>(string key, CancellationToken ct)
     {
         var result = await _context.GetStringAsync(key, ct);
         return result != null ? JsonConvert.DeserializeObject<T>(result) : default;
     }
 
-    public async Task<bool> SetToCache<T>(string key, T value, DurationEnum duration, CancellationToken ct)
+    public async Task<bool> SetToCacheAsync<T>(string key, T value, DurationEnum duration, CancellationToken ct)
     {
         try
         {
