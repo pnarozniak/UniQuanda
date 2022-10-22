@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 using UniQuanda.Infrastructure.Options;
 
@@ -33,5 +34,19 @@ public static class JwtBearerExtensions
             });
 
         return services;
+    }
+
+    /// <summary>
+    ///     Get id of AppUser from token
+    /// </summary>
+    /// <param name="claimPrincipal">AppUser JWT Token</param>
+    /// <returns>Id of AppUser if exists, otherwise null</returns>
+    public static int? GetId(this ClaimsPrincipal claimPrincipal)
+    {
+        var idAppUser = claimPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var canParse = int.TryParse(idAppUser, out var parsedIdAppUser);
+        if (!canParse)
+            return null;
+        return parsedIdAppUser;
     }
 }
