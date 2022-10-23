@@ -33,6 +33,11 @@ public class TokensService : ITokensService
         return new Tuple<string, DateTime>(refreshToken, refreshTokenExp);
     }
 
+    public string GeneratePasswordRecoveryToken()
+    {
+				return Guid.NewGuid().ToString();
+    }
+
     public string GenerateAccessToken(UserEntity user)
     {
         var userClaims = new List<Claim>
