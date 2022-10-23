@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -30,6 +31,11 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
         private string Tiltle = "Title";
         private string UniversityName = "UniversityName";
         private string Logo = "Logo";
+        private string AboutText = "AboutText";
+        private string PhoneNumber = "PhoneNumber";
+        private string City = "City";
+        private string SemanticScholarProfile = "SemanticScholarProfile";
+        private string TagName = "TagName";
 
 
         [SetUp]
@@ -56,6 +62,7 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
         public async Task GetProfile_ShouldReturnProfileWithoutTitlesAndUniversities_WhenProfileExists()
         {
             var appUserEntity = GetDefaultAppUserEntity();
+            appUserEntity.Tags = GetTags(0);
             appUserRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(appUserEntity);
 
@@ -73,6 +80,11 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
             result.HeaderStatistics.Points.Should().Be(Points);
             result.UserData.Avatar.Should().Be(Avatar);
             result.UserData.Banner.Should().Be(Banner);
+            result.UserData.AboutText.Should().Be(AboutText);
+            result.UserData.PhoneNumber.Should().Be(PhoneNumber);
+            result.UserData.City.Should().Be(City);
+            result.UserData.SemanticScholarProfile.Should().Be(SemanticScholarProfile);
+            result.PointsInTags.Should().HaveCount(0);
 
         }
 
@@ -81,6 +93,7 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
         {
             var appUserEntity = GetDefaultAppUserEntity();
             appUserEntity.Titles = GetAcademicTitles(2);
+            appUserEntity.Tags = GetTags(2);
             appUserRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(appUserEntity);
 
@@ -105,6 +118,11 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
             result.HeaderStatistics.Points.Should().Be(Points);
             result.UserData.Avatar.Should().Be(Avatar);
             result.UserData.Banner.Should().Be(Banner);
+            result.UserData.AboutText.Should().Be(AboutText);
+            result.UserData.PhoneNumber.Should().Be(PhoneNumber);
+            result.UserData.City.Should().Be(City);
+            result.UserData.SemanticScholarProfile.Should().Be(SemanticScholarProfile);
+            result.PointsInTags.Should().HaveCount(2);
 
         }
 
@@ -113,6 +131,7 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
         {
             var appUserEntity = GetDefaultAppUserEntity();
             appUserEntity.Universities = GetUniversities(2);
+            appUserEntity.Tags = GetTags(3);
 
             appUserRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(appUserEntity);
@@ -124,7 +143,7 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
 
             result.Universities.Should().HaveCount(2);
             Assert.That(orders, Is.Unique);
-
+            
             result.UserData.Id.Should().Be(UserId);
             result.AcademicTitles.Should().BeEmpty();
             result.UserData.FirstName.Should().Be(FirstName);
@@ -135,6 +154,11 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
             result.HeaderStatistics.Points.Should().Be(Points);
             result.UserData.Avatar.Should().Be(Avatar);
             result.UserData.Banner.Should().Be(Banner);
+            result.UserData.AboutText.Should().Be(AboutText);
+            result.UserData.PhoneNumber.Should().Be(PhoneNumber);
+            result.UserData.City.Should().Be(City);
+            result.UserData.SemanticScholarProfile.Should().Be(SemanticScholarProfile);
+            result.PointsInTags.Should().HaveCount(3);
 
         }
 
@@ -151,8 +175,13 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
                 Points = Points,
                 Avatar = Avatar,
                 Banner = Banner,
+                AboutText = AboutText,
+                PhoneNumber = PhoneNumber,
+                City = City,
+                SemanticScholarProfile = SemanticScholarProfile,
                 Titles = new List<AcademicTitleEntity>(),
-                Universities = new List<UniversityEntity>()
+                Universities = new List<UniversityEntity>(),
+                Tags = new List<TagOnProfileEntity>()
             };
         }
 
@@ -192,6 +221,21 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
                 });
             }
             return universities;
+        }
+
+        public IEnumerable<TagOnProfileEntity> GetTags(int amount)
+        {
+            var tags = new List<TagOnProfileEntity>();
+            var rnd = new Random();
+            for (var i = 0; i < amount; i++)
+            {
+                tags.Add(new TagOnProfileEntity
+                {
+                    Name = $"{TagName}{i}",
+                    Points = rnd.Next(1, 100)
+                });
+            }
+            return tags;
         }
     }
 }
