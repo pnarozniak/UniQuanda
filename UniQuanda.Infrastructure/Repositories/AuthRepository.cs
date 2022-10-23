@@ -160,7 +160,8 @@ public class AuthRepository : IAuthRepository
 		{
 				var dbUser = await _authContext.Users
 						.Include(u => u.ActionsToConfirm)
-						.SingleOrDefaultAsync(u => u.Id == idUser);
+						.Include(u => u.IdTempUserNavigation)
+						.SingleOrDefaultAsync(u => u.Id == idUser & u.IdTempUserNavigation == null);
 
 				if (dbUser is null) return null;
 	
@@ -196,7 +197,9 @@ public class AuthRepository : IAuthRepository
 
 		public async Task<bool> ResetUserPasswordAsync(int idUser, int idRecoveryAction, string newHashedPassword, CancellationToken ct)
 		{
-			var dbUser = await _authContext.Users.SingleOrDefaultAsync(u => u.Id == idUser);
+			var dbUser = await _authContext.Users
+				.Include(u => u.IdTempUserNavigation)
+				.SingleOrDefaultAsync(u => u.Id == idUser && u.IdTempUserNavigation == null);
 			if (dbUser is null) return false;
 
 			dbUser.HashedPassword = newHashedPassword;

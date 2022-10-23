@@ -28,7 +28,7 @@ public class RecoverPasswordHandler : IRequestHandler<RecoverPasswordCommand, bo
 		public async Task<bool> Handle(RecoverPasswordCommand command, CancellationToken ct)
 		{
 				var dbUser = await _authRepository.GetUserByEmailAsync(command.Email, ct);
-				if (dbUser is null) return false;
+        if (dbUser is null || !dbUser.IsEmailConfirmed) return false;
 	
         var recoveryToken = _tokensService.GeneratePasswordRecoveryToken();
 				var actionExp = DateTime.UtcNow.AddMinutes(_expirationService.GetRecoverPasswordActionExpirationInMinutes());
