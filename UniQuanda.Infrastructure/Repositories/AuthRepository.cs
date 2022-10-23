@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Domain.Entities.Auth;
+using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 using UniQuanda.Infrastructure.Presistence.AuthDb;
@@ -154,4 +155,58 @@ public class AuthRepository : IAuthRepository
         tempUser.EmailConfirmationCode = confirmationCode;
         return await _authContext.SaveChangesAsync(ct) >= 1;
     }
+
+		public async Task<bool?> CreateUserActionToConfirmAsync(int idUser, UserActionToConfirmEnum actionType, string confirmationToken, DateTime existsUntil, CancellationToken ct)
+		{
+				var dbUser = await _authContext.Users
+						.Include(u => u.ActionsToConfirm)
+						.SingleOrDefaultAsync(u => u.Id == idUser);
+
+				if (dbUser is null) return null;
+	
+				var existingAction = dbUser.ActionsToConfirm.SingleOrDefault(a => a.ActionType == actionType);
+				if (existingAction is not null) {
+					existingAction.ConfirmationToken = confirmationToken;
+					existingAction.ExistsUntil = existsUntil;
+				} else {
+					var actionConfirmation = new UserActionToConfirm() {
+						IdUserNavigation = dbUser,
+						ConfirmationToken = confirmationToken,
+						ExistsUntil = existsUntil
+					};
+					await _authContext.UsersActionsToConfirm.AddAsync(actionConfirmation, ct);
+				}
+
+				return await _authContext.SaveChangesAsync(ct) == 1;
+		}
+
+		public async Task<UserActionToConfirmEntity?> GetUserActionToConfirmAsync(UserActionToConfirmEnum actionType, string confirmationToken, CancellationToken ct)
+		{
+				return await _authContext.UsersActionsToConfirm
+					.Where(ua => ua.ActionType == actionType && EF.Functions.Like(ua.ConfirmationToken, confirmationToken))
+					.Select(ua => new UserActionToConfirmEntity() {
+						Id = ua.Id,
+						IdUser = ua.IdUser,
+						ConfirmationToken = ua.ConfirmationToken,
+						ExistsUntil = ua.ExistsUntil,
+    				ActionType = ua.ActionType,
+					})
+					.SingleOrDefaultAsync(ct);
+		}
+
+		public async Task<bool> ResetUserPasswordAsync(int idUser, int idRecoveryAction, string newHashedPassword, CancellationToken ct)
+		{
+			var dbUser = await _authContext.Users.SingleOrDefaultAsync(u => u.Id == idUser);
+			if (dbUser is null) return false;
+
+			dbUser.HashedPassword = newHashedPassword;
+			dbUser.RefreshToken = null;
+			dbUser.RefreshTokenExp = null;
+
+			var action = new UserActionToConfirm() { Id = idRecoveryAction };
+			_authContext.UsersActionsToConfirm.Attach(action);
+			_authContext.UsersActionsToConfirm.Remove(action);
+			
+			return await _authContext.SaveChangesAsync(ct) == 2;
+		}
 }
