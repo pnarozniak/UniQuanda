@@ -14,10 +14,10 @@
         /// <exception cref="ArgumentOutOfRangeException">When there is no folder with given name</exception>
         public static ImageFolder FindByValue(string Value)
         {
-            switch(Value)
+            switch (Value)
             {
                 case "Profile": return Profile;
-                default: throw new ArgumentOutOfRangeException("Unknown ImageFolder value"); 
+                default: throw new ArgumentOutOfRangeException("Unknown ImageFolder value");
             }
         }
     }

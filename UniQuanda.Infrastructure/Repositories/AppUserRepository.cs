@@ -5,7 +5,6 @@ using UniQuanda.Core.Domain.Entities.App;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Infrastructure.Presistence.AppDb;
-using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 using UniQuanda.Infrastructure.Presistence.AuthDb;
 
 namespace UniQuanda.Infrastructure.Repositories;

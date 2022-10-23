@@ -7,22 +7,22 @@ using UniQuanda.Core.Domain.Enums;
 
 namespace UniQuanda.Infrastructure.Services
 {
-	public class ImageService: IImageService
-	{
+    public class ImageService : IImageService
+    {
         private readonly IAmazonS3 _amazonS3;
         private readonly BucketNames bucket = BucketNames.Default;
         private readonly IConfiguration _configuration;
 
-		public ImageService(IAmazonS3 amazonS3, IConfiguration configuration)
-		{
+        public ImageService(IAmazonS3 amazonS3, IConfiguration configuration)
+        {
             _amazonS3 = amazonS3;
             _configuration = configuration;
-		}
+        }
 
         public async Task<(Stream DataStream, string ContentType)> GetImageAsync(string FileName, ImageFolder FolderName, CancellationToken ct)
         {
             var s3Object = await _amazonS3.GetObjectAsync(bucket.Value, $"{FolderName.Value}/{FileName}");
-          
+
             return s3Object.HttpStatusCode == System.Net.HttpStatusCode.OK ?
                 (s3Object.ResponseStream, s3Object.Headers.ContentType)
                 : default((Stream DataStream, string ContentType));
@@ -48,7 +48,7 @@ namespace UniQuanda.Infrastructure.Services
                 InputStream = file.OpenReadStream()
             };
             request.Metadata.Add("Content-Type", file.ContentType);
-            var response = await _amazonS3.PutObjectAsync(request,ct);
+            var response = await _amazonS3.PutObjectAsync(request, ct);
             return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
         }
     }
