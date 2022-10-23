@@ -11,7 +11,7 @@
         {
             return "user-profile-statistics-" + uid;
         }
-        
+
         /// <summary>
         ///     Key for top tags in user profile
         /// </summary>

@@ -143,7 +143,7 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
 
             result.Universities.Should().HaveCount(2);
             Assert.That(orders, Is.Unique);
-            
+
             result.UserData.Id.Should().Be(UserId);
             result.AcademicTitles.Should().BeEmpty();
             result.UserData.FirstName.Should().Be(FirstName);
