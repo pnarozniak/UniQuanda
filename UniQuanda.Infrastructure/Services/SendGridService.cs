@@ -26,7 +26,7 @@ public class SendGridService : IEmailService
 
     public async Task SendPasswordRecoveryEmailAsync(string to, string recoveryToken)
     {
-        var url = $"{_uniQuandaClientOptions.Url}/public/reset-password?email={to}&recoveryToken={recoveryToken}";
+        var url = $"{_uniQuandaClientOptions.Url}/public/password-recovery/reset-password?email={to}&recoveryToken={recoveryToken}";
         var emailMessage =
             $"<span>Click following link, to reset your password: <a href=\"{url}\">Reset password</a></span>";
         var emailSubject = "Password recovery";
