@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Services\IImageService.proto" />
+    <None Remove="Microsoft.AspNetCore.Http.Features" />
+  </ItemGroup>
+  <ItemGroup>
     <None Update="NuGet.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

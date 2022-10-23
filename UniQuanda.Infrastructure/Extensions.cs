@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Amazon.Extensions.NETCore.Setup;
+using Amazon.Runtime;
+using Amazon.S3;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
@@ -29,6 +32,7 @@ public static class Extensions
         services.AddScoped<IEmailService, SendGridService>();
         services.AddScoped<IExpirationService, ExpirationService>();
         services.AddScoped<ICacheService, CacheService>();
+        services.AddScoped<IImageService, ImageService>();
 
         // Cache
         services.AddStackExchangeRedisCache(options =>
@@ -37,6 +41,16 @@ public static class Extensions
             options.Configuration = cacheOptions.ConnectionString;
             options.InstanceName = "UniQuanda-";
         });
+
+        //AWS S3
+        services.AddDefaultAWSOptions(new AWSOptions
+        {
+            Credentials = new BasicAWSCredentials(
+                configuration.GetSection("AWS")["AccessKeyId"],
+                configuration.GetSection("AWS")["SecretAccessKey"]),
+            Region = Amazon.RegionEndpoint.GetBySystemName(configuration.GetSection("AWS")["Region"])
+        });
+        services.AddAWSService<IAmazonS3>();
 
         return services;
     }

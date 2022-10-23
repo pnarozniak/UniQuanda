@@ -13,6 +13,8 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="SendGrid" Version="9.28.0" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.9.70" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +23,10 @@
     <ProjectReference Include="..\UniQuanda.Infrastructure.Presistence\UniQuanda.Infrastructure.Presistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="AWSSDK.S3" />
+    <None Remove="AWSSDK.Extensions.NETCore.Setup" />
+  </ItemGroup>
   <ItemGroup>
     <None Update="NuGet.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
