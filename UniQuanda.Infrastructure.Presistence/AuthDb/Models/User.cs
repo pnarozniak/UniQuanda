@@ -12,5 +12,5 @@ public class User
 
     public virtual TempUser IdTempUserNavigation { get; set; }
     public virtual ICollection<UserEmail> Emails { get; set; }
-		public virtual ICollection<UserActionToConfirm> ActionsToConfirm { get; set; }
+    public virtual ICollection<UserActionToConfirm> ActionsToConfirm { get; set; }
 }

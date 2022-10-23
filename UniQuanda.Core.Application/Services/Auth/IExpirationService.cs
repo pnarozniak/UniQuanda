@@ -8,7 +8,7 @@ public interface IExpirationService
     /// <returns>Number of hours</returns>
     int GetNewUserExpirationInHours();
 
-		/// <summary>
+    /// <summary>
     ///     Gets number of minutes, after which recovery password action should be deleted from db
     /// </summary>
     /// <returns>Number of minutes</returns>

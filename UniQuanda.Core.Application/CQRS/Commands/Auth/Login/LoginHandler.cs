@@ -6,10 +6,10 @@ namespace UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
 
 public class LoginHandler : IRequestHandler<LoginCommand, LoginResponseDTO>
 {
+    private readonly IAppUserRepository _appUserRepository;
     private readonly IAuthRepository _authRepository;
     private readonly IPasswordsService _passwordsService;
     private readonly ITokensService _tokensService;
-    private readonly IAppUserRepository _appUserRepository;
 
     public LoginHandler(
         IAuthRepository authRepository,

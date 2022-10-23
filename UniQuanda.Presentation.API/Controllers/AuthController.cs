@@ -100,7 +100,7 @@ public class AuthController : ControllerBase
         return NoContent();
     }
 
-		/// <summary>
+    /// <summary>
     ///     Generates password recovery link and sends it via e-mail
     /// </summary>
     [HttpPost("recover-password")]
@@ -114,12 +114,12 @@ public class AuthController : ControllerBase
         return NoContent();
     }
 
-		/// <summary>
+    /// <summary>
     ///     Resets user password
     /// </summary>
     [HttpPost("reset-password")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-		[ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> ResetPassword(
         [FromBody] ResetPaswordDTO request,
         CancellationToken ct)

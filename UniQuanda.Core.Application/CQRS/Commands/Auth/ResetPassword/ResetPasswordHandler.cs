@@ -15,7 +15,7 @@ public class ResetPasswordHandler : IRequestHandler<ResetPasswordCommand, bool>
     public ResetPasswordHandler(
         IAuthRepository authRepository,
         IEmailService emailService,
-                IPasswordsService passwordsService)
+        IPasswordsService passwordsService)
     {
         _authRepository = authRepository;
         _emailService = emailService;
@@ -24,15 +24,13 @@ public class ResetPasswordHandler : IRequestHandler<ResetPasswordCommand, bool>
 
     public async Task<bool> Handle(ResetPasswordCommand command, CancellationToken ct)
     {
-        var dbUser = await this._authRepository.GetUserByEmailAsync(command.Email, ct);
+        var dbUser = await _authRepository.GetUserByEmailAsync(command.Email, ct);
         if (dbUser is null || !dbUser.IsEmailConfirmed) return false;
 
-        var action = await this._authRepository.GetUserActionToConfirmAsync(UserActionToConfirmEnum.RECOVER_PASSWORD, command.RecoveryToken, ct);
+        var action = await _authRepository.GetUserActionToConfirmAsync(UserActionToConfirmEnum.RECOVER_PASSWORD,
+            command.RecoveryToken, ct);
 
-        if (action is null || action.IdUser != dbUser.Id || action.ExistsUntil <= DateTime.UtcNow)
-        {
-            return false;
-        }
+        if (action is null || action.IdUser != dbUser.Id || action.ExistsUntil <= DateTime.UtcNow) return false;
 
         var hashedPassword = _passwordService.HashPassword(command.NewPassword);
         var isReseted = await _authRepository.ResetUserPasswordAsync(dbUser.Id, action.Id, hashedPassword, ct);

@@ -11,17 +11,17 @@ public class UserActionToConfirmEfConfiguration : IEntityTypeConfiguration<UserA
         builder.HasKey(ua => ua.Id);
         builder.Property(ua => ua.Id).ValueGeneratedOnAdd();
 
-				builder.Property(ua => ua.ConfirmationToken).IsRequired();
+        builder.Property(ua => ua.ConfirmationToken).IsRequired();
 
-				builder.Property(ua => ua.ExistsUntil).IsRequired();
+        builder.Property(ua => ua.ExistsUntil).IsRequired();
 
-				builder.Property(ua => ua.ActionType).IsRequired();
+        builder.Property(ua => ua.ActionType).IsRequired();
 
-				builder.HasOne(ua => ua.IdUserNavigation)
-					.WithMany(u => u.ActionsToConfirm)
-					.HasForeignKey(ua => ua.IdUser)
-					.OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(ua => ua.IdUserNavigation)
+            .WithMany(u => u.ActionsToConfirm)
+            .HasForeignKey(ua => ua.IdUser)
+            .OnDelete(DeleteBehavior.Cascade);
 
-				builder.HasIndex(ua => new { ua.ActionType, ua.IdUser }).IsUnique();
+        builder.HasIndex(ua => new { ua.ActionType, ua.IdUser }).IsUnique();
     }
 }

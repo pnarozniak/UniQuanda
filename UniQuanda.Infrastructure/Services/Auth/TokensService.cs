@@ -1,7 +1,7 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Infrastructure.Options;
@@ -35,7 +35,7 @@ public class TokensService : ITokensService
 
     public string GeneratePasswordRecoveryToken()
     {
-				return Guid.NewGuid().ToString();
+        return Guid.NewGuid().ToString();
     }
 
     public string GenerateAccessToken(UserEntity user)

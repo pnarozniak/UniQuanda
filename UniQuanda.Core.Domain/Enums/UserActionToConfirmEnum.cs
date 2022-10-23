@@ -1,7 +1,6 @@
-namespace UniQuanda.Core.Domain.Enums
+namespace UniQuanda.Core.Domain.Enums;
+
+public enum UserActionToConfirmEnum
 {
-    public enum UserActionToConfirmEnum
-    {
-        RECOVER_PASSWORD,
-    }
+    RECOVER_PASSWORD
 }

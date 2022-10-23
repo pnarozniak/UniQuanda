@@ -1,4 +1,5 @@
 ﻿using UniQuanda.Core.Domain.Entities.Auth;
+
 namespace UniQuanda.Core.Application.Services.Auth;
 
 public interface ITokensService
@@ -15,7 +16,7 @@ public interface ITokensService
     /// <returns>Returns tuple with refresh token and it's expiration</returns>
     Tuple<string, DateTime> GenerateRefreshToken();
 
-   /// <summary>
+    /// <summary>
     ///     Generates token for password recovery
     /// </summary>
     /// <returns>Password recovery token</returns>
