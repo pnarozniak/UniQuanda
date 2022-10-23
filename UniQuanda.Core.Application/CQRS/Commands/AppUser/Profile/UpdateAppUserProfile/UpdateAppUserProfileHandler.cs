@@ -29,14 +29,14 @@ public class UpdateAppUserProfileHandler : IRequestHandler<UpdateAppUserProfileC
             var endpointURL = _imageService.GetImageURL();
             if (request.Avatar != null)
             {
-                var fileName = $"avatar-{request.AppUser.Nickname}";
+                var fileName = $"avatar-{request.AppUser.Id}";
                 request.AppUser.Avatar = endpointURL + fileName;
                 await _imageService.RemoveImageAsync(fileName, ImageFolder.Profile,ct);
                 await _imageService.SaveImageAsync(request.Avatar, fileName, ImageFolder.Profile, ct);
             }
             if (request.Banner != null)
             {
-                var fileName = $"banner-{request.AppUser.Nickname}";
+                var fileName = $"banner-{request.AppUser.Id}";
                 request.AppUser.Banner = endpointURL + fileName;
                 await _imageService.RemoveImageAsync(fileName, ImageFolder.Profile, ct);
                 await _imageService.SaveImageAsync(request.Banner, fileName, ImageFolder.Profile, ct);

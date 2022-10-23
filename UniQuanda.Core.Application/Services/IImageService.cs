@@ -24,7 +24,7 @@ namespace UniQuanda.Core.Application.Services
         public Task<bool> RemoveImageAsync(string FileName, ImageFolder FolderName, CancellationToken ct);
 
         /// <summary>
-        ///     Function to remove image from S3 bucket
+        ///     Function to save image from S3 bucket
         /// </summary>
         /// <param name="file">File from request to backend</param>
         /// <param name="FileName">Name of file (with type). Ex. File.png</param>
@@ -34,7 +34,7 @@ namespace UniQuanda.Core.Application.Services
         public Task<bool> SaveImageAsync(IFormFile file, string FileName, ImageFolder FolderName, CancellationToken ct);
 
         /// <summary>
-        ///     Returns image endpoind adress. 
+        ///     Returns image endpoint adress. 
         /// </summary>
         /// <returns>string with image endpoint adress</returns>
         public string GetImageURL();
