@@ -45,7 +45,8 @@ namespace UniQuanda.Infrastructure.Services
             {
                 BucketName = bucket.Value,
                 Key = $"{FolderName.Value}/{FileName}",
-                InputStream = file.OpenReadStream()
+                InputStream = file.OpenReadStream(),
+                ContentType = file.ContentType
             };
             request.Metadata.Add("Content-Type", file.ContentType);
             var response = await _amazonS3.PutObjectAsync(request,ct);
