@@ -12,7 +12,9 @@ using UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateUserMainEmail;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.GetUserEmails;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.IsEmailAndNicknameAvailable;
 using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Infrastructure.Enums;
 using UniQuanda.Presentation.API.Extensions;
+using UniQuanda.Presentation.API.Utils;
 
 namespace UniQuanda.Presentation.API.Controllers;
 
@@ -126,7 +128,7 @@ public class AuthController : ControllerBase
     /// </summary>
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
     [HttpPut("update-main-email")]
     [Authorize(Roles = "user")]
     public async Task<IActionResult> UpdateUserMainEmail([FromBody] UpdateUserMainEmailRequestDTO request, CancellationToken ct)
@@ -136,9 +138,9 @@ public class AuthController : ControllerBase
         return result switch
         {
             UpdateResultOfEmailOrPasswordEnum.ContentNotExist => NotFound(),
-            UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new { Status = UpdateUserMainEmailResponseDTO.PasswordIsInvalid }),
-            UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new { Status = UpdateUserMainEmailResponseDTO.UpdateError }),
-            UpdateResultOfEmailOrPasswordEnum.NotEnoughContent => Conflict(new { Status = UpdateUserMainEmailResponseDTO.UpdateError }),
+            UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.PasswordIsInvalid }),
+            UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
+            UpdateResultOfEmailOrPasswordEnum.NotEnoughContent => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
             UpdateResultOfEmailOrPasswordEnum.Successful => NoContent()
         };
     }
@@ -148,7 +150,7 @@ public class AuthController : ControllerBase
     /// </summary>
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
     [HttpPost("add-extra-email")]
     [Authorize(Roles = "user")]
     public async Task<IActionResult> AddExtraEmail([FromBody] AddExtraEmailForUserRequestDTO request, CancellationToken ct)
@@ -158,10 +160,10 @@ public class AuthController : ControllerBase
         return result switch
         {
             UpdateResultOfEmailOrPasswordEnum.ContentNotExist => NotFound(),
-            UpdateResultOfEmailOrPasswordEnum.EmailNotAvailable => Conflict(new { Status = AddExtraEmailForUserResponseDTO.EmailNotAvailable }),
-            UpdateResultOfEmailOrPasswordEnum.OverLimitOfExtraEmails => Conflict(new { Status = AddExtraEmailForUserResponseDTO.OverLimitOfExtraEmails }),
-            UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new { Status = AddExtraEmailForUserResponseDTO.InvalidPassword }),
-            UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new { Status = AddExtraEmailForUserResponseDTO.UpdateError }),
+            UpdateResultOfEmailOrPasswordEnum.EmailNotAvailable => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.EmailNotAvailable }),
+            UpdateResultOfEmailOrPasswordEnum.OverLimitOfExtraEmails => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.OverLimitOfExtraEmails }),
+            UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
+            UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
             UpdateResultOfEmailOrPasswordEnum.Successful => NoContent()
         };
     }
@@ -171,7 +173,7 @@ public class AuthController : ControllerBase
     /// </summary>
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
     [HttpPut("update-user-passsword")]
     [Authorize(Roles = "user")]
     public async Task<IActionResult> UpdateUserPassword([FromBody] UpdatePasswordRequestDTO request, CancellationToken ct)
@@ -181,8 +183,8 @@ public class AuthController : ControllerBase
         return result switch
         {
             UpdateResultOfEmailOrPasswordEnum.ContentNotExist => NotFound(),
-            UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new { Status = AddExtraEmailForUserResponseDTO.InvalidPassword }),
-            UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new { Status = AddExtraEmailForUserResponseDTO.UpdateError }),
+            UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
+            UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
             UpdateResultOfEmailOrPasswordEnum.Successful => NoContent()
         };
     }
@@ -192,7 +194,7 @@ public class AuthController : ControllerBase
     /// </summary>
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
     [HttpDelete("update-user-passsword")]
     [Authorize(Roles = "user")]
     public async Task<IActionResult> DeleteExtraEmail([FromBody] DeleteExtraEmailRequestDTO request, CancellationToken ct)
@@ -202,8 +204,8 @@ public class AuthController : ControllerBase
         return result switch
         {
             UpdateResultOfEmailOrPasswordEnum.ContentNotExist => NotFound(),
-            UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new { Status = AddExtraEmailForUserResponseDTO.InvalidPassword }),
-            UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new { Status = AddExtraEmailForUserResponseDTO.UpdateError }),
+            UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
+            UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
             UpdateResultOfEmailOrPasswordEnum.Successful => NoContent()
         };
     }

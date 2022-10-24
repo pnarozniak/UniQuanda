@@ -15,10 +15,3 @@ public class UpdateUserMainEmailRequestDTO
     [PasswordValidator]
     public string Password { get; set; }
 }
-
-
-public enum UpdateUserMainEmailResponseDTO
-{
-    PasswordIsInvalid,
-    UpdateError
-}

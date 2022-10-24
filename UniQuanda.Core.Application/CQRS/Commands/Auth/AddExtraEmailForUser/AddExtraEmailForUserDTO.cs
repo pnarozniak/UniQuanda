@@ -14,12 +14,3 @@ public class AddExtraEmailForUserRequestDTO
     [PasswordValidator]
     public string Password { get; set; }
 }
-
-
-public enum AddExtraEmailForUserResponseDTO
-{
-    InvalidPassword,
-    OverLimitOfExtraEmails,
-    EmailNotAvailable,
-    UpdateError
-}
