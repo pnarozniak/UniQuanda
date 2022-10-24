@@ -252,4 +252,16 @@ public class AuthRepository : IAuthRepository
             return false;
         return true;
     }
+
+    public async Task<bool?> DeleteExtraEmailAsync(int idUser, int idExtraEmail, CancellationToken ct)
+    {
+        var userEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(ue => ue.IdUser == idUser && ue.Id == idExtraEmail && !ue.IsMain, ct);
+        if (userEmail is null)
+            return null;
+
+        _authContext.UsersEmails.Remove(userEmail);
+        if (await _authContext.SaveChangesAsync(ct) == 0)
+            return false;
+        return true;
+    }
 }

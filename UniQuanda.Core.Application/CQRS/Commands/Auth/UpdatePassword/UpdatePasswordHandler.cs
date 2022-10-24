@@ -22,7 +22,7 @@ public class UpdatePasswordHandler : IRequestHandler<UpdatePasswordCommand, Upda
     {
         var hashedPassword = await _authRepository.GetUserHashedPasswordByIdAsync(request.IdUser, ct);
         if (hashedPassword == null)
-            return UpdateResultOfEmailOrPasswordEnum.UserNotExist;
+            return UpdateResultOfEmailOrPasswordEnum.ContentNotExist;
 
         if (!_passwordsService.VerifyPassword(request.OldPassword, hashedPassword))
             return UpdateResultOfEmailOrPasswordEnum.InvalidPassword;
@@ -32,7 +32,7 @@ public class UpdatePasswordHandler : IRequestHandler<UpdatePasswordCommand, Upda
         var updateResult = await _authRepository.UpdateUserPasswordAsync(request.IdUser, request.NewPassword, ct);
         return updateResult switch
         {
-            null => UpdateResultOfEmailOrPasswordEnum.UserNotExist,
+            null => UpdateResultOfEmailOrPasswordEnum.ContentNotExist,
             false => UpdateResultOfEmailOrPasswordEnum.NotSuccessful,
             true => UpdateResultOfEmailOrPasswordEnum.Successful
         };

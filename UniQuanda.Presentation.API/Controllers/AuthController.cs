@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.AddExtraEmailForUser;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ConfirmRegister;
+using UniQuanda.Core.Application.CQRS.Commands.Auth.DeleteExtraEmail;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Register;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ResendRegisterConfirmationCode;
@@ -134,7 +135,7 @@ public class AuthController : ControllerBase
         var result = await _mediator.Send(command, ct);
         return result switch
         {
-            UpdateResultOfEmailOrPasswordEnum.UserNotExist => NotFound(),
+            UpdateResultOfEmailOrPasswordEnum.ContentNotExist => NotFound(),
             UpdateResultOfEmailOrPasswordEnum.EmailNotConnected => Conflict(new { Status = UpdateUserMainEmailResponseDTO.EmailIsNotConnectedWithUser }),
             UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new { Status = UpdateUserMainEmailResponseDTO.PasswordIsInvalid }),
             UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new { Status = UpdateUserMainEmailResponseDTO.UpdateError }),
@@ -156,7 +157,7 @@ public class AuthController : ControllerBase
         var result = await _mediator.Send(command, ct);
         return result switch
         {
-            UpdateResultOfEmailOrPasswordEnum.UserNotExist => NotFound(),
+            UpdateResultOfEmailOrPasswordEnum.ContentNotExist => NotFound(),
             UpdateResultOfEmailOrPasswordEnum.EmailNotAvailable => Conflict(new { Status = AddExtraEmailForUserResponseDTO.EmailNotAvailable }),
             UpdateResultOfEmailOrPasswordEnum.OverLimitOfExtraEmails => Conflict(new { Status = AddExtraEmailForUserResponseDTO.OverLimitOfExtraEmails }),
             UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new { Status = AddExtraEmailForUserResponseDTO.InvalidPassword }),
@@ -179,7 +180,28 @@ public class AuthController : ControllerBase
         var result = await _mediator.Send(command, ct);
         return result switch
         {
-            UpdateResultOfEmailOrPasswordEnum.UserNotExist => NotFound(),
+            UpdateResultOfEmailOrPasswordEnum.ContentNotExist => NotFound(),
+            UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new { Status = AddExtraEmailForUserResponseDTO.InvalidPassword }),
+            UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new { Status = AddExtraEmailForUserResponseDTO.UpdateError }),
+            UpdateResultOfEmailOrPasswordEnum.Successful => NoContent()
+        };
+    }
+
+    /// <summary>
+    ///     Get all emails connected with User
+    /// </summary>
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [HttpDelete("update-user-passsword")]
+    [Authorize(Roles = "user")]
+    public async Task<IActionResult> DeleteExtraEmail([FromBody] DeleteExtraEmailRequestDTO request, CancellationToken ct)
+    {
+        var command = new DeleteExtraEmailCommand(request, User.GetId()!.Value);
+        var result = await _mediator.Send(command, ct);
+        return result switch
+        {
+            UpdateResultOfEmailOrPasswordEnum.ContentNotExist => NotFound(),
             UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new { Status = AddExtraEmailForUserResponseDTO.InvalidPassword }),
             UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new { Status = AddExtraEmailForUserResponseDTO.UpdateError }),
             UpdateResultOfEmailOrPasswordEnum.Successful => NoContent()

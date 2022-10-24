@@ -22,7 +22,7 @@ public class UpdateUserMainEmailHandler : IRequestHandler<UpdateUserMainEmailCom
     {
         var hashedPassword = await _authRepository.GetUserHashedPasswordByIdAsync(request.IdUser, ct);
         if (hashedPassword == null)
-            return UpdateResultOfEmailOrPasswordEnum.UserNotExist;
+            return UpdateResultOfEmailOrPasswordEnum.ContentNotExist;
 
         if (!_passwordsService.VerifyPassword(request.PlainPassword, hashedPassword))
             return UpdateResultOfEmailOrPasswordEnum.InvalidPassword;
@@ -34,7 +34,7 @@ public class UpdateUserMainEmailHandler : IRequestHandler<UpdateUserMainEmailCom
         var updateResult = await _authRepository.UpdateUserMainEmailAsync(request.IdUser, request.NewMainEmail, ct);
         return updateResult switch
         {
-            null => UpdateResultOfEmailOrPasswordEnum.UserNotExist,
+            null => UpdateResultOfEmailOrPasswordEnum.ContentNotExist,
             false => UpdateResultOfEmailOrPasswordEnum.NotSuccessful,
             true => UpdateResultOfEmailOrPasswordEnum.Successful
         };

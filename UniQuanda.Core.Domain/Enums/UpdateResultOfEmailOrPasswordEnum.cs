@@ -6,7 +6,7 @@ public enum UpdateResultOfEmailOrPasswordEnum
     EmailNotAvailable,
     EmailNotConnected,
     InvalidPassword,
-    UserNotExist,
+    ContentNotExist,
     NotSuccessful,
     Successful
 }

@@ -121,7 +121,16 @@ public interface IAuthRepository
     /// </summary>
     /// <param name="idUser">Id of User to update</param>
     /// <param name="newHashedPassword">New hashed password</param>
-    /// <param name="ct"></param>
+    /// <param name="ct">Operation cancellation token</param>
     /// <returns>True if succesful, NULL when user not exists, false when update is not succesful</returns>
     Task<bool?> UpdateUserPasswordAsync(int idUser, string newHashedPassword, CancellationToken ct);
+
+    /// <summary>
+    ///     Delete extra email of user
+    /// </summary>
+    /// <param name="idUser">User id</param>
+    /// <param name="idExtraEmail">Extra email id</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>True if succesful, NULL when user or email not exists, false when delete is not succesful</returns>
+    Task<bool?> DeleteExtraEmailAsync(int idUser, int idExtraEmail, CancellationToken ct);
 }
