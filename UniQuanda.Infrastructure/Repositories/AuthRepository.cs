@@ -240,4 +240,16 @@ public class AuthRepository : IAuthRepository
             return false;
         return true;
     }
+
+    public async Task<bool?> UpdateUserPasswordAsync(int idUser, string newHashedPassword, CancellationToken ct)
+    {
+        var user = await _authContext.Users.SingleOrDefaultAsync(u => u.Id == idUser, ct);
+        if (user is null)
+            return null;
+
+        user.HashedPassword = newHashedPassword;
+        if (await _authContext.SaveChangesAsync(ct) == 0)
+            return false;
+        return true;
+    }
 }

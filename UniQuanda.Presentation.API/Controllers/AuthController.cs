@@ -6,6 +6,7 @@ using UniQuanda.Core.Application.CQRS.Commands.Auth.ConfirmRegister;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Register;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ResendRegisterConfirmationCode;
+using UniQuanda.Core.Application.CQRS.Commands.Auth.UpdatePassword;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateUserMainEmail;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.GetUserEmails;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.IsEmailAndNicknameAvailable;
@@ -158,6 +159,27 @@ public class AuthController : ControllerBase
             UpdateResultOfEmailOrPasswordEnum.UserNotExist => NotFound(),
             UpdateResultOfEmailOrPasswordEnum.EmailNotAvailable => Conflict(new { Status = AddExtraEmailForUserResponseDTO.EmailNotAvailable }),
             UpdateResultOfEmailOrPasswordEnum.OverLimitOfExtraEmails => Conflict(new { Status = AddExtraEmailForUserResponseDTO.OverLimitOfExtraEmails }),
+            UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new { Status = AddExtraEmailForUserResponseDTO.InvalidPassword }),
+            UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new { Status = AddExtraEmailForUserResponseDTO.UpdateError }),
+            UpdateResultOfEmailOrPasswordEnum.Successful => NoContent()
+        };
+    }
+
+    /// <summary>
+    ///     Get all emails connected with User
+    /// </summary>
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [HttpPut("update-user-passsword")]
+    [Authorize(Roles = "user")]
+    public async Task<IActionResult> UpdateUserPassword([FromBody] UpdatePasswordRequestDTO request, CancellationToken ct)
+    {
+        var command = new UpdatePasswordCommand(request, User.GetId()!.Value);
+        var result = await _mediator.Send(command, ct);
+        return result switch
+        {
+            UpdateResultOfEmailOrPasswordEnum.UserNotExist => NotFound(),
             UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new { Status = AddExtraEmailForUserResponseDTO.InvalidPassword }),
             UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new { Status = AddExtraEmailForUserResponseDTO.UpdateError }),
             UpdateResultOfEmailOrPasswordEnum.Successful => NoContent()

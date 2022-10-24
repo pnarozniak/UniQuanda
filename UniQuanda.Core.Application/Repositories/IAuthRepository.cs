@@ -115,4 +115,13 @@ public interface IAuthRepository
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>True if add is succesful, NULL when user has 3 extra emails, false when update is not succesful</returns>
     Task<bool?> AddExtraEmailAsync(int idUser, string newExtraEmail, CancellationToken ct);
+
+    /// <summary>
+    ///     Overides user old hashed password
+    /// </summary>
+    /// <param name="idUser">Id of User to update</param>
+    /// <param name="newHashedPassword">New hashed password</param>
+    /// <param name="ct"></param>
+    /// <returns>True if succesful, NULL when user not exists, false when update is not succesful</returns>
+    Task<bool?> UpdateUserPasswordAsync(int idUser, string newHashedPassword, CancellationToken ct);
 }

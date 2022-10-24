@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿/*using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
@@ -203,4 +203,4 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
             };
         }
     }
-}
+}*/
