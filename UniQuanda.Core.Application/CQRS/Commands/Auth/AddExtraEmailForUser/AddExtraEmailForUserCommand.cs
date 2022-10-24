@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using UniQuanda.Core.Domain.Enums;
 
-namespace UniQuanda.Core.Application.CQRS.Commands.Security.AddExtraEmailForUser;
+namespace UniQuanda.Core.Application.CQRS.Commands.Auth.AddExtraEmailForUser;
 
 public class AddExtraEmailForUserCommand : IRequest<UpdateResultOfEmailOrPasswordEnum>
 {

@@ -47,7 +47,7 @@ public class AppUserProfileController : ControllerBase
     public async Task<IActionResult> GetAppUserProfileSettings(
         CancellationToken ct)
     {
-        var query = new GetAppUserProfileSettingsQuery(User.GetId()!.Value));
+        var query = new GetAppUserProfileSettingsQuery(User.GetId()!.Value);
         var appUserData = await _mediator.Send(query, ct);
         if (appUserData == null)
             return NotFound();

@@ -1,4 +1,4 @@
-﻿namespace UniQuanda.Core.Application.CQRS.Queries.Security.GetUserEmails;
+﻿namespace UniQuanda.Core.Application.CQRS.Queries.Auth.GetUserEmails;
 
 public class GetUserEmailsReponseDTO
 {
