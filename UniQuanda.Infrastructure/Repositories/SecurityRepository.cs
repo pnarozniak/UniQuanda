@@ -2,6 +2,7 @@
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Infrastructure.Presistence.AuthDb;
+using UniQuanda.Infrastructure.Presistence.AuthDb.Models;
 
 namespace UniQuanda.Infrastructure.Repositories;
 
@@ -36,10 +37,9 @@ public class SecurityRepository : ISecurityRepository
 
         return hashedPassword;
     }
-
     public async Task<bool> IsEmailConnectedWithUserAsync(int idUser, string email, CancellationToken ct)
     {
-        return await _authContext.UsersEmails.AnyAsync(ue => ue.IdUser == idUser && ue.Value == email, ct);
+        return await _authContext.UsersEmails.AnyAsync(ue => ue.IdUser == idUser && EF.Functions.ILike(ue.Value, email), ct);
     }
 
     public async Task<bool?> UpdateUserMainEmailAsync(int idUser, string newMainEmail, CancellationToken ct)
@@ -51,7 +51,7 @@ public class SecurityRepository : ISecurityRepository
         if (userMainEmail.Value == newMainEmail)
             return true;
 
-        var userExtraEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(ue => ue.IdUser == idUser && ue.Value == newMainEmail && !ue.IsMain, ct);
+        var userExtraEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(ue => ue.IdUser == idUser && EF.Functions.ILike(ue.Value, newMainEmail) && !ue.IsMain, ct);
         if (userExtraEmail is null)
             return null;
 
@@ -76,5 +76,28 @@ public class SecurityRepository : ISecurityRepository
                 throw;
             return false;
         }
+    }
+
+    public async Task<bool> IsEmailAvailableAsync(string email, CancellationToken ct)
+    {
+        return !await _authContext.UsersEmails.AnyAsync(ue => EF.Functions.ILike(ue.Value, email), ct);
+    }
+
+    public async Task<bool?> AddExtraEmailAsync(int idUser, string newExtraEmail, CancellationToken ct)
+    {
+        var numberOfExtraEmails = await _authContext.UsersEmails.Where(ue => ue.IdUser == idUser && !ue.IsMain).CountAsync(ct);
+        if (numberOfExtraEmails == 3)
+            return null;
+
+        var newUserEmail = new UserEmail()
+        {
+            IdUser = idUser,
+            IsMain = false,
+            Value = newExtraEmail
+        };
+        await _authContext.UsersEmails.AddAsync(newUserEmail, ct);
+        if (await _authContext.SaveChangesAsync(ct) == 0)
+            return false;
+        return true;
     }
 }

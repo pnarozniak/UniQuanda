@@ -2,7 +2,9 @@
 
 public enum UpdateResultOfEmailOrPasswordEnum
 {
-    EmailIsNotConnected,
+    OverLimitOfExtraEmails,
+    EmailNotAvailable,
+    EmailNotConnected,
     InvalidPassword,
     UserNotExist,
     NotSuccessful,

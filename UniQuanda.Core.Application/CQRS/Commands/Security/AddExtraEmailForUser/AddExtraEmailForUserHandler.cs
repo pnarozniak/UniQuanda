@@ -3,14 +3,14 @@ using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Enums;
 
-namespace UniQuanda.Core.Application.CQRS.Commands.Security.UpdateUserMainEmail;
+namespace UniQuanda.Core.Application.CQRS.Commands.Security.AddExtraEmailForUser;
 
-public class UpdateUserMainEmailHandler : IRequestHandler<UpdateUserMainEmailCommand, UpdateResultOfEmailOrPasswordEnum>
+public class AddExtraEmailForUserHandler : IRequestHandler<AddExtraEmailForUserCommand, UpdateResultOfEmailOrPasswordEnum>
 {
     private readonly ISecurityRepository _securityRepository;
     private readonly IPasswordsService _passwordsService;
 
-    public UpdateUserMainEmailHandler(
+    public AddExtraEmailForUserHandler(
         ISecurityRepository securityRepository,
         IPasswordsService passwordsService)
     {
@@ -18,7 +18,7 @@ public class UpdateUserMainEmailHandler : IRequestHandler<UpdateUserMainEmailCom
         _passwordsService = passwordsService;
     }
 
-    public async Task<UpdateResultOfEmailOrPasswordEnum> Handle(UpdateUserMainEmailCommand request, CancellationToken ct)
+    public async Task<UpdateResultOfEmailOrPasswordEnum> Handle(AddExtraEmailForUserCommand request, CancellationToken ct)
     {
         var hashedPassword = await _securityRepository.GetUserHashedPasswordByIdAsync(request.IdUser, ct);
         if (hashedPassword == null)
@@ -27,14 +27,15 @@ public class UpdateUserMainEmailHandler : IRequestHandler<UpdateUserMainEmailCom
         if (!_passwordsService.VerifyPassword(request.PlainPassword, hashedPassword))
             return UpdateResultOfEmailOrPasswordEnum.InvalidPassword;
 
-        var isEmailConnectedWithUser = await _securityRepository.IsEmailConnectedWithUserAsync(request.IdUser, request.NewMainEmail, ct);
-        if (!isEmailConnectedWithUser)
-            return UpdateResultOfEmailOrPasswordEnum.EmailNotConnected;
+        var isEmailAvailable = await _securityRepository.IsEmailAvailableAsync(request.NewExtraEmail, ct);
+        if (!isEmailAvailable)
+            return UpdateResultOfEmailOrPasswordEnum.EmailNotAvailable;
 
-        var updateResult = await _securityRepository.UpdateUserMainEmailAsync(request.IdUser, request.NewMainEmail, ct);
-        return updateResult switch
+        var addResult = await _securityRepository.AddExtraEmailAsync(request.IdUser, request.NewExtraEmail, ct);
+
+        return addResult switch
         {
-            null => UpdateResultOfEmailOrPasswordEnum.UserNotExist,
+            null => UpdateResultOfEmailOrPasswordEnum.OverLimitOfExtraEmails,
             false => UpdateResultOfEmailOrPasswordEnum.NotSuccessful,
             true => UpdateResultOfEmailOrPasswordEnum.Successful
         };

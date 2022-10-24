@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UniQuanda.Core.Application.CQRS.Commands.Security.AddExtraEmailForUser;
 using UniQuanda.Core.Application.CQRS.Commands.Security.UpdateUserMainEmail;
 using UniQuanda.Core.Application.CQRS.Queries.Security.GetUserEmails;
 using UniQuanda.Core.Domain.Enums;
@@ -49,9 +50,31 @@ public class SecurityController : ControllerBase
         return result switch
         {
             UpdateResultOfEmailOrPasswordEnum.UserNotExist => NotFound(),
-            UpdateResultOfEmailOrPasswordEnum.EmailIsNotConnected => Conflict(new { Status = UpdateUserMainEmailResponseDTO.EmailIsNotConnectedWithUser }),
+            UpdateResultOfEmailOrPasswordEnum.EmailNotConnected => Conflict(new { Status = UpdateUserMainEmailResponseDTO.EmailIsNotConnectedWithUser }),
             UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new { Status = UpdateUserMainEmailResponseDTO.PasswordIsInvalid }),
             UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new { Status = UpdateUserMainEmailResponseDTO.UpdateError }),
+            UpdateResultOfEmailOrPasswordEnum.Successful => NoContent()
+        };
+    }
+
+    /// <summary>
+    ///     Update main email assinged to user
+    /// </summary>
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [HttpPost("add-extra-email")]
+    public async Task<IActionResult> AddExtraEmail([FromBody] AddExtraEmailForUserRequestDTO request, CancellationToken ct)
+    {
+        var command = new AddExtraEmailForUserCommand(request, User.GetId()!.Value);
+        var result = await _mediator.Send(command, ct);
+        return result switch
+        {
+            UpdateResultOfEmailOrPasswordEnum.UserNotExist => NotFound(),
+            UpdateResultOfEmailOrPasswordEnum.EmailNotAvailable => Conflict(new { Status = AddExtraEmailForUserResponseDTO.EmailNotAvailable }),
+            UpdateResultOfEmailOrPasswordEnum.OverLimitOfExtraEmails => Conflict(new { Status = AddExtraEmailForUserResponseDTO.OverLimitOfExtraEmails }),
+            UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new { Status = AddExtraEmailForUserResponseDTO.InvalidPassword }),
+            UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new { Status = AddExtraEmailForUserResponseDTO.UpdateError }),
             UpdateResultOfEmailOrPasswordEnum.Successful => NoContent()
         };
     }

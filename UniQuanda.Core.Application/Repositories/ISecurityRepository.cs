@@ -37,4 +37,21 @@ public interface ISecurityRepository
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>True if email is connected with user, otherwise false</returns>
     Task<bool> IsEmailConnectedWithUserAsync(int idUser, string email, CancellationToken ct);
+
+    /// <summary>
+    ///     Checks if email is available
+    /// </summary>
+    /// <param name="email">Email to check</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>True if email is available, otherwise false</returns>
+    Task<bool> IsEmailAvailableAsync(string email, CancellationToken ct);
+
+    /// <summary>
+    ///     Add extra email for User
+    /// </summary>
+    /// <param name="idUser">Id of User to add extra email</param>
+    /// <param name="newExtraEmail">New extra email</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>True if add is succesful, NULL when user has 3 extra emails, false when update is not succesful</returns>
+    Task<bool?> AddExtraEmailAsync(int idUser, string newExtraEmail, CancellationToken ct);
 }
