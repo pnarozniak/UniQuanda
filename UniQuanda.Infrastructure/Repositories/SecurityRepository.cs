@@ -26,4 +26,55 @@ public class SecurityRepository : ISecurityRepository
             ExtraEmails = userEmails.Where(ue => !ue.IsMain).Select(ue => ue.Value)
         };
     }
+
+    public async Task<string?> GetUserHashedPasswordByIdAsync(int idUser, CancellationToken ct)
+    {
+        var hashedPassword = await _authContext.Users
+            .Where(u => u.Id == idUser)
+            .Select(u => u.HashedPassword)
+            .SingleOrDefaultAsync(ct);
+
+        return hashedPassword;
+    }
+
+    public async Task<bool> IsEmailConnectedWithUserAsync(int idUser, string email, CancellationToken ct)
+    {
+        return await _authContext.UsersEmails.AnyAsync(ue => ue.IdUser == idUser && ue.Value == email, ct);
+    }
+
+    public async Task<bool?> UpdateUserMainEmailAsync(int idUser, string newMainEmail, CancellationToken ct)
+    {
+        var userMainEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(ue => ue.IdUser == idUser && ue.IsMain, ct);
+        if (userMainEmail is null)
+            return null;
+
+        if (userMainEmail.Value == newMainEmail)
+            return true;
+
+        var userExtraEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(ue => ue.IdUser == idUser && ue.Value == newMainEmail && !ue.IsMain, ct);
+        if (userExtraEmail is null)
+            return null;
+
+        await using var tran = await _authContext.Database.BeginTransactionAsync(ct);
+        try
+        {
+            userMainEmail.IsMain = false;
+            userExtraEmail.IsMain = true;
+            if (await _authContext.SaveChangesAsync(ct) == 2)
+            {
+                await tran.CommitAsync(ct);
+                return true;
+            }
+
+            await tran.RollbackAsync(ct);
+            return false;
+        }
+        catch (Exception exc)
+        {
+            await tran.RollbackAsync(ct);
+            if (exc.InnerException is OperationCanceledException)
+                throw;
+            return false;
+        }
+    }
 }
