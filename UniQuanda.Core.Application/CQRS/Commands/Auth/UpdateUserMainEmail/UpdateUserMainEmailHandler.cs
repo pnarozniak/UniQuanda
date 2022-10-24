@@ -27,16 +27,36 @@ public class UpdateUserMainEmailHandler : IRequestHandler<UpdateUserMainEmailCom
         if (!_passwordsService.VerifyPassword(request.PlainPassword, hashedPassword))
             return UpdateResultOfEmailOrPasswordEnum.InvalidPassword;
 
-        var isEmailConnectedWithUser = await _authRepository.IsEmailConnectedWithUserAsync(request.IdUser, request.NewMainEmail, ct);
-        if (!isEmailConnectedWithUser)
-            return UpdateResultOfEmailOrPasswordEnum.EmailNotConnected;
-
-        var updateResult = await _authRepository.UpdateUserMainEmailAsync(request.IdUser, request.NewMainEmail, ct);
-        return updateResult switch
+        if (request.NewMainEmail != null)
         {
-            null => UpdateResultOfEmailOrPasswordEnum.ContentNotExist,
-            false => UpdateResultOfEmailOrPasswordEnum.NotSuccessful,
-            true => UpdateResultOfEmailOrPasswordEnum.Successful
-        };
+            var idExtreEmail = await _authRepository.GetExtraEmailIdAsync(request.IdUser, request.NewMainEmail, ct);
+            if (idExtreEmail is null)
+            {
+                var updateResultWithValue = await _authRepository.UpdateUserMainEmailAsync(request.IdUser, request.NewMainEmail, ct);
+                return updateResultWithValue switch
+                {
+                    null => UpdateResultOfEmailOrPasswordEnum.ContentNotExist,
+                    false => UpdateResultOfEmailOrPasswordEnum.NotSuccessful,
+                    true => UpdateResultOfEmailOrPasswordEnum.Successful
+                };
+            }
+            else
+            {
+                request.IdExtraEmail = idExtreEmail;
+            }
+        }
+
+        if (request.IdExtraEmail != null)
+        {
+            var updateWithExtraEmailResult = await _authRepository.UpdateUserMainEmailByExtraEmail(request.IdUser, request.IdExtraEmail.Value, ct);
+            return updateWithExtraEmailResult switch
+            {
+                null => UpdateResultOfEmailOrPasswordEnum.ContentNotExist,
+                false => UpdateResultOfEmailOrPasswordEnum.NotSuccessful,
+                true => UpdateResultOfEmailOrPasswordEnum.Successful
+            };
+        }
+
+        return UpdateResultOfEmailOrPasswordEnum.NotEnoughContent;
     }
 }

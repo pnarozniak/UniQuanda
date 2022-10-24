@@ -91,13 +91,22 @@ public interface IAuthRepository
     Task<bool?> UpdateUserMainEmailAsync(int idUser, string newMainEmail, CancellationToken ct);
 
     /// <summary>
-    ///     Check if email is connected with User
+    ///     Update user main email with existing extra email
+    /// </summary>
+    /// <param name="idUser">Id of user which main email will be updated</param>
+    /// <param name="idExtraEmail">Id of extra email which will be main</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>True if update is succesful, NULL when extra or main email not exist, false when update is not succesful</returns>
+    Task<bool?> UpdateUserMainEmailByExtraEmail(int idUser, int idExtraEmail, CancellationToken ct);
+
+    /// <summary>
+    ///     Check if email is connected with User as extra email and returns id
     /// </summary>
     /// <param name="idUser">Id of user to check email connection</param>
     /// <param name="email">Email to check</param>
     /// <param name="ct">Operation cancellation token</param>
-    /// <returns>True if email is connected with user, otherwise false</returns>
-    Task<bool> IsEmailConnectedWithUserAsync(int idUser, string email, CancellationToken ct);
+    /// <returns>Email id if email is connected with user, otherwise NULL</returns>
+    Task<int?> GetExtraEmailIdAsync(int idUser, string email, CancellationToken ct);
 
     /// <summary>
     ///     Checks if email is available

@@ -136,9 +136,9 @@ public class AuthController : ControllerBase
         return result switch
         {
             UpdateResultOfEmailOrPasswordEnum.ContentNotExist => NotFound(),
-            UpdateResultOfEmailOrPasswordEnum.EmailNotConnected => Conflict(new { Status = UpdateUserMainEmailResponseDTO.EmailIsNotConnectedWithUser }),
             UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new { Status = UpdateUserMainEmailResponseDTO.PasswordIsInvalid }),
             UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new { Status = UpdateUserMainEmailResponseDTO.UpdateError }),
+            UpdateResultOfEmailOrPasswordEnum.NotEnoughContent => Conflict(new { Status = UpdateUserMainEmailResponseDTO.UpdateError }),
             UpdateResultOfEmailOrPasswordEnum.Successful => NoContent()
         };
     }

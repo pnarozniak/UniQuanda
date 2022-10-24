@@ -186,9 +186,14 @@ public class AuthRepository : IAuthRepository
 
         return hashedPassword;
     }
-    public async Task<bool> IsEmailConnectedWithUserAsync(int idUser, string email, CancellationToken ct)
+    public async Task<int?> GetExtraEmailIdAsync(int idUser, string email, CancellationToken ct)
     {
-        return await _authContext.UsersEmails.AnyAsync(ue => ue.IdUser == idUser && EF.Functions.ILike(ue.Value, email), ct);
+        var connectedEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(ue => ue.IdUser == idUser && EF.Functions.ILike(ue.Value, email), ct);
+        if (connectedEmail is null)
+            return null;
+        else if (connectedEmail.IsMain)
+            return -1;
+        return connectedEmail.Id;
     }
 
     public async Task<bool?> UpdateUserMainEmailAsync(int idUser, string newMainEmail, CancellationToken ct)
@@ -200,7 +205,19 @@ public class AuthRepository : IAuthRepository
         if (userMainEmail.Value == newMainEmail)
             return true;
 
-        var userExtraEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(ue => ue.IdUser == idUser && EF.Functions.ILike(ue.Value, newMainEmail) && !ue.IsMain, ct);
+        userMainEmail.Value = newMainEmail;
+        if (await _authContext.SaveChangesAsync(ct) == 0)
+            return false;
+        return true;
+    }
+
+    public async Task<bool?> UpdateUserMainEmailByExtraEmail(int idUser, int idExtraEmail, CancellationToken ct)
+    {
+        var userMainEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(ue => ue.IdUser == idUser && ue.IsMain, ct);
+        if (userMainEmail is null)
+            return null;
+
+        var userExtraEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(ue => ue.IdUser == idUser && ue.Id == idExtraEmail && !ue.IsMain, ct);
         if (userExtraEmail is null)
             return null;
 

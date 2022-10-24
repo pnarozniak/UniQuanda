@@ -2,9 +2,11 @@
 
 public enum UpdateResultOfEmailOrPasswordEnum
 {
+    //MainEmailOverwrittenByExtraEmail,
     OverLimitOfExtraEmails,
+    NotEnoughContent,
     EmailNotAvailable,
-    EmailNotConnected,
+    //EmailNotConnected,
     InvalidPassword,
     ContentNotExist,
     NotSuccessful,
