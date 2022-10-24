@@ -68,15 +68,15 @@ public interface IAuthRepository
     /// <summary>
     ///     Gets all emails connected with user
     /// </summary>
-    /// <param name="idUser">Id of User</param>
+    /// <param name="idUser">Id of user to get emails</param>
     /// <param name="ct">Operation cancellation token</param>
-    /// <returns>User emails, if user not exists then NULL</returns>
+    /// <returns>True if User emails exists, otherwise NULL</returns>
     Task<UserEmailsEntity?> GetUserEmailsAsync(int idUser, CancellationToken ct);
 
     /// <summary>
     ///     Gets user hashed password by id
     /// </summary>
-    /// <param name="idUser">Id user</param>
+    /// <param name="idUser">Id of user to get hashed password</param>
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>HashedPassword if user exists, otherwise NULL</returns>
     Task<string?> GetUserHashedPasswordByIdAsync(int idUser, CancellationToken ct);
@@ -84,7 +84,7 @@ public interface IAuthRepository
     /// <summary>
     ///     Update main email for user
     /// </summary>
-    /// <param name="idUser">Id of user which main email will be updated </param>
+    /// <param name="idUser">Id of user which main email will be updated</param>
     /// <param name="newMainEmail">New main email</param>
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>True if update is succesful, NULL when user not exist, false when update is not succesful</returns>
@@ -93,7 +93,7 @@ public interface IAuthRepository
     /// <summary>
     ///     Check if email is connected with User
     /// </summary>
-    /// <param name="idUser">Id of user to check email with</param>
+    /// <param name="idUser">Id of user to check email connection</param>
     /// <param name="email">Email to check</param>
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>True if email is connected with user, otherwise false</returns>
@@ -128,9 +128,9 @@ public interface IAuthRepository
     /// <summary>
     ///     Delete extra email of user
     /// </summary>
-    /// <param name="idUser">User id</param>
+    /// <param name="idUser">Id of user to delete extra email</param>
     /// <param name="idExtraEmail">Extra email id</param>
     /// <param name="ct">Operation cancellation token</param>
-    /// <returns>True if succesful, NULL when user or email not exists, false when delete is not succesful</returns>
+    /// <returns>True if succesful, NULL when extra email not exists, false when delete is not succesful</returns>
     Task<bool?> DeleteExtraEmailAsync(int idUser, int idExtraEmail, CancellationToken ct);
 }

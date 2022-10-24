@@ -1,7 +1,9 @@
-﻿namespace UniQuanda.Core.Domain.Entities.Auth;
+﻿using UniQuanda.Core.Domain.ValueObjects;
+
+namespace UniQuanda.Core.Domain.Entities.Auth;
 
 public class UserEmailsEntity
 {
-    public string MainEmail { get; set; }
-    public IEnumerable<string> ExtraEmails { get; set; }
+    public UserEmailValue MainEmail { get; set; }
+    public IEnumerable<UserEmailValue> ExtraEmails { get; set; }
 }

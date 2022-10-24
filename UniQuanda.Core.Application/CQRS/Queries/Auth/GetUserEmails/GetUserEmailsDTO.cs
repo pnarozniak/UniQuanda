@@ -1,7 +1,9 @@
-﻿namespace UniQuanda.Core.Application.CQRS.Queries.Auth.GetUserEmails;
+﻿using UniQuanda.Core.Domain.ValueObjects;
+
+namespace UniQuanda.Core.Application.CQRS.Queries.Auth.GetUserEmails;
 
 public class GetUserEmailsReponseDTO
 {
-    public string MainEmail { get; set; }
-    public IEnumerable<string> ExtraEmails { get; set; }
+    public UserEmailValue MainEmail { get; set; }
+    public IEnumerable<UserEmailValue> ExtraEmails { get; set; }
 }

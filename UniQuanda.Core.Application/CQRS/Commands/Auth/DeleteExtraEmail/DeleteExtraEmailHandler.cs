@@ -5,7 +5,7 @@ using UniQuanda.Core.Domain.Enums;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.DeleteExtraEmail;
 
-public class DeleteExtraEmailHandler: IRequestHandler<DeleteExtraEmailCommand, UpdateResultOfEmailOrPasswordEnum>
+public class DeleteExtraEmailHandler : IRequestHandler<DeleteExtraEmailCommand, UpdateResultOfEmailOrPasswordEnum>
 {
     private readonly IAuthRepository _authRepository;
     private readonly IPasswordsService _passwordsService;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Domain.Entities.Auth;
+using UniQuanda.Core.Domain.ValueObjects;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 using UniQuanda.Infrastructure.Presistence.AuthDb;
@@ -163,8 +164,16 @@ public class AuthRepository : IAuthRepository
 
         return new UserEmailsEntity()
         {
-            MainEmail = userEmails.SingleOrDefault(ue => ue.IsMain == true).Value,
-            ExtraEmails = userEmails.Where(ue => !ue.IsMain).Select(ue => ue.Value)
+            MainEmail = userEmails.Where(ue => ue.IsMain == true).Select(ue => new UserEmailValue
+            {
+                IdEmail = ue.Id,
+                Value = ue.Value
+            }).SingleOrDefault(),
+            ExtraEmails = userEmails.Where(ue => !ue.IsMain).Select(ue => new UserEmailValue
+            {
+                IdEmail = ue.Id,
+                Value = ue.Value
+            })
         };
     }
 

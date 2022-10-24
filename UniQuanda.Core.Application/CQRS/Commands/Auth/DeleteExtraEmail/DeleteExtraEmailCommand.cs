@@ -3,7 +3,7 @@ using UniQuanda.Core.Domain.Enums;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.DeleteExtraEmail;
 
-public class DeleteExtraEmailCommand: IRequest<UpdateResultOfEmailOrPasswordEnum>
+public class DeleteExtraEmailCommand : IRequest<UpdateResultOfEmailOrPasswordEnum>
 {
     public DeleteExtraEmailCommand(DeleteExtraEmailRequestDTO request, int idUser)
     {
