@@ -29,6 +29,10 @@ public class UpdateUserMainEmailHandler : IRequestHandler<UpdateUserMainEmailCom
 
         if (request.NewMainEmail != null)
         {
+            var isEmailAvailable = await _authRepository.IsEmailAvailableAsync(request.IdUser, request.NewMainEmail, ct);
+            if (!isEmailAvailable)
+                return UpdateResultOfEmailOrPasswordEnum.EmailNotAvailable;
+
             var idExtreEmail = await _authRepository.GetExtraEmailIdAsync(request.IdUser, request.NewMainEmail, ct);
             if (idExtreEmail is null)
             {
@@ -46,17 +50,12 @@ public class UpdateUserMainEmailHandler : IRequestHandler<UpdateUserMainEmailCom
             }
         }
 
-        if (request.IdExtraEmail != null)
+        var updateWithExtraEmailResult = await _authRepository.UpdateUserMainEmailByExtraEmail(request.IdUser, request.IdExtraEmail.Value, ct);
+        return updateWithExtraEmailResult switch
         {
-            var updateWithExtraEmailResult = await _authRepository.UpdateUserMainEmailByExtraEmail(request.IdUser, request.IdExtraEmail.Value, ct);
-            return updateWithExtraEmailResult switch
-            {
-                null => UpdateResultOfEmailOrPasswordEnum.ContentNotExist,
-                false => UpdateResultOfEmailOrPasswordEnum.NotSuccessful,
-                true => UpdateResultOfEmailOrPasswordEnum.Successful
-            };
-        }
-
-        return UpdateResultOfEmailOrPasswordEnum.NotEnoughContent;
+            null => UpdateResultOfEmailOrPasswordEnum.ContentNotExist,
+            false => UpdateResultOfEmailOrPasswordEnum.NotSuccessful,
+            true => UpdateResultOfEmailOrPasswordEnum.Successful
+        };
     }
 }

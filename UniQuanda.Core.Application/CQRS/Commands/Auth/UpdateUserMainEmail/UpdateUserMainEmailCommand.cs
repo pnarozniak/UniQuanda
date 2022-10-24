@@ -7,7 +7,7 @@ public class UpdateUserMainEmailCommand : IRequest<UpdateResultOfEmailOrPassword
 {
     public UpdateUserMainEmailCommand(UpdateUserMainEmailRequestDTO request, int idUser)
     {
-        NewMainEmail = request.NewMainEmail;
+        NewMainEmail = IdExtraEmail == null ? request.NewMainEmail : null;
         IdExtraEmail = request.IdExtraEmail;
         PlainPassword = request.Password;
         IdUser = idUser;

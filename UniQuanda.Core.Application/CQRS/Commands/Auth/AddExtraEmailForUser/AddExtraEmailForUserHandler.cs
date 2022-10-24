@@ -27,7 +27,7 @@ public class AddExtraEmailForUserHandler : IRequestHandler<AddExtraEmailForUserC
         if (!_passwordsService.VerifyPassword(request.PlainPassword, hashedPassword))
             return UpdateResultOfEmailOrPasswordEnum.InvalidPassword;
 
-        var isEmailAvailable = await _authRepository.IsEmailAvailableAsync(request.NewExtraEmail, ct);
+        var isEmailAvailable = await _authRepository.IsEmailAvailableAsync(null, request.NewExtraEmail, ct);
         if (!isEmailAvailable)
             return UpdateResultOfEmailOrPasswordEnum.EmailNotAvailable;
 

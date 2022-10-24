@@ -20,6 +20,9 @@ public class UpdatePasswordHandler : IRequestHandler<UpdatePasswordCommand, Upda
 
     public async Task<UpdateResultOfEmailOrPasswordEnum> Handle(UpdatePasswordCommand request, CancellationToken ct)
     {
+        if (request.NewPassword == request.OldPassword)
+            return UpdateResultOfEmailOrPasswordEnum.Successful;
+
         var hashedPassword = await _authRepository.GetUserHashedPasswordByIdAsync(request.IdUser, ct);
         if (hashedPassword == null)
             return UpdateResultOfEmailOrPasswordEnum.ContentNotExist;

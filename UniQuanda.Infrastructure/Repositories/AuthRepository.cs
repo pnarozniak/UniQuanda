@@ -244,9 +244,11 @@ public class AuthRepository : IAuthRepository
         }
     }
 
-    public async Task<bool> IsEmailAvailableAsync(string email, CancellationToken ct)
+    public async Task<bool> IsEmailAvailableAsync(int? idUser, string email, CancellationToken ct)
     {
-        return !await _authContext.UsersEmails.AnyAsync(ue => EF.Functions.ILike(ue.Value, email), ct);
+        if (idUser is null)
+            return !await _authContext.UsersEmails.AnyAsync(ue => EF.Functions.ILike(ue.Value, email), ct);
+        return !await _authContext.UsersEmails.AnyAsync(ue => EF.Functions.ILike(ue.Value, email) && ue.IdUser != idUser, ct);
     }
 
     public async Task<bool?> AddExtraEmailAsync(int idUser, string newExtraEmail, CancellationToken ct)

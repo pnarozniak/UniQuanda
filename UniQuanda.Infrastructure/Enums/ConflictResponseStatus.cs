@@ -2,9 +2,8 @@
 
 public enum ConflictResponseStatus
 {
-    OverLimitOfExtraEmails,
-    PasswordIsInvalid,
-    EmailNotAvailable,
     InvalidPassword,
-    DbConflict
+    DbConflict,
+    EmailNotAvailable,
+    OverLimitOfExtraEmails
 }

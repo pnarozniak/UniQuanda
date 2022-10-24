@@ -3,7 +3,6 @@
 public enum UpdateResultOfEmailOrPasswordEnum
 {
     OverLimitOfExtraEmails,
-    NotEnoughContent,
     EmailNotAvailable,
     InvalidPassword,
     ContentNotExist,

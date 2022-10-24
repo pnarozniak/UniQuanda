@@ -66,6 +66,15 @@ public interface IAuthRepository
     Task<bool?> UpdateTempUserEmailConfirmationCodeAsync(string email, string confirmationCode, CancellationToken ct);
 
     /// <summary>
+    ///     Checks if email is available
+    /// </summary>
+    /// <param name="idUser">If null check all rows, otherwise query skip id user </param>
+    /// <param name="email">Email to check</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>True if email is available, otherwise false</returns>
+    Task<bool> IsEmailAvailableAsync(int? idUser, string email, CancellationToken ct);
+
+    /// <summary>
     ///     Gets all emails connected with user
     /// </summary>
     /// <param name="idUser">Id of user to get emails</param>
@@ -107,14 +116,6 @@ public interface IAuthRepository
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>Email id if email is connected with user, otherwise NULL</returns>
     Task<int?> GetExtraEmailIdAsync(int idUser, string email, CancellationToken ct);
-
-    /// <summary>
-    ///     Checks if email is available
-    /// </summary>
-    /// <param name="email">Email to check</param>
-    /// <param name="ct">Operation cancellation token</param>
-    /// <returns>True if email is available, otherwise false</returns>
-    Task<bool> IsEmailAvailableAsync(string email, CancellationToken ct);
 
     /// <summary>
     ///     Add extra email for User

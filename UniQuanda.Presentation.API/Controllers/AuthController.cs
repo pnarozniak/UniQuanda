@@ -20,7 +20,6 @@ namespace UniQuanda.Presentation.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[AllowAnonymous]
 public class AuthController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -35,6 +34,7 @@ public class AuthController : ControllerBase
     /// </summary>
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IsEmailAndNicknameAvailableResponseDTO))]
     [HttpGet("is-email-and-nickname-available")]
+    [AllowAnonymous]
     public async Task<IActionResult> IsEmailAndNicknameAvailable(
         [FromQuery] IsEmailAndNicknameAvailableRequestDTO request,
         CancellationToken ct)
@@ -50,6 +50,7 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [AllowAnonymous]
     public async Task<IActionResult> Register(
         [FromBody] RegisterRequestDTO request,
         CancellationToken ct)
@@ -65,6 +66,7 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponseDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [AllowAnonymous]
     public async Task<IActionResult> Login(
         [FromBody] LoginRequestDTO request,
         CancellationToken ct)
@@ -84,6 +86,7 @@ public class AuthController : ControllerBase
     [HttpPost("confirm-register")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [AllowAnonymous]
     public async Task<IActionResult> ConfirmRegister(
         [FromBody] ConfirmRegisterRequestDTO request,
         CancellationToken ct)
@@ -98,6 +101,7 @@ public class AuthController : ControllerBase
     /// </summary>
     [HttpPost("resend-register-confirmation-code")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [AllowAnonymous]
     public async Task<IActionResult> ResendRegisterConfirmationCode(
         [FromBody] ResendRegisterConfirmationCodeRequestDTO request,
         CancellationToken ct)
@@ -138,15 +142,15 @@ public class AuthController : ControllerBase
         return result switch
         {
             UpdateResultOfEmailOrPasswordEnum.ContentNotExist => NotFound(),
-            UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.PasswordIsInvalid }),
+            UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
+            UpdateResultOfEmailOrPasswordEnum.EmailNotAvailable => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.EmailNotAvailable }),
             UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
-            UpdateResultOfEmailOrPasswordEnum.NotEnoughContent => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
             UpdateResultOfEmailOrPasswordEnum.Successful => NoContent()
         };
     }
 
     /// <summary>
-    ///     Update main email assinged to user
+    ///     Add extra email to user
     /// </summary>
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -169,7 +173,7 @@ public class AuthController : ControllerBase
     }
 
     /// <summary>
-    ///     Get all emails connected with User
+    ///     Updater user password
     /// </summary>
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -190,12 +194,12 @@ public class AuthController : ControllerBase
     }
 
     /// <summary>
-    ///     Get all emails connected with User
+    ///     Delete extra email of user
     /// </summary>
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
-    [HttpDelete("update-user-passsword")]
+    [HttpDelete("delete-extra-email")]
     [Authorize(Roles = "user")]
     public async Task<IActionResult> DeleteExtraEmail([FromBody] DeleteExtraEmailRequestDTO request, CancellationToken ct)
     {
