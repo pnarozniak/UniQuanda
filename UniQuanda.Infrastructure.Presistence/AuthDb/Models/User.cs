@@ -1,3 +1,5 @@
+using UniQuanda.Infrastructure.Presistence.AppDb.Models;
+
 namespace UniQuanda.Infrastructure.Presistence.AuthDb.Models;
 
 public class User
@@ -10,4 +12,5 @@ public class User
 
     public virtual TempUser IdTempUserNavigation { get; set; }
     public virtual ICollection<UserEmail> Emails { get; set; }
+    public virtual ICollection<UserActionToConfirm> ActionsToConfirm { get; set; }
 }

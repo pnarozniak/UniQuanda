@@ -21,6 +21,7 @@ public static class Extensions
         services.AddSingleton(new SendGridOptions(configuration));
         services.AddSingleton(new DataExpirationOptions(configuration));
         services.AddSingleton(new TokensOptions(configuration));
+        services.AddSingleton(new UniQuandaClientOptions(configuration));
 
         // Repositories
         services.AddScoped<IAuthRepository, AuthRepository>();

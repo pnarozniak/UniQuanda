@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using UniQuanda.Infrastructure.Presistence.AuthDb;
@@ -11,48 +12,17 @@ using UniQuanda.Infrastructure.Presistence.AuthDb;
 namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221022225729_FixedDefaultUser")]
+    partial class FixedDefaultUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "user_action_to_confirm_enum", new[] { "recover_password" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.UserActionToConfirm", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ActionType")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ConfirmationToken")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("ExistsUntil")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("IdUser")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdUser");
-
-                    b.HasIndex("ActionType", "IdUser")
-                        .IsUnique();
-
-                    b.ToTable("UsersActionsToConfirm");
-                });
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AuthDb.Models.TempUser", b =>
                 {
@@ -168,17 +138,6 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                         });
                 });
 
-            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.UserActionToConfirm", b =>
-                {
-                    b.HasOne("UniQuanda.Infrastructure.Presistence.AuthDb.Models.User", "IdUserNavigation")
-                        .WithMany("ActionsToConfirm")
-                        .HasForeignKey("IdUser")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("IdUserNavigation");
-                });
-
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AuthDb.Models.TempUser", b =>
                 {
                     b.HasOne("UniQuanda.Infrastructure.Presistence.AuthDb.Models.User", "IdUserNavigation")
@@ -203,8 +162,6 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AuthDb.Models.User", b =>
                 {
-                    b.Navigation("ActionsToConfirm");
-
                     b.Navigation("Emails");
 
                     b.Navigation("IdTempUserNavigation")
