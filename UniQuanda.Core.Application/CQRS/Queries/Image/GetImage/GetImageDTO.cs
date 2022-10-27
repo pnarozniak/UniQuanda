@@ -6,13 +6,13 @@ namespace UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUser
 public class GetImageRequestDTO
 {
     [Required]
-    public string FileName { get; set; }
+    public string ImageName { get; set; }
     [Required]
     public ImageFolder Folder { get; set; }
 }
 
 public class GetImageResponseDTO
 {
-    public Stream File { get; set; }
+    public Stream Image { get; set; }
     public string ContentType { get; set; }
 }

@@ -14,10 +14,10 @@ public class GetImageHandler : IRequestHandler<GetImageQuery, GetImageResponseDT
 
     public async Task<GetImageResponseDTO> Handle(GetImageQuery request, CancellationToken ct)
     {
-        var result = await _imageService.GetImageAsync(request.FileName, request.Folder, ct);
+        var result = await _imageService.GetImageAsync(request.ImageName, request.Folder, ct);
         return new()
         {
-            File = result.DataStream,
+            Image = result.DataStream,
             ContentType = result.ContentType
         };
     }

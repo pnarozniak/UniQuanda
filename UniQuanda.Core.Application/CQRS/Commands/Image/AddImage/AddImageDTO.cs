@@ -6,11 +6,11 @@ namespace UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUser
 
 public class AddImageRequestDTO
 {
-    [ImageUploadValidator("file")]
+    [ImageUploadValidator("Image")]
     [Required]
-    public IFormFile File { get; set; }
+    public IFormFile Image { get; set; }
     [Required]
-    public string FileName { get; set; }
+    public string ImageName { get; set; }
 }
 
 public class AddImageResponseDTO

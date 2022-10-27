@@ -5,7 +5,7 @@ namespace UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUser
 public class RemoveImageRequestDTO
 {
     [Required]
-    public string FileName { get; set; }
+    public string ImageName { get; set; }
 }
 
 public class RemoveImageResponseDTO

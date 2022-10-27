@@ -22,10 +22,10 @@ public class ImageController : ControllerBase
     ///     Gets image by url
     /// </summary>
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(File))]
-    [HttpGet("{FolderName}/{FileName}")]
+    [HttpGet("{FolderName}/{ImageName}")]
     public async Task<IActionResult> GetImage(
         [FromRoute] string FolderName,
-        [FromRoute] string FileName,
+        [FromRoute] string ImageName,
         CancellationToken ct)
     {
 
@@ -33,12 +33,12 @@ public class ImageController : ControllerBase
         var dto = new GetImageRequestDTO
         {
             Folder = ImageFolder.FindByValue(FolderName),
-            FileName = FileName
+            ImageName = ImageName
         };
         var query = new GetImageQuery(dto);
         var result = await _mediator.Send(query, ct);
         if (object.Equals(result, default((Stream DataStream, string ContentType)))) return NotFound();
-        return File(result.File, result.ContentType);
+        return File(result.Image, result.ContentType);
     }
 
     /// <summary>
@@ -49,12 +49,12 @@ public class ImageController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> AddImage(
         [FromRoute] string FolderName,
-        [FromBody] AddImageRequestDTO file,
+        [FromBody] AddImageRequestDTO image,
         CancellationToken ct)
     {
         if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development") return StatusCode(StatusCodes.Status423Locked);
 
-        var command = new AddImageCommand(file, ImageFolder.FindByValue(FolderName));
+        var command = new AddImageCommand(image, ImageFolder.FindByValue(FolderName));
         var result = await _mediator.Send(command, ct);
         return result.IsSuccess ? StatusCode(StatusCodes.Status201Created) : Conflict();
     }
@@ -67,11 +67,11 @@ public class ImageController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RemoveImage(
         [FromRoute] string FolderName,
-        [FromBody] RemoveImageRequestDTO fileData,
+        [FromBody] RemoveImageRequestDTO imageData,
         CancellationToken ct)
     {
         if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development") return StatusCode(StatusCodes.Status423Locked);
-        var command = new RemoveImageCommand(fileData, ImageFolder.FindByValue(FolderName));
+        var command = new RemoveImageCommand(imageData, ImageFolder.FindByValue(FolderName));
         var result = await _mediator.Send(command, ct);
         return result.IsSuccess ? StatusCode(StatusCodes.Status204NoContent) : NotFound();
     }

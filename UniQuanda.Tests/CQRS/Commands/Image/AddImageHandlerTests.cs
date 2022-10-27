@@ -25,8 +25,8 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
             this.addImageHandler = new AddImageHandler(this.imageService.Object);
             this.addImageCommand = new AddImageCommand(new()
             {
-                File = new FormFile(Stream.Null, 0, 0, "name", "name"),
-                FileName = "Name"
+                Image = new FormFile(Stream.Null, 0, 0, "name", "name"),
+                ImageName = "Name"
             }, ImageFolder.Profile);
         }
 

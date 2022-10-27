@@ -8,8 +8,8 @@ public class RemoveImageCommand : IRequest<RemoveImageResponseDTO>
     public RemoveImageCommand(RemoveImageRequestDTO request, ImageFolder folder)
     {
         this.Folder = folder;
-        this.FileName = request.FileName;
+        this.ImageName = request.ImageName;
     }
     public ImageFolder Folder { get; set; }
-    public string FileName { get; set; }
+    public string ImageName { get; set; }
 }

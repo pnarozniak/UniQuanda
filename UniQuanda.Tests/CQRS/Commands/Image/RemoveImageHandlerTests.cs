@@ -23,7 +23,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
             this.removeImageHandler = new RemoveImageHandler(this.imageService.Object);
             this.removeImageCommand = new RemoveImageCommand(new()
             {
-                FileName = "Name"
+                ImageName = "Name"
             }, ImageFolder.Profile);
         }
 

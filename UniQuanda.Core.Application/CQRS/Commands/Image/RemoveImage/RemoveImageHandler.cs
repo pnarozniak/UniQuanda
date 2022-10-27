@@ -14,7 +14,7 @@ public class RemoveImageHandler : IRequestHandler<RemoveImageCommand, RemoveImag
 
     public async Task<RemoveImageResponseDTO> Handle(RemoveImageCommand request, CancellationToken ct)
     {
-        var result = await _imageService.RemoveImageAsync(request.FileName, request.Folder, ct);
+        var result = await _imageService.RemoveImageAsync(request.ImageName, request.Folder, ct);
         return new()
         {
             IsSuccess = result

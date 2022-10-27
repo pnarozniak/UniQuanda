@@ -8,8 +8,8 @@ public class GetImageQuery : IRequest<GetImageResponseDTO>
     public GetImageQuery(GetImageRequestDTO request)
     {
         this.Folder = request.Folder;
-        this.FileName = request.FileName;
+        this.ImageName = request.ImageName;
     }
     public ImageFolder Folder { get; set; }
-    public string FileName { get; set; }
+    public string ImageName { get; set; }
 }
