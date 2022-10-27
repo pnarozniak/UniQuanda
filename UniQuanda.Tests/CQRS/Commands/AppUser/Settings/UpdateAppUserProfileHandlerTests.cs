@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProfile;
 using UniQuanda.Core.Application.Repositories;
+using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Core.Domain.Utils;
 
@@ -18,6 +19,7 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
         private UpdateAppUserProfileHandler updateAppUserProfileHandler;
         private UpdateAppUserProfileCommand updateAppUserProfileCommand;
         private Mock<IAppUserRepository> appUserRepository;
+        private Mock<IImageService> imageService;
 
         private readonly int _idAppUser = 1;
         private readonly string _avatarUrl = "AvatarUrl";
@@ -25,7 +27,8 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
         public void SetupTests()
         {
             this.appUserRepository = new Mock<IAppUserRepository>();
-            this.updateAppUserProfileHandler = new UpdateAppUserProfileHandler(this.appUserRepository.Object);
+            this.imageService = new Mock<IImageService>();
+            this.updateAppUserProfileHandler = new UpdateAppUserProfileHandler(this.appUserRepository.Object, this.imageService.Object);
         }
 
         [Test]

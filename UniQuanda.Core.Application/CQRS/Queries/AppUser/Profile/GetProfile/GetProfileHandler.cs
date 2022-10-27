@@ -27,7 +27,12 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     Avatar = user.Avatar,
-                    Banner = user.Banner
+                    Banner = user.Banner,
+                    AboutText = user.AboutText,
+                    PhoneNumber = user.PhoneNumber,
+                    City = user.City,
+                    Birthdate = user.Birthdate,
+                    SemanticScholarProfile = user.SemanticScholarProfile
                 },
                 HeaderStatistics = new HeaderStatisticsResponseDTO()
                 {
@@ -47,6 +52,11 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile
                     Logo = u.Logo,
                     Name = u.Name,
                     Order = u.Order
+                }),
+                PointsInTags = user.Tags.Select(tag => new PointsInTagsResponseDTO()
+                {
+                    Points = tag.Points,
+                    Name = tag.Name
                 })
             };
         }
