@@ -39,25 +39,26 @@ public class AccessTokenOptions
         ValidityInMinutes = int.Parse(section["ValidityInMinutes"]);
     }
 
-    public AccessTokenOptions(string secretKey, string validIssuer, string validAudience, bool validateIssuer, bool validateAudience, int validityInMinutes) 
-        {
-          this.SecretKey = secretKey;
-              this.ValidIssuer = validIssuer;
-              this.ValidAudience = validAudience;
-              this.ValidateIssuer = validateIssuer;
-              this.ValidateAudience = validateAudience;
-              this.ValidityInMinutes = validityInMinutes;
-               
-        }
-            public string SecretKey { get; set; }
+    public AccessTokenOptions(string secretKey, string validIssuer, string validAudience, bool validateIssuer,
+        bool validateAudience, int validityInMinutes)
+    {
+        SecretKey = secretKey;
+        ValidIssuer = validIssuer;
+        ValidAudience = validAudience;
+        ValidateIssuer = validateIssuer;
+        ValidateAudience = validateAudience;
+        ValidityInMinutes = validityInMinutes;
+    }
+
+    public string SecretKey { get; set; }
     public string ValidIssuer { get; set; }
     public string ValidAudience { get; set; }
     public bool ValidateIssuer { get; set; }
     public bool ValidateAudience { get; set; }
     public int ValidityInMinutes { get; set; }
 
-    public TokenValidationParameters ValidationParameters { get { 
-        return new TokenValidationParameters
+    public TokenValidationParameters ValidationParameters =>
+        new TokenValidationParameters
         {
             ValidateIssuer = ValidateIssuer,
             ValidIssuer = ValidIssuer,
@@ -68,5 +69,4 @@ public class AccessTokenOptions
             ValidateLifetime = true,
             ClockSkew = TimeSpan.Zero
         };
-    }}
 }

@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
-using System.Text;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using UniQuanda.Infrastructure.Options;
 
 namespace UniQuanda.Presentation.API.Extensions;

@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using UniQuanda.Core.Domain.Entities.Auth;
+﻿using UniQuanda.Core.Domain.Entities.Auth;
 
 namespace UniQuanda.Core.Application.Services.Auth;
 
@@ -30,7 +29,7 @@ public interface ITokensService
     string GenerateAccessToken(UserEntity user);
 
     /// <summary>
-    /// Validates access token, without its lifetime and parses its claims.
+    ///     Validates access token, without its lifetime and parses its claims.
     /// </summary>
     /// <param name="accessToken">Access token as string</param>
     /// <returns>User id or null if validation fails</returns>

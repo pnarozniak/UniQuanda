@@ -8,10 +8,12 @@ namespace UniQuanda.Infrastructure.Services;
 public class CacheService : ICacheService
 {
     public IDistributedCache _context;
+
     public CacheService(IDistributedCache context)
     {
         _context = context;
     }
+
     public async Task<T?> GetFromCacheAsync<T>(string key, CancellationToken ct)
     {
         var result = await _context.GetStringAsync(key, ct);

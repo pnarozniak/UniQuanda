@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using MediatR;
+﻿using MediatR;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.RefreshToken;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services.Auth;
@@ -14,17 +13,18 @@ public class RefreshTokenHandler : IRequestHandler<RefreshTokenCommand, RefreshT
     public RefreshTokenHandler(
         IAuthRepository authRepository,
         ITokensService tokensService
-    ) {
+    )
+    {
         _authRepository = authRepository;
         _tokensService = tokensService;
     }
 
-	public async Task<RefreshTokenResponseDTO?> Handle(RefreshTokenCommand request, CancellationToken ct)
-	{
-        var idUser = this._tokensService.GetUserIdFromExpiredAccessToken(request.AccessToken);
+    public async Task<RefreshTokenResponseDTO?> Handle(RefreshTokenCommand request, CancellationToken ct)
+    {
+        var idUser = _tokensService.GetUserIdFromExpiredAccessToken(request.AccessToken);
         if (idUser is null) return null;
 
-        var dbUser = await this._authRepository.GetUserByIdAsync((int)idUser, ct);
+        var dbUser = await _authRepository.GetUserByIdAsync((int)idUser, ct);
         if (dbUser is null || dbUser.Id != idUser || dbUser.RefreshToken != request.RefreshToken) return null;
 
         var isTokenValid = dbUser.RefreshTokenExp > DateTime.UtcNow;
@@ -34,9 +34,10 @@ public class RefreshTokenHandler : IRequestHandler<RefreshTokenCommand, RefreshT
         var (refreshToken, refreshTokenExp) = _tokensService.GenerateRefreshToken();
         await _authRepository.UpdateUserRefreshTokenAsync(dbUser.Id, refreshToken, refreshTokenExp, ct);
 
-		return new RefreshTokenResponseDTO {
+        return new RefreshTokenResponseDTO
+        {
             AccessToken = accessToken,
             RefreshToken = refreshToken
         };
-	}
+    }
 }
