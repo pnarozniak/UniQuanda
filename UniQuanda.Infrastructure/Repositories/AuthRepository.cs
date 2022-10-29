@@ -220,4 +220,16 @@ public class AuthRepository : IAuthRepository
 
         return await _authContext.SaveChangesAsync(ct) == 2;
     }
+
+	public async Task<UserEntity?> GetUserByIdAsync(int idUser, CancellationToken ct)
+	{
+        return await _authContext.Users
+            .Where(u => u.Id == idUser)
+            .Select(u => new UserEntity {
+                Id = u.Id,
+                RefreshToken = u.RefreshToken,
+                RefreshTokenExp = u .RefreshTokenExp
+            })
+            .SingleOrDefaultAsync(ct);
+	}
 }

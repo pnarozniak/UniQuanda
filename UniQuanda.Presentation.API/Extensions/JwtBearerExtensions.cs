@@ -20,17 +20,7 @@ public static class JwtBearerExtensions
             .AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = accessTokenOptions.ValidateIssuer,
-                    ValidIssuer = accessTokenOptions.ValidIssuer,
-                    ValidateAudience = accessTokenOptions.ValidateAudience,
-                    ValidAudience = accessTokenOptions.ValidAudience,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(accessTokenOptions.SecretKey)),
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
-                };
+                options.TokenValidationParameters = accessTokenOptions.ValidationParameters;
             });
 
         return services;
