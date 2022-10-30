@@ -8,6 +8,7 @@ using UniQuanda.Core.Application.CQRS.Commands.Auth.Register;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ResendRegisterConfirmationCode;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ResetPasword;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.IsEmailAndNicknameAvailable;
+using UniQuanda.Presentation.API.Attributes;
 
 namespace UniQuanda.Presentation.API.Controllers;
 
@@ -26,8 +27,9 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Checks if given e-mail address and given nickname are already used by any users
     /// </summary>
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IsEmailAndNicknameAvailableResponseDTO))]
+    [Recaptcha]
     [HttpGet("is-email-and-nickname-available")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IsEmailAndNicknameAvailableResponseDTO))]
     public async Task<IActionResult> IsEmailAndNicknameAvailable(
         [FromQuery] IsEmailAndNicknameAvailableRequestDTO request,
         CancellationToken ct)
@@ -40,6 +42,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Registers new user in database and sends confirmation code to user e-mail address
     /// </summary>
+    [Recaptcha]
     [HttpPost("register")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -55,6 +58,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Performs login operation and returns JWT access token and refresh token
     /// </summary>
+    [Recaptcha]
     [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponseDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -74,6 +78,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Confirms user registration process
     /// </summary>
+    [Recaptcha]
     [HttpPost("confirm-register")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -89,6 +94,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Resets and re-sends e-mail confirmation code for given user
     /// </summary>
+    [Recaptcha]
     [HttpPost("resend-register-confirmation-code")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> ResendRegisterConfirmationCode(
@@ -103,6 +109,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Generates password recovery link and sends it via e-mail
     /// </summary>
+    [Recaptcha]
     [HttpPost("recover-password")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> RecoverPassword(
@@ -117,6 +124,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Resets user password
     /// </summary>
+    [Recaptcha]
     [HttpPost("reset-password")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
