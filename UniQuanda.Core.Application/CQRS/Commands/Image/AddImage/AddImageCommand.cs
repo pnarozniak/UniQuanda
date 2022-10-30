@@ -8,7 +8,7 @@ public class AddImageCommand : IRequest<AddImageResponseDTO>
 {
     public AddImageCommand(AddImageRequestDTO request, ImageFolder folder)
     {
-        this.Image = request.File;
+        this.Image = request.Image;
         this.Folder = folder;
         this.ImageName = request.ImageName;
     }
