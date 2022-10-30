@@ -16,49 +16,59 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Tags.GetTags
         {
             if (request.Keyword != null)
             {
-                int? count = request.Page == 1 ? await this._tagRepository.GetTagsByKeywordCountAsync(request.Keyword, request.TagId, ct) : null;
+                int? count = request.AddCount ? await this._tagRepository.GetTagsByKeywordCountAsync(request.Keyword, request.TagId, ct) : null;
                 return new()
                 {
                     Tags = (await _tagRepository
-                    .GetTagsByKeywordAsync(request.PageSize, request.PageSize * (request.Page - 1), request.Keyword, request.TagId, ct)).ToList()
+                    .GetTagsByKeywordAsync(request.PageSize, request.PageSize * (request.Page - 1), request.Keyword, request.TagId, request.OrderDirection, ct)).ToList()
                     .Select(tag => new GetTagsResponseTagDTO()
                     {
                         Id = tag.Id,
                         Name = tag.Name,
                         Description = tag.Description,
-                        ImageUrl = tag.ImageUrl
+                        ImageUrl = tag.ImageUrl,
+                        ParentTagId = tag.ParentId
                     }).ToList(),
                     TotalCount = count
                 };
             }
             else if (request.TagId != null)
             {
-                int? count = request.Page == 1 ? await this._tagRepository.GetSubTagsCountAsync(request.TagId ?? 0, ct) : null;
+                int? count = request.AddCount ? await this._tagRepository.GetSubTagsCountAsync(request.TagId ?? 0, ct) : null;
+                var mainTag = request.AddParentTagData ?? false ? await this._tagRepository.GetTagById(request.TagId ?? 0, ct) : null;
                 return new()
                 {
                     Tags = (await _tagRepository
-                    .GetSubTagsAsync(request.PageSize, request.PageSize * (request.Page - 1), request.TagId ?? 0, ct)).ToList()
+                    .GetSubTagsAsync(request.PageSize, request.PageSize * (request.Page - 1), request.TagId ?? 0, request.OrderDirection, ct)).ToList()
                     .Select(tag => new GetTagsResponseTagDTO()
                     {
                         Id = tag.Id,
                         Name = tag.Name,
-                        ImageUrl = tag.ImageUrl
+                        ImageUrl = tag.ImageUrl,
+                        ParentTagId = tag.ParentId
                     }).ToList(),
-                    TotalCount = count
+                    TotalCount = count,
+                    ParentTag = mainTag == null ? null : new GetTagsResponseTagDTO()
+                    {
+                        Id = mainTag.Id,
+                        Name = mainTag.Name,
+                        Description = mainTag.Description,
+                    }
                 };
             }
             else
             {
-                int? count = request.Page == 1 ? await this._tagRepository.GetMainTagsCountAsync(ct) : null;
+                int? count = request.AddCount ? await this._tagRepository.GetMainTagsCountAsync(ct) : null;
                 return new()
                 {
                     Tags = (await _tagRepository
-                    .GetMainTagsAsync(request.PageSize, request.PageSize * (request.Page - 1), ct)).ToList()
+                    .GetMainTagsAsync(request.PageSize, request.PageSize * (request.Page - 1), request.OrderDirection, ct)).ToList()
                     .Select(tag => new GetTagsResponseTagDTO()
                     {
                         Id = tag.Id,
                         Name = tag.Name,
-                        Description = tag.Description
+                        Description = tag.Description,
+                        ParentTagId = tag.ParentId
                     }).ToList(),
                     TotalCount = count
                 };
