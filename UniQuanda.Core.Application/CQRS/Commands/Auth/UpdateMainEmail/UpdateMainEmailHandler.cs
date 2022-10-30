@@ -34,7 +34,7 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
         bool? updateResult;
         if (request.IdExtraEmail != null)
         {
-            updateResult = await _authRepository.UpdateUserMainEmailByExtraEmail(request.IdUser, request.IdExtraEmail.Value, ct);
+            updateResult = await _authRepository.UpdateUserMainEmailByExtraEmailAsync(request.IdUser, request.IdExtraEmail.Value, ct);
         }
         else
         {
@@ -43,13 +43,17 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
                 return UpdateSecurityResultEnum.EmailNotAvailable;
 
             var idExtreEmail = await _authRepository.GetExtraEmailIdAsync(request.IdUser, request.NewMainEmail, ct);
-            if (idExtreEmail is not null)
+            if (idExtreEmail == null)
             {
-                updateResult = await _authRepository.UpdateUserMainEmailByExtraEmail(request.IdUser, idExtreEmail.Value, ct);
+                updateResult = await _authRepository.UpdateUserMainEmailAsync(request.IdUser, request.NewMainEmail, ct);
+            }
+            else if (idExtreEmail == -1)
+            {
+                updateResult = true;
             }
             else
             {
-                updateResult = await _authRepository.UpdateUserMainEmailAsync(request.IdUser, request.NewMainEmail, ct);
+                updateResult = await _authRepository.UpdateUserMainEmailByExtraEmailAsync(request.IdUser, idExtreEmail.Value, ct); 
             }
         }
         if (updateResult == true)

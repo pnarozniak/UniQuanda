@@ -107,7 +107,7 @@ public interface IAuthRepository
     /// <param name="idExtraEmail">Id of extra email which will be main</param>
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>True if update is succesful, NULL when extra or main email not exist, false when update is not succesful</returns>
-    Task<bool?> UpdateUserMainEmailByExtraEmail(int idUser, int idExtraEmail, CancellationToken ct);
+    Task<bool?> UpdateUserMainEmailByExtraEmailAsync(int idUser, int idExtraEmail, CancellationToken ct);
 
     /// <summary>
     ///     Check if email is connected with User as extra email and returns id

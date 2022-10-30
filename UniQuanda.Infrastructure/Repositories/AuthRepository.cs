@@ -288,7 +288,7 @@ public class AuthRepository : IAuthRepository
         return true;
     }
 
-    public async Task<bool?> UpdateUserMainEmailByExtraEmail(int idUser, int idExtraEmail, CancellationToken ct)
+    public async Task<bool?> UpdateUserMainEmailByExtraEmailAsync(int idUser, int idExtraEmail, CancellationToken ct)
     {
         var userMainEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(ue => ue.IdUser == idUser && ue.IsMain, ct);
         if (userMainEmail is null)
