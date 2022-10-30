@@ -46,12 +46,7 @@ public class DeleteExtraEmailHandlerTests
     {
         this.SetupDeleteExtraEmailCommand();
         var userSecurityEntity = GetUserSecurityEntity();
-        this.authRepository
-            .Setup(ar => ar.GetUserByIdAsync(IdUser, CancellationToken.None))
-            .ReturnsAsync(userSecurityEntity);
-        this.passwordsService
-            .Setup(ps => ps.VerifyPassword(this.deleteExtraEmailCommand.Password, userSecurityEntity.HashedPassword))
-            .Returns(true);
+        this.SetupValidPasswordFlow(userSecurityEntity);
         this.authRepository
             .Setup(ar => ar.DeleteExtraEmailAsync(IdUser, IdExtraEmail, CancellationToken.None))
             .ReturnsAsync(true);
@@ -96,12 +91,7 @@ public class DeleteExtraEmailHandlerTests
     {
         this.SetupDeleteExtraEmailCommand(PlainPassword, 1);
         var userSecurityEntity = GetUserSecurityEntity();
-        this.authRepository
-            .Setup(ar => ar.GetUserByIdAsync(IdUser, CancellationToken.None))
-            .ReturnsAsync(userSecurityEntity);
-        this.passwordsService
-            .Setup(ps => ps.VerifyPassword(this.deleteExtraEmailCommand.Password, userSecurityEntity.HashedPassword))
-            .Returns(true);
+        this.SetupValidPasswordFlow(userSecurityEntity);
         this.authRepository
             .Setup(ar => ar.DeleteExtraEmailAsync(IdUser, IdExtraEmail, CancellationToken.None))
             .ReturnsAsync((bool?)null);
@@ -116,12 +106,7 @@ public class DeleteExtraEmailHandlerTests
     {
         this.SetupDeleteExtraEmailCommand();
         var userSecurityEntity = GetUserSecurityEntity();
-        this.authRepository
-            .Setup(ar => ar.GetUserByIdAsync(IdUser, CancellationToken.None))
-            .ReturnsAsync(userSecurityEntity);
-        this.passwordsService
-            .Setup(ps => ps.VerifyPassword(this.deleteExtraEmailCommand.Password, userSecurityEntity.HashedPassword))
-            .Returns(true);
+        this.SetupValidPasswordFlow(userSecurityEntity);
         this.authRepository
             .Setup(ar => ar.DeleteExtraEmailAsync(IdUser, IdExtraEmail, CancellationToken.None))
             .ReturnsAsync(false);
@@ -153,5 +138,15 @@ public class DeleteExtraEmailHandlerTests
                 new UserEmailSecurity { Id = 2, IsMain = false, Value = ExtraUserEmail}
             }
         };
+    }
+
+    private void SetupValidPasswordFlow(UserSecurityEntity userSecurityEntity)
+    {
+        this.authRepository
+            .Setup(ar => ar.GetUserByIdAsync(IdUser, CancellationToken.None))
+            .ReturnsAsync(userSecurityEntity);
+        this.passwordsService
+            .Setup(ps => ps.VerifyPassword(this.deleteExtraEmailCommand.Password, userSecurityEntity.HashedPassword))
+            .Returns(true);
     }
 }

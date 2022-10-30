@@ -46,18 +46,8 @@ public class AddExtraEmailHandlerTests
     {
         this.SetupAddExtraEmailCommand();
         var userSecurityEntity = GetUserSecurityEntity();
-        this.authRepository
-            .Setup(ar => ar.GetUserByIdAsync(IdUser, CancellationToken.None))
-            .ReturnsAsync(userSecurityEntity);
-        this.passwordsService
-            .Setup(ps => ps.VerifyPassword(this.addExtraEmailCommand.PlainPassword, userSecurityEntity.HashedPassword))
-            .Returns(true);
-        this.authRepository
-            .Setup(ar => ar.IsEmailAvailableAsync(null, this.addExtraEmailCommand.NewExtraEmail, CancellationToken.None))
-            .ReturnsAsync(true);
-        this.authRepository
-            .Setup(ar => ar.AddExtraEmailAsync(this.addExtraEmailCommand.IdUser, this.addExtraEmailCommand.NewExtraEmail, CancellationToken.None))
-            .ReturnsAsync(true);
+        this.SetupValidPasswordFlow(userSecurityEntity);
+        this.SetupFlowOfAddExtraEmailWhenEmailIsAvailable(true);
 
         var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
 
@@ -99,12 +89,7 @@ public class AddExtraEmailHandlerTests
     {
         this.SetupAddExtraEmailCommand(PlainPassword, ExtraUserEmail);
         var userSecurityEntity = GetUserSecurityEntity();
-        this.authRepository
-            .Setup(ar => ar.GetUserByIdAsync(IdUser, CancellationToken.None))
-            .ReturnsAsync(userSecurityEntity);
-        this.passwordsService
-            .Setup(ps => ps.VerifyPassword(this.addExtraEmailCommand.PlainPassword, userSecurityEntity.HashedPassword))
-            .Returns(true);
+        this.SetupValidPasswordFlow(userSecurityEntity);
         this.authRepository
             .Setup(ar => ar.IsEmailAvailableAsync(null, this.addExtraEmailCommand.NewExtraEmail, CancellationToken.None))
             .ReturnsAsync(false);
@@ -120,18 +105,8 @@ public class AddExtraEmailHandlerTests
         this.SetupAddExtraEmailCommand();
         var userSecurityEntity = GetUserSecurityEntity();
         userSecurityEntity.Emails.Add(new UserEmailSecurity { Id = 3, IsMain = false, Value = "thirdEmail@domain.com" });
-        this.authRepository
-            .Setup(ar => ar.GetUserByIdAsync(IdUser, CancellationToken.None))
-            .ReturnsAsync(userSecurityEntity);
-        this.passwordsService
-            .Setup(ps => ps.VerifyPassword(this.addExtraEmailCommand.PlainPassword, userSecurityEntity.HashedPassword))
-            .Returns(true);
-        this.authRepository
-            .Setup(ar => ar.IsEmailAvailableAsync(null, this.addExtraEmailCommand.NewExtraEmail, CancellationToken.None))
-            .ReturnsAsync(true);
-        this.authRepository
-            .Setup(ar => ar.AddExtraEmailAsync(this.addExtraEmailCommand.IdUser, this.addExtraEmailCommand.NewExtraEmail, CancellationToken.None))
-            .ReturnsAsync((bool?)null);
+        this.SetupValidPasswordFlow(userSecurityEntity);
+        this.SetupFlowOfAddExtraEmailWhenEmailIsAvailable(null);
 
         var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
 
@@ -143,18 +118,8 @@ public class AddExtraEmailHandlerTests
     {
         this.SetupAddExtraEmailCommand();
         var userSecurityEntity = GetUserSecurityEntity();
-        this.authRepository
-            .Setup(ar => ar.GetUserByIdAsync(IdUser, CancellationToken.None))
-            .ReturnsAsync(userSecurityEntity);
-        this.passwordsService
-            .Setup(ps => ps.VerifyPassword(this.addExtraEmailCommand.PlainPassword, userSecurityEntity.HashedPassword))
-            .Returns(true);
-        this.authRepository
-            .Setup(ar => ar.IsEmailAvailableAsync(null, this.addExtraEmailCommand.NewExtraEmail, CancellationToken.None))
-            .ReturnsAsync(true);
-        this.authRepository
-            .Setup(ar => ar.AddExtraEmailAsync(this.addExtraEmailCommand.IdUser, this.addExtraEmailCommand.NewExtraEmail, CancellationToken.None))
-            .ReturnsAsync(false);
+        this.SetupValidPasswordFlow(userSecurityEntity);
+        this.SetupFlowOfAddExtraEmailWhenEmailIsAvailable(false);
 
         var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
 
@@ -183,5 +148,25 @@ public class AddExtraEmailHandlerTests
                 new UserEmailSecurity { Id = 2, IsMain = false, Value = ExtraUserEmail}
             }
         };
+    }
+
+    private void SetupValidPasswordFlow(UserSecurityEntity userSecurityEntity)
+    {
+        this.authRepository
+            .Setup(ar => ar.GetUserByIdAsync(IdUser, CancellationToken.None))
+            .ReturnsAsync(userSecurityEntity);
+        this.passwordsService
+            .Setup(ps => ps.VerifyPassword(this.addExtraEmailCommand.PlainPassword, userSecurityEntity.HashedPassword))
+            .Returns(true);
+    }
+
+    private void SetupFlowOfAddExtraEmailWhenEmailIsAvailable(bool? addResult)
+    {
+        this.authRepository
+            .Setup(ar => ar.IsEmailAvailableAsync(null, this.addExtraEmailCommand.NewExtraEmail, CancellationToken.None))
+            .ReturnsAsync(true);
+        this.authRepository
+            .Setup(ar => ar.AddExtraEmailAsync(this.addExtraEmailCommand.IdUser, this.addExtraEmailCommand.NewExtraEmail, CancellationToken.None))
+            .ReturnsAsync(addResult);
     }
 }
