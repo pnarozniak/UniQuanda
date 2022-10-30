@@ -20,6 +20,9 @@ builder.Services.AddInfrastructurePersistence(builder.Configuration);
 // Configure CORS
 builder.Services.AddCORS(builder.Configuration);
 
+// Configure Recaptcha
+builder.Services.AddRecaptcha(builder.Configuration);
+
 // Configure authentication
 builder.Services.AddJwtBearerAuth(builder.Configuration);
 
@@ -41,6 +44,8 @@ if (app.Environment.IsProduction())
 }
 
 app.UseCORS();
+
+app.UseRecaptcha();
 
 app.UseAuthentication();
 
