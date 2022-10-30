@@ -37,6 +37,14 @@ public interface IAuthRepository
     Task<UserEntity?> GetUserByEmailAsync(string email, CancellationToken ct);
 
     /// <summary>
+    ///     Gets registered user by id
+    /// </summary>
+    /// <param name="idUser">Id by which user will be searched</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>User if found, otherwise NULL</returns>
+    Task<UserSecurityEntity?> GetUserByIdAsync(int idUser, CancellationToken ct);
+
+    /// <summary>
     ///     Updates user refresh token
     /// </summary>
     /// <param name="idUser">Id of user to update</param>
@@ -81,14 +89,6 @@ public interface IAuthRepository
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>True if User emails exists, otherwise NULL</returns>
     Task<UserEmailsEntity?> GetUserEmailsAsync(int idUser, CancellationToken ct);
-
-    /// <summary>
-    ///     Gets user hashed password by id
-    /// </summary>
-    /// <param name="idUser">Id of user to get hashed password</param>
-    /// <param name="ct">Operation cancellation token</param>
-    /// <returns>HashedPassword if user exists, otherwise NULL</returns>
-    Task<string?> GetUserHashedPasswordByIdAsync(int idUser, CancellationToken ct);
 
     /// <summary>
     ///     Update main email for user

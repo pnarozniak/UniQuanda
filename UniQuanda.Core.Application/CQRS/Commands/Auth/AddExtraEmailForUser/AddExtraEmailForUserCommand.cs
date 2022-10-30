@@ -3,7 +3,7 @@ using UniQuanda.Core.Domain.Enums;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.AddExtraEmailForUser;
 
-public class AddExtraEmailForUserCommand : IRequest<UpdateResultOfEmailOrPasswordEnum>
+public class AddExtraEmailForUserCommand : IRequest<UpdateSecurityResultEnum>
 {
     public AddExtraEmailForUserCommand(AddExtraEmailForUserRequestDTO request, int idUser)
     {

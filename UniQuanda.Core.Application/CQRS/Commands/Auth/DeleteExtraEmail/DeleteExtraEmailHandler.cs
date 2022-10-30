@@ -1,38 +1,45 @@
 ﻿using MediatR;
 using UniQuanda.Core.Application.Repositories;
+using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Enums;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.DeleteExtraEmail;
 
-public class DeleteExtraEmailHandler : IRequestHandler<DeleteExtraEmailCommand, UpdateResultOfEmailOrPasswordEnum>
+public class DeleteExtraEmailHandler : IRequestHandler<DeleteExtraEmailCommand, UpdateSecurityResultEnum>
 {
     private readonly IAuthRepository _authRepository;
     private readonly IPasswordsService _passwordsService;
+    private readonly IEmailService _emailService;
 
     public DeleteExtraEmailHandler(
         IAuthRepository authRepository,
-        IPasswordsService passwordsService)
+        IPasswordsService passwordsService,
+        IEmailService emailService)
     {
         _authRepository = authRepository;
         _passwordsService = passwordsService;
+        _emailService = emailService;
     }
 
-    public async Task<UpdateResultOfEmailOrPasswordEnum> Handle(DeleteExtraEmailCommand request, CancellationToken ct)
+    public async Task<UpdateSecurityResultEnum> Handle(DeleteExtraEmailCommand request, CancellationToken ct)
     {
-        var hashedPassword = await _authRepository.GetUserHashedPasswordByIdAsync(request.IdUser, ct);
-        if (hashedPassword == null)
-            return UpdateResultOfEmailOrPasswordEnum.ContentNotExist;
+        var user = await _authRepository.GetUserByIdAsync(request.IdUser, ct);
+        if (user is null)
+            return UpdateSecurityResultEnum.ContentNotExist;
 
-        if (!_passwordsService.VerifyPassword(request.Password, hashedPassword))
-            return UpdateResultOfEmailOrPasswordEnum.InvalidPassword;
+        if (!_passwordsService.VerifyPassword(request.Password, user.HashedPassword))
+            return UpdateSecurityResultEnum.InvalidPassword;
 
         var deleteResult = await _authRepository.DeleteExtraEmailAsync(request.IdUser, request.IdExtraEmail, ct);
+        if (deleteResult == true)
+            await _emailService.SendInformationAboutDeleteExtraEmailAsync(user.Emails.SingleOrDefault(e => e.IsMain).Value, user.Emails.SingleOrDefault(e => e.Id == request.IdExtraEmail).Value);
+
         return deleteResult switch
         {
-            null => UpdateResultOfEmailOrPasswordEnum.ContentNotExist,
-            false => UpdateResultOfEmailOrPasswordEnum.NotSuccessful,
-            true => UpdateResultOfEmailOrPasswordEnum.Successful
+            null => UpdateSecurityResultEnum.ContentNotExist,
+            false => UpdateSecurityResultEnum.DbConflict,
+            true => UpdateSecurityResultEnum.Successful
         };
     }
 }

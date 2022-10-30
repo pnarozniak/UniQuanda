@@ -141,11 +141,11 @@ public class AuthController : ControllerBase
         var result = await _mediator.Send(command, ct);
         return result switch
         {
-            UpdateResultOfEmailOrPasswordEnum.ContentNotExist => NotFound(),
-            UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
-            UpdateResultOfEmailOrPasswordEnum.EmailNotAvailable => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.EmailNotAvailable }),
-            UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
-            UpdateResultOfEmailOrPasswordEnum.Successful => NoContent()
+            UpdateSecurityResultEnum.ContentNotExist => NotFound(),
+            UpdateSecurityResultEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
+            UpdateSecurityResultEnum.EmailNotAvailable => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.EmailNotAvailable }),
+            UpdateSecurityResultEnum.DbConflict => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
+            UpdateSecurityResultEnum.Successful => NoContent()
         };
     }
 
@@ -163,12 +163,12 @@ public class AuthController : ControllerBase
         var result = await _mediator.Send(command, ct);
         return result switch
         {
-            UpdateResultOfEmailOrPasswordEnum.ContentNotExist => NotFound(),
-            UpdateResultOfEmailOrPasswordEnum.EmailNotAvailable => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.EmailNotAvailable }),
-            UpdateResultOfEmailOrPasswordEnum.OverLimitOfExtraEmails => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.OverLimitOfExtraEmails }),
-            UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
-            UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
-            UpdateResultOfEmailOrPasswordEnum.Successful => NoContent()
+            UpdateSecurityResultEnum.ContentNotExist => NotFound(),
+            UpdateSecurityResultEnum.EmailNotAvailable => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.EmailNotAvailable }),
+            UpdateSecurityResultEnum.OverLimitOfExtraEmails => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.OverLimitOfExtraEmails }),
+            UpdateSecurityResultEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
+            UpdateSecurityResultEnum.DbConflict => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
+            UpdateSecurityResultEnum.Successful => NoContent()
         };
     }
 
@@ -186,10 +186,10 @@ public class AuthController : ControllerBase
         var result = await _mediator.Send(command, ct);
         return result switch
         {
-            UpdateResultOfEmailOrPasswordEnum.ContentNotExist => NotFound(),
-            UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
-            UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
-            UpdateResultOfEmailOrPasswordEnum.Successful => NoContent()
+            UpdateSecurityResultEnum.ContentNotExist => NotFound(),
+            UpdateSecurityResultEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
+            UpdateSecurityResultEnum.DbConflict => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
+            UpdateSecurityResultEnum.Successful => NoContent()
         };
     }
 
@@ -207,10 +207,10 @@ public class AuthController : ControllerBase
         var result = await _mediator.Send(command, ct);
         return result switch
         {
-            UpdateResultOfEmailOrPasswordEnum.ContentNotExist => NotFound(),
-            UpdateResultOfEmailOrPasswordEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
-            UpdateResultOfEmailOrPasswordEnum.NotSuccessful => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
-            UpdateResultOfEmailOrPasswordEnum.Successful => NoContent()
+            UpdateSecurityResultEnum.ContentNotExist => NotFound(),
+            UpdateSecurityResultEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
+            UpdateSecurityResultEnum.DbConflict => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
+            UpdateSecurityResultEnum.Successful => NoContent()
         };
     }
 }

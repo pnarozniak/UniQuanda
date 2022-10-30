@@ -1,61 +1,68 @@
 ﻿using MediatR;
 using UniQuanda.Core.Application.Repositories;
+using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Enums;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateUserMainEmail;
 
-public class UpdateUserMainEmailHandler : IRequestHandler<UpdateUserMainEmailCommand, UpdateResultOfEmailOrPasswordEnum>
+public class UpdateUserMainEmailHandler : IRequestHandler<UpdateUserMainEmailCommand, UpdateSecurityResultEnum>
 {
     private readonly IAuthRepository _authRepository;
     private readonly IPasswordsService _passwordsService;
+    private readonly IEmailService _emailService;
 
     public UpdateUserMainEmailHandler(
         IAuthRepository authRepository,
-        IPasswordsService passwordsService)
+        IPasswordsService passwordsService,
+        IEmailService emailService)
     {
         _authRepository = authRepository;
         _passwordsService = passwordsService;
+        _emailService = emailService;
     }
 
-    public async Task<UpdateResultOfEmailOrPasswordEnum> Handle(UpdateUserMainEmailCommand request, CancellationToken ct)
+    public async Task<UpdateSecurityResultEnum> Handle(UpdateUserMainEmailCommand request, CancellationToken ct)
     {
-        var hashedPassword = await _authRepository.GetUserHashedPasswordByIdAsync(request.IdUser, ct);
-        if (hashedPassword == null)
-            return UpdateResultOfEmailOrPasswordEnum.ContentNotExist;
+        var user = await _authRepository.GetUserByIdAsync(request.IdUser, ct);
+        if (user is null)
+            return UpdateSecurityResultEnum.ContentNotExist;
 
-        if (!_passwordsService.VerifyPassword(request.PlainPassword, hashedPassword))
-            return UpdateResultOfEmailOrPasswordEnum.InvalidPassword;
+        if (!_passwordsService.VerifyPassword(request.PlainPassword, user.HashedPassword))
+            return UpdateSecurityResultEnum.InvalidPassword;
 
-        if (request.NewMainEmail != null)
+        bool? updateResult;
+        if (request.IdExtraEmail != null)
+        {
+            updateResult = await _authRepository.UpdateUserMainEmailByExtraEmail(request.IdUser, request.IdExtraEmail.Value, ct);
+        }
+        else
         {
             var isEmailAvailable = await _authRepository.IsEmailAvailableAsync(request.IdUser, request.NewMainEmail, ct);
             if (!isEmailAvailable)
-                return UpdateResultOfEmailOrPasswordEnum.EmailNotAvailable;
+                return UpdateSecurityResultEnum.EmailNotAvailable;
 
             var idExtreEmail = await _authRepository.GetExtraEmailIdAsync(request.IdUser, request.NewMainEmail, ct);
-            if (idExtreEmail is null)
+            if (idExtreEmail is not null)
             {
-                var updateResultWithValue = await _authRepository.UpdateUserMainEmailAsync(request.IdUser, request.NewMainEmail, ct);
-                return updateResultWithValue switch
-                {
-                    null => UpdateResultOfEmailOrPasswordEnum.ContentNotExist,
-                    false => UpdateResultOfEmailOrPasswordEnum.NotSuccessful,
-                    true => UpdateResultOfEmailOrPasswordEnum.Successful
-                };
+                updateResult = await _authRepository.UpdateUserMainEmailByExtraEmail(request.IdUser, idExtreEmail.Value, ct);
             }
             else
             {
-                request.IdExtraEmail = idExtreEmail;
+                updateResult = await _authRepository.UpdateUserMainEmailAsync(request.IdUser, request.NewMainEmail, ct);
             }
         }
-
-        var updateWithExtraEmailResult = await _authRepository.UpdateUserMainEmailByExtraEmail(request.IdUser, request.IdExtraEmail.Value, ct);
-        return updateWithExtraEmailResult switch
+        if (updateResult == true)
         {
-            null => UpdateResultOfEmailOrPasswordEnum.ContentNotExist,
-            false => UpdateResultOfEmailOrPasswordEnum.NotSuccessful,
-            true => UpdateResultOfEmailOrPasswordEnum.Successful
+            var newExtraEmail = request.IdExtraEmail != null ? user.Emails.SingleOrDefault(e => e.Id == request.IdExtraEmail).Value : request.NewMainEmail;
+            await _emailService.SendInformationAboutUpdateMainEmailAsync(user.Emails.SingleOrDefault(e => e.IsMain).Value, newExtraEmail);
+        }
+
+        return updateResult switch
+        {
+            null => UpdateSecurityResultEnum.ContentNotExist,
+            false => UpdateSecurityResultEnum.DbConflict,
+            true => UpdateSecurityResultEnum.Successful
         };
     }
 }

@@ -21,6 +21,34 @@ public class SendGridService : IEmailService
         await SendEmailAsync(to, emailSubject, emailMessage);
     }
 
+    public async Task SendInformationAboutAddNewExtraEmailAsync(string to, string newExtraEmail)
+    {
+        var emailSubject = "Dodatkowy e-mail został dodany do konta";
+        var emailMessage = $"<span>Do Twojego konta został przypisany nowy e-mail dodatkowy: <b>{newExtraEmail}</b>.</span>";
+        await SendEmailAsync(to, emailSubject, emailMessage);
+    }
+
+    public async Task SendInformationAboutDeleteExtraEmailAsync(string to, string extraEmail)
+    {
+        var emailSubject = "Dodatkowy e-mail został usunięty z konta";
+        var emailMessage = $"<span>Z Twojego konta został usunięty dodatkowy e-mail: <b>{extraEmail}</b>.</span>";
+        await SendEmailAsync(to, emailSubject, emailMessage);
+    }
+
+    public async Task SendInformationAboutUpdateMainEmailAsync(string to, string newMainEmail)
+    {
+        var emailSubject = "Twój główny e-mail został zmieniony";
+        var emailMessage = $"<span>Główny e-mail powiązany z Twoim kontem został zmieniony. Teraz głównym e-mailem twojego konta jest: <b>{newMainEmail}</b>.</span>";
+        await SendEmailAsync(to, emailSubject, emailMessage);
+    }
+
+    public async Task SendInformationAboutUpdatePasswordAsync(string to, string nickName)
+    {
+        var emailSubject = "Twoje hasło zostało zmienione";
+        var emailMessage = $"<span>Hasło powiązane z Twoim kontem <b>{nickName}</b> zostało zmienione.</span>";
+        await SendEmailAsync(to, emailSubject, emailMessage);
+    }
+
     private async Task SendEmailAsync(string email, string subject, string message)
     {
         var client = new SendGridClient(_options.ApiKey);

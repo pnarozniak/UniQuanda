@@ -89,6 +89,26 @@ public class AuthRepository : IAuthRepository
         return appUser;
     }
 
+    public async Task<UserSecurityEntity?> GetUserByIdAsync(int idUser, CancellationToken ct)
+    {
+        var appUser = await _authContext.Users
+            .Where(u => u.Id == idUser)
+            .Select(u => new UserSecurityEntity
+            {
+                Nickname = u.Nickname,
+                HashedPassword = u.HashedPassword,
+                Emails = u.Emails.Select(ue => new UserEmailSecurity
+                {
+                    Id = ue.Id,
+                    IsMain = ue.IsMain,
+                    Value = ue.Value
+                })
+            })
+            .SingleOrDefaultAsync(ct);
+
+        return appUser;
+    }
+
     public async Task<bool?> UpdateUserRefreshTokenAsync(int idUser, string refreshToken, DateTime refreshTokenExp,
         CancellationToken ct)
     {
@@ -177,15 +197,6 @@ public class AuthRepository : IAuthRepository
         };
     }
 
-    public async Task<string?> GetUserHashedPasswordByIdAsync(int idUser, CancellationToken ct)
-    {
-        var hashedPassword = await _authContext.Users
-            .Where(u => u.Id == idUser)
-            .Select(u => u.HashedPassword)
-            .SingleOrDefaultAsync(ct);
-
-        return hashedPassword;
-    }
     public async Task<int?> GetExtraEmailIdAsync(int idUser, string email, CancellationToken ct)
     {
         var connectedEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(ue => ue.IdUser == idUser && EF.Functions.ILike(ue.Value, email), ct);

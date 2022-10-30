@@ -3,7 +3,7 @@ using UniQuanda.Core.Domain.Enums;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.UpdatePassword;
 
-public class UpdatePasswordCommand : IRequest<UpdateResultOfEmailOrPasswordEnum>
+public class UpdatePasswordCommand : IRequest<UpdateSecurityResultEnum>
 {
     public UpdatePasswordCommand(UpdatePasswordRequestDTO request, int idUser)
     {

@@ -25,7 +25,7 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
         public void SetupTests()
         {
             this.appUserRepository = new Mock<IAppUserRepository>();
-            this.updateAppUserProfileHandler = new UpdateAppUserProfileHandler(this.appUserRepository.Object);
+            this.updateAppUserProfileHandler = new UpdateAppUserProfileHandler(this.appUserRepository.Object, null);
         }
 
         [Test]
