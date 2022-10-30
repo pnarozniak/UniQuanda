@@ -5,7 +5,6 @@ namespace UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateUserMainEmail;
 
 public class UpdateUserMainEmailRequestDTO
 {
-    [Required]
     [MaxLength(320)]
     [EmailAddress]
     public string NewMainEmail { get; set; }
