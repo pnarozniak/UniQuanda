@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using UniQuanda.Core.Application.Validators;
 
-namespace UniQuanda.Core.Application.CQRS.Commands.Auth.AddExtraEmailForUser;
+namespace UniQuanda.Core.Application.CQRS.Commands.Auth.AddExtraEmail;
 
-public class AddExtraEmailForUserRequestDTO
+public class AddExtraEmailRequestDTO
 {
     [Required]
     [MaxLength(320)]

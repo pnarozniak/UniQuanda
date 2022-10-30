@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using UniQuanda.Core.Domain.Enums;
 
-namespace UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateUserMainEmail;
+namespace UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateMainEmail;
 
-public class UpdateUserMainEmailCommand : IRequest<UpdateSecurityResultEnum>
+public class UpdateMainEmailCommand : IRequest<UpdateSecurityResultEnum>
 {
-    public UpdateUserMainEmailCommand(UpdateUserMainEmailRequestDTO request, int idUser)
+    public UpdateMainEmailCommand(UpdateMainEmailRequestDTO request, int idUser)
     {
         NewMainEmail = IdExtraEmail == null ? request.NewMainEmail : null;
         IdExtraEmail = request.IdExtraEmail;

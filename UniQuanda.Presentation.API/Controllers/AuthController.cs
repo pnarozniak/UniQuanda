@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using UniQuanda.Core.Application.CQRS.Commands.Auth.AddExtraEmailForUser;
+using UniQuanda.Core.Application.CQRS.Commands.Auth.AddExtraEmail;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ConfirmRegister;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.DeleteExtraEmail;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
@@ -10,7 +10,7 @@ using UniQuanda.Core.Application.CQRS.Commands.Auth.Register;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ResendRegisterConfirmationCode;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ResetPasword;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.UpdatePassword;
-using UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateUserMainEmail;
+using UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateMainEmail;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.GetUserEmails;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.IsEmailAndNicknameAvailable;
 using UniQuanda.Core.Domain.Enums;
@@ -166,9 +166,9 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
     [HttpPut("update-main-email")]
     [Authorize(Roles = "user")]
-    public async Task<IActionResult> UpdateUserMainEmail([FromBody] UpdateUserMainEmailRequestDTO request, CancellationToken ct)
+    public async Task<IActionResult> UpdateUserMainEmail([FromBody] UpdateMainEmailRequestDTO request, CancellationToken ct)
     {
-        var command = new UpdateUserMainEmailCommand(request, User.GetId()!.Value);
+        var command = new UpdateMainEmailCommand(request, User.GetId()!.Value);
         var result = await _mediator.Send(command, ct);
         return result switch
         {
@@ -188,9 +188,9 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
     [HttpPost("add-extra-email")]
     [Authorize(Roles = "user")]
-    public async Task<IActionResult> AddExtraEmail([FromBody] AddExtraEmailForUserRequestDTO request, CancellationToken ct)
+    public async Task<IActionResult> AddExtraEmail([FromBody] AddExtraEmailRequestDTO request, CancellationToken ct)
     {
-        var command = new AddExtraEmailForUserCommand(request, User.GetId()!.Value);
+        var command = new AddExtraEmailCommand(request, User.GetId()!.Value);
         var result = await _mediator.Send(command, ct);
         return result switch
         {

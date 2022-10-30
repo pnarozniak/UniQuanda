@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using UniQuanda.Core.Application.Validators;
 
-namespace UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateUserMainEmail;
+namespace UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateMainEmail;
 
-public class UpdateUserMainEmailRequestDTO
+public class UpdateMainEmailRequestDTO
 {
     [MaxLength(320)]
     [EmailAddress]

@@ -4,15 +4,15 @@ using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Enums;
 
-namespace UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateUserMainEmail;
+namespace UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateMainEmail;
 
-public class UpdateUserMainEmailHandler : IRequestHandler<UpdateUserMainEmailCommand, UpdateSecurityResultEnum>
+public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, UpdateSecurityResultEnum>
 {
     private readonly IAuthRepository _authRepository;
     private readonly IPasswordsService _passwordsService;
     private readonly IEmailService _emailService;
 
-    public UpdateUserMainEmailHandler(
+    public UpdateMainEmailHandler(
         IAuthRepository authRepository,
         IPasswordsService passwordsService,
         IEmailService emailService)
@@ -22,7 +22,7 @@ public class UpdateUserMainEmailHandler : IRequestHandler<UpdateUserMainEmailCom
         _emailService = emailService;
     }
 
-    public async Task<UpdateSecurityResultEnum> Handle(UpdateUserMainEmailCommand request, CancellationToken ct)
+    public async Task<UpdateSecurityResultEnum> Handle(UpdateMainEmailCommand request, CancellationToken ct)
     {
         var user = await _authRepository.GetUserByIdAsync(request.IdUser, ct);
         if (user is null)

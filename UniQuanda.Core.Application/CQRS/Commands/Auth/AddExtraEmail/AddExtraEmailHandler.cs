@@ -4,15 +4,15 @@ using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Enums;
 
-namespace UniQuanda.Core.Application.CQRS.Commands.Auth.AddExtraEmailForUser;
+namespace UniQuanda.Core.Application.CQRS.Commands.Auth.AddExtraEmail;
 
-public class AddExtraEmailForUserHandler : IRequestHandler<AddExtraEmailForUserCommand, UpdateSecurityResultEnum>
+public class AddExtraEmailHandler : IRequestHandler<AddExtraEmailCommand, UpdateSecurityResultEnum>
 {
     private readonly IAuthRepository _authRepository;
     private readonly IPasswordsService _passwordsService;
     private readonly IEmailService _emailService;
 
-    public AddExtraEmailForUserHandler(
+    public AddExtraEmailHandler(
         IAuthRepository authRepository,
         IPasswordsService passwordsService,
         IEmailService emailService)
@@ -22,7 +22,7 @@ public class AddExtraEmailForUserHandler : IRequestHandler<AddExtraEmailForUserC
         _emailService = emailService;
     }
 
-    public async Task<UpdateSecurityResultEnum> Handle(AddExtraEmailForUserCommand request, CancellationToken ct)
+    public async Task<UpdateSecurityResultEnum> Handle(AddExtraEmailCommand request, CancellationToken ct)
     {
         var user = await _authRepository.GetUserByIdAsync(request.IdUser, ct);
         if (user is null)
