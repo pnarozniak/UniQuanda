@@ -15,7 +15,7 @@ public static class RecaptchaExtensions
 
     public static IApplicationBuilder UseRecaptcha(this IApplicationBuilder app)
     {
-        app.UseMiddleware<RecaptchaMidldeware>();
+        app.UseMiddleware<RecaptchaMiddleware>();
         return app;
     }
 
