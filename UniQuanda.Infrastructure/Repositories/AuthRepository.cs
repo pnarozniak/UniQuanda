@@ -103,7 +103,7 @@ public class AuthRepository : IAuthRepository
                     Id = ue.Id,
                     IsMain = ue.IsMain,
                     Value = ue.Value
-                })
+                }).ToList()
             })
             .SingleOrDefaultAsync(ct);
 
