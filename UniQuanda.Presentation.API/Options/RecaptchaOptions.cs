@@ -6,7 +6,9 @@ public class RecaptchaOptions
     {
         var section = configuration.GetSection("Recaptcha");
         SecretKey = section["SecretKey"];
+        VerificationApiUrl = section["VerificationApiUrl"];
     }
 
     public string SecretKey { get; set; }
+    public string VerificationApiUrl { get; set; }
 }

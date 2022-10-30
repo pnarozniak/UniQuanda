@@ -45,7 +45,7 @@ public class RecaptchaMiddleware
     {
         try
         {
-            var url = "https://www.google.com/recaptcha/api/siteverify";
+            var url = _recaptchaOptions.VerificationApiUrl;
             using var http = new HttpClient();
             var body = new
             {
