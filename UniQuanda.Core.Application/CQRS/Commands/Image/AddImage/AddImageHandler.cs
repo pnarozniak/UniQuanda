@@ -14,7 +14,7 @@ public class AddImageHandler : IRequestHandler<AddImageCommand, AddImageResponse
 
     public async Task<AddImageResponseDTO> Handle(AddImageCommand request, CancellationToken ct)
     {
-        var result = await _imageService.SaveImageAsync(request.File, request.FileName, request.Folder, ct);
+        var result = await _imageService.SaveImageAsync(request.Image, request.ImageName, request.Folder, ct);
         return new()
         {
             IsSuccess = result
