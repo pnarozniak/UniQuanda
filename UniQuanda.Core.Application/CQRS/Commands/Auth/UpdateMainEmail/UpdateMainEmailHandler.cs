@@ -53,7 +53,7 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
             }
             else
             {
-                updateResult = await _authRepository.UpdateUserMainEmailByExtraEmailAsync(request.IdUser, idExtreEmail.Value, ct); 
+                updateResult = await _authRepository.UpdateUserMainEmailByExtraEmailAsync(request.IdUser, idExtreEmail.Value, ct);
             }
         }
         if (updateResult == true)

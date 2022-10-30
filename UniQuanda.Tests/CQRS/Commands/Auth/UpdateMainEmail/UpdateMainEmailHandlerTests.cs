@@ -214,7 +214,7 @@ public class UpdateMainEmailHandlerTests
     [Test]
     public async Task UpdateMainEmail_ShouldReturnResultEnumInvalidPassword_WhenGivenPasswordIsInvalid()
     {
-        this.SetupUpdateMainEmailCommand(1,null,"InvalidPassword");
+        this.SetupUpdateMainEmailCommand(1, null, "InvalidPassword");
         var userSecurityEntity = GetUserSecurityEntity();
         this.authRepository
             .Setup(ar => ar.GetUserByIdAsync(IdUser, CancellationToken.None))
