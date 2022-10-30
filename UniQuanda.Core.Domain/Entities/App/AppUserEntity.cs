@@ -18,4 +18,5 @@ public class AppUserEntity
     public string? SemanticScholarProfile { get; set; }
     public IEnumerable<AcademicTitleEntity>? Titles { get; set; }
     public IEnumerable<UniversityEntity>? Universities { get; set; }
+    public IEnumerable<TagOnProfileEntity>? Tags { get; set; }
 }

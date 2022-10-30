@@ -5,6 +5,7 @@ public class Tag
     public int Id { get; set; }
     public bool IsDeleted { get; set; }
     public int? ParentTagId { get; set; }
+    public string Name { get; set; }
     public virtual Tag? ParentTagIdNavigation { get; set; }
     public virtual ICollection<Tag> ChildTags { get; set; }
     public virtual ICollection<TagInQuestion> TagInQuestions { get; set; }
