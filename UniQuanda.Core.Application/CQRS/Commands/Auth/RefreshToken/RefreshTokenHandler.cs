@@ -25,7 +25,7 @@ public class RefreshTokenHandler : IRequestHandler<RefreshTokenCommand, RefreshT
         if (idUser is null) return null;
 
         var dbUser = await _authRepository.GetUserByIdAsync((int)idUser, ct);
-        if (dbUser is null || dbUser.Id != idUser || dbUser.RefreshToken != request.RefreshToken) return null;
+        if (dbUser is null || dbUser.RefreshToken != request.RefreshToken) return null;
 
         var isTokenValid = dbUser.RefreshTokenExp > DateTime.UtcNow;
         if (!isTokenValid) return null;
