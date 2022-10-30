@@ -16,6 +16,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile
         public IEnumerable<AcademicTitleResponseDTO> AcademicTitles { get; set; }
         public IEnumerable<UniversityResponseDTO> Universities { get; set; }
         public HeaderStatisticsResponseDTO HeaderStatistics { get; set; }
+        public IEnumerable<PointsInTagsResponseDTO> PointsInTags { get; set; }
 
 
         public class UserDataResponseDTO
@@ -26,6 +27,11 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile
             public string? LastName { get; set; }
             public string? Avatar { get; set; }
             public string? Banner { get; set; }
+            public string? AboutText { get; set; }
+            public string? PhoneNumber { get; set; }
+            public string? City { get; set; }
+            public DateTime? Birthdate { get; set; }
+            public string? SemanticScholarProfile { get; set; }
         }
         public class UniversityResponseDTO
         {
@@ -47,6 +53,13 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile
             public int Points { get; set; }
             public int Questions { get; set; }
             public int Answers { get; set; }
+        }
+
+        public class PointsInTagsResponseDTO
+        {
+            public string Name { get; set; }
+            public int Points { get; set; }
+            public int Order { get; set; }
         }
     }
 

@@ -32,13 +32,16 @@ public class AppUserRepository : IAppUserRepository
 
     public async Task<AppUserEntity?> GetUserProfileAsync(int uid, CancellationToken ct)
     {
-        var cacheKey = CacheKey.GetUserProfileStatistics(uid);
+        var cacheStatisticsKey = CacheKey.GetUserProfileStatistics(uid);
+        var cacheTopTagsKey = CacheKey.GetUserProfileTopTags(uid);
         var cacheDuration = DurationEnum.ThreeHours;
 
         var query = _appContext.AppUsers.Where(u => u.Id == uid);
-        var cacheResult = await _cacheService.GetFromCacheAsync<(int Points, int QuestionAmount, int AnswersAmount)>(cacheKey, ct);
+        var cacheStatisticsResult = await _cacheService.GetFromCacheAsync<(int Points, int QuestionAmount, int AnswersAmount)>(cacheStatisticsKey, ct);
+        var cacheTopTagsResult = await _cacheService.GetFromCacheAsync<IEnumerable<(string Tag, int Amount)>>(cacheTopTagsKey, ct);
+
         AppUserEntity? user = null;
-        if (Equals(cacheResult, default((int Points, int QuestionAmount, int AnswersAmount))))
+        if (Equals(cacheStatisticsResult, default((int Points, int QuestionAmount, int AnswersAmount))) || Equals(cacheTopTagsResult, default(IEnumerable<(string Tag, int Amount)>)))
         {
             user = await query.Select(u => new AppUserEntity()
             {
@@ -48,6 +51,11 @@ public class AppUserRepository : IAppUserRepository
                 Nickname = u.Nickname,
                 Avatar = u.Avatar,
                 Banner = u.Banner,
+                AboutText = u.AboutText,
+                Birthdate = u.Birthdate,
+                City = u.City,
+                SemanticScholarProfile = u.SemanticScholarProfile,
+                PhoneNumber = u.PhoneNumber,
                 Titles = u.AppUserTitles
                     .Where(ut => ut.AppUserId == u.Id)
                     .Select(t => new AcademicTitleEntity()
@@ -70,12 +78,23 @@ public class AppUserRepository : IAppUserRepository
                 AnswersAmount = u.AppUserAnswersInteractions.Where(a => a.AppUserId == uid && a.IsCreator).Count(),
                 QuestionsAmount = u.AppUserQuestionsInteractions.Where(q => q.AppUserId == uid && q.IsCreator).Count(),
                 Points = _appContext.UsersPointsInTags.Where(p => p.AppUserId == uid).Sum(p => p.Points),
+                Tags = u.UserPointsInTags.Where(t => t.AppUserId == uid)
+                    .Select(t => new TagOnProfileEntity()
+                    {
+                        Name = t.TagIdNavigation.Name,
+                        Points = t.Points
+                    })
+                    .OrderBy(t => t.Points)
+                    .Take(3)
+                    .ToList()
             }).SingleOrDefaultAsync(ct);
 
             if (Equals(user, default(AppUserEntity))) return null;
 
             (int Points, int QuestionAmount, int AnswersAmount) statistics = (user.Points ?? 0, user.QuestionsAmount ?? 0, user.AnswersAmount ?? 0);
-            await _cacheService.SetToCacheAsync(cacheKey, statistics, cacheDuration, ct);
+            IEnumerable<(string Tag, int Amount)> topTags = user.Tags.Select(t => (t.Name, t.Points));
+            await _cacheService.SetToCacheAsync(cacheStatisticsKey, statistics, cacheDuration, ct);
+            await _cacheService.SetToCacheAsync(cacheTopTagsKey, topTags, cacheDuration, ct);
             return user;
         }
         else
@@ -88,6 +107,11 @@ public class AppUserRepository : IAppUserRepository
                 Nickname = u.Nickname,
                 Avatar = u.Avatar,
                 Banner = u.Banner,
+                AboutText = u.AboutText,
+                Birthdate = u.Birthdate,
+                City = u.City,
+                SemanticScholarProfile = u.SemanticScholarProfile,
+                PhoneNumber = u.PhoneNumber,
                 Titles = u.AppUserTitles
                     .Where(ut => ut.AppUserId == u.Id)
                     .Select(t => new AcademicTitleEntity()
@@ -110,9 +134,14 @@ public class AppUserRepository : IAppUserRepository
             }).SingleAsync(ct);
             if (Equals(user, default(AppUserEntity))) return null;
 
-            user.QuestionsAmount = cacheResult.QuestionAmount;
-            user.AnswersAmount = cacheResult.AnswersAmount;
-            user.Points = cacheResult.Points;
+            user.QuestionsAmount = cacheStatisticsResult.QuestionAmount;
+            user.AnswersAmount = cacheStatisticsResult.AnswersAmount;
+            user.Points = cacheStatisticsResult.Points;
+            user.Tags = cacheTopTagsResult.Select(t => new TagOnProfileEntity()
+            {
+                Name = t.Tag,
+                Points = t.Amount
+            }).ToList();
             return user;
         }
     }

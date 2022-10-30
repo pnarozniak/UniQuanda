@@ -1,7 +1,7 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Infrastructure.Options;
@@ -31,6 +31,11 @@ public class TokensService : ITokensService
         var refreshToken = Guid.NewGuid().ToString();
         var refreshTokenExp = DateTime.UtcNow.AddMinutes(_options.RefreshToken.ValidityInMinutes);
         return new Tuple<string, DateTime>(refreshToken, refreshTokenExp);
+    }
+
+    public string GeneratePasswordRecoveryToken()
+    {
+        return Guid.NewGuid().ToString();
     }
 
     public string GenerateAccessToken(UserEntity user)

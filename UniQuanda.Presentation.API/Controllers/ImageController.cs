@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using UniQuanda.Core.Application.Services;
+using UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProfile;
 using UniQuanda.Core.Domain.Enums;
 
 namespace UniQuanda.Presentation.API.Controllers;
@@ -10,62 +11,69 @@ namespace UniQuanda.Presentation.API.Controllers;
 [AllowAnonymous]
 public class ImageController : ControllerBase
 {
-    private readonly IImageService _imageService;
+    private readonly IMediator _mediator;
 
-    public ImageController(IImageService imageService)
+    public ImageController(IMediator mediator)
     {
-        _imageService = imageService;
+        _mediator = mediator;
     }
 
     /// <summary>
     ///     Gets image by url
     /// </summary>
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(File))]
-    [HttpGet("{FolderName}/{FileName}")]
+    [HttpGet("{FolderName}/{ImageName}")]
     public async Task<IActionResult> GetImage(
         [FromRoute] string FolderName,
-        [FromRoute] string FileName,
+        [FromRoute] string ImageName,
         CancellationToken ct)
     {
+
         // TODO: Authorization for the resource based on User
-        var result = await _imageService.GetImageAsync(FileName, ImageFolder.FindByValue(FolderName), ct);
+        var dto = new GetImageRequestDTO
+        {
+            Folder = ImageFolder.FindByValue(FolderName),
+            ImageName = ImageName
+        };
+        var query = new GetImageQuery(dto);
+        var result = await _mediator.Send(query, ct);
         if (object.Equals(result, default((Stream DataStream, string ContentType)))) return NotFound();
-        return File(result.DataStream, result.ContentType);
+        return File(result.Image, result.ContentType);
     }
 
     /// <summary>
     ///     Saves image by url
     /// </summary>
-    [HttpPost("{FolderName}/{FileName}")]
+    [HttpPost("{FolderName}")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> AddImage(
         [FromRoute] string FolderName,
-        [FromRoute] string FileName,
-        IFormFile file,
+        [FromBody] AddImageRequestDTO image,
         CancellationToken ct)
     {
         if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development") return StatusCode(StatusCodes.Status423Locked);
 
-        var result = await _imageService.SaveImageAsync(file, FileName, ImageFolder.FindByValue(FolderName), ct);
-        return result ? StatusCode(StatusCodes.Status201Created) : Conflict();
+        var command = new AddImageCommand(image, ImageFolder.FindByValue(FolderName));
+        var result = await _mediator.Send(command, ct);
+        return result.IsSuccess ? StatusCode(StatusCodes.Status201Created) : Conflict();
     }
 
     /// <summary>
     ///     Removes image by url
     /// </summary>
-    [HttpDelete("{FolderName}/{FileName}")]
+    [HttpDelete("{FolderName}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteImage(
+    public async Task<IActionResult> RemoveImage(
         [FromRoute] string FolderName,
-        [FromRoute] string FileName,
+        [FromBody] RemoveImageRequestDTO imageData,
         CancellationToken ct)
     {
         if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development") return StatusCode(StatusCodes.Status423Locked);
-
-        var result = await _imageService.RemoveImageAsync(FileName, ImageFolder.FindByValue(FolderName), ct);
-        return result ? StatusCode(StatusCodes.Status204NoContent) : NotFound();
+        var command = new RemoveImageCommand(imageData, ImageFolder.FindByValue(FolderName));
+        var result = await _mediator.Send(command, ct);
+        return result.IsSuccess ? StatusCode(StatusCodes.Status204NoContent) : NotFound();
     }
 
 }

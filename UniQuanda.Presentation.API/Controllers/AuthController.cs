@@ -5,8 +5,10 @@ using UniQuanda.Core.Application.CQRS.Commands.Auth.AddExtraEmailForUser;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ConfirmRegister;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.DeleteExtraEmail;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
+using UniQuanda.Core.Application.CQRS.Commands.Auth.RecoverPassword;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Register;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ResendRegisterConfirmationCode;
+using UniQuanda.Core.Application.CQRS.Commands.Auth.ResetPasword;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.UpdatePassword;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateUserMainEmail;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.GetUserEmails;
@@ -109,6 +111,35 @@ public class AuthController : ControllerBase
         var command = new ResendRegisterConfirmationCodeCommand(request);
         await _mediator.Send(command, ct);
         return NoContent();
+    }
+
+    /// <summary>
+    ///     Generates password recovery link and sends it via e-mail
+    /// </summary>
+    [HttpPost("recover-password")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> RecoverPassword(
+        [FromBody] RecoverPasswordDTO request,
+        CancellationToken ct)
+    {
+        var command = new RecoverPasswordCommand(request);
+        await _mediator.Send(command, ct);
+        return NoContent();
+    }
+
+    /// <summary>
+    ///     Resets user password
+    /// </summary>
+    [HttpPost("reset-password")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> ResetPassword(
+        [FromBody] ResetPaswordDTO request,
+        CancellationToken ct)
+    {
+        var command = new ResetPasswordCommand(request);
+        var success = await _mediator.Send(command, ct);
+        return success ? NoContent() : Conflict();
     }
 
     /// <summary>

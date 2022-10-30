@@ -17,6 +17,12 @@ public interface ITokensService
     Tuple<string, DateTime> GenerateRefreshToken();
 
     /// <summary>
+    ///     Generates token for password recovery
+    /// </summary>
+    /// <returns>Password recovery token</returns>
+    string GeneratePasswordRecoveryToken();
+
+    /// <summary>
     ///     Generates access token for given user
     /// </summary>
     /// <returns>Access token as string</returns>

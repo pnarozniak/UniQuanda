@@ -1,4 +1,5 @@
 ﻿using UniQuanda.Core.Domain.Entities.Auth;
+using UniQuanda.Core.Domain.Enums;
 
 namespace UniQuanda.Core.Application.Repositories;
 
@@ -143,4 +144,39 @@ public interface IAuthRepository
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>True if succesful, NULL when extra email not exists, false when delete is not succesful</returns>
     Task<bool?> DeleteExtraEmailAsync(int idUser, int idExtraEmail, CancellationToken ct);
+
+    /// <summary>
+    ///     Creates UserActionConfirmation of given action type for given user
+    /// </summary>
+    /// <param name="idUser">Id of user connected with action</param>
+    /// <param name="actionType">Confirmation action type</param>
+    /// <param name="confirmationToken">Confirmation token</param>
+    /// <param name="existsUntil">Confirmation token expiration and a timestamp when record should be deleted from db</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>
+    ///     True if user confirmation action has been successfully added to db, NULL if user was not found, otherwise
+    ///     False
+    /// </returns>
+    Task<bool?> CreateUserActionToConfirmAsync(int idUser, UserActionToConfirmEnum actionType, string confirmationToken,
+        DateTime existsUntil, CancellationToken ct);
+
+    /// <summary>
+    ///     Gets user action confirmation by confirmation action type and token
+    /// </summary>
+    /// <param name="actionType">Confirmation action type</param>
+    /// <param name="confirmationToken">Confirmation token value</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>User action to confirm entity if confirmation action has been found, otherwise NULL</returns>
+    Task<UserActionToConfirmEntity?> GetUserActionToConfirmAsync(UserActionToConfirmEnum actionType,
+        string confirmationToken, CancellationToken ct);
+
+    /// <summary>
+    ///     Resets user password, removes user refreshToken and deletes password recovery action
+    /// </summary>
+    /// <param name="idUser">Id of user reseting password</param>
+    /// <param name="idRecoveryAction">Id of user password recovery action to confirm</param>
+    /// <param name="newHashedPassword">User new hashed password</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>True if password has been changed and password recovery action has been deleted, otherwise False</returns>
+    Task<bool> ResetUserPasswordAsync(int idUser, int idRecoveryAction, string newHashedPassword, CancellationToken ct);
 }

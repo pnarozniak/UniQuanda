@@ -27,5 +27,6 @@ public class TagEfConfiguration : IEntityTypeConfiguration<Tag>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(t => t.IsDeleted).HasDefaultValue(false).IsRequired();
+        builder.Property(t => t.Name).HasMaxLength(100).IsRequired();
     }
 }

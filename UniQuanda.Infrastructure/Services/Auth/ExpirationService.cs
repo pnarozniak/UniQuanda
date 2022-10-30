@@ -16,4 +16,9 @@ public class ExpirationService : IExpirationService
     {
         return _options.NewUserExpirationInHours;
     }
+
+    public int GetRecoverPasswordActionExpirationInMinutes()
+    {
+        return _options.RecoverPasswordActionExpirationInMinutes;
+    }
 }

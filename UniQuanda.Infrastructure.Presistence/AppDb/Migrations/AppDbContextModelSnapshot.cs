@@ -276,6 +276,11 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
                     b.Property<int?>("ParentTagId")
                         .HasColumnType("integer");
 
