@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ConfirmRegister;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.RecoverPassword;
+using UniQuanda.Core.Application.CQRS.Commands.Auth.RefreshToken;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Register;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ResendRegisterConfirmationCode;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ResetPasword;
@@ -127,5 +128,20 @@ public class AuthController : ControllerBase
         var command = new ResetPasswordCommand(request);
         var success = await _mediator.Send(command, ct);
         return success ? NoContent() : Conflict();
+    }
+
+    /// <summary>
+    ///     Refreshes access and refresh tokens
+    /// </summary>
+    [HttpPost("refresh-token")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RefreshTokenResponseDTO))]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> RefreshToken(
+        [FromBody] RefreshTokenRequestDTO request,
+        CancellationToken ct)
+    {
+        var command = new RefreshTokenCommand(request);
+        var tokens = await _mediator.Send(command, ct);
+        return tokens is not null ? Ok(tokens) : Conflict();
     }
 }
