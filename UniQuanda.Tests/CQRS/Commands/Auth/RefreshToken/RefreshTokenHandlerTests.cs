@@ -13,7 +13,7 @@ using UniQuanda.Core.Domain.Entities.Auth;
 namespace UniQuanda.Tests.CQRS.Commands.Auth.RecoverPassword;
 
 [TestFixture]
-public class RecoverPasswordHandlerTests
+public class RefreshTokenHandlerTests
 {
     [SetUp]
     public void SetupTests()
