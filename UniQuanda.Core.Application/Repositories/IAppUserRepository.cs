@@ -6,7 +6,7 @@ namespace UniQuanda.Core.Application.Repositories;
 public interface IAppUserRepository
 {
     /// <summary>
-    /// Returns user data needed to display profile
+    ///     Returns user data needed to display profile
     /// </summary>
     /// <param name="uid">ID of profile to load</param>
     /// <param name="ct">Cancellation token</param>
@@ -14,7 +14,7 @@ public interface IAppUserRepository
     public Task<AppUserEntity?> GetUserProfileAsync(int uid, CancellationToken ct);
 
     /// <summary>
-    /// Returns avatar of user if exists
+    ///     Returns avatar of user if exists
     /// </summary>
     /// <param name="uid">ID of user</param>
     /// <param name="ct">Cancellation token</param>
@@ -34,7 +34,10 @@ public interface IAppUserRepository
     /// </summary>
     /// <param name="appUser">New data</param>
     /// <param name="ct">Operation cancellation token</param>
-    /// <returns>If AppUser isn't found then IsSuccessful NULL, otherwise true/false based on success of update. If it is successful, returned is avatar url</returns>    
+    /// <returns>
+    ///     If AppUser isn't found then IsSuccessful NULL, otherwise true/false based on success of update. If it is
+    ///     successful, returned is avatar url
+    /// </returns>
     Task<AppUserUpdateResult> UpdateAppUserAsync(AppUserEntity appUser, CancellationToken ct);
 
     /// <summary>

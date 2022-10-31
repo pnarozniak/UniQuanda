@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
-using System.Text;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using UniQuanda.Infrastructure.Options;
 
 namespace UniQuanda.Presentation.API.Extensions;
@@ -20,17 +18,7 @@ public static class JwtBearerExtensions
             .AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = accessTokenOptions.ValidateIssuer,
-                    ValidIssuer = accessTokenOptions.ValidIssuer,
-                    ValidateAudience = accessTokenOptions.ValidateAudience,
-                    ValidAudience = accessTokenOptions.ValidAudience,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(accessTokenOptions.SecretKey)),
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
-                };
+                options.TokenValidationParameters = accessTokenOptions.ValidationParameters;
             });
 
         return services;
