@@ -17,6 +17,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Tags.GetTags
             if (request.Keyword != null)
             {
                 int? count = request.AddCount ? await this._tagRepository.GetTagsByKeywordCountAsync(request.Keyword, request.TagId, ct) : null;
+                var mainTag = request.AddParentTagData ?? false && request.TagId != null ? await this._tagRepository.GetTagById(request.TagId ?? 0, ct) : null;
                 return new()
                 {
                     Tags = (await _tagRepository
@@ -29,7 +30,13 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Tags.GetTags
                         ImageUrl = tag.ImageUrl,
                         ParentTagId = tag.ParentId
                     }).ToList(),
-                    TotalCount = count
+                    TotalCount = count,
+                    ParentTag = mainTag == null ? null : new GetTagsResponseTagDTO()
+                    {
+                        Id = mainTag.Id,
+                        Name = mainTag.Name,
+                        Description = mainTag.Description,
+                    }
                 };
             }
             else if (request.TagId != null)
