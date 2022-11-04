@@ -5,6 +5,7 @@ using UniQuanda.Core.Application.CQRS.Commands.Report.CreateReport;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.CreateReport;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.GetReportTypes;
 using UniQuanda.Core.Application.CQRS.Queries.Report.GetReportTypes;
+using UniQuanda.Presentation.API.Attributes;
 using UniQuanda.Presentation.API.Extensions;
 
 namespace UniQuanda.Presentation.API.Controllers
@@ -39,6 +40,7 @@ namespace UniQuanda.Presentation.API.Controllers
         /// <summary>
         ///     Creates new report
         /// </summary>
+        [Recaptcha]
         [HttpPost] 
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
