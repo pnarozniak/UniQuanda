@@ -90,7 +90,7 @@ public class AuthRepository : IAuthRepository
         return appUser;
     }
 
-    public async Task<UserSecurityEntity?> GetUserByIdAsync(int idUser, CancellationToken ct)
+    public async Task<UserSecurityEntity?> GetUserWithEmailsByIdAsync(int idUser, CancellationToken ct)
     {
         var appUser = await _authContext.Users
             .Where(u => u.Id == idUser)
@@ -240,6 +240,19 @@ public class AuthRepository : IAuthRepository
         _authContext.UsersActionsToConfirm.Remove(action);
 
         return await _authContext.SaveChangesAsync(ct) == 2;
+    }
+
+    public async Task<UserEntity?> GetUserByIdAsync(int idUser, CancellationToken ct)
+    {
+        return await _authContext.Users
+            .Where(u => u.Id == idUser)
+            .Select(u => new UserEntity
+            {
+                Id = u.Id,
+                RefreshToken = u.RefreshToken,
+                RefreshTokenExp = u.RefreshTokenExp
+            })
+            .SingleOrDefaultAsync(ct);
     }
 
     public async Task<UserEmailsEntity?> GetUserEmailsAsync(int idUser, CancellationToken ct)

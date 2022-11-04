@@ -24,7 +24,7 @@ public class DeleteExtraEmailHandler : IRequestHandler<DeleteExtraEmailCommand, 
 
     public async Task<UpdateSecurityResultEnum> Handle(DeleteExtraEmailCommand request, CancellationToken ct)
     {
-        var user = await _authRepository.GetUserByIdAsync(request.IdUser, ct);
+        var user = await _authRepository.GetUserWithEmailsByIdAsync(request.IdUser, ct);
         if (user is null)
             return UpdateSecurityResultEnum.ContentNotExist;
 

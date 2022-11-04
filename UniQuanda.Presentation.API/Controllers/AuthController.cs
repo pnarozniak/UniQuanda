@@ -6,6 +6,7 @@ using UniQuanda.Core.Application.CQRS.Commands.Auth.ConfirmRegister;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.DeleteExtraEmail;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.RecoverPassword;
+using UniQuanda.Core.Application.CQRS.Commands.Auth.RefreshToken;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Register;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ResendRegisterConfirmationCode;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ResetPasword;
@@ -34,7 +35,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Checks if given e-mail address and given nickname are already used by any users
     /// </summary>
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IsEmailAndNicknameAvailableResponseDTO))]
+    [Recaptcha]
     [HttpGet("is-email-and-nickname-available")]
     [AllowAnonymous]
     public async Task<IActionResult> IsEmailAndNicknameAvailable(
@@ -49,6 +50,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Registers new user in database and sends confirmation code to user e-mail address
     /// </summary>
+    [Recaptcha]
     [HttpPost("register")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -65,6 +67,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Performs login operation and returns JWT access token and refresh token
     /// </summary>
+    [Recaptcha]
     [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponseDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -85,6 +88,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Confirms user registration process
     /// </summary>
+    [Recaptcha]
     [HttpPost("confirm-register")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -101,6 +105,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Resets and re-sends e-mail confirmation code for given user
     /// </summary>
+    [Recaptcha]
     [HttpPost("resend-register-confirmation-code")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [AllowAnonymous]
@@ -116,6 +121,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Generates password recovery link and sends it via e-mail
     /// </summary>
+    [Recaptcha]
     [HttpPost("recover-password")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> RecoverPassword(
@@ -130,6 +136,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Resets user password
     /// </summary>
+    [Recaptcha]
     [HttpPost("reset-password")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -140,6 +147,21 @@ public class AuthController : ControllerBase
         var command = new ResetPasswordCommand(request);
         var success = await _mediator.Send(command, ct);
         return success ? NoContent() : Conflict();
+    }
+
+    /// <summary>
+    ///     Refreshes access and refresh tokens
+    /// </summary>
+    [HttpPost("refresh-token")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RefreshTokenResponseDTO))]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> RefreshToken(
+        [FromBody] RefreshTokenRequestDTO request,
+        CancellationToken ct)
+    {
+        var command = new RefreshTokenCommand(request);
+        var tokens = await _mediator.Send(command, ct);
+        return tokens is not null ? Ok(tokens) : Conflict();
     }
 
     /// <summary>

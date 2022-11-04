@@ -67,4 +67,33 @@ public class TokensService : ITokensService
 
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
+
+    public int? GetUserIdFromExpiredAccessToken(string accessToken)
+    {
+        var tokenValidationParameters = _options.AccessToken.ValidationParameters;
+        tokenValidationParameters.ValidateLifetime = false;
+
+        ClaimsPrincipal? principal = null;
+        SecurityToken? securityToken = null;
+        try
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            principal = tokenHandler.ValidateToken(
+                accessToken, tokenValidationParameters, out SecurityToken outSecurityToken);
+
+            securityToken = outSecurityToken;
+        }
+        catch
+        {
+            return null;
+        }
+    
+        if (securityToken is not JwtSecurityToken jwt || jwt == null 
+            || !jwt.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,StringComparison.InvariantCultureIgnoreCase))
+            return null;
+
+        var idUser = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var canParse = int.TryParse(idUser, out var parsedIdUser);
+        return canParse ? parsedIdUser : null;
+    }
 }

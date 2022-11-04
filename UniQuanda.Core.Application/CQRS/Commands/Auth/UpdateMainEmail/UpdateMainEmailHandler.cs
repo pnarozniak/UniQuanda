@@ -24,7 +24,7 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
 
     public async Task<UpdateSecurityResultEnum> Handle(UpdateMainEmailCommand request, CancellationToken ct)
     {
-        var user = await _authRepository.GetUserByIdAsync(request.IdUser, ct);
+        var user = await _authRepository.GetUserWithEmailsByIdAsync(request.IdUser, ct);
         if (user is null)
             return UpdateSecurityResultEnum.ContentNotExist;
 
