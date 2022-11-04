@@ -45,7 +45,7 @@ namespace UniQuanda.Tests.CQRS.Queries.Report
                 .ReturnsAsync(foundReportTypes);
 
             var query = new GetReportTypesQuery(new GetReportTypesRequestDTO(){
-                Answers = true
+                Answer = true
             }){};
             var result = await getReportTypesHandler.Handle(query, CancellationToken.None);
             var shouldReturn = new GetReportTypesResponseDTO(){

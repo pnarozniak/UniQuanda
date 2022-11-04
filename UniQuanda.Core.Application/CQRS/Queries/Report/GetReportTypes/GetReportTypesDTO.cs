@@ -2,9 +2,9 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Auth.GetReportTypes;
 
 public class GetReportTypesRequestDTO
 {
-		public bool Questions { get; set; }
-		public bool Answers { get; set; }
-		public bool Users { get; set; }
+		public bool Question { get; set; }
+		public bool Answer { get; set; }
+		public bool User { get; set; }
 }
 
 public class GetReportTypesResponseDTO
