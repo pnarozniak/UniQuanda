@@ -52,5 +52,7 @@ public class AppDbContext : DbContext
 
         modelBuilder.HasPostgresEnum<AcademicTitleEnum>();
         modelBuilder.HasPostgresEnum<ReportCategoryEnum>();
+
+        modelBuilder.ApplyConfiguration(new ReportTypeDataSeed());
     }
 }
