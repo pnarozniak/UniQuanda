@@ -203,7 +203,7 @@ public class UpdateMainEmailHandlerTests
     {
         this.SetupUpdateMainEmailCommand();
         this.authRepository
-            .Setup(ar => ar.GetUserByIdAsync(IdUser, CancellationToken.None))
+            .Setup(ar => ar.GetUserWithEmailsByIdAsync(IdUser, CancellationToken.None))
             .ReturnsAsync((UserSecurityEntity)null);
 
         var result = await updateMainEmailHandler.Handle(this.updateMainEmailCommand, CancellationToken.None);
@@ -217,7 +217,7 @@ public class UpdateMainEmailHandlerTests
         this.SetupUpdateMainEmailCommand(1, null, "InvalidPassword");
         var userSecurityEntity = GetUserSecurityEntity();
         this.authRepository
-            .Setup(ar => ar.GetUserByIdAsync(IdUser, CancellationToken.None))
+            .Setup(ar => ar.GetUserWithEmailsByIdAsync(IdUser, CancellationToken.None))
             .ReturnsAsync(userSecurityEntity);
         this.passwordsService
             .Setup(ps => ps.VerifyPassword(this.updateMainEmailCommand.PlainPassword, userSecurityEntity.HashedPassword))
@@ -256,7 +256,7 @@ public class UpdateMainEmailHandlerTests
     private void SetupValidPasswordFlow(UserSecurityEntity userSecurityEntity)
     {
         this.authRepository
-            .Setup(ar => ar.GetUserByIdAsync(IdUser, CancellationToken.None))
+            .Setup(ar => ar.GetUserWithEmailsByIdAsync(IdUser, CancellationToken.None))
             .ReturnsAsync(userSecurityEntity);
         this.passwordsService
             .Setup(ps => ps.VerifyPassword(this.updateMainEmailCommand.PlainPassword, userSecurityEntity.HashedPassword))

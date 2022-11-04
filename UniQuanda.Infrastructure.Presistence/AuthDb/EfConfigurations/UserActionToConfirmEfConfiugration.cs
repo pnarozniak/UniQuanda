@@ -23,5 +23,7 @@ public class UserActionToConfirmEfConfiguration : IEntityTypeConfiguration<UserA
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(ua => new { ua.ActionType, ua.IdUser }).IsUnique();
+
+        builder.HasIndex(ua => new { ua.ActionType, ua.IdUserEmail, ua.IdUser }).IsUnique();
     }
 }

@@ -27,7 +27,7 @@ public class ResetPasswordHandler : IRequestHandler<ResetPasswordCommand, bool>
         var dbUser = await _authRepository.GetUserByEmailAsync(command.Email, ct);
         if (dbUser is null || !dbUser.IsEmailConfirmed) return false;
 
-        var action = await _authRepository.GetUserActionToConfirmAsync(UserActionToConfirmEnum.RECOVER_PASSWORD,
+        var action = await _authRepository.GetUserActionToConfirmAsync(UserActionToConfirmEnum.RecoverPassword,
             command.RecoveryToken, ct);
 
         if (action is null || action.IdUser != dbUser.Id || action.ExistsUntil <= DateTime.UtcNow) return false;

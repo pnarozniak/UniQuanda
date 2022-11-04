@@ -89,7 +89,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ResetPassword
 
             authRepository
                     .Setup(ar => ar.GetUserActionToConfirmAsync(
-                        UserActionToConfirmEnum.RECOVER_PASSWORD, PasswordRecoveryToken, CancellationToken.None
+                        UserActionToConfirmEnum.RecoverPassword, PasswordRecoveryToken, CancellationToken.None
                     )).ReturnsAsync(recoveryAction);
 
             var result = await resetPasswordHandler.Handle(this.resetPasswordCommand, CancellationToken.None);
@@ -107,7 +107,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ResetPassword
 
             authRepository
                     .Setup(ar => ar.GetUserActionToConfirmAsync(
-                        UserActionToConfirmEnum.RECOVER_PASSWORD, PasswordRecoveryToken, CancellationToken.None
+                        UserActionToConfirmEnum.RecoverPassword, PasswordRecoveryToken, CancellationToken.None
                     )).ReturnsAsync(recoveryAction);
 
             var result = await resetPasswordHandler.Handle(this.resetPasswordCommand, CancellationToken.None);
@@ -125,7 +125,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ResetPassword
 
             authRepository
                     .Setup(ar => ar.GetUserActionToConfirmAsync(
-                        UserActionToConfirmEnum.RECOVER_PASSWORD, PasswordRecoveryToken, CancellationToken.None
+                        UserActionToConfirmEnum.RecoverPassword, PasswordRecoveryToken, CancellationToken.None
                     )).ReturnsAsync(recoveryAction);
 
             var result = await resetPasswordHandler.Handle(this.resetPasswordCommand, CancellationToken.None);
@@ -143,7 +143,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ResetPassword
 
             authRepository
                     .Setup(ar => ar.GetUserActionToConfirmAsync(
-                        UserActionToConfirmEnum.RECOVER_PASSWORD, PasswordRecoveryToken, CancellationToken.None
+                        UserActionToConfirmEnum.RecoverPassword, PasswordRecoveryToken, CancellationToken.None
                     )).ReturnsAsync(recoveryAction);
 
             var result = await resetPasswordHandler.Handle(this.resetPasswordCommand, CancellationToken.None);
@@ -170,7 +170,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ResetPassword
                 Id = 1,
                 IdUser = idUser,
                 ConfirmationToken = PasswordRecoveryToken,
-                ActionType = UserActionToConfirmEnum.RECOVER_PASSWORD,
+                ActionType = UserActionToConfirmEnum.RecoverPassword,
                 ExistsUntil = existsUntil
             };
         }

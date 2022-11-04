@@ -59,7 +59,7 @@ public class AddExtraEmailHandlerTests
     {
         this.SetupAddExtraEmailCommand();
         this.authRepository
-            .Setup(ar => ar.GetUserByIdAsync(IdUser, CancellationToken.None))
+            .Setup(ar => ar.GetUserWithEmailsByIdAsync(IdUser, CancellationToken.None))
             .ReturnsAsync((UserSecurityEntity)null);
 
         var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
@@ -73,7 +73,7 @@ public class AddExtraEmailHandlerTests
         this.SetupAddExtraEmailCommand("InvalidPassword");
         var userSecurityEntity = GetUserSecurityEntity();
         this.authRepository
-            .Setup(ar => ar.GetUserByIdAsync(IdUser, CancellationToken.None))
+            .Setup(ar => ar.GetUserWithEmailsByIdAsync(IdUser, CancellationToken.None))
             .ReturnsAsync(userSecurityEntity);
         this.passwordsService
             .Setup(ps => ps.VerifyPassword(this.addExtraEmailCommand.PlainPassword, userSecurityEntity.HashedPassword))
@@ -153,7 +153,7 @@ public class AddExtraEmailHandlerTests
     private void SetupValidPasswordFlow(UserSecurityEntity userSecurityEntity)
     {
         this.authRepository
-            .Setup(ar => ar.GetUserByIdAsync(IdUser, CancellationToken.None))
+            .Setup(ar => ar.GetUserWithEmailsByIdAsync(IdUser, CancellationToken.None))
             .ReturnsAsync(userSecurityEntity);
         this.passwordsService
             .Setup(ps => ps.VerifyPassword(this.addExtraEmailCommand.PlainPassword, userSecurityEntity.HashedPassword))

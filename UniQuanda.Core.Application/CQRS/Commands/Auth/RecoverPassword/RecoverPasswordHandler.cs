@@ -33,7 +33,7 @@ public class RecoverPasswordHandler : IRequestHandler<RecoverPasswordCommand, bo
         var recoveryToken = _tokensService.GeneratePasswordRecoveryToken();
         var actionExp = DateTime.UtcNow.AddMinutes(_expirationService.GetRecoverPasswordActionExpirationInMinutes());
         var isActionCreated = await _authRepository.CreateUserActionToConfirmAsync(dbUser.Id,
-            UserActionToConfirmEnum.RECOVER_PASSWORD, recoveryToken, actionExp, ct);
+            UserActionToConfirmEnum.RecoverPassword, recoveryToken, actionExp, ct);
         if (isActionCreated is null or false) return false;
 
         await _emailService.SendPasswordRecoveryEmailAsync(command.Email, recoveryToken);

@@ -16,6 +16,7 @@ using UniQuanda.Core.Application.CQRS.Queries.Auth.GetUserEmails;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.IsEmailAndNicknameAvailable;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Infrastructure.Enums;
+using UniQuanda.Presentation.API.Attributes;
 using UniQuanda.Presentation.API.Extensions;
 using UniQuanda.Presentation.API.Utils;
 
