@@ -16,7 +16,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                 {
                     { 1, "Podszywanie się pod inną osobę", ReportCategoryEnum.USER },
                     { 2, "Publikowanie niestosownych treści", ReportCategoryEnum.USER },
-                    { 3, "Nękanie lub cybeprzemoc", ReportCategoryEnum.USER },
+                    { 3, "Nękanie lub cyberprzemoc", ReportCategoryEnum.USER },
                     { 4, "Inne", ReportCategoryEnum.USER },
                     { 5, "Nieodpowiednia/obraźliwa treść", ReportCategoryEnum.QUESTION },
                     { 6, "Pytanie pojawiło się już na stronie/spam", ReportCategoryEnum.QUESTION },

@@ -5,16 +5,12 @@ using static UniQuanda.Core.Domain.Enums.ReportCategoryEnum;
 
 public class ReportTypeDataSeed : IEntityTypeConfiguration<ReportType>
 	{
-		public ReportTypeDataSeed()
-		{
-		}
-
 		public void Configure(EntityTypeBuilder<ReportType> builder)
 		{
 				builder.HasData(
 					new ReportType{ Id = 1, Name = "Podszywanie się pod inną osobę", ReportCategory = USER },
 					new ReportType{ Id = 2, Name = "Publikowanie niestosownych treści", ReportCategory = USER },
-					new ReportType{ Id = 3, Name = "Nękanie lub cybeprzemoc", ReportCategory = USER },
+					new ReportType{ Id = 3, Name = "Nękanie lub cyberprzemoc", ReportCategory = USER },
 					new ReportType{ Id = 4, Name = "Inne", ReportCategory = USER },
 					new ReportType{ Id = 5, Name = "Nieodpowiednia/obraźliwa treść", ReportCategory = QUESTION },
 					new ReportType{ Id = 6, Name = "Pytanie pojawiło się już na stronie/spam", ReportCategory = QUESTION },

@@ -450,7 +450,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         new
                         {
                             Id = 3,
-                            Name = "Nękanie lub cybeprzemoc",
+                            Name = "Nękanie lub cyberprzemoc",
                             ReportCategory = ReportCategoryEnum.USER
                         },
                         new

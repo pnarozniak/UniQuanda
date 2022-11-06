@@ -28,7 +28,7 @@ public class ReportRepository : IReportRepository
 	{
 		var reportType = await this._appContext.ReportTypes
 			.Where(rt => rt.Id == reportData.ReportedTypeId)
-			.SingleOrDefaultAsync();
+			.SingleOrDefaultAsync(ct);
 
 		if (reportType is null) return false;
 	

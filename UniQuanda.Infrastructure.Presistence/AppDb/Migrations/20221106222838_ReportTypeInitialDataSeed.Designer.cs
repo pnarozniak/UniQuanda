@@ -13,7 +13,7 @@ using UniQuanda.Infrastructure.Presistence.AppDb;
 namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221104225703_ReportTypeInitialDataSeed")]
+    [Migration("20221106222838_ReportTypeInitialDataSeed")]
     partial class ReportTypeInitialDataSeed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -452,7 +452,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         new
                         {
                             Id = 3,
-                            Name = "Nękanie lub cybeprzemoc",
+                            Name = "Nękanie lub cyberprzemoc",
                             ReportCategory = ReportCategoryEnum.USER
                         },
                         new
