@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using UniQuanda.Core.Domain.Enums;
@@ -12,9 +13,10 @@ using UniQuanda.Infrastructure.Presistence.AppDb;
 namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221103230502_AddedReportsTables")]
+    partial class AddedReportsTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -433,86 +435,6 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ReportTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Podszywanie się pod inną osobę",
-                            ReportCategory = ReportCategoryEnum.USER
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Publikowanie niestosownych treści",
-                            ReportCategory = ReportCategoryEnum.USER
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Nękanie lub cyberprzemoc",
-                            ReportCategory = ReportCategoryEnum.USER
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Inne",
-                            ReportCategory = ReportCategoryEnum.USER
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Nieodpowiednia/obraźliwa treść",
-                            ReportCategory = ReportCategoryEnum.QUESTION
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Pytanie pojawiło się już na stronie/spam",
-                            ReportCategory = ReportCategoryEnum.QUESTION
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Treść nie związana z tagiem",
-                            ReportCategory = ReportCategoryEnum.QUESTION
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Kradzież zasobów intelektualnych",
-                            ReportCategory = ReportCategoryEnum.QUESTION
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Inne",
-                            ReportCategory = ReportCategoryEnum.QUESTION
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Nieodpowiednia/obraźliwa treść",
-                            ReportCategory = ReportCategoryEnum.ANSWER
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Spam",
-                            ReportCategory = ReportCategoryEnum.ANSWER
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Name = "Treść nie nawiązująca do pytania",
-                            ReportCategory = ReportCategoryEnum.ANSWER
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Name = "Inne",
-                            ReportCategory = ReportCategoryEnum.ANSWER
-                        });
                 });
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Answer", b =>
