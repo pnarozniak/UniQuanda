@@ -26,11 +26,8 @@ public static class Extensions
         // Repositories
         services.AddScoped<IAuthRepository, AuthRepository>();
         services.AddScoped<IAppUserRepository, AppUserRepository>();
-<<<<<<< HEAD
         services.AddScoped<ITagRepository, TagRepository>();
-=======
         services.AddScoped<IReportRepository, ReportRepository>();
->>>>>>> remotes/origin/develop
 
         // Services
         services.AddScoped<IPasswordsService, PasswordsService>();
