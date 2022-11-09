@@ -1,4 +1,6 @@
-﻿namespace UniQuanda.Infrastructure.Presistence.AppDb.Models;
+﻿using UniQuanda.Infrastructure.Presistence.AuthDb.Models;
+
+namespace UniQuanda.Infrastructure.Presistence.AppDb.Models;
 
 public class Answer
 {
@@ -10,4 +12,5 @@ public class Answer
     public virtual Answer? ParentAnswerIdNavigation { get; set; }
     public virtual ICollection<Answer> Comments { get; set; }
     public virtual ICollection<AppUserAnswerInteraction> AppUsersAnswerInteractions { get; set; }
+    public virtual ICollection<Report> Reports { get; set; }
 }

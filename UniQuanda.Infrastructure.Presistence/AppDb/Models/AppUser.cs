@@ -1,4 +1,6 @@
-﻿namespace UniQuanda.Infrastructure.Presistence.AppDb.Models;
+﻿using UniQuanda.Infrastructure.Presistence.AuthDb.Models;
+
+namespace UniQuanda.Infrastructure.Presistence.AppDb.Models;
 
 public class AppUser
 {
@@ -18,4 +20,6 @@ public class AppUser
     public virtual ICollection<AppUserQuestionInteraction> AppUserQuestionsInteractions { get; set; }
     public virtual ICollection<AppUserAnswerInteraction> AppUserAnswersInteractions { get; set; }
     public virtual ICollection<AppUserTitle> AppUserTitles { get; set; }
+    public virtual ICollection<Report> CreatedReports { get; set; }
+    public virtual ICollection<Report> Reports { get; set; }
 }

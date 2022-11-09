@@ -10,4 +10,6 @@ public class UserEntity
     public bool IsEmailConfirmed { get; set; }
     public UserOptionalInfo OptionalInfo { get; set; }
     public IEnumerable<string> Emails { get; set; }
+    public string? RefreshToken { get; set; }
+    public DateTime? RefreshTokenExp { get; set; }
 }
