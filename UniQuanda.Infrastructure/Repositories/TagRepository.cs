@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Domain.Entities.App;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Infrastructure.Presistence.AppDb;
+using UniQuanda.Infrastructure.Presistence.AppDb.Models;
+using UniQuanda.Infrastructure.Presistence.ExtensionsEF;
 
 namespace UniQuanda.Infrastructure.Repositories
 {
@@ -13,25 +16,16 @@ namespace UniQuanda.Infrastructure.Repositories
         {
             _context = context;
         }
-
-        public async Task<IEnumerable<TagEntity>> GetMainTagsAsync(int take, int skip, OrderDirectionEnum orderDirection, CancellationToken ct)
+        
+        public async Task<IEnumerable<TagEntity>> GetParentTagsAsync(
+            int take, int skip, 
+            OrderDirectionEnum orderDirection, 
+            CancellationToken ct)
         {
-            var query = _context.Tags
-                .Where(t => t.ParentTagId == null);
-
-            switch (orderDirection)
-            {
-                case OrderDirectionEnum.Ascending:
-                    query = query.OrderBy(t => t.Name);
-                    break;
-                case OrderDirectionEnum.Descending:
-                    query = query.OrderByDescending(t => t.Name);
-                    break;
-                default:
-                    break;
-            }
-
-            return await query.Skip(skip)
+            return await _context.Tags
+                .Where(t => t.ParentTagId == null)
+                .OrderBy(t => t.Name, orderDirection)
+                .Skip(skip)
                 .Take(take)
                 .Select(t => new TagEntity()
                 {
@@ -44,29 +38,21 @@ namespace UniQuanda.Infrastructure.Repositories
                 .ToListAsync(ct);
         }
 
-        public async Task<int> GetMainTagsCountAsync(CancellationToken ct)
+        public async Task<int> GetParentTagsCountAsync(CancellationToken ct)
         {
             return await _context.Tags
                 .Where(t => t.ParentTagId == null)
                 .CountAsync(ct);
         }
 
-        public async Task<IEnumerable<TagEntity>> GetSubTagsAsync(int take, int skip, int tagId, OrderDirectionEnum orderDirection, CancellationToken ct)
+        public async Task<IEnumerable<TagEntity>> GetSubTagsAsync(
+            int take, int skip, int tagId, 
+            OrderDirectionEnum orderDirection, 
+            CancellationToken ct)
         {
-            var query = _context.Tags.Where(t => t.ParentTagId == tagId);
-
-            switch (orderDirection)
-            {
-                case OrderDirectionEnum.Ascending:
-                    query = query.OrderBy(t => t.Name);
-                    break;
-                case OrderDirectionEnum.Descending:
-                    query = query.OrderByDescending(t => t.Name);
-                    break;
-                default:
-                    break;
-            }
-            return await query.Skip(skip)
+            return await _context.Tags
+                .Where(t => t.ParentTagId == tagId)
+                .OrderBy(t => t.Name, orderDirection).Skip(skip)
                 .Take(take)
                 .Select(t => new TagEntity()
                 {
@@ -101,40 +87,17 @@ namespace UniQuanda.Infrastructure.Repositories
                 .FirstOrDefaultAsync(ct);
         }
 
-        public async Task<IEnumerable<TagEntity>> GetTagsByKeywordAsync(int take, int skip, string keyword, int? parentTagId, OrderDirectionEnum orderDirection, CancellationToken ct)
+        public async Task<IEnumerable<TagEntity>> GetTagsByKeywordAsync(
+            int take, int skip, 
+            string keyword, 
+            OrderDirectionEnum orderDirection, 
+            CancellationToken ct)
         {
-            var query = _context.Tags
+            return await _context.Tags
                 .Where(t =>
                     t.SearchVector.Matches(EF.Functions.PlainToTsQuery("polish", keyword))
                     || EF.Functions.ILike(t.Name, $"%{keyword}%")
-                );
-            switch (orderDirection)
-            {
-                case OrderDirectionEnum.Ascending:
-                    query = query.OrderBy(t => t.Name);
-                    break;
-                case OrderDirectionEnum.Descending:
-                    query = query.OrderByDescending(t => t.Name);
-                    break;
-                default:
-                    break;
-            }
-            if (parentTagId != null)
-            {
-                return await query.Where(t => t.ParentTagId == parentTagId)
-                    .Select(t => new TagEntity()
-                    {
-                        Id = t.Id,
-                        Name = t.Name,
-                        Description = t.Description,
-                        ImageUrl = t.ImageUrl,
-                        ParentId = t.ParentTagId
-                    })
-                    .Skip(skip)
-                    .Take(take)
-                    .ToListAsync(ct);
-            }
-            return await query
+                ).OrderBy(t => t.Name, orderDirection)
                 .Select(t => new TagEntity()
                 {
                     Id = t.Id,
@@ -148,23 +111,49 @@ namespace UniQuanda.Infrastructure.Repositories
                 .ToListAsync(ct);
 
         }
-
-        public async Task<int> GetTagsByKeywordCountAsync(string keyword, int? parentTagId, CancellationToken ct)
+        
+        public async Task<int> GetTagsByKeywordCountAsync(string keyword, CancellationToken ct)
         {
-            var query = _context.Tags
-                .Where(t =>
-                    t.SearchVector.Matches(EF.Functions.PlainToTsQuery("polish", keyword))
-                    || EF.Functions.ILike(t.Name, $"%{keyword}%")
-                );
-            if (parentTagId != null)
-            {
-                query = query.Where(t => t.ParentTagId == parentTagId);
-            }
-            if (parentTagId != null)
-            {
-                query = query.Where(t => t.ParentTagId == parentTagId);
-            }
-            return await query.CountAsync(ct);
+            return await _context.Tags
+               .Where(t =>
+                   t.SearchVector.Matches(EF.Functions.PlainToTsQuery("polish", keyword))
+                   || EF.Functions.ILike(t.Name, $"%{keyword}%")
+               ).CountAsync(ct);
+        }
+        
+        public async Task<IEnumerable<TagEntity>> GetSubTagsByKeywordAsync(
+            int take, int skip,
+            string keyword, int tagId, 
+            OrderDirectionEnum orderDirection, 
+            CancellationToken ct)
+        {
+            return await _context.Tags
+                    .Where(t =>
+                        (t.SearchVector.Matches(EF.Functions.PlainToTsQuery("polish", keyword))
+                        || EF.Functions.ILike(t.Name, $"%{keyword}%"))
+                        && t.ParentTagId == tagId
+                    ).OrderBy(t => t.Name, orderDirection)
+                    .Select(t => new TagEntity()
+                    {
+                        Id = t.Id,
+                        Name = t.Name,
+                        Description = t.Description,
+                        ImageUrl = t.ImageUrl,
+                        ParentId = t.ParentTagId
+                    })
+                    .Skip(skip)
+                    .Take(take)
+                    .ToListAsync(ct);
+        }
+        
+        public async Task<int> GetSubTagsByKeywordCountAsync(string keyword, int tagId, CancellationToken ct)
+        {
+            return await _context.Tags
+               .Where(t =>
+                   (t.SearchVector.Matches(EF.Functions.PlainToTsQuery("polish", keyword))
+                   || EF.Functions.ILike(t.Name, $"%{keyword}%"))
+                   && t.ParentTagId == tagId
+               ).CountAsync(ct);
         }
     }
 }
