@@ -454,7 +454,7 @@ public class AuthRepository : IAuthRepository
         return !(await _authContext.SaveChangesAsync(ct) == 0);
     }
 
-    public async Task<AddExtraEmailStatus> IsUserAllowedToAddExtraEmail(int idUser, CancellationToken ct)
+    public async Task<AddExtraEmailStatus> IsUserAllowedToAddExtraEmailAsync(int idUser, CancellationToken ct)
     {
         var userEmails = await _authContext.UsersEmails
             .Include(ue => ue.IdUserActionToConfirmNavigation).Where(ue => ue.IdUser == idUser).ToListAsync(ct);

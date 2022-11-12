@@ -131,7 +131,7 @@ public interface IAuthRepository
     /// <param name="idUser">Id of user to add extra email</param>
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>Enum AddExtraEmailStatus</returns>
-    Task<AddExtraEmailStatus> IsUserAllowedToAddExtraEmail(int idUser, CancellationToken ct);
+    Task<AddExtraEmailStatus> IsUserAllowedToAddExtraEmailAsync(int idUser, CancellationToken ct);
 
     /// <summary>
     ///     Add extra email for User

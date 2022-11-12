@@ -42,7 +42,7 @@ public class AddExtraEmailHandler : IRequestHandler<AddExtraEmailCommand, Update
         if (!isEmailAvailable)
             return UpdateSecurityResultEnum.EmailNotAvailable;
 
-        var isUserAllowed = await _authRepository.IsUserAllowedToAddExtraEmail(request.IdUser, ct);
+        var isUserAllowed = await _authRepository.IsUserAllowedToAddExtraEmailAsync(request.IdUser, ct);
         if (isUserAllowed == AddExtraEmailStatus.UserNotExist)
             return UpdateSecurityResultEnum.ContentNotExist;
         else if (isUserAllowed == AddExtraEmailStatus.OverLimitOfExtraEmails)
