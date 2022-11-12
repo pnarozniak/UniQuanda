@@ -87,4 +87,13 @@ public class SendGridService : IEmailService
 
         await client.SendEmailAsync(emailMessage);
     }
+
+    public async Task SendInformationToConfirmEmail(string to, string token)
+    {
+        var url = $"{_uniQuandaClientOptions.Url}/public/confirm-email?email={to}&token={token}";
+        var emailMessage =
+            $"<span>Kliknij w poniższy link by potwierdzić e-mail: <a href=\"{url}\">Potwiedź e-mail</a></span>";
+        var emailSubject = "Potwierdzenie e-mail'a";
+        await SendEmailAsync(to, emailSubject, emailMessage);
+    }
 }

@@ -12,7 +12,7 @@ using UniQuanda.Infrastructure.Presistence.AuthDb;
 namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20221104214204_AddedConfirmationForUserEmail")]
+    [Migration("20221106210434_AddedConfirmationForUserEmail")]
     partial class AddedConfirmationForUserEmail
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,9 +57,6 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                         .IsUnique();
 
                     b.HasIndex("ActionType", "IdUser")
-                        .IsUnique();
-
-                    b.HasIndex("ActionType", "IdUserEmail", "IdUser")
                         .IsUnique();
 
                     b.ToTable("UsersActionsToConfirm");

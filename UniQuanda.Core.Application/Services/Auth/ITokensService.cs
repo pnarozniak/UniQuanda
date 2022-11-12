@@ -34,4 +34,10 @@ public interface ITokensService
     /// <param name="accessToken">Access token as string</param>
     /// <returns>User id or null if validation fails</returns>
     int? GetUserIdFromExpiredAccessToken(string accessToken);
+
+    /// <summary>
+    ///     Generates token for email confirmation
+    /// </summary>
+    /// <returns>Email confirmation token</returns>
+    string GenerateNewEmailConfirmationToken();
 }

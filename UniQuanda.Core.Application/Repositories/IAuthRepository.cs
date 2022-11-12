@@ -1,5 +1,6 @@
 ﻿using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Core.Application.Repositories;
 
@@ -84,30 +85,36 @@ public interface IAuthRepository
     Task<bool> IsEmailAvailableAsync(int? idUser, string email, CancellationToken ct);
 
     /// <summary>
-    ///     Gets all emails connected with user
+    ///     Gets all confirmed emails connected with user
     /// </summary>
-    /// <param name="idUser">Id of user to get emails</param>
+    /// <param name="idUser">Id of user to get confirmed emails</param>
     /// <param name="ct">Operation cancellation token</param>
-    /// <returns>True if User emails exists, otherwise NULL</returns>
-    Task<UserEmailsEntity?> GetUserEmailsAsync(int idUser, CancellationToken ct);
+    /// <returns>True if user exists, otherwise NULL</returns>
+    Task<UserEmailsEntity?> GetUserConfirmedEmailsAsync(int idUser, CancellationToken ct);
+
+    /// <summary>
+    ///     Gets unconfirmed email connected with user
+    /// </summary>
+    /// <param name="idUser">Id of user to get unconfirmed email</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>UserEmailToConfirmValue if is an email not confirmed, otherwise NULL</returns>
+    Task<UserEmailToConfirmValue?> GetUserUnConfirmedEmailAsync(int idUser, CancellationToken ct);
 
     /// <summary>
     ///     Update main email for user
     /// </summary>
-    /// <param name="idUser">Id of user which main email will be updated</param>
-    /// <param name="newMainEmail">New main email</param>
+    /// <param name="userEmailToConfirm">Value object with new main e-mail, id user, confirmation token and end date of valid token</param>
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>True if update is succesful, NULL when user not exist, false when update is not succesful</returns>
-    Task<bool?> UpdateUserMainEmailAsync(int idUser, string newMainEmail, CancellationToken ct);
+    Task<bool?> UpdateUserMainEmailAsync(UserEmailToConfirm userEmailToConfirm, CancellationToken ct);
 
     /// <summary>
     ///     Update user main email with existing extra email
     /// </summary>
-    /// <param name="idUser">Id of user which main email will be updated</param>
-    /// <param name="idExtraEmail">Id of extra email which will be main</param>
+    /// <param name="userEmailToConfirm">Value object with id e-mail, id user, confirmation token and end date of valid token</param>
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>True if update is succesful, NULL when extra or main email not exist, false when update is not succesful</returns>
-    Task<bool?> UpdateUserMainEmailByExtraEmailAsync(int idUser, int idExtraEmail, CancellationToken ct);
+    Task<bool?> UpdateUserMainEmailByExtraEmailAsync(UserEmailToConfirm userEmailToConfirm, CancellationToken ct);
 
     /// <summary>
     ///     Check if email is connected with User as extra email and returns id
@@ -115,17 +122,25 @@ public interface IAuthRepository
     /// <param name="idUser">Id of user to check email connection</param>
     /// <param name="email">Email to check</param>
     /// <param name="ct">Operation cancellation token</param>
-    /// <returns>Email id if email is connected with user, otherwise NULL</returns>
-    Task<int?> GetExtraEmailIdAsync(int idUser, string email, CancellationToken ct);
+    /// <returns>Status of email availability and email id</returns>
+    Task<(bool isConnected, int? idEmail)> GetExtraEmailIdAsync(int idUser, string email, CancellationToken ct);
+
+    /// <summary>
+    ///     Check if user is allowed to add new extra email to account
+    /// </summary>
+    /// <param name="idUser">Id of user to add extra email</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>Enum AddExtraEmailStatus</returns>
+    Task<AddExtraEmailStatus> IsUserAllowedToAddExtraEmail(int idUser, CancellationToken ct);
 
     /// <summary>
     ///     Add extra email for User
     /// </summary>
     /// <param name="idUser">Id of User to add extra email</param>
-    /// <param name="newExtraEmail">New extra email</param>
+    /// <param name="userEmailToConfirm">Value object with new e-mail, id user, confirmation token and end date of valid token</param>
     /// <param name="ct">Operation cancellation token</param>
-    /// <returns>True if add is succesful, NULL when user has 3 extra emails, false when update is not succesful</returns>
-    Task<bool?> AddExtraEmailAsync(int idUser, string newExtraEmail, CancellationToken ct);
+    /// <returns>True if add is succesful, NULL when user not exist, false when update is not succesful</returns>
+    Task<bool?> AddExtraEmailAsync(UserEmailToConfirm userEmailToConfirm, CancellationToken ct);
 
     /// <summary>
     ///     Overides user old hashed password
@@ -158,7 +173,7 @@ public interface IAuthRepository
     ///     False
     /// </returns>
     Task<bool?> CreateUserActionToConfirmAsync(int idUser, UserActionToConfirmEnum actionType, string confirmationToken,
-        DateTime existsUntil, CancellationToken ct);
+        DateTime existsUntil, int? idUserEmail, CancellationToken ct);
 
     /// <summary>
     ///     Gets user action confirmation by confirmation action type and token
@@ -187,4 +202,37 @@ public interface IAuthRepository
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>User entiy if found, otherwise NULL</returns>
     Task<UserEntity?> GetUserByIdAsync(int idUser, CancellationToken ct);
+
+    /// <summary>
+    ///     Confirm user email
+    /// </summary>
+    /// <param name="email">Email to confirm</param>
+    /// <param name="confirmationCode">Confirmation code</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>True with user id and action connected to main email if confirmation is successful, otherwise false.</returns>
+    Task<(bool isSuccess, bool isMainEmail, int? idUser)> ConfirmUserEmailnAsync(string email, string confirmationCode, CancellationToken ct);
+
+    /// <summary>
+    ///     Update token to confirm and date until it this token is valid
+    /// </summary>
+    /// <param name="userEmailToConfirm">Value object with new e-mail, id user, confirmation token and end date of valid token</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>True if update is successful, otherwise false</returns>
+    Task<bool> UpdateActionToConfirmEmailAsync(UserEmailToConfirm userEmailToConfirm, CancellationToken ct);
+
+    /// <summary>
+    ///     Delete email confirmation action with e-mail
+    /// </summary>
+    /// <param name="idUser">Id user</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>True if confirmation is successful, otherwise false</returns>
+    Task<bool> CancelEmailConfirmationActionAsync(int idUser, CancellationToken ct);
+
+    /// <summary>
+    ///     Get email id which is not confirmed
+    /// </summary>
+    /// <param name="idUser">Id user</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>Id of email if exists, otherwise null</returns>
+    Task<int?> GetIdEmailToConfirmAsync(int idUser, CancellationToken ct);
 }

@@ -2,12 +2,15 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.AddExtraEmail;
+using UniQuanda.Core.Application.CQRS.Commands.Auth.CancelEmailConfirmation;
+using UniQuanda.Core.Application.CQRS.Commands.Auth.ConfirmEmail;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ConfirmRegister;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.DeleteExtraEmail;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.RecoverPassword;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.RefreshToken;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Register;
+using UniQuanda.Core.Application.CQRS.Commands.Auth.ResendConfirmationEmail;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ResendRegisterConfirmationCode;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ResetPasword;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateMainEmail;
@@ -220,6 +223,7 @@ public class AuthController : ControllerBase
             UpdateSecurityResultEnum.ContentNotExist => NotFound(),
             UpdateSecurityResultEnum.EmailNotAvailable => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.EmailNotAvailable }),
             UpdateSecurityResultEnum.OverLimitOfExtraEmails => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.OverLimitOfExtraEmails }),
+            UpdateSecurityResultEnum.UserHasActionToConfirm => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.UserHasActionToConfirm }),
             UpdateSecurityResultEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
             UpdateSecurityResultEnum.DbConflict => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
             UpdateSecurityResultEnum.Successful => NoContent()
@@ -266,5 +270,53 @@ public class AuthController : ControllerBase
             UpdateSecurityResultEnum.DbConflict => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
             UpdateSecurityResultEnum.Successful => NoContent()
         };
+    }
+
+    /// <summary>
+    ///     Confirm user email
+    /// </summary>
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [HttpPost("confirm-email")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ConfirmUserEmail([FromBody] ConfirmEmailRequestDTO request, CancellationToken ct)
+    {
+        var command = new ConfirmEmailCommand(request);
+        var result = await _mediator.Send(command, ct);
+        if (!result)
+            return Conflict();
+        return NoContent();
+    }
+
+    /// <summary>
+    ///     Confirm user email
+    /// </summary>
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [HttpPut("resend-confirmation-email")]
+    [Authorize(Roles = "user")]
+    public async Task<IActionResult> ResendConfirmationEmail(CancellationToken ct)
+    {
+        var command = new ResendConfirmationEmailCommand(User.GetId()!.Value);
+        var result = await _mediator.Send(command, ct);
+        if (!result)
+            return Conflict();
+        return NoContent();
+    }
+
+    /// <summary>
+    ///     Cancel user email to confirm
+    /// </summary>
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [HttpDelete("cancel-email-confirmation")]
+    [Authorize(Roles = "user")]
+    public async Task<IActionResult> CancelEmailConfirmation(CancellationToken ct)
+    {
+        var command = new CancelEmailConfirmationCommand(User.GetId()!.Value);
+        var result = await _mediator.Send(command, ct);
+        if (!result)
+            return Conflict();
+        return NoContent();
     }
 }

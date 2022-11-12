@@ -57,9 +57,6 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                     b.HasIndex("ActionType", "IdUser")
                         .IsUnique();
 
-                    b.HasIndex("ActionType", "IdUserEmail", "IdUser")
-                        .IsUnique();
-
                     b.ToTable("UsersActionsToConfirm");
                 });
 

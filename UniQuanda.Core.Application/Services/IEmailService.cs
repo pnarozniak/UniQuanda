@@ -49,4 +49,11 @@ public interface IEmailService
     /// <param name="to">E-mail address of recipient</param>
     /// <param name="nickName"></param>
     Task SendInformationAboutUpdatePasswordAsync(string to, string nickName);
+
+    /// <summary>
+    ///     Sends email with link to confirm email
+    /// </summary>
+    /// <param name="to">E-mail address of recipient</param>
+    /// <param name="token">Token required to confirm email</param>
+    Task SendInformationToConfirmEmail(string to, string token);
 }
