@@ -39,7 +39,7 @@ public class ResendConfirmationEmailHandler : IRequestHandler<ResendConfirmation
         {
             IdUser = request.IdUser,
             IdEmail = idEmail,
-            ConfirmationToken = _tokensService.GenerateEmailConfirmationToken(),
+            ConfirmationToken = _tokensService.GenerateNewEmailConfirmationToken(),
             ExistsUntil = DateTime.UtcNow.AddHours(_expirationService.GetNewUserExpirationInHours()),
         };
 
