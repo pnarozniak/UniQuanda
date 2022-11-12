@@ -14,14 +14,17 @@ public class GetUserEmailsHandler : IRequestHandler<GetUserEmailsQuery, GetUserE
 
     public async Task<GetUserEmailsReponseDTO?> Handle(GetUserEmailsQuery request, CancellationToken ct)
     {
-        var userEmails = await _authRepository.GetUserEmailsAsync(request.IdUser, ct);
-        if (userEmails is null)
+        var userConfirmedEmails = await _authRepository.GetUserConfirmedEmailsAsync(request.IdUser, ct);
+        var userEmailToConfirm = await _authRepository.GetUserUnConfirmedEmailAsync(request.IdUser, ct);
+        if (userConfirmedEmails is null)
             return null;
+
 
         return new GetUserEmailsReponseDTO
         {
-            MainEmail = userEmails.MainEmail,
-            ExtraEmails = userEmails.ExtraEmails
+            MainEmail = userConfirmedEmails.MainEmail,
+            EmailToConfirm = userEmailToConfirm,
+            ExtraEmails = userConfirmedEmails.ExtraEmails
         };
     }
 }

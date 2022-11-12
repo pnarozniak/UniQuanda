@@ -5,5 +5,6 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Auth.GetUserEmails;
 public class GetUserEmailsReponseDTO
 {
     public UserEmailValue MainEmail { get; set; }
+    public UserEmailToConfirmValue? EmailToConfirm { get; set; }
     public IEnumerable<UserEmailValue> ExtraEmails { get; set; }
 }
