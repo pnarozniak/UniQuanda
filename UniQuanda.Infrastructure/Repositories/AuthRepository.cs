@@ -444,9 +444,11 @@ public class AuthRepository : IAuthRepository
 
     public async Task<bool?> DeleteExtraEmailAsync(int idUser, int idExtraEmail, CancellationToken ct)
     {
-        var userEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(ue => ue.IdUser == idUser && ue.Id == idExtraEmail && !ue.IsMain, ct);
+        var userEmail = await _authContext.UsersEmails.Include(ue => ue.IdUserActionToConfirmNavigation).SingleOrDefaultAsync(ue => ue.IdUser == idUser && ue.Id == idExtraEmail && !ue.IsMain, ct);
         if (userEmail is null)
             return null;
+        if (userEmail.IdUserActionToConfirmNavigation != null)
+            return false;
 
         _authContext.UsersEmails.Remove(userEmail);
         return !(await _authContext.SaveChangesAsync(ct) == 0);
