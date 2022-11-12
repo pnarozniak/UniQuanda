@@ -3,6 +3,7 @@ using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateMainEmail;
 
@@ -11,15 +12,21 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
     private readonly IAuthRepository _authRepository;
     private readonly IPasswordsService _passwordsService;
     private readonly IEmailService _emailService;
+    private readonly ITokensService _tokensService;
+    private readonly IExpirationService _expirationService;
 
     public UpdateMainEmailHandler(
         IAuthRepository authRepository,
         IPasswordsService passwordsService,
-        IEmailService emailService)
+        IEmailService emailService,
+        ITokensService tokensService,
+        IExpirationService expirationService)
     {
         _authRepository = authRepository;
         _passwordsService = passwordsService;
         _emailService = emailService;
+        _tokensService = tokensService;
+        _expirationService = expirationService;
     }
 
     public async Task<UpdateSecurityResultEnum> Handle(UpdateMainEmailCommand request, CancellationToken ct)
@@ -34,7 +41,14 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
         bool? updateResult;
         if (request.IdExtraEmail != null)
         {
-            updateResult = await _authRepository.UpdateUserMainEmailByExtraEmailAsync(request.IdUser, request.IdExtraEmail.Value, ct);
+            var userEmailToConfirm = new UserEmailToConfirm
+            {
+                IdUser = request.IdUser,
+                IdEmail = request.IdExtraEmail.Value,
+                ConfirmationToken = _tokensService.GenerateNewEmailConfirmationToken(),
+                ExistsUntil = DateTime.UtcNow.AddHours(_expirationService.GetNewUserExpirationInHours()),
+            };
+            updateResult = await _authRepository.UpdateUserMainEmailByExtraEmailAsync(userEmailToConfirm, ct);
         }
         else
         {
@@ -42,24 +56,36 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
             if (!isEmailAvailable)
                 return UpdateSecurityResultEnum.EmailNotAvailable;
 
-            var idExtreEmail = await _authRepository.GetExtraEmailIdAsync(request.IdUser, request.NewMainEmail, ct);
-            if (idExtreEmail == null)
+            var getResult = await _authRepository.GetExtraEmailIdAsync(request.IdUser, request.NewMainEmail, ct);
+            if (getResult.isConnected && getResult.idEmail != null)
             {
-                updateResult = await _authRepository.UpdateUserMainEmailAsync(request.IdUser, request.NewMainEmail, ct);
+                var userEmailToConfirm = new UserEmailToConfirm
+                {
+                    IdUser = request.IdUser,
+                    IdEmail = getResult.idEmail.Value,
+                    ConfirmationToken = _tokensService.GenerateNewEmailConfirmationToken(),
+                    ExistsUntil = DateTime.UtcNow.AddHours(_expirationService.GetNewUserExpirationInHours()),
+                };
+                updateResult = await _authRepository.UpdateUserMainEmailByExtraEmailAsync(userEmailToConfirm, ct);
             }
-            else if (idExtreEmail == -1)
+            else if (getResult.isConnected && getResult.idEmail == null)
             {
                 updateResult = true;
             }
             else
             {
-                updateResult = await _authRepository.UpdateUserMainEmailByExtraEmailAsync(request.IdUser, idExtreEmail.Value, ct);
+                var userEmailToConfirm = new UserEmailToConfirm
+                {
+                    IdUser = request.IdUser,
+                    Email = request.NewMainEmail,
+                    ConfirmationToken = _tokensService.GenerateNewEmailConfirmationToken(),
+                    ExistsUntil = DateTime.UtcNow.AddHours(_expirationService.GetNewUserExpirationInHours()),
+                };
+                updateResult = await _authRepository.UpdateUserMainEmailAsync(userEmailToConfirm, ct);
+
+                if (updateResult == true)
+                    await _emailService.SendInformationToConfirmEmail(userEmailToConfirm.Email, userEmailToConfirm.ConfirmationToken);
             }
-        }
-        if (updateResult == true)
-        {
-            var newExtraEmail = request.IdExtraEmail != null ? user.Emails.SingleOrDefault(e => e.Id == request.IdExtraEmail).Value : request.NewMainEmail;
-            await _emailService.SendInformationAboutUpdateMainEmailAsync(user.Emails.SingleOrDefault(e => e.IsMain).Value, newExtraEmail);
         }
 
         return updateResult switch
