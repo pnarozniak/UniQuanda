@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,12 +25,16 @@ public class AddExtraEmailHandlerTests
     private const string Nickname = "Nickname";
     private const string MainUserEmail = "mainEmail@domain.com";
     private const string ExtraUserEmail = "extraEmail@domain.com";
+    private const int NewUserExpirationInHours = 24;
+    private readonly string _emailConfirmationToken = Guid.NewGuid().ToString();
 
     private AddExtraEmailHandler addExtraEmailHandler;
     private AddExtraEmailCommand addExtraEmailCommand;
     private Mock<IAuthRepository> authRepository;
     private Mock<IPasswordsService> passwordsService;
     private Mock<IEmailService> emailService;
+    private Mock<ITokensService> tokensService;
+    private Mock<IExpirationService> expirationService;
 
     [SetUp]
     public void SetupTests()
@@ -37,8 +42,13 @@ public class AddExtraEmailHandlerTests
         this.authRepository = new Mock<IAuthRepository>();
         this.passwordsService = new Mock<IPasswordsService>();
         this.emailService = new Mock<IEmailService>();
+        this.tokensService = new Mock<ITokensService>();
+        this.expirationService = new Mock<IExpirationService>();
 
-        this.addExtraEmailHandler = new AddExtraEmailHandler(this.authRepository.Object, this.passwordsService.Object, this.emailService.Object);
+        this.SetupEmailConfirmationToken();
+        this.SetupExpirationService();
+
+        this.addExtraEmailHandler = new AddExtraEmailHandler(this.authRepository.Object, this.passwordsService.Object, this.emailService.Object, this.tokensService.Object, this.expirationService.Object);
     }
 
     [Test]
@@ -106,11 +116,37 @@ public class AddExtraEmailHandlerTests
         var userSecurityEntity = GetUserSecurityEntity();
         userSecurityEntity.Emails.Add(new UserEmailSecurity { Id = 3, IsMain = false, Value = "thirdEmail@domain.com" });
         this.SetupValidPasswordFlow(userSecurityEntity);
-        this.SetupFlowOfAddExtraEmailWhenEmailIsAvailable(null);
+        this.SetupFlowToCheckPointOfIsUserAllowed(AddExtraEmailStatus.OverLimitOfExtraEmails);
 
         var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
 
         result.Should().Be(UpdateSecurityResultEnum.OverLimitOfExtraEmails);
+    }
+
+    [Test]
+    public async Task AddExtraEmail_ShouldReturnResultEnumContentNotExists_WhenCheckOnIsUserAllowedIsUserNotExists()
+    {
+        this.SetupAddExtraEmailCommand();
+        var userSecurityEntity = GetUserSecurityEntity();
+        this.SetupValidPasswordFlow(userSecurityEntity);
+        this.SetupFlowToCheckPointOfIsUserAllowed(AddExtraEmailStatus.UserNotExist);
+
+        var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
+
+        result.Should().Be(UpdateSecurityResultEnum.ContentNotExist);
+    }
+
+    [Test]
+    public async Task AddExtraEmail_ShouldReturnResultEnumUserHasActionToConfirm_WhenUserHasOtherActionToConfirm()
+    {
+        this.SetupAddExtraEmailCommand();
+        var userSecurityEntity = GetUserSecurityEntity();
+        this.SetupValidPasswordFlow(userSecurityEntity);
+        this.SetupFlowToCheckPointOfIsUserAllowed(AddExtraEmailStatus.UserHasActionToConfirm);
+
+        var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
+
+        result.Should().Be(UpdateSecurityResultEnum.UserHasActionToConfirm);
     }
 
     [Test]
@@ -124,6 +160,33 @@ public class AddExtraEmailHandlerTests
         var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
 
         result.Should().Be(UpdateSecurityResultEnum.DbConflict);
+    }
+
+    [Test]
+    public async Task AddExtraEmail_ShouldReturnResultEnumContentNotExist_WhenAddExtraEmailNotExists()
+    {
+        this.SetupAddExtraEmailCommand();
+        var userSecurityEntity = GetUserSecurityEntity();
+        this.SetupValidPasswordFlow(userSecurityEntity);
+        this.SetupFlowOfAddExtraEmailWhenEmailIsAvailable(null);
+
+        var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
+
+        result.Should().Be(UpdateSecurityResultEnum.ContentNotExist);
+    }
+
+    private void SetupEmailConfirmationToken()
+    {
+        this.tokensService
+            .Setup(ts => ts.GenerateNewEmailConfirmationToken())
+            .Returns(_emailConfirmationToken);
+    }
+
+    private void SetupExpirationService()
+    {
+        this.expirationService
+            .Setup(es => es.GetNewUserExpirationInHours())
+            .Returns(NewUserExpirationInHours);
     }
 
     private void SetupAddExtraEmailCommand(string plainPassword = PlainPassword, string newExtraEmail = NewExtraEmail)
@@ -166,7 +229,20 @@ public class AddExtraEmailHandlerTests
             .Setup(ar => ar.IsEmailAvailableAsync(null, this.addExtraEmailCommand.NewExtraEmail, CancellationToken.None))
             .ReturnsAsync(true);
         this.authRepository
-            .Setup(ar => ar.AddExtraEmailAsync(this.addExtraEmailCommand.IdUser, this.addExtraEmailCommand.NewExtraEmail, CancellationToken.None))
+            .Setup(ar => ar.IsUserAllowedToAddExtraEmailAsync(IdUser, CancellationToken.None))
+            .ReturnsAsync(AddExtraEmailStatus.AllowedToAdd);
+        this.authRepository
+            .Setup(ar => ar.AddExtraEmailAsync(It.IsAny<UserEmailToConfirm>(), CancellationToken.None))
             .ReturnsAsync(addResult);
+    }
+
+    private void SetupFlowToCheckPointOfIsUserAllowed(AddExtraEmailStatus resultOfIsUserAllowed)
+    {
+        this.authRepository
+            .Setup(ar => ar.IsEmailAvailableAsync(null, this.addExtraEmailCommand.NewExtraEmail, CancellationToken.None))
+            .ReturnsAsync(true);
+        this.authRepository
+            .Setup(ar => ar.IsUserAllowedToAddExtraEmailAsync(IdUser, CancellationToken.None))
+            .ReturnsAsync(resultOfIsUserAllowed);
     }
 }
