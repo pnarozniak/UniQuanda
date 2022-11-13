@@ -3,12 +3,16 @@ using Npgsql;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Infrastructure.Presistence.AppDb.EfConfigurations;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
+using UniQuanda.Infrastructure.Presistence.AuthDb.Models;
 
 namespace UniQuanda.Infrastructure.Presistence.AppDb;
 
 public class AppDbContext : DbContext
 {
-    static AppDbContext() => NpgsqlConnection.GlobalTypeMapper.MapEnum<AcademicTitleEnum>();
+    static AppDbContext() => NpgsqlConnection.GlobalTypeMapper
+        .MapEnum<AcademicTitleEnum>()
+        .MapEnum<ReportCategoryEnum>();
+
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
 
@@ -26,6 +30,8 @@ public class AppDbContext : DbContext
     public DbSet<AppUserAnswerInteraction> AppUsersAnswersInteractions { get; set; }
     public DbSet<UserPointsInTag> UsersPointsInTags { get; set; }
     public DbSet<TagInQuestion> TagsInQuestions { get; set; }
+    public DbSet<ReportType> ReportTypes { get; set; }
+    public DbSet<Report> Reports { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -41,7 +47,12 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new AppUserAnswerInteractionEfConfiguration());
         modelBuilder.ApplyConfiguration(new UserPointsInTagEfConfiguration());
         modelBuilder.ApplyConfiguration(new TagInQuestionEfConfiguration());
+        modelBuilder.ApplyConfiguration(new ReportTypeEfConfiguration());
+        modelBuilder.ApplyConfiguration(new ReportEfConfiguration());
 
         modelBuilder.HasPostgresEnum<AcademicTitleEnum>();
+        modelBuilder.HasPostgresEnum<ReportCategoryEnum>();
+
+        modelBuilder.ApplyConfiguration(new ReportTypeDataSeed());
     }
 }
