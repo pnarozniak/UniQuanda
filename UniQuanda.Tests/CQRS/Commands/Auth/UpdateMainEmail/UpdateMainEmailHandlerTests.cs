@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,14 +24,19 @@ public class UpdateMainEmailHandlerTests
     private const string Nickname = "Nickname";
     private const string MainUserEmail = "mainEmail@domain.com";
     private const string ExtraUserEmail = "extraEmail@domain.com";
+    private const int IdMainEmail = 1;
     private const int IdExtraEmail = 2;
     private const string NewMainEmail = "newMainEmail@domain.com";
+    private const int NewUserExpirationInHours = 24;
+    private readonly string _emailConfirmationToken = Guid.NewGuid().ToString();
 
     private UpdateMainEmailHandler updateMainEmailHandler;
     private UpdateMainEmailCommand updateMainEmailCommand;
     private Mock<IAuthRepository> authRepository;
     private Mock<IPasswordsService> passwordsService;
     private Mock<IEmailService> emailService;
+    private Mock<ITokensService> tokensService;
+    private Mock<IExpirationService> expirationService;
 
     [SetUp]
     public void SetupTests()
@@ -38,18 +44,23 @@ public class UpdateMainEmailHandlerTests
         this.authRepository = new Mock<IAuthRepository>();
         this.passwordsService = new Mock<IPasswordsService>();
         this.emailService = new Mock<IEmailService>();
+        this.tokensService = new Mock<ITokensService>();
+        this.expirationService = new Mock<IExpirationService>();
 
-        this.updateMainEmailHandler = new UpdateMainEmailHandler(this.authRepository.Object, this.passwordsService.Object, this.emailService.Object);
+        this.SetupEmailConfirmationToken();
+        this.SetupExpirationService();
+
+        this.updateMainEmailHandler = new UpdateMainEmailHandler(this.authRepository.Object, this.passwordsService.Object, this.emailService.Object, this.tokensService.Object, this.expirationService.Object);
     }
 
     [Test]
     public async Task UpdateMainEmail_ShouldReturnResultEnumSuccessful_WhenCallIsValidAndIdExtraEmailIsGiven()
     {
-        this.SetupUpdateMainEmailCommand(2, null);
+        this.SetupUpdateMainEmailCommand(IdExtraEmail, null);
         var userSecurityEntity = GetUserSecurityEntity();
         this.SetupValidPasswordFlow(userSecurityEntity);
         this.authRepository
-            .Setup(ar => ar.UpdateUserMainEmailByExtraEmailAsync(this.updateMainEmailCommand.IdUser, this.updateMainEmailCommand.IdExtraEmail.Value, CancellationToken.None))
+            .Setup(ar => ar.UpdateUserMainEmailByExtraEmailAsync(It.IsAny<UserEmailToConfirm>(), CancellationToken.None))
             .ReturnsAsync(true);
 
         var result = await updateMainEmailHandler.Handle(this.updateMainEmailCommand, CancellationToken.None);
@@ -64,7 +75,7 @@ public class UpdateMainEmailHandlerTests
         var userSecurityEntity = GetUserSecurityEntity();
         this.SetupValidPasswordFlow(userSecurityEntity);
         this.authRepository
-            .Setup(ar => ar.UpdateUserMainEmailByExtraEmailAsync(this.updateMainEmailCommand.IdUser, this.updateMainEmailCommand.IdExtraEmail.Value, CancellationToken.None))
+            .Setup(ar => ar.UpdateUserMainEmailByExtraEmailAsync(It.IsAny<UserEmailToConfirm>(), CancellationToken.None))
             .ReturnsAsync((bool?)null);
 
         var result = await updateMainEmailHandler.Handle(this.updateMainEmailCommand, CancellationToken.None);
@@ -79,7 +90,7 @@ public class UpdateMainEmailHandlerTests
         var userSecurityEntity = GetUserSecurityEntity();
         this.SetupValidPasswordFlow(userSecurityEntity);
         this.authRepository
-            .Setup(ar => ar.UpdateUserMainEmailByExtraEmailAsync(this.updateMainEmailCommand.IdUser, this.updateMainEmailCommand.IdExtraEmail.Value, CancellationToken.None))
+            .Setup(ar => ar.UpdateUserMainEmailByExtraEmailAsync(It.IsAny<UserEmailToConfirm>(), CancellationToken.None))
             .ReturnsAsync(false);
 
         var result = await updateMainEmailHandler.Handle(this.updateMainEmailCommand, CancellationToken.None);
@@ -152,7 +163,7 @@ public class UpdateMainEmailHandlerTests
             .ReturnsAsync(true);
         this.authRepository
             .Setup(ar => ar.GetExtraEmailIdAsync(this.updateMainEmailCommand.IdUser, this.updateMainEmailCommand.NewMainEmail, CancellationToken.None))
-            .ReturnsAsync(-1);
+            .ReturnsAsync((isConnected: true, idEmail: null));
 
         var result = await updateMainEmailHandler.Handle(this.updateMainEmailCommand, CancellationToken.None);
 
@@ -247,10 +258,24 @@ public class UpdateMainEmailHandlerTests
             HashedPassword = HashedPassword,
             Emails = new List<UserEmailSecurity>()
             {
-                new UserEmailSecurity { Id = 1, IsMain = true, Value = MainUserEmail},
-                new UserEmailSecurity { Id = 2, IsMain = false, Value = ExtraUserEmail}
+                new UserEmailSecurity { Id = IdMainEmail, IsMain = true, Value = MainUserEmail},
+                new UserEmailSecurity { Id = IdExtraEmail, IsMain = false, Value = ExtraUserEmail}
             }
         };
+    }
+
+    private void SetupEmailConfirmationToken()
+    {
+        this.tokensService
+            .Setup(ts => ts.GenerateNewEmailConfirmationToken())
+            .Returns(_emailConfirmationToken);
+    }
+
+    private void SetupExpirationService()
+    {
+        this.expirationService
+            .Setup(es => es.GetNewUserExpirationInHours())
+            .Returns(NewUserExpirationInHours);
     }
 
     private void SetupValidPasswordFlow(UserSecurityEntity userSecurityEntity)
@@ -270,9 +295,9 @@ public class UpdateMainEmailHandlerTests
             .ReturnsAsync(true);
         this.authRepository
             .Setup(ar => ar.GetExtraEmailIdAsync(this.updateMainEmailCommand.IdUser, this.updateMainEmailCommand.NewMainEmail, CancellationToken.None))
-            .ReturnsAsync(IdExtraEmail);
+            .ReturnsAsync((isConnected: true, idEmail: IdExtraEmail));
         this.authRepository
-            .Setup(ar => ar.UpdateUserMainEmailByExtraEmailAsync(this.updateMainEmailCommand.IdUser, IdExtraEmail, CancellationToken.None))
+            .Setup(ar => ar.UpdateUserMainEmailByExtraEmailAsync(It.IsAny<UserEmailToConfirm>(), CancellationToken.None))
             .ReturnsAsync(updateResult);
     }
 
@@ -283,9 +308,9 @@ public class UpdateMainEmailHandlerTests
             .ReturnsAsync(true);
         this.authRepository
             .Setup(ar => ar.GetExtraEmailIdAsync(this.updateMainEmailCommand.IdUser, this.updateMainEmailCommand.NewMainEmail, CancellationToken.None))
-            .ReturnsAsync((int?)null);
+            .ReturnsAsync((isConnected: false, idEmail: null));
         this.authRepository
-            .Setup(ar => ar.UpdateUserMainEmailAsync(this.updateMainEmailCommand.IdUser, this.updateMainEmailCommand.NewMainEmail, CancellationToken.None))
+            .Setup(ar => ar.UpdateUserMainEmailAsync(It.IsAny<UserEmailToConfirm>(), CancellationToken.None))
             .ReturnsAsync(updateResult);
     }
 }
