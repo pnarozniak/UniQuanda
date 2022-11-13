@@ -18,7 +18,7 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, bool>
     public async Task<bool> Handle(ConfirmEmailCommand request, CancellationToken ct)
     {
 
-        var (isSuccess, isMainEmail, idUser) = await _authRepository.ConfirmUserEmailnAsync(request.Email, request.ConfirmationCode, ct);
+        var (isSuccess, isMainEmail, idUser) = await _authRepository.ConfirmUserEmailAsync(request.Email, request.ConfirmationCode, ct);
         if (isSuccess)
         {
             var user = await _authRepository.GetUserWithEmailsByIdAsync(idUser.Value, ct);

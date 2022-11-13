@@ -55,7 +55,7 @@ public class AddExtraEmailHandler : IRequestHandler<AddExtraEmailCommand, Update
             IdUser = request.IdUser,
             Email = request.NewExtraEmail,
             ConfirmationToken = _tokensService.GenerateNewEmailConfirmationToken(),
-            ExistsUntil = DateTime.UtcNow.AddHours(_expirationService.GetNewUserExpirationInHours()),
+            ExistsUntil = DateTime.UtcNow.AddHours(_expirationService.GetNewUserExpirationInHours())
         };
 
         var addResult = await _authRepository.AddExtraEmailAsync(userEmailToConfirm, ct);

@@ -4,11 +4,11 @@ using UniQuanda.Infrastructure.Presistence.AuthDb.Models;
 
 namespace UniQuanda.Infrastructure.Presistence.AppDb.EfConfigurations
 {
-	public class ReportEfConfiguration : IEntityTypeConfiguration<Report>
-	{
-		public ReportEfConfiguration()
-		{
-		}
+    public class ReportEfConfiguration : IEntityTypeConfiguration<Report>
+    {
+        public ReportEfConfiguration()
+        {
+        }
 
         public void Configure(EntityTypeBuilder<Report> builder)
         {

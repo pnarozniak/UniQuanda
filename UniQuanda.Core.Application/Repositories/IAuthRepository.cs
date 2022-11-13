@@ -210,7 +210,7 @@ public interface IAuthRepository
     /// <param name="confirmationCode">Confirmation code</param>
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>True with user id and action connected to main email if confirmation is successful, otherwise false.</returns>
-    Task<(bool isSuccess, bool isMainEmail, int? idUser)> ConfirmUserEmailnAsync(string email, string confirmationCode, CancellationToken ct);
+    Task<(bool isSuccess, bool isMainEmail, int? idUser)> ConfirmUserEmailAsync(string email, string confirmationCode, CancellationToken ct);
 
     /// <summary>
     ///     Update token to confirm and date until it this token is valid

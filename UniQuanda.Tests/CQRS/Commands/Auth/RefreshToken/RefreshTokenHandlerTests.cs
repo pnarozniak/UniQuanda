@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ConfirmRegister;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.RefreshToken;
 using UniQuanda.Core.Application.Repositories;
@@ -22,7 +22,7 @@ public class RefreshTokenHandlerTests
         tokensService = new Mock<ITokensService>();
 
         refreshTokenCommand = new RefreshTokenCommand(new RefreshTokenRequestDTO
-            { AccessToken = AccessToken, RefreshToken = RefreshToken });
+        { AccessToken = AccessToken, RefreshToken = RefreshToken });
         refreshTokenHandler = new RefreshTokenHandler(authRepository.Object, tokensService.Object);
     }
 

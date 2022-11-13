@@ -467,7 +467,7 @@ public class AuthRepository : IAuthRepository
         return AddExtraEmailStatus.AllowedToAdd;
     }
 
-    public async Task<(bool isSuccess, bool isMainEmail, int? idUser)> ConfirmUserEmailnAsync(string email, string confirmationCode, CancellationToken ct)
+    public async Task<(bool isSuccess, bool isMainEmail, int? idUser)> ConfirmUserEmailAsync(string email, string confirmationCode, CancellationToken ct)
     {
         var userEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(ue => ue.Value == email, ct);
         if (userEmail is null)
