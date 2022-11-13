@@ -275,6 +275,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Confirm user email
     /// </summary>
+    [Recaptcha]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [HttpPost("confirm-email")]
