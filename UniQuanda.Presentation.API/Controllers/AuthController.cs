@@ -171,6 +171,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Get all emails connected with User
     /// </summary>
+    [Recaptcha]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetUserEmailsReponseDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("get-user-emails")]
@@ -187,6 +188,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Update main email assinged to user
     /// </summary>
+    [Recaptcha]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
@@ -209,6 +211,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Add extra email to user
     /// </summary>
+    [Recaptcha]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
@@ -233,6 +236,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Updater user password
     /// </summary>
+    [Recaptcha]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
@@ -254,6 +258,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Delete extra email of user
     /// </summary>
+    [Recaptcha]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
@@ -309,6 +314,7 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Cancel user email to confirm
     /// </summary>
+    [Recaptcha]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [HttpDelete("cancel-email-confirmation")]
