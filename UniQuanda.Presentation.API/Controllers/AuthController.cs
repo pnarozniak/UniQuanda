@@ -292,9 +292,10 @@ public class AuthController : ControllerBase
     /// <summary>
     ///     Confirm user email
     /// </summary>
+    [Recaptcha]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    [HttpPut("resend-confirmation-email")]
+    [HttpPost("resend-confirmation-email")]
     [Authorize(Roles = "user")]
     public async Task<IActionResult> ResendConfirmationEmail(CancellationToken ct)
     {

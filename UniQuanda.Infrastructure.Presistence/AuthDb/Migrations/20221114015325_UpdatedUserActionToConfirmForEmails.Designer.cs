@@ -12,8 +12,8 @@ using UniQuanda.Infrastructure.Presistence.AuthDb;
 namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20221106210434_AddedConfirmationForUserEmail")]
-    partial class AddedConfirmationForUserEmail
+    [Migration("20221114015325_UpdatedUserActionToConfirmForEmails")]
+    partial class UpdatedUserActionToConfirmForEmails
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
