@@ -22,11 +22,11 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
         ITokensService tokensService,
         IExpirationService expirationService)
     {
-        _authRepository = authRepository;
-        _passwordsService = passwordsService;
-        _emailService = emailService;
-        _tokensService = tokensService;
-        _expirationService = expirationService;
+        this._authRepository = authRepository;
+        this._passwordsService = passwordsService;
+        this._emailService = emailService;
+        this._tokensService = tokensService;
+        this._expirationService = expirationService;
     }
 
     public async Task<UpdateSecurityResultEnum> Handle(UpdateMainEmailCommand request, CancellationToken ct)
@@ -46,7 +46,7 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
                 IdUser = request.IdUser,
                 IdEmail = request.IdExtraEmail.Value,
                 ConfirmationToken = _tokensService.GenerateNewEmailConfirmationToken(),
-                ExistsUntil = DateTime.UtcNow.AddHours(_expirationService.GetNewUserExpirationInHours()),
+                ExistsUntil = DateTime.UtcNow.AddHours(_expirationService.GetEmailConfirmationExpirationInHours()),
             };
             updateResult = await _authRepository.UpdateUserMainEmailByExtraEmailAsync(userEmailToConfirm, ct);
         }
@@ -64,7 +64,7 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
                     IdUser = request.IdUser,
                     IdEmail = getResult.idEmail.Value,
                     ConfirmationToken = _tokensService.GenerateNewEmailConfirmationToken(),
-                    ExistsUntil = DateTime.UtcNow.AddHours(_expirationService.GetNewUserExpirationInHours()),
+                    ExistsUntil = DateTime.UtcNow.AddHours(_expirationService.GetEmailConfirmationExpirationInHours()),
                 };
                 updateResult = await _authRepository.UpdateUserMainEmailByExtraEmailAsync(userEmailToConfirm, ct);
             }
@@ -79,7 +79,7 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
                     IdUser = request.IdUser,
                     Email = request.NewMainEmail,
                     ConfirmationToken = _tokensService.GenerateNewEmailConfirmationToken(),
-                    ExistsUntil = DateTime.UtcNow.AddHours(_expirationService.GetNewUserExpirationInHours()),
+                    ExistsUntil = DateTime.UtcNow.AddHours(_expirationService.GetEmailConfirmationExpirationInHours()),
                 };
                 updateResult = await _authRepository.UpdateUserMainEmailAsync(userEmailToConfirm, ct);
 

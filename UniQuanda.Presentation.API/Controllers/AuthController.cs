@@ -180,9 +180,7 @@ public class AuthController : ControllerBase
     {
         var command = new GetUserEmailsQuery(User.GetId()!.Value);
         var result = await _mediator.Send(command, ct);
-        if (result is null)
-            return NotFound();
-        return Ok(result);
+        return result is null ? NotFound() : Ok(result);
     }
 
     /// <summary>
@@ -289,9 +287,7 @@ public class AuthController : ControllerBase
     {
         var command = new ConfirmEmailCommand(request);
         var result = await _mediator.Send(command, ct);
-        if (!result)
-            return Conflict();
-        return NoContent();
+        return result ? NoContent() : Conflict();
     }
 
     /// <summary>
@@ -306,9 +302,7 @@ public class AuthController : ControllerBase
     {
         var command = new ResendConfirmationEmailCommand(User.GetId()!.Value);
         var result = await _mediator.Send(command, ct);
-        if (!result)
-            return Conflict();
-        return NoContent();
+        return result ? NoContent() : Conflict();
     }
 
     /// <summary>
@@ -323,8 +317,6 @@ public class AuthController : ControllerBase
     {
         var command = new CancelEmailConfirmationCommand(User.GetId()!.Value);
         var result = await _mediator.Send(command, ct);
-        if (!result)
-            return Conflict();
-        return NoContent();
+        return result ? NoContent() : Conflict();
     }
 }

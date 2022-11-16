@@ -280,7 +280,7 @@ public class AuthRepository : IAuthRepository
         };
     }
 
-    public async Task<UserEmailToConfirmValue?> GetUserUnConfirmedEmailAsync(int idUser, CancellationToken ct)
+    public async Task<UserEmailToConfirmValue?> GetUserNotConfirmedEmailAsync(int idUser, CancellationToken ct)
     {
         return await _authContext.UsersEmails
             .Include(ue => ue.IdUserActionToConfirmNavigation)
@@ -454,17 +454,17 @@ public class AuthRepository : IAuthRepository
         return !(await _authContext.SaveChangesAsync(ct) == 0);
     }
 
-    public async Task<AddExtraEmailStatus> IsUserAllowedToAddExtraEmailAsync(int idUser, CancellationToken ct)
+    public async Task<CheckOptionOfAddNewExtraEmail> IsUserAllowedToAddExtraEmailAsync(int idUser, CancellationToken ct)
     {
         var userEmails = await _authContext.UsersEmails
             .Include(ue => ue.IdUserActionToConfirmNavigation).Where(ue => ue.IdUser == idUser).ToListAsync(ct);
         if (userEmails.Count == 0)
-            return AddExtraEmailStatus.UserNotExist;
+            return CheckOptionOfAddNewExtraEmail.UserNotExist;
         else if (userEmails.Where(ue => !ue.IsMain).ToList().Count == 3)
-            return AddExtraEmailStatus.OverLimitOfExtraEmails;
+            return CheckOptionOfAddNewExtraEmail.OverLimitOfExtraEmails;
         else if (userEmails.Any(ue => ue.IdUserActionToConfirmNavigation != null))
-            return AddExtraEmailStatus.UserHasActionToConfirm;
-        return AddExtraEmailStatus.AllowedToAdd;
+            return CheckOptionOfAddNewExtraEmail.UserHasActionToConfirm;
+        return CheckOptionOfAddNewExtraEmail.AllowedToAdd;
     }
 
     public async Task<(bool isSuccess, bool isMainEmail, int? idUser)> ConfirmUserEmailAsync(string email, string confirmationCode, CancellationToken ct)

@@ -40,7 +40,7 @@ public class ResendConfirmationEmailHandler : IRequestHandler<ResendConfirmation
             IdUser = request.IdUser,
             IdEmail = idEmail,
             ConfirmationToken = _tokensService.GenerateNewEmailConfirmationToken(),
-            ExistsUntil = DateTime.UtcNow.AddHours(_expirationService.GetNewUserExpirationInHours()),
+            ExistsUntil = DateTime.UtcNow.AddHours(_expirationService.GetEmailConfirmationExpirationInHours()),
         };
 
         var isUpdateSuccessful = await _authRepository.UpdateActionToConfirmEmailAsync(userEmailToConfirm, ct);

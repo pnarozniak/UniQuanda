@@ -27,7 +27,7 @@ public class UpdateMainEmailHandlerTests
     private const int IdMainEmail = 1;
     private const int IdExtraEmail = 2;
     private const string NewMainEmail = "newMainEmail@domain.com";
-    private const int NewUserExpirationInHours = 24;
+    private const int EmailConfirmationExpirationInHours = 24;
     private readonly string _emailConfirmationToken = Guid.NewGuid().ToString();
 
     private UpdateMainEmailHandler updateMainEmailHandler;
@@ -275,7 +275,7 @@ public class UpdateMainEmailHandlerTests
     {
         this.expirationService
             .Setup(es => es.GetNewUserExpirationInHours())
-            .Returns(NewUserExpirationInHours);
+            .Returns(EmailConfirmationExpirationInHours);
     }
 
     private void SetupValidPasswordFlow(UserSecurityEntity userSecurityEntity)

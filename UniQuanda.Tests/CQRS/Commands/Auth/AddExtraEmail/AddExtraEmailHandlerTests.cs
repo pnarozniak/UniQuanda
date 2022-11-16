@@ -25,7 +25,7 @@ public class AddExtraEmailHandlerTests
     private const string Nickname = "Nickname";
     private const string MainUserEmail = "mainEmail@domain.com";
     private const string ExtraUserEmail = "extraEmail@domain.com";
-    private const int NewUserExpirationInHours = 24;
+    private const int EmailConfirmationExpirationInHours = 24;
     private readonly string _emailConfirmationToken = Guid.NewGuid().ToString();
 
     private AddExtraEmailHandler addExtraEmailHandler;
@@ -116,7 +116,7 @@ public class AddExtraEmailHandlerTests
         var userSecurityEntity = GetUserSecurityEntity();
         userSecurityEntity.Emails.Add(new UserEmailSecurity { Id = 3, IsMain = false, Value = "thirdEmail@domain.com" });
         this.SetupValidPasswordFlow(userSecurityEntity);
-        this.SetupFlowToCheckPointOfIsUserAllowed(AddExtraEmailStatus.OverLimitOfExtraEmails);
+        this.SetupFlowToCheckPointOfIsUserAllowed(CheckOptionOfAddNewExtraEmail.OverLimitOfExtraEmails);
 
         var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
 
@@ -129,7 +129,7 @@ public class AddExtraEmailHandlerTests
         this.SetupAddExtraEmailCommand();
         var userSecurityEntity = GetUserSecurityEntity();
         this.SetupValidPasswordFlow(userSecurityEntity);
-        this.SetupFlowToCheckPointOfIsUserAllowed(AddExtraEmailStatus.UserNotExist);
+        this.SetupFlowToCheckPointOfIsUserAllowed(CheckOptionOfAddNewExtraEmail.UserNotExist);
 
         var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
 
@@ -142,7 +142,7 @@ public class AddExtraEmailHandlerTests
         this.SetupAddExtraEmailCommand();
         var userSecurityEntity = GetUserSecurityEntity();
         this.SetupValidPasswordFlow(userSecurityEntity);
-        this.SetupFlowToCheckPointOfIsUserAllowed(AddExtraEmailStatus.UserHasActionToConfirm);
+        this.SetupFlowToCheckPointOfIsUserAllowed(CheckOptionOfAddNewExtraEmail.UserHasActionToConfirm);
 
         var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
 
@@ -185,8 +185,8 @@ public class AddExtraEmailHandlerTests
     private void SetupExpirationService()
     {
         this.expirationService
-            .Setup(es => es.GetNewUserExpirationInHours())
-            .Returns(NewUserExpirationInHours);
+            .Setup(es => es.GetEmailConfirmationExpirationInHours())
+            .Returns(EmailConfirmationExpirationInHours);
     }
 
     private void SetupAddExtraEmailCommand(string plainPassword = PlainPassword, string newExtraEmail = NewExtraEmail)
@@ -230,13 +230,13 @@ public class AddExtraEmailHandlerTests
             .ReturnsAsync(true);
         this.authRepository
             .Setup(ar => ar.IsUserAllowedToAddExtraEmailAsync(IdUser, CancellationToken.None))
-            .ReturnsAsync(AddExtraEmailStatus.AllowedToAdd);
+            .ReturnsAsync(CheckOptionOfAddNewExtraEmail.AllowedToAdd);
         this.authRepository
             .Setup(ar => ar.AddExtraEmailAsync(It.IsAny<UserEmailToConfirm>(), CancellationToken.None))
             .ReturnsAsync(addResult);
     }
 
-    private void SetupFlowToCheckPointOfIsUserAllowed(AddExtraEmailStatus resultOfIsUserAllowed)
+    private void SetupFlowToCheckPointOfIsUserAllowed(CheckOptionOfAddNewExtraEmail resultOfIsUserAllowed)
     {
         this.authRepository
             .Setup(ar => ar.IsEmailAvailableAsync(null, this.addExtraEmailCommand.NewExtraEmail, CancellationToken.None))

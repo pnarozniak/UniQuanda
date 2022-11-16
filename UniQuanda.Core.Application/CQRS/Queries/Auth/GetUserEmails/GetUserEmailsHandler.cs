@@ -15,7 +15,7 @@ public class GetUserEmailsHandler : IRequestHandler<GetUserEmailsQuery, GetUserE
     public async Task<GetUserEmailsReponseDTO?> Handle(GetUserEmailsQuery request, CancellationToken ct)
     {
         var userConfirmedEmails = await _authRepository.GetUserConfirmedEmailsAsync(request.IdUser, ct);
-        var userEmailToConfirm = await _authRepository.GetUserUnConfirmedEmailAsync(request.IdUser, ct);
+        var userEmailToConfirm = await _authRepository.GetUserNotConfirmedEmailAsync(request.IdUser, ct);
         if (userConfirmedEmails is null)
             return null;
 

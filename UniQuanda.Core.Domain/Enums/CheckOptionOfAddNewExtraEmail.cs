@@ -1,6 +1,6 @@
 ﻿namespace UniQuanda.Core.Domain.Enums;
 
-public enum AddExtraEmailStatus
+public enum CheckOptionOfAddNewExtraEmail
 {
     UserNotExist,
     OverLimitOfExtraEmails,

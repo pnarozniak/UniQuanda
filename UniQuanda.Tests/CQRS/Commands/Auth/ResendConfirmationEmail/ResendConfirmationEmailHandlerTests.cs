@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,6 +25,8 @@ public class ResendConfirmationEmailHandlerTests
     private const string ExtraUserEmail = "extraEmail@domain.com";
     private const int IdMainEmail = 1;
     private const int IdExtraEmail = 2;
+    private const int EmailConfirmationExpirationInHours = 24;
+    private readonly string _emailConfirmationToken = Guid.NewGuid().ToString();
 
     private ResendConfirmationEmailHandler resendConfirmationEmailHandler;
     private ResendConfirmationEmailCommand resendConfirmationEmailCommand;
@@ -35,11 +38,13 @@ public class ResendConfirmationEmailHandlerTests
     [SetUp]
     public void SetupTests()
     {
-        authRepository = new Mock<IAuthRepository>();
-        emailService = new Mock<IEmailService>();
-        tokensService = new Mock<ITokensService>();
-        expirationService = new Mock<IExpirationService>();
+        this.authRepository = new Mock<IAuthRepository>();
+        this.emailService = new Mock<IEmailService>();
+        this.tokensService = new Mock<ITokensService>();
+        this.expirationService = new Mock<IExpirationService>();
 
+        this.SetupEmailConfirmationToken();
+        this.SetupExpirationService();
         this.resendConfirmationEmailCommand = new(IdUser);
 
         this.resendConfirmationEmailHandler = new ResendConfirmationEmailHandler(this.authRepository.Object, this.emailService.Object, this.tokensService.Object, this.expirationService.Object);
@@ -114,6 +119,20 @@ public class ResendConfirmationEmailHandlerTests
                 new UserEmailSecurity { Id = IdExtraEmail, IsMain = false, Value = ExtraUserEmail}
             }
         };
+    }
+
+    private void SetupEmailConfirmationToken()
+    {
+        this.tokensService
+            .Setup(ts => ts.GenerateNewEmailConfirmationToken())
+            .Returns(_emailConfirmationToken);
+    }
+
+    private void SetupExpirationService()
+    {
+        this.expirationService
+            .Setup(es => es.GetEmailConfirmationExpirationInHours())
+            .Returns(EmailConfirmationExpirationInHours);
     }
 
     private void SetupValidFlowWhenUserAndEmailExists(UserSecurityEntity userSecurityEntity, int? idEmail)

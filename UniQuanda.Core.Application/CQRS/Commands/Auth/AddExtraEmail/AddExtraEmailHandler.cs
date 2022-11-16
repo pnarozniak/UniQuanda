@@ -43,11 +43,11 @@ public class AddExtraEmailHandler : IRequestHandler<AddExtraEmailCommand, Update
             return UpdateSecurityResultEnum.EmailNotAvailable;
 
         var isUserAllowed = await _authRepository.IsUserAllowedToAddExtraEmailAsync(request.IdUser, ct);
-        if (isUserAllowed == AddExtraEmailStatus.UserNotExist)
+        if (isUserAllowed == CheckOptionOfAddNewExtraEmail.UserNotExist)
             return UpdateSecurityResultEnum.ContentNotExist;
-        else if (isUserAllowed == AddExtraEmailStatus.OverLimitOfExtraEmails)
+        else if (isUserAllowed == CheckOptionOfAddNewExtraEmail.OverLimitOfExtraEmails)
             return UpdateSecurityResultEnum.OverLimitOfExtraEmails;
-        else if (isUserAllowed == AddExtraEmailStatus.UserHasActionToConfirm)
+        else if (isUserAllowed == CheckOptionOfAddNewExtraEmail.UserHasActionToConfirm)
             return UpdateSecurityResultEnum.UserHasActionToConfirm;
 
         var userEmailToConfirm = new UserEmailToConfirm
@@ -55,7 +55,7 @@ public class AddExtraEmailHandler : IRequestHandler<AddExtraEmailCommand, Update
             IdUser = request.IdUser,
             Email = request.NewExtraEmail,
             ConfirmationToken = _tokensService.GenerateNewEmailConfirmationToken(),
-            ExistsUntil = DateTime.UtcNow.AddHours(_expirationService.GetNewUserExpirationInHours())
+            ExistsUntil = DateTime.UtcNow.AddHours(_expirationService.GetEmailConfirmationExpirationInHours())
         };
 
         var addResult = await _authRepository.AddExtraEmailAsync(userEmailToConfirm, ct);

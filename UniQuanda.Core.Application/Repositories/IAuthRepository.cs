@@ -98,7 +98,7 @@ public interface IAuthRepository
     /// <param name="idUser">Id of user to get unconfirmed email</param>
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>UserEmailToConfirmValue if is an email not confirmed, otherwise NULL</returns>
-    Task<UserEmailToConfirmValue?> GetUserUnConfirmedEmailAsync(int idUser, CancellationToken ct);
+    Task<UserEmailToConfirmValue?> GetUserNotConfirmedEmailAsync(int idUser, CancellationToken ct);
 
     /// <summary>
     ///     Update main email for user
@@ -131,7 +131,7 @@ public interface IAuthRepository
     /// <param name="idUser">Id of user to add extra email</param>
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>Enum AddExtraEmailStatus</returns>
-    Task<AddExtraEmailStatus> IsUserAllowedToAddExtraEmailAsync(int idUser, CancellationToken ct);
+    Task<CheckOptionOfAddNewExtraEmail> IsUserAllowedToAddExtraEmailAsync(int idUser, CancellationToken ct);
 
     /// <summary>
     ///     Add extra email for User
