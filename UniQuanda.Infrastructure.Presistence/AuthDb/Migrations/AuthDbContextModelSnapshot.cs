@@ -157,10 +157,9 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Value")
-                        .IsUnique();
+                    b.HasIndex("IdUser");
 
-                    b.HasIndex("IdUser", "IsMain")
+                    b.HasIndex("Value")
                         .IsUnique();
 
                     b.ToTable("UsersEmails");
