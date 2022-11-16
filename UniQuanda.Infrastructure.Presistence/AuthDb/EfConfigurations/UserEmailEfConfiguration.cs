@@ -17,6 +17,8 @@ public class UserEmailEfConfiguration : IEntityTypeConfiguration<UserEmail>
 
         builder.Property(ue => ue.IsMain).IsRequired();
 
+        builder.HasIndex(ue => new { ue.IdUser, ue.IsMain}).IsUnique();
+
         builder
             .HasOne(ue => ue.IdUserActionToConfirmNavigation)
             .WithOne(ua => ua.IdUserEmailNavigation)
