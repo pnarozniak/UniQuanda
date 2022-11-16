@@ -310,7 +310,7 @@ public class UpdateMainEmailHandlerTests
             .Setup(ar => ar.GetExtraEmailIdAsync(this.updateMainEmailCommand.IdUser, this.updateMainEmailCommand.NewMainEmail, CancellationToken.None))
             .ReturnsAsync((isConnected: false, idEmail: null));
         this.authRepository
-            .Setup(ar => ar.UpdateUserMainEmailAsync(It.IsAny<UserEmailToConfirm>(), CancellationToken.None))
+            .Setup(ar => ar.AddUserMainEmailToConfirmAsync(It.IsAny<UserEmailToConfirm>(), CancellationToken.None))
             .ReturnsAsync(updateResult);
     }
 }

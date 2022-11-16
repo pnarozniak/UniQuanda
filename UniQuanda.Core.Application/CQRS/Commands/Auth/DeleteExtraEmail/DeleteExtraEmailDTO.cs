@@ -6,7 +6,7 @@ namespace UniQuanda.Core.Application.CQRS.Commands.Auth.DeleteExtraEmail;
 public class DeleteExtraEmailRequestDTO
 {
     [Required]
-    public int IdExtraEmail { get; set; }
+    public int? IdExtraEmail { get; set; }
 
     [Required]
     [PasswordValidator]

@@ -293,17 +293,17 @@ public class AuthRepository : IAuthRepository
             }).SingleOrDefaultAsync(ct);
     }
 
-    public async Task<(bool isConnected, int? idEmail)> GetExtraEmailIdAsync(int idUser, string email, CancellationToken ct)
+    public async Task<(bool isEmailConnected, int? idEmail)> GetExtraEmailIdAsync(int idUser, string email, CancellationToken ct)
     {
         var connectedEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(ue => ue.IdUser == idUser && EF.Functions.ILike(ue.Value, email), ct);
         if (connectedEmail is null)
-            return (isConnected: false, idEmail: null);
+            return (isEmailConnected: false, idEmail: null);
         else if (connectedEmail.IsMain)
-            return (isConnected: true, idEmail: null);
-        return (isConnected: true, idEmail: connectedEmail.Id);
+            return (isEmailConnected: true, idEmail: null);
+        return (isEmailConnected: true, idEmail: connectedEmail.Id);
     }
 
-    public async Task<bool?> UpdateUserMainEmailAsync(UserEmailToConfirm userEmailToConfirm, CancellationToken ct)
+    public async Task<bool?> AddUserMainEmailToConfirmAsync(UserEmailToConfirm userEmailToConfirm, CancellationToken ct)
     {
         var userMainEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(ue => ue.IdUser == userEmailToConfirm.IdUser && ue.IsMain, ct);
         if (userMainEmail is null)
@@ -358,27 +358,13 @@ public class AuthRepository : IAuthRepository
         if (userExtraEmail is null)
             return null;
 
-        await using var tran = await _authContext.Database.BeginTransactionAsync(ct);
-        try
+        userMainEmail.IsMain = false;
+        userExtraEmail.IsMain = true;
+        if (await _authContext.SaveChangesAsync(ct) == 2)
         {
-            userMainEmail.IsMain = false;
-            userExtraEmail.IsMain = true;
-            if (await _authContext.SaveChangesAsync(ct) == 2)
-            {
-                await tran.CommitAsync(ct);
-                return true;
-            }
-
-            await tran.RollbackAsync(ct);
-            return false;
+            return true;
         }
-        catch (Exception exc)
-        {
-            await tran.RollbackAsync(ct);
-            if (exc.InnerException is OperationCanceledException)
-                throw;
-            return false;
-        }
+        return false;
     }
 
     public async Task<bool> IsEmailAvailableAsync(int? idUser, string email, CancellationToken ct)
@@ -483,29 +469,16 @@ public class AuthRepository : IAuthRepository
             if (userMainEmail is null)
                 return (isSuccess: false, isMainEmail: false, idUser: null);
 
-            await using var tran = await _authContext.Database.BeginTransactionAsync(ct);
-            try
-            {
-                userEmail.IsMain = true;
-                _authContext.UsersActionsToConfirm.Remove(userEmailActionToConfirm);
-                _authContext.UsersEmails.Remove(userMainEmail);
+            userEmail.IsMain = true;
+            _authContext.UsersActionsToConfirm.Remove(userEmailActionToConfirm);
+            _authContext.UsersEmails.Remove(userMainEmail);
 
-                if (await _authContext.SaveChangesAsync(ct) == 3)
-                {
-                    await tran.CommitAsync(ct);
-                    return (isSuccess: true, isMainEmail: true, idUser: userEmail.IdUser);
-                }
-
-                await tran.RollbackAsync(ct);
-                return (isSuccess: false, isMainEmail: false, idUser: null);
-            }
-            catch (Exception exc)
+            if (await _authContext.SaveChangesAsync(ct) == 3)
             {
-                await tran.RollbackAsync(ct);
-                if (exc.InnerException is OperationCanceledException)
-                    throw;
-                return (isSuccess: false, isMainEmail: false, idUser: null);
+                return (isSuccess: true, isMainEmail: true, idUser: userEmail.IdUser);
             }
+
+            return (isSuccess: false, isMainEmail: false, idUser: null);
         }
         else if (userEmailActionToConfirm.ActionType == UserActionToConfirmEnum.NewExtraEmail)
         {
@@ -537,35 +510,20 @@ public class AuthRepository : IAuthRepository
         if (userEmail is null)
             return false;
 
-        await using var tran = await _authContext.Database.BeginTransactionAsync(ct);
-        try
-        {
-            _authContext.UsersActionsToConfirm.Remove(action);
-            _authContext.UsersEmails.Remove(userEmail);
+        _authContext.UsersActionsToConfirm.Remove(action);
+        _authContext.UsersEmails.Remove(userEmail);
 
-            if (await _authContext.SaveChangesAsync(ct) == 2)
-            {
-                await tran.CommitAsync(ct);
-                return true;
-            }
-
-            await tran.RollbackAsync(ct);
-            return false;
-        }
-        catch (Exception exc)
+        if (await _authContext.SaveChangesAsync(ct) == 2)
         {
-            await tran.RollbackAsync(ct);
-            if (exc.InnerException is OperationCanceledException)
-                throw;
-            return false;
+            return true;
         }
+
+        return false;
     }
 
     public async Task<int?> GetIdEmailToConfirmAsync(int idUser, CancellationToken ct)
     {
         var emailToConfirm = await _authContext.UsersActionsToConfirm.SingleOrDefaultAsync(u => u.IdUser == idUser && (u.ActionType == UserActionToConfirmEnum.NewMainEmail || u.ActionType == UserActionToConfirmEnum.NewExtraEmail), ct);
-        if (emailToConfirm is null)
-            return null;
-        return emailToConfirm.IdUserEmail;
+        return emailToConfirm?.IdUserEmail;
     }
 }

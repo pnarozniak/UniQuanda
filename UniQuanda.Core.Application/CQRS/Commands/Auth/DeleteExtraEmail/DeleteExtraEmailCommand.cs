@@ -7,7 +7,7 @@ public class DeleteExtraEmailCommand : IRequest<UpdateSecurityResultEnum>
 {
     public DeleteExtraEmailCommand(DeleteExtraEmailRequestDTO request, int idUser)
     {
-        IdExtraEmail = request.IdExtraEmail;
+        IdExtraEmail = request.IdExtraEmail.Value;
         Password = request.Password;
         IdUser = idUser;
     }

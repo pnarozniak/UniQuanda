@@ -101,12 +101,12 @@ public interface IAuthRepository
     Task<UserEmailToConfirmValue?> GetUserNotConfirmedEmailAsync(int idUser, CancellationToken ct);
 
     /// <summary>
-    ///     Update main email for user
+    ///     Add main email for user to confirm
     /// </summary>
     /// <param name="userEmailToConfirm">Value object with new main e-mail, id user, confirmation token and end date of valid token</param>
     /// <param name="ct">Operation cancellation token</param>
-    /// <returns>True if update is succesful, NULL when user not exist, false when update is not succesful</returns>
-    Task<bool?> UpdateUserMainEmailAsync(UserEmailToConfirm userEmailToConfirm, CancellationToken ct);
+    /// <returns>True if add is succesful, NULL when user not exist, false when add is not succesful</returns>
+    Task<bool?> AddUserMainEmailToConfirmAsync(UserEmailToConfirm userEmailToConfirm, CancellationToken ct);
 
     /// <summary>
     ///     Update user main email with existing extra email
@@ -123,7 +123,7 @@ public interface IAuthRepository
     /// <param name="email">Email to check</param>
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>Status of email availability and email id</returns>
-    Task<(bool isConnected, int? idEmail)> GetExtraEmailIdAsync(int idUser, string email, CancellationToken ct);
+    Task<(bool isEmailConnected, int? idEmail)> GetExtraEmailIdAsync(int idUser, string email, CancellationToken ct);
 
     /// <summary>
     ///     Check if user is allowed to add new extra email to account

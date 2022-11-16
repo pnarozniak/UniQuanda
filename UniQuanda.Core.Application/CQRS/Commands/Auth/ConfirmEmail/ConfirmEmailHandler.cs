@@ -19,18 +19,18 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, bool>
     {
 
         var (isSuccess, isMainEmail, idUser) = await _authRepository.ConfirmUserEmailAsync(request.Email, request.ConfirmationCode, ct);
-        if (isSuccess)
-        {
-            var user = await _authRepository.GetUserWithEmailsByIdAsync(idUser.Value, ct);
-            if (user is null)
-                return false;
-            var mainEmail = user.Emails.SingleOrDefault(e => e.IsMain).Value;
-            if (isMainEmail)
-                await _emailService.SendInformationAboutUpdateMainEmailAsync(mainEmail, mainEmail);
-            else
-                await _emailService.SendInformationAboutAddNewExtraEmailAsync(mainEmail, request.Email);
-        }
+        if (!isSuccess)
+            return false;
 
-        return isSuccess;
+        var user = await _authRepository.GetUserWithEmailsByIdAsync(idUser.Value, ct);
+        if (user is null)
+            return false;
+        var mainEmail = user.Emails.SingleOrDefault(e => e.IsMain).Value;
+        if (isMainEmail)
+            await _emailService.SendInformationAboutUpdateMainEmailAsync(mainEmail, mainEmail);
+        else
+            await _emailService.SendInformationAboutAddNewExtraEmailAsync(mainEmail, request.Email);
+
+        return true;
     }
 }
