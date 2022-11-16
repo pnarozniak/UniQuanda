@@ -27,9 +27,9 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, bool>
             return false;
         var mainEmail = user.Emails.SingleOrDefault(e => e.IsMain).Value;
         if (isMainEmail)
-            await _emailService.SendInformationAboutUpdateMainEmailAsync(mainEmail, mainEmail);
+            await _emailService.SendEmailAboutUpdatedMainEmailAsync(mainEmail, mainEmail);
         else
-            await _emailService.SendInformationAboutAddNewExtraEmailAsync(mainEmail, request.Email);
+            await _emailService.SendEmailAboutAddedNewExtraEmailAsync(mainEmail, request.Email);
 
         return true;
     }

@@ -61,7 +61,7 @@ public class AddExtraEmailHandler : IRequestHandler<AddExtraEmailCommand, Update
         var addResult = await _authRepository.AddExtraEmailAsync(userEmailToConfirm, ct);
 
         if (addResult == true)
-            await _emailService.SendInformationToConfirmEmail(userEmailToConfirm.Email, userEmailToConfirm.ConfirmationToken);
+            await _emailService.SendEmailWithEmailConfirmationLinkAsync(userEmailToConfirm.Email, userEmailToConfirm.ConfirmationToken);
 
         return addResult switch
         {

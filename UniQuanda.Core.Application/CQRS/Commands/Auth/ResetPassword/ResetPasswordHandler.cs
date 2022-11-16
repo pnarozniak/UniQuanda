@@ -36,7 +36,7 @@ public class ResetPasswordHandler : IRequestHandler<ResetPasswordCommand, bool>
         var isReseted = await _authRepository.ResetUserPasswordAsync(dbUser.Id, action.Id, hashedPassword, ct);
         if (!isReseted) return false;
 
-        await _emailService.SendPasswordHasBeenChangedEmailAsync(command.Email);
+        await _emailService.SendEmailAboutUpdatedPasswordAsync(command.Email);
         return true;
     }
 }

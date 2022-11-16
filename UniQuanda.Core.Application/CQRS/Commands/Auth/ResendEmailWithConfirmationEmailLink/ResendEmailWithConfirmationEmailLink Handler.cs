@@ -4,16 +4,16 @@ using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.ValueObjects;
 
-namespace UniQuanda.Core.Application.CQRS.Commands.Auth.ResendConfirmationEmail;
+namespace UniQuanda.Core.Application.CQRS.Commands.Auth.ResendEmailWithConfirmationEmailLink;
 
-public class ResendConfirmationEmailHandler : IRequestHandler<ResendConfirmationEmailCommand, bool>
+public class ResendEmailWithConfirmationEmailLinkHandler : IRequestHandler<ResendEmailWithConfirmationEmailLinkCommand, bool>
 {
     private readonly IAuthRepository _authRepository;
     private readonly IEmailService _emailService;
     private readonly ITokensService _tokensService;
     private readonly IExpirationService _expirationService;
 
-    public ResendConfirmationEmailHandler(
+    public ResendEmailWithConfirmationEmailLinkHandler(
         IAuthRepository authRepository,
         IEmailService emailService,
         ITokensService tokensService,
@@ -25,7 +25,7 @@ public class ResendConfirmationEmailHandler : IRequestHandler<ResendConfirmation
         _expirationService = expirationService;
     }
 
-    public async Task<bool> Handle(ResendConfirmationEmailCommand request, CancellationToken ct)
+    public async Task<bool> Handle(ResendEmailWithConfirmationEmailLinkCommand request, CancellationToken ct)
     {
         var user = await _authRepository.GetUserWithEmailsByIdAsync(request.IdUser, ct);
         if (user is null)
@@ -45,7 +45,7 @@ public class ResendConfirmationEmailHandler : IRequestHandler<ResendConfirmation
 
         var isUpdateSuccessful = await _authRepository.UpdateActionToConfirmEmailAsync(userEmailToConfirm, ct);
         if (isUpdateSuccessful)
-            await _emailService.SendInformationToConfirmEmail(user.Emails.SingleOrDefault(u => u.Id == idEmail).Value, userEmailToConfirm.ConfirmationToken);
+            await _emailService.SendEmailWithEmailConfirmationLinkAsync(user.Emails.SingleOrDefault(u => u.Id == idEmail).Value, userEmailToConfirm.ConfirmationToken);
 
         return isUpdateSuccessful;
     }

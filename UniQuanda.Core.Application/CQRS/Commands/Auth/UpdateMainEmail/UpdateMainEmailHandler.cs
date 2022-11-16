@@ -106,7 +106,7 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
         var addResult = await _authRepository.AddUserMainEmailToConfirmAsync(userEmailToConfirm, ct);
 
         if (addResult == true)
-            await _emailService.SendInformationToConfirmEmail(userEmailToConfirm.Email, userEmailToConfirm.ConfirmationToken);
+            await _emailService.SendEmailWithEmailConfirmationLinkAsync(userEmailToConfirm.Email, userEmailToConfirm.ConfirmationToken);
         return addResult;
     }
 }

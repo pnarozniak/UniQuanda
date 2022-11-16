@@ -298,7 +298,8 @@ public class AuthRepository : IAuthRepository
         var connectedEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(ue => ue.IdUser == idUser && EF.Functions.ILike(ue.Value, email), ct);
         if (connectedEmail is null)
             return (isEmailConnected: false, idEmail: null);
-        else if (connectedEmail.IsMain)
+
+        if (connectedEmail.IsMain)
             return (isEmailConnected: true, idEmail: null);
         return (isEmailConnected: true, idEmail: connectedEmail.Id);
     }

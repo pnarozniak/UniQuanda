@@ -5,17 +5,17 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using UniQuanda.Core.Application.CQRS.Commands.Auth.ResendConfirmationEmail;
+using UniQuanda.Core.Application.CQRS.Commands.Auth.ResendEmailWithConfirmationEmailLink;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.ValueObjects;
 
-namespace UniQuanda.Tests.CQRS.Commands.Auth.ResendConfirmationEmail;
+namespace UniQuanda.Tests.CQRS.Commands.Auth.ResendEmailWithConfirmationEmailLink;
 
 [TestFixture]
-public class ResendConfirmationEmailHandlerTests
+public class ResendEmailWithConfirmationEmailLinkTests
 {
     private const int IdUser = 1;
     private const string PlainPassword = "PlainPassword";
@@ -28,8 +28,8 @@ public class ResendConfirmationEmailHandlerTests
     private const int EmailConfirmationExpirationInHours = 24;
     private readonly string _emailConfirmationToken = Guid.NewGuid().ToString();
 
-    private ResendConfirmationEmailHandler resendConfirmationEmailHandler;
-    private ResendConfirmationEmailCommand resendConfirmationEmailCommand;
+    private ResendEmailWithConfirmationEmailLinkHandler resendEmailWithConfirmationEmailLinkHandler;
+    private ResendEmailWithConfirmationEmailLinkCommand resendEmailWithConfirmationEmailLinkCommand;
     private Mock<IAuthRepository> authRepository;
     private Mock<IEmailService> emailService;
     private Mock<ITokensService> tokensService;
@@ -45,9 +45,9 @@ public class ResendConfirmationEmailHandlerTests
 
         this.SetupEmailConfirmationToken();
         this.SetupExpirationService();
-        this.resendConfirmationEmailCommand = new(IdUser);
+        this.resendEmailWithConfirmationEmailLinkCommand = new(IdUser);
 
-        this.resendConfirmationEmailHandler = new ResendConfirmationEmailHandler(this.authRepository.Object, this.emailService.Object, this.tokensService.Object, this.expirationService.Object);
+        this.resendEmailWithConfirmationEmailLinkHandler = new ResendEmailWithConfirmationEmailLinkHandler(this.authRepository.Object, this.emailService.Object, this.tokensService.Object, this.expirationService.Object);
     }
 
     [Test]
@@ -59,7 +59,7 @@ public class ResendConfirmationEmailHandlerTests
             .Setup(ar => ar.UpdateActionToConfirmEmailAsync(It.IsAny<UserEmailToConfirm>(), CancellationToken.None))
             .ReturnsAsync(true);
 
-        var result = await resendConfirmationEmailHandler.Handle(this.resendConfirmationEmailCommand, CancellationToken.None);
+        var result = await resendEmailWithConfirmationEmailLinkHandler.Handle(this.resendEmailWithConfirmationEmailLinkCommand, CancellationToken.None);
 
         result.Should().Be(true);
     }
@@ -73,7 +73,7 @@ public class ResendConfirmationEmailHandlerTests
             .Setup(ar => ar.UpdateActionToConfirmEmailAsync(It.IsAny<UserEmailToConfirm>(), CancellationToken.None))
             .ReturnsAsync(false);
 
-        var result = await resendConfirmationEmailHandler.Handle(this.resendConfirmationEmailCommand, CancellationToken.None);
+        var result = await resendEmailWithConfirmationEmailLinkHandler.Handle(this.resendEmailWithConfirmationEmailLinkCommand, CancellationToken.None);
 
         result.Should().Be(false);
     }
@@ -86,7 +86,7 @@ public class ResendConfirmationEmailHandlerTests
             .Setup(ar => ar.GetUserWithEmailsByIdAsync(IdUser, CancellationToken.None))
             .ReturnsAsync((UserSecurityEntity)null);
 
-        var result = await resendConfirmationEmailHandler.Handle(this.resendConfirmationEmailCommand, CancellationToken.None);
+        var result = await resendEmailWithConfirmationEmailLinkHandler.Handle(this.resendEmailWithConfirmationEmailLinkCommand, CancellationToken.None);
 
         result.Should().Be(false);
     }
@@ -102,7 +102,7 @@ public class ResendConfirmationEmailHandlerTests
             .Setup(ar => ar.GetIdEmailToConfirmAsync(IdUser, CancellationToken.None))
             .ReturnsAsync((int?)null);
 
-        var result = await resendConfirmationEmailHandler.Handle(this.resendConfirmationEmailCommand, CancellationToken.None);
+        var result = await resendEmailWithConfirmationEmailLinkHandler.Handle(this.resendEmailWithConfirmationEmailLinkCommand, CancellationToken.None);
 
         result.Should().Be(false);
     }

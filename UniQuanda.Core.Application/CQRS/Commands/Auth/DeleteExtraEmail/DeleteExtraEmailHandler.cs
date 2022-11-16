@@ -33,7 +33,7 @@ public class DeleteExtraEmailHandler : IRequestHandler<DeleteExtraEmailCommand, 
 
         var deleteResult = await _authRepository.DeleteExtraEmailAsync(request.IdUser, request.IdExtraEmail, ct);
         if (deleteResult == true)
-            await _emailService.SendInformationAboutDeleteExtraEmailAsync(user.Emails.SingleOrDefault(e => e.IsMain).Value, user.Emails.SingleOrDefault(e => e.Id == request.IdExtraEmail).Value);
+            await _emailService.SendEmailAboutDeletedExtraEmailAsync(user.Emails.SingleOrDefault(e => e.IsMain).Value, user.Emails.SingleOrDefault(e => e.Id == request.IdExtraEmail).Value);
 
         return deleteResult switch
         {

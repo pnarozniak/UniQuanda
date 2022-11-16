@@ -10,7 +10,7 @@ using UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.RecoverPassword;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.RefreshToken;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Register;
-using UniQuanda.Core.Application.CQRS.Commands.Auth.ResendConfirmationEmail;
+using UniQuanda.Core.Application.CQRS.Commands.Auth.ResendEmailWithConfirmationEmailLink;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ResendRegisterConfirmationCode;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ResetPasword;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateMainEmail;
@@ -300,7 +300,7 @@ public class AuthController : ControllerBase
     [Authorize(Roles = "user")]
     public async Task<IActionResult> ResendConfirmationEmail(CancellationToken ct)
     {
-        var command = new ResendConfirmationEmailCommand(User.GetId()!.Value);
+        var command = new ResendEmailWithConfirmationEmailLinkCommand(User.GetId()!.Value);
         var result = await _mediator.Send(command, ct);
         return result ? NoContent() : Conflict();
     }

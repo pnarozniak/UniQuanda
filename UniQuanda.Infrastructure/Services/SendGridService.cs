@@ -33,35 +33,35 @@ public class SendGridService : IEmailService
         await SendEmailAsync(to, emailSubject, emailMessage);
     }
 
-    public async Task SendPasswordHasBeenChangedEmailAsync(string to)
+    public async Task SendEmailAboutUpdatedPasswordAsync(string to)
     {
         var emailMessage = "<span>Your password has been changed</span>";
         var emailSubject = "Password has been changed";
         await SendEmailAsync(to, emailSubject, emailMessage);
     }
 
-    public async Task SendInformationAboutAddNewExtraEmailAsync(string to, string newExtraEmail)
+    public async Task SendEmailAboutAddedNewExtraEmailAsync(string to, string newExtraEmail)
     {
         var emailSubject = "Dodatkowy e-mail został dodany do konta";
         var emailMessage = $"<span>Do Twojego konta został przypisany nowy e-mail dodatkowy: <b>{newExtraEmail}</b>.</span>";
         await SendEmailAsync(to, emailSubject, emailMessage);
     }
 
-    public async Task SendInformationAboutDeleteExtraEmailAsync(string to, string extraEmail)
+    public async Task SendEmailAboutDeletedExtraEmailAsync(string to, string extraEmail)
     {
         var emailSubject = "Dodatkowy e-mail został usunięty z konta";
         var emailMessage = $"<span>Z Twojego konta został usunięty dodatkowy e-mail: <b>{extraEmail}</b>.</span>";
         await SendEmailAsync(to, emailSubject, emailMessage);
     }
 
-    public async Task SendInformationAboutUpdateMainEmailAsync(string to, string newMainEmail)
+    public async Task SendEmailAboutUpdatedMainEmailAsync(string to, string newMainEmail)
     {
         var emailSubject = "Twój główny e-mail został zmieniony";
         var emailMessage = $"<span>Główny e-mail powiązany z Twoim kontem został zmieniony. Teraz głównym e-mailem twojego konta jest: <b>{newMainEmail}</b>.</span>";
         await SendEmailAsync(to, emailSubject, emailMessage);
     }
 
-    public async Task SendInformationAboutUpdatePasswordAsync(string to, string nickName)
+    public async Task SendEmailAboutUpdatedPasswordAsync(string to, string nickName)
     {
         var emailSubject = "Twoje hasło zostało zmienione";
         var emailMessage = $"<span>Hasło powiązane z Twoim kontem <b>{nickName}</b> zostało zmienione.</span>";
@@ -88,7 +88,7 @@ public class SendGridService : IEmailService
         await client.SendEmailAsync(emailMessage);
     }
 
-    public async Task SendInformationToConfirmEmail(string to, string token)
+    public async Task SendEmailWithEmailConfirmationLinkAsync(string to, string token)
     {
         var url = $"{_uniQuandaClientOptions.Url}/public/confirm-email?email={to}&token={token}";
         var emailMessage =
