@@ -1,7 +1,7 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Infrastructure.Options;
@@ -87,13 +87,18 @@ public class TokensService : ITokensService
         {
             return null;
         }
-    
-        if (securityToken is not JwtSecurityToken jwt || jwt == null 
-            || !jwt.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,StringComparison.InvariantCultureIgnoreCase))
+
+        if (securityToken is not JwtSecurityToken jwt || jwt == null
+            || !jwt.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
             return null;
 
         var idUser = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var canParse = int.TryParse(idUser, out var parsedIdUser);
         return canParse ? parsedIdUser : null;
+    }
+
+    public string GenerateNewEmailConfirmationToken()
+    {
+        return Guid.NewGuid().ToString();
     }
 }

@@ -3,7 +3,7 @@
 public interface IExpirationService
 {
     /// <summary>
-    ///     Gets number of hours, after which new user should be deleted from db if he doesn't confirm his e-mail
+    ///     Gets number of hours, after which new user should be deleted from db if user doesn't confirm his e-mail
     /// </summary>
     /// <returns>Number of hours</returns>
     int GetNewUserExpirationInHours();
@@ -13,4 +13,10 @@ public interface IExpirationService
     /// </summary>
     /// <returns>Number of minutes</returns>
     int GetRecoverPasswordActionExpirationInMinutes();
+
+    /// <summary>
+    ///     Gets number of hours, after which email should be deleted from db if user doesn't confirm that e-mail
+    /// </summary>
+    /// <returns>Number of hours</returns>
+    int GetEmailConfirmationExpirationInHours();
 }

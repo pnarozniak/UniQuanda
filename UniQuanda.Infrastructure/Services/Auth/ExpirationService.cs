@@ -21,4 +21,9 @@ public class ExpirationService : IExpirationService
     {
         return _options.RecoverPasswordActionExpirationInMinutes;
     }
+
+    public int GetEmailConfirmationExpirationInHours()
+    {
+        return _options.EmailConfirmationExpirationInHours;
+    }
 }
