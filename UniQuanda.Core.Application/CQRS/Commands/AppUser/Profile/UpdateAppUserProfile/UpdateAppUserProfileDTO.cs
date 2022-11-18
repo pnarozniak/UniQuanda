@@ -48,6 +48,6 @@ public class UpdateAppUserProfileRequestDTO
 
 public class UpdateAppUserProfileResponseDTO
 {
-    public AppUserProfileUpdateStatusEnum UpdateStatus { get; set; }
+    public AppUserProfileUpdateResultEnum UpdateStatus { get; set; }
     public string? AvatarUrl { get; set; }
 }

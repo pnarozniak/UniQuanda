@@ -1,6 +1,6 @@
 ﻿namespace UniQuanda.Core.Domain.Enums;
 
-public enum AppUserProfileUpdateStatusEnum
+public enum AppUserProfileUpdateResultEnum
 {
     ContentNotExist,
     NickNameIsUsed,

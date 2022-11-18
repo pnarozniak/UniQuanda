@@ -20,9 +20,9 @@ public class UpdateAppUserProfileHandler : IRequestHandler<UpdateAppUserProfileC
     {
         var isNickNameUsed = await _appUserRepository.IsNicknameUsedAsync(request.AppUser.Id, request.AppUser.Nickname, ct);
         if (isNickNameUsed is null)
-            return new UpdateAppUserProfileResponseDTO() { UpdateStatus = AppUserProfileUpdateStatusEnum.ContentNotExist };
+            return new UpdateAppUserProfileResponseDTO() { UpdateStatus = AppUserProfileUpdateResultEnum.ContentNotExist };
         else if (isNickNameUsed == true)
-            return new UpdateAppUserProfileResponseDTO() { UpdateStatus = AppUserProfileUpdateStatusEnum.NickNameIsUsed };
+            return new UpdateAppUserProfileResponseDTO() { UpdateStatus = AppUserProfileUpdateResultEnum.NickNameIsUsed };
 
         var endpointURL = _imageService.GetImageURL();
         if (request.Avatar != null && request.IsNewAvatar)
@@ -32,7 +32,7 @@ public class UpdateAppUserProfileHandler : IRequestHandler<UpdateAppUserProfileC
             await _imageService.RemoveImageAsync(imageName, ImageFolder.Profile, ct);
             var avatarSaveResult = await _imageService.SaveImageAsync(request.Avatar, imageName, ImageFolder.Profile, ct);
             if (!avatarSaveResult)
-                return new UpdateAppUserProfileResponseDTO { UpdateStatus = AppUserProfileUpdateStatusEnum.UnSuccessful };
+                return new UpdateAppUserProfileResponseDTO { UpdateStatus = AppUserProfileUpdateResultEnum.UnSuccessful };
         }
 
         if (request.Banner != null && request.IsNewBanner)
@@ -42,15 +42,15 @@ public class UpdateAppUserProfileHandler : IRequestHandler<UpdateAppUserProfileC
             await _imageService.RemoveImageAsync(imageName, ImageFolder.Profile, ct);
             var bannerSaveResult = await _imageService.SaveImageAsync(request.Banner, imageName, ImageFolder.Profile, ct);
             if (!bannerSaveResult)
-                return new UpdateAppUserProfileResponseDTO { UpdateStatus = AppUserProfileUpdateStatusEnum.UnSuccessful };
+                return new UpdateAppUserProfileResponseDTO { UpdateStatus = AppUserProfileUpdateResultEnum.UnSuccessful };
         }
 
         var updateResult = await _appUserRepository.UpdateAppUserAsync(request.AppUser, request.IsNewAvatar, request.IsNewBanner, ct);
         return updateResult switch
         {
-            null => new UpdateAppUserProfileResponseDTO() { UpdateStatus = AppUserProfileUpdateStatusEnum.ContentNotExist },
-            false => new UpdateAppUserProfileResponseDTO() { UpdateStatus = AppUserProfileUpdateStatusEnum.UnSuccessful },
-            true => new UpdateAppUserProfileResponseDTO() { UpdateStatus = AppUserProfileUpdateStatusEnum.Successful, AvatarUrl = request.AppUser.Avatar }
+            null => new UpdateAppUserProfileResponseDTO() { UpdateStatus = AppUserProfileUpdateResultEnum.ContentNotExist },
+            false => new UpdateAppUserProfileResponseDTO() { UpdateStatus = AppUserProfileUpdateResultEnum.UnSuccessful },
+            true => new UpdateAppUserProfileResponseDTO() { UpdateStatus = AppUserProfileUpdateResultEnum.Successful, AvatarUrl = request.AppUser.Avatar }
         };
     }
 }

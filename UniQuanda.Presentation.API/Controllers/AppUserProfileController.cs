@@ -72,8 +72,8 @@ public class AppUserProfileController : ControllerBase
 
         return result.UpdateStatus switch
         {
-            AppUserProfileUpdateStatusEnum.ContentNotExist => NotFound(),
-            AppUserProfileUpdateStatusEnum.Successful => Ok(result),
+            AppUserProfileUpdateResultEnum.ContentNotExist => NotFound(),
+            AppUserProfileUpdateResultEnum.Successful => Ok(result),
             _ => Conflict(result)
         };
     }

@@ -55,7 +55,7 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.Successful);
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateResultEnum.Successful);
             result.AvatarUrl.Should().NotBeNull();
         }
 
@@ -75,7 +75,7 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.Successful);
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateResultEnum.Successful);
             result.AvatarUrl.Should().NotBeNull();
         }
 
@@ -95,7 +95,7 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.Successful);
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateResultEnum.Successful);
             result.AvatarUrl.Should().BeNull();
         }
 
@@ -114,7 +114,7 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.Successful);
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateResultEnum.Successful);
             result.AvatarUrl.Should().BeNull();
         }
 
@@ -133,7 +133,7 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.UnSuccessful);
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateResultEnum.UnSuccessful);
             result.AvatarUrl.Should().BeNull();
         }
 
@@ -152,7 +152,7 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.ContentNotExist);
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateResultEnum.ContentNotExist);
             result.AvatarUrl.Should().BeNull();
         }
 
@@ -166,7 +166,7 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.NickNameIsUsed);
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateResultEnum.NickNameIsUsed);
             result.AvatarUrl.Should().BeNull();
         }
 
@@ -180,7 +180,7 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.ContentNotExist);
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateResultEnum.ContentNotExist);
             result.AvatarUrl.Should().BeNull();
         }
 
@@ -197,7 +197,7 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.UnSuccessful);
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateResultEnum.UnSuccessful);
             result.AvatarUrl.Should().BeNull();
         }
 
@@ -214,7 +214,7 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.UnSuccessful);
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateResultEnum.UnSuccessful);
             result.AvatarUrl.Should().BeNull();
         }
 
