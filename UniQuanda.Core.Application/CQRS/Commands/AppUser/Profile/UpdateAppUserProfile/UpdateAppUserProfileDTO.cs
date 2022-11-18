@@ -36,12 +36,18 @@ public class UpdateAppUserProfileRequestDTO
     [ImageUploadValidator("Avatar")]
     public IFormFile? Avatar { get; set; }
 
+    [Required]
+    public bool IsNewAvatar { get; set; }
+
     [ImageUploadValidator("Banner")]
     public IFormFile? Banner { get; set; }
+
+    [Required]
+    public bool IsNewBanner { get; set; }
 }
 
 public class UpdateAppUserProfileResponseDTO
 {
-    public AppUserUpdateStatusEnum AppUserUpdateStatus { get; set; }
+    public AppUserProfileUpdateStatusEnum UpdateStatus { get; set; }
     public string? AvatarUrl { get; set; }
 }

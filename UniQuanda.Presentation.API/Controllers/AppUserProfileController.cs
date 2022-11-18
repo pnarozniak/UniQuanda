@@ -57,10 +57,9 @@ public class AppUserProfileController : ControllerBase
     /// <summary>
     ///     Update AppUser profile settings in Db
     /// </summary>
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UpdateAppUserProfileResponseDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(UpdateAppUserProfileResponseDTO))]
     [HttpPut("settings")]
     [RequestSizeLimit(21 * (int)ByteSizeEnum.MegaByte)]
     [Authorize(Roles = "user")]
@@ -70,12 +69,12 @@ public class AppUserProfileController : ControllerBase
     {
         var command = new UpdateAppUserProfileCommand(request, User.GetId()!.Value);
         var result = await _mediator.Send(command, ct);
-        return result.AppUserUpdateStatus switch
+
+        return result.UpdateStatus switch
         {
-            AppUserUpdateStatusEnum.AppUserNotExist => NotFound(),
-            AppUserUpdateStatusEnum.NickNameIsUsed => Conflict(new { isNickNameUsed = true }),
-            AppUserUpdateStatusEnum.NotSuccessful => Conflict(new { isNickNameUsed = false }),
-            AppUserUpdateStatusEnum.Successful => Ok(new { avatarUrl = result.AvatarUrl })
+            AppUserProfileUpdateStatusEnum.ContentNotExist => NotFound(),
+            AppUserProfileUpdateStatusEnum.Successful => Ok(result),
+            _ => Conflict(result)
         };
     }
 }

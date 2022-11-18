@@ -9,7 +9,6 @@ using UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProf
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Domain.Enums;
-using UniQuanda.Core.Domain.Utils;
 
 namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
 {
@@ -21,159 +20,205 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
         private Mock<IAppUserRepository> appUserRepository;
         private Mock<IImageService> imageService;
 
-        private readonly int _idAppUser = 1;
-        private readonly string _avatarUrl = "AvatarUrl";
+        private const int IdAppUser = 1;
+        private const string ImageUrl = "https://ImageUrl";
+        private static readonly string _avatarName = $"avatar-{IdAppUser}";
+        private static readonly string _bannerName = $"banner-{IdAppUser}";
+
         [SetUp]
         public void SetupTests()
         {
             this.appUserRepository = new Mock<IAppUserRepository>();
             this.imageService = new Mock<IImageService>();
+
+            this.imageService
+                .Setup(i => i.GetImageURL())
+                .Returns(ImageUrl);
+
             this.updateAppUserProfileHandler = new UpdateAppUserProfileHandler(this.appUserRepository.Object, this.imageService.Object);
         }
 
         [Test]
         public async Task UpdateAppUserProfile_ShouldReturnStatusAsSuccessful_WhenUpdateIsSuccessfulAndContainsAvatarAndBanner()
         {
-            var avatar = GetImage("png");
-            var banner = GetImage("png");
-            var newAppUserData = GetNewAppUserData(avatar, banner);
-            this.updateAppUserProfileCommand = new UpdateAppUserProfileCommand(newAppUserData, _idAppUser);
+            var isNewAvatar = true;
+            var isNewBanner = true;
+            this.SetUpdateAppUserProfileCommand(isNewAvatar, isNewBanner);
             this.appUserRepository
-                .Setup(ar => ar.IsNicknameUsedAsync(_idAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
+                .Setup(ar => ar.IsNicknameUsedAsync(IdAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
                 .ReturnsAsync(false);
+            this.SetSaveImage(_avatarName, true);
+            this.SetSaveImage(_bannerName, true);
             this.appUserRepository
-                .Setup(a => a.UpdateAppUserAsync(updateAppUserProfileCommand.AppUser, CancellationToken.None))
-                .ReturnsAsync(GetAppUserProfileUpdateResult(true, this._avatarUrl));
+                .Setup(a => a.UpdateAppUserAsync(updateAppUserProfileCommand.AppUser, isNewAvatar, isNewBanner, CancellationToken.None))
+                .ReturnsAsync(true);
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.AppUserUpdateStatus.Should().Be(AppUserUpdateStatusEnum.Successful);
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.Successful);
             result.AvatarUrl.Should().NotBeNull();
         }
 
         [Test]
         public async Task UpdateAppUserProfile_ShouldReturnStatusAsSuccessful_WhenUpdateIsSuccessfulAndContainsAvatar()
         {
-            var avatar = GetImage("png");
-            var newAppUserData = GetNewAppUserData(avatar, null);
-            this.updateAppUserProfileCommand = new UpdateAppUserProfileCommand(newAppUserData, _idAppUser);
+            var isNewAvatar = true;
+            var isNewBanner = false;
+            this.SetUpdateAppUserProfileCommand(isNewAvatar, isNewBanner);
             this.appUserRepository
-                .Setup(ar => ar.IsNicknameUsedAsync(_idAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
+                .Setup(ar => ar.IsNicknameUsedAsync(IdAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
                 .ReturnsAsync(false);
+            this.SetSaveImage(_avatarName, true);
             this.appUserRepository
-                .Setup(a => a.UpdateAppUserAsync(updateAppUserProfileCommand.AppUser, CancellationToken.None))
-                .ReturnsAsync(GetAppUserProfileUpdateResult(true, this._avatarUrl));
+                .Setup(a => a.UpdateAppUserAsync(updateAppUserProfileCommand.AppUser, isNewAvatar, isNewBanner, CancellationToken.None))
+                .ReturnsAsync(true);
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.AppUserUpdateStatus.Should().Be(AppUserUpdateStatusEnum.Successful);
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.Successful);
             result.AvatarUrl.Should().NotBeNull();
         }
 
         [Test]
         public async Task UpdateAppUserProfile_ShouldReturnStatusAsSuccessful_WhenUpdateIsSuccessfulAndContainsBanner()
         {
-            var banner = GetImage("png");
-            var newAppUserData = GetNewAppUserData(null, banner);
-            this.updateAppUserProfileCommand = new UpdateAppUserProfileCommand(newAppUserData, _idAppUser);
+            var isNewAvatar = false;
+            var isNewBanner = true;
+            this.SetUpdateAppUserProfileCommand(isNewAvatar, isNewBanner);
             this.appUserRepository
-                .Setup(ar => ar.IsNicknameUsedAsync(_idAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
+                .Setup(ar => ar.IsNicknameUsedAsync(IdAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
                 .ReturnsAsync(false);
+            this.SetSaveImage(_bannerName, true);
             this.appUserRepository
-                .Setup(a => a.UpdateAppUserAsync(updateAppUserProfileCommand.AppUser, CancellationToken.None))
-                .ReturnsAsync(GetAppUserProfileUpdateResult(true, null));
+                .Setup(a => a.UpdateAppUserAsync(updateAppUserProfileCommand.AppUser, isNewAvatar, isNewBanner, CancellationToken.None))
+                .ReturnsAsync(true);
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.AppUserUpdateStatus.Should().Be(AppUserUpdateStatusEnum.Successful);
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.Successful);
             result.AvatarUrl.Should().BeNull();
         }
 
         [Test]
         public async Task UpdateAppUserProfile_ShouldReturnStatusAsSuccessful_WhenUpdateIsSuccessfulAndNotContainsAvatarAndBanner()
         {
-            var newAppUserData = GetNewAppUserData(null, null);
-            this.updateAppUserProfileCommand = new UpdateAppUserProfileCommand(newAppUserData, _idAppUser);
+            var isNewAvatar = false;
+            var isNewBanner = false;
+            this.SetUpdateAppUserProfileCommand(isNewAvatar, isNewBanner);
             this.appUserRepository
-                .Setup(ar => ar.IsNicknameUsedAsync(_idAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
+                .Setup(ar => ar.IsNicknameUsedAsync(IdAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
                 .ReturnsAsync(false);
             this.appUserRepository
-                .Setup(a => a.UpdateAppUserAsync(updateAppUserProfileCommand.AppUser, CancellationToken.None))
-                .ReturnsAsync(GetAppUserProfileUpdateResult(true, null));
+                .Setup(a => a.UpdateAppUserAsync(updateAppUserProfileCommand.AppUser, isNewAvatar, isNewBanner, CancellationToken.None))
+                .ReturnsAsync(true);
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.AppUserUpdateStatus.Should().Be(AppUserUpdateStatusEnum.Successful);
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.Successful);
             result.AvatarUrl.Should().BeNull();
         }
 
         [Test]
-        public async Task UpdateAppUserProfile_ShouldReturnStatusAsNotSuccessful_WhenUpdateAppUserIsNotSuccessful()
+        public async Task UpdateAppUserProfile_ShouldReturnStatusAsUnSuccessful_WhenUpdateAppUserIsNotSuccessful()
         {
-            var newAppUserData = GetNewAppUserData(null, null);
-            this.updateAppUserProfileCommand = new UpdateAppUserProfileCommand(newAppUserData, _idAppUser);
+            var isNewAvatar = false;
+            var isNewBanner = false;
+            this.SetUpdateAppUserProfileCommand(isNewAvatar, isNewBanner);
             this.appUserRepository
-                .Setup(ar => ar.IsNicknameUsedAsync(_idAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
+                .Setup(ar => ar.IsNicknameUsedAsync(IdAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
                 .ReturnsAsync(false);
             this.appUserRepository
-                .Setup(a => a.UpdateAppUserAsync(updateAppUserProfileCommand.AppUser, CancellationToken.None))
-                .ReturnsAsync(GetAppUserProfileUpdateResult(false, null));
+                .Setup(a => a.UpdateAppUserAsync(updateAppUserProfileCommand.AppUser, isNewAvatar, isNewBanner, CancellationToken.None))
+                .ReturnsAsync(false);
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.AppUserUpdateStatus.Should().Be(AppUserUpdateStatusEnum.NotSuccessful);
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.UnSuccessful);
             result.AvatarUrl.Should().BeNull();
         }
 
         [Test]
         public async Task UpdateAppUserProfile_ShouldReturnStatusAsAppUserNotExist_WhenAppUserIsNotFound()
         {
-            var newAppUserData = GetNewAppUserData(null, null);
-            this.updateAppUserProfileCommand = new UpdateAppUserProfileCommand(newAppUserData, _idAppUser);
+            var isNewAvatar = false;
+            var isNewBanner = false;
+            this.SetUpdateAppUserProfileCommand(isNewAvatar, isNewBanner);
             this.appUserRepository
-                .Setup(ar => ar.IsNicknameUsedAsync(_idAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
+                .Setup(ar => ar.IsNicknameUsedAsync(IdAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
                 .ReturnsAsync(false);
             this.appUserRepository
-                .Setup(a => a.UpdateAppUserAsync(updateAppUserProfileCommand.AppUser, CancellationToken.None))
-                .ReturnsAsync(GetAppUserProfileUpdateResult(null, null));
+                .Setup(a => a.UpdateAppUserAsync(updateAppUserProfileCommand.AppUser, isNewAvatar, isNewBanner, CancellationToken.None))
+                .ReturnsAsync((bool?)null);
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.AppUserUpdateStatus.Should().Be(AppUserUpdateStatusEnum.AppUserNotExist);
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.ContentNotExist);
             result.AvatarUrl.Should().BeNull();
         }
 
         [Test]
         public async Task UpdateAppUserProfile_ShouldReturnStatusAsNickNameIsUsed_WhenNickNameIsUsed()
         {
-            var newAppUserData = GetNewAppUserData(null, null);
-            this.updateAppUserProfileCommand = new UpdateAppUserProfileCommand(newAppUserData, _idAppUser);
+            this.SetUpdateAppUserProfileCommand(false, false);
             this.appUserRepository
-                .Setup(ar => ar.IsNicknameUsedAsync(_idAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
+                .Setup(ar => ar.IsNicknameUsedAsync(IdAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
                 .ReturnsAsync(true);
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.AppUserUpdateStatus.Should().Be(AppUserUpdateStatusEnum.NickNameIsUsed);
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.NickNameIsUsed);
             result.AvatarUrl.Should().BeNull();
         }
 
         [Test]
         public async Task UpdateAppUserProfile_ShouldReturnStatusAsNickNameIsUsed_WhenCheckIfNickNameIsUsedNotFindUser()
         {
-            var newAppUserData = GetNewAppUserData(null, null);
-            this.updateAppUserProfileCommand = new UpdateAppUserProfileCommand(newAppUserData, _idAppUser);
+            this.SetUpdateAppUserProfileCommand(false, false);
             this.appUserRepository
-                .Setup(ar => ar.IsNicknameUsedAsync(_idAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
+                .Setup(ar => ar.IsNicknameUsedAsync(IdAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
                 .ReturnsAsync((bool?)null);
 
             var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
 
-            result.AppUserUpdateStatus.Should().Be(AppUserUpdateStatusEnum.AppUserNotExist);
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.ContentNotExist);
             result.AvatarUrl.Should().BeNull();
         }
 
-        private static UpdateAppUserProfileRequestDTO GetNewAppUserData(IFormFile? avatar, IFormFile? banner)
+        [Test]
+        public async Task UpdateAppUserProfile_ShouldReturnUnSuccessful_WhenAvatarSaveIsNotSuccessful()
+        {
+            var isNewAvatar = true;
+            var isNewBanner = false;
+            this.SetUpdateAppUserProfileCommand(isNewAvatar, isNewBanner);
+            this.appUserRepository
+                .Setup(ar => ar.IsNicknameUsedAsync(IdAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
+                .ReturnsAsync(false);
+            this.SetSaveImage(_avatarName, false);
+
+            var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
+
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.UnSuccessful);
+            result.AvatarUrl.Should().BeNull();
+        }
+
+        [Test]
+        public async Task UpdateAppUserProfile_ShouldReturnUnSuccessful_WhenBannerSaveIsNotSuccessful()
+        {
+            var isNewAvatar = false;
+            var isNewBanner = true;
+            this.SetUpdateAppUserProfileCommand(isNewAvatar, isNewBanner);
+            this.appUserRepository
+                .Setup(ar => ar.IsNicknameUsedAsync(IdAppUser, updateAppUserProfileCommand.AppUser.Nickname, CancellationToken.None))
+                .ReturnsAsync(false);
+            this.SetSaveImage(_bannerName, false);
+
+            var result = await updateAppUserProfileHandler.Handle(this.updateAppUserProfileCommand, CancellationToken.None);
+
+            result.UpdateStatus.Should().Be(AppUserProfileUpdateStatusEnum.UnSuccessful);
+            result.AvatarUrl.Should().BeNull();
+        }
+
+        private static UpdateAppUserProfileRequestDTO GetNewAppUserData(IFormFile? avatar, IFormFile? banner, bool isNewAvatar, bool isNewBanner)
         {
             return new UpdateAppUserProfileRequestDTO
             {
@@ -186,8 +231,18 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
                 PhoneNumber = "PhoneNumber",
                 SemanticScholarProfile = "SemanticScholarProfile",
                 Avatar = avatar,
-                Banner = banner
+                IsNewAvatar = isNewAvatar,
+                Banner = banner,
+                IsNewBanner = isNewBanner,
             };
+        }
+
+        private void SetUpdateAppUserProfileCommand(bool isNewAvatar, bool isNewBanner)
+        {
+            IFormFile? avatar = isNewAvatar ? GetImage("png") : null;
+            IFormFile? banner = isNewBanner ? GetImage("png") : null;
+            var newAppUserData = GetNewAppUserData(avatar, banner, isNewAvatar, isNewBanner);
+            this.updateAppUserProfileCommand = new UpdateAppUserProfileCommand(newAppUserData, IdAppUser);
         }
 
         private static IFormFile GetImage(string contentType)
@@ -197,13 +252,11 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
             return file.Object;
         }
 
-        private static AppUserUpdateResult GetAppUserProfileUpdateResult(bool? isSuccessful, string? avatarUrl)
+        private void SetSaveImage(string imageName, bool result)
         {
-            return new AppUserUpdateResult
-            {
-                IsSuccessful = isSuccessful,
-                AvatarUrl = avatarUrl
-            };
+            this.imageService
+                .Setup(i => i.SaveImageAsync(It.IsAny<IFormFile>(), imageName, It.IsAny<ImageFolder>(), CancellationToken.None))
+                .ReturnsAsync(result);
         }
     }
 }
