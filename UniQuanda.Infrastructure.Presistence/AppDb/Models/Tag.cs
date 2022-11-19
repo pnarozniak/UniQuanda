@@ -4,6 +4,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Models;
 
 public class Tag
 {
+    public Tag() { }
     public int Id { get; set; }
     public bool IsDeleted { get; set; }
     public int? ParentTagId { get; set; }

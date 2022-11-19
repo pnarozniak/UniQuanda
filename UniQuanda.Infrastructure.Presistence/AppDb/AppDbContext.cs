@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds;
 using UniQuanda.Infrastructure.Presistence.AppDb.EfConfigurations;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 using UniQuanda.Infrastructure.Presistence.AuthDb.Models;
@@ -54,5 +55,8 @@ public class AppDbContext : DbContext
         modelBuilder.HasPostgresEnum<ReportCategoryEnum>();
 
         modelBuilder.ApplyConfiguration(new ReportTypeDataSeed());
+        modelBuilder.ApplyConfiguration(new AcademicTitleDataSeed());
+        modelBuilder.ApplyConfiguration(new UniversitiesDataSeed());
+        modelBuilder.ApplyConfiguration(new TagDataSeed());
     }
 }

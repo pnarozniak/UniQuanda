@@ -58,7 +58,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Tags.GetTags
         private async Task<GetTagsResponseDTO> GetSubTagsAsync(GetTagsQuery request, CancellationToken ct)
         {
             int? count = request.AddCount ? await this._tagRepository.GetSubTagsCountAsync(request.TagId ?? 0, ct) : null;
-            var parentTag = request.AddParentTagData ?? false ? await this._tagRepository.GetTagById(request.TagId ?? 0, ct) : null;
+            var parentTag = request.AddParentTagData ?? false ? await this._tagRepository.GetTagByIdAsync(request.TagId ?? 0, ct) : null;
             return new()
             {
                 Tags = (await _tagRepository
@@ -107,7 +107,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Tags.GetTags
         private async Task<GetTagsResponseDTO> GetSubTagsByKeywordAsync(GetTagsQuery request, CancellationToken ct)
         {
             int? count = request.AddCount ? await this._tagRepository.GetSubTagsByKeywordCountAsync(request.Keyword, request.TagId ?? 0, ct) : null;
-            var parentTag = request.AddParentTagData ?? false ? await this._tagRepository.GetTagById(request.TagId ?? 0, ct) : null;
+            var parentTag = request.AddParentTagData ?? false ? await this._tagRepository.GetTagByIdAsync(request.TagId ?? 0, ct) : null;
             return new()
             {
                 Tags = (await _tagRepository

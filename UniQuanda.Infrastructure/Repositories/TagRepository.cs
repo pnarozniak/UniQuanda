@@ -72,7 +72,7 @@ namespace UniQuanda.Infrastructure.Repositories
                 .CountAsync(ct);
         }
 
-        public async Task<TagEntity?> GetTagById(int tagId, CancellationToken ct)
+        public async Task<TagEntity?> GetTagByIdAsync(int tagId, CancellationToken ct)
         {
             return await _context.Tags
                 .Where(t => t.Id == tagId)

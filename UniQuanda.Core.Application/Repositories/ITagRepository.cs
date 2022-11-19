@@ -87,6 +87,6 @@ namespace UniQuanda.Core.Application.Repositories
         /// <param name="tagId">Id of tag</param>
         /// <param name="ct"></param>
         /// <returns>Cancelation token</returns>
-        public Task<TagEntity> GetTagById(int tagId, CancellationToken ct);
+        public Task<TagEntity> GetTagByIdAsync(int tagId, CancellationToken ct);
     }
 }

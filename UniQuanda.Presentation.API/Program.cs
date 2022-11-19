@@ -4,7 +4,6 @@ using System.Reflection;
 using UniQuanda.Infrastructure;
 using UniQuanda.Infrastructure.Presistence;
 using UniQuanda.Presentation.API.Extensions;
-using UniQuanda.Presentation.API.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +37,6 @@ builder.Services.AddSwaggerGen(c =>
             new string[] { }
         }
     });
-    c.SchemaFilter<EnumSchemaFilter>();
     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
 
     var assemblies = AppDomain.CurrentDomain.GetAssemblies()
