@@ -5,6 +5,7 @@ using UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProf
 using UniQuanda.Core.Application.CQRS.Queries.AppUser.Profile.GetAppUserProfileSettings;
 using UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile;
 using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Enums.Results;
 using UniQuanda.Presentation.API.Extensions;
 
 namespace UniQuanda.Presentation.API.Controllers;

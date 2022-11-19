@@ -2,6 +2,7 @@
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Enums.Results;
 using UniQuanda.Core.Domain.ValueObjects;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;

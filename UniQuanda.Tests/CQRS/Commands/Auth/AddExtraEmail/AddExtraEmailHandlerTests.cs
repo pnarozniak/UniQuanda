@@ -10,7 +10,7 @@ using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Entities.Auth;
-using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Enums.Results;
 using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Tests.CQRS.Commands.Auth.AddExtraEmail;
@@ -52,7 +52,7 @@ public class AddExtraEmailHandlerTests
     }
 
     [Test]
-    public async Task AddExtraEmail_ShouldReturnResultEnumSuccessful_WhenCallIsValid()
+    public async Task AddExtraEmail_ShouldReturnActionResultSuccessful_WhenCallIsValid()
     {
         this.SetupAddExtraEmailCommand();
         var userSecurityEntity = GetUserSecurityEntity();
@@ -61,11 +61,11 @@ public class AddExtraEmailHandlerTests
 
         var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.Successful);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.Successful);
     }
 
     [Test]
-    public async Task AddExtraEmail_ShouldReturnResultEnumContentNotExist_WhenUserNotExists()
+    public async Task AddExtraEmail_ShouldReturnActionResultContentNotExist_WhenUserNotExists()
     {
         this.SetupAddExtraEmailCommand();
         this.authRepository
@@ -74,11 +74,11 @@ public class AddExtraEmailHandlerTests
 
         var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.ContentNotExist);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.ContentNotExist);
     }
 
     [Test]
-    public async Task AddExtraEmail_ShouldReturnResultEnumInvalidPassword_WhenGivenPasswordIsInvalid()
+    public async Task AddExtraEmail_ShouldReturnActionResultInvalidPassword_WhenGivenPasswordIsInvalid()
     {
         this.SetupAddExtraEmailCommand("InvalidPassword");
         var userSecurityEntity = GetUserSecurityEntity();
@@ -91,11 +91,11 @@ public class AddExtraEmailHandlerTests
 
         var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.InvalidPassword);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.InvalidPassword);
     }
 
     [Test]
-    public async Task AddExtraEmail_ShouldReturnResultEnumEmailNotAvailable_WhenEmailIsNotAvailable()
+    public async Task AddExtraEmail_ShouldReturnActionResultEmailNotAvailable_WhenEmailIsNotAvailable()
     {
         this.SetupAddExtraEmailCommand(PlainPassword, ExtraUserEmail);
         var userSecurityEntity = GetUserSecurityEntity();
@@ -106,11 +106,11 @@ public class AddExtraEmailHandlerTests
 
         var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.EmailNotAvailable);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.EmailNotAvailable);
     }
 
     [Test]
-    public async Task AddExtraEmail_ShouldReturnResultEnumOverLimitOfExtraEmails_WhenUserHasAlready3ExtraEmails()
+    public async Task AddExtraEmail_ShouldReturnActionResultOverLimitOfExtraEmails_WhenUserHasAlready3ExtraEmails()
     {
         this.SetupAddExtraEmailCommand();
         var userSecurityEntity = GetUserSecurityEntity();
@@ -120,11 +120,11 @@ public class AddExtraEmailHandlerTests
 
         var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.OverLimitOfExtraEmails);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.OverLimitOfExtraEmails);
     }
 
     [Test]
-    public async Task AddExtraEmail_ShouldReturnResultEnumContentNotExists_WhenCheckOnIsUserAllowedIsUserNotExists()
+    public async Task AddExtraEmail_ShouldReturnActionResultContentNotExists_WhenCheckOnIsUserAllowedIsUserNotExists()
     {
         this.SetupAddExtraEmailCommand();
         var userSecurityEntity = GetUserSecurityEntity();
@@ -133,11 +133,11 @@ public class AddExtraEmailHandlerTests
 
         var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.ContentNotExist);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.ContentNotExist);
     }
 
     [Test]
-    public async Task AddExtraEmail_ShouldReturnResultEnumUserHasActionToConfirm_WhenUserHasOtherActionToConfirm()
+    public async Task AddExtraEmail_ShouldReturnActionResultUserHasActionToConfirm_WhenUserHasOtherActionToConfirm()
     {
         this.SetupAddExtraEmailCommand();
         var userSecurityEntity = GetUserSecurityEntity();
@@ -146,11 +146,11 @@ public class AddExtraEmailHandlerTests
 
         var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.UserHasActionToConfirm);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.UserHasActionToConfirm);
     }
 
     [Test]
-    public async Task AddExtraEmail_ShouldReturnResultEnumDbConflict_WhenAddExtraEmailIsNotSuccessful()
+    public async Task AddExtraEmail_ShouldReturnActionResultDbConflict_WhenAddExtraEmailIsNotSuccessful()
     {
         this.SetupAddExtraEmailCommand();
         var userSecurityEntity = GetUserSecurityEntity();
@@ -159,11 +159,11 @@ public class AddExtraEmailHandlerTests
 
         var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.DbConflict);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.UnSuccessful);
     }
 
     [Test]
-    public async Task AddExtraEmail_ShouldReturnResultEnumContentNotExist_WhenAddExtraEmailNotExists()
+    public async Task AddExtraEmail_ShouldReturnActionResultContentNotExist_WhenAddExtraEmailNotExists()
     {
         this.SetupAddExtraEmailCommand();
         var userSecurityEntity = GetUserSecurityEntity();
@@ -172,7 +172,7 @@ public class AddExtraEmailHandlerTests
 
         var result = await addExtraEmailHandler.Handle(this.addExtraEmailCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.ContentNotExist);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.ContentNotExist);
     }
 
     private void SetupEmailConfirmationToken()
