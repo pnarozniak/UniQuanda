@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using UniQuanda.Core.Domain.Enums.Results;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateMainEmail;
 

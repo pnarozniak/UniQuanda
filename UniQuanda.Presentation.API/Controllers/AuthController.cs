@@ -17,11 +17,9 @@ using UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateMainEmail;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.UpdatePassword;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.GetUserEmails;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.IsEmailAndNicknameAvailable;
-using UniQuanda.Core.Domain.Enums;
-using UniQuanda.Infrastructure.Enums;
+using UniQuanda.Core.Domain.Enums.Results;
 using UniQuanda.Presentation.API.Attributes;
 using UniQuanda.Presentation.API.Extensions;
-using UniQuanda.Presentation.API.Utils;
 
 namespace UniQuanda.Presentation.API.Controllers;
 
@@ -189,20 +187,18 @@ public class AuthController : ControllerBase
     [Recaptcha]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
+    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(UpdateMainEmailResponseDTO))]
     [HttpPut("update-main-email")]
     [Authorize(Roles = "user")]
     public async Task<IActionResult> UpdateUserMainEmail([FromBody] UpdateMainEmailRequestDTO request, CancellationToken ct)
     {
         var command = new UpdateMainEmailCommand(request, User.GetId()!.Value);
         var result = await _mediator.Send(command, ct);
-        return result switch
+        return result.ActionResult switch
         {
-            UpdateSecurityResultEnum.ContentNotExist => NotFound(),
-            UpdateSecurityResultEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
-            UpdateSecurityResultEnum.EmailNotAvailable => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.EmailNotAvailable }),
-            UpdateSecurityResultEnum.DbConflict => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
-            UpdateSecurityResultEnum.Successful => NoContent()
+            AppUserSecurityActionResultEnum.Successful => NoContent(),
+            AppUserSecurityActionResultEnum.ContentNotExist => NotFound(),
+            _ => Conflict(result)
         };
     }
 
@@ -212,22 +208,18 @@ public class AuthController : ControllerBase
     [Recaptcha]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
+    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AddExtraEmailResponseDTO))]
     [HttpPost("add-extra-email")]
     [Authorize(Roles = "user")]
     public async Task<IActionResult> AddExtraEmail([FromBody] AddExtraEmailRequestDTO request, CancellationToken ct)
     {
         var command = new AddExtraEmailCommand(request, User.GetId()!.Value);
         var result = await _mediator.Send(command, ct);
-        return result switch
+        return result.ActionResult switch
         {
-            UpdateSecurityResultEnum.ContentNotExist => NotFound(),
-            UpdateSecurityResultEnum.EmailNotAvailable => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.EmailNotAvailable }),
-            UpdateSecurityResultEnum.OverLimitOfExtraEmails => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.OverLimitOfExtraEmails }),
-            UpdateSecurityResultEnum.UserHasActionToConfirm => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.UserHasActionToConfirm }),
-            UpdateSecurityResultEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
-            UpdateSecurityResultEnum.DbConflict => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
-            UpdateSecurityResultEnum.Successful => NoContent()
+            AppUserSecurityActionResultEnum.Successful => NoContent(),
+            AppUserSecurityActionResultEnum.ContentNotExist => NotFound(),
+            _ => Conflict(result)
         };
     }
 
@@ -237,19 +229,18 @@ public class AuthController : ControllerBase
     [Recaptcha]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
+    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(UpdatePasswordResponseDTO))]
     [HttpPut("update-user-password")]
     [Authorize(Roles = "user")]
     public async Task<IActionResult> UpdateUserPassword([FromBody] UpdatePasswordRequestDTO request, CancellationToken ct)
     {
         var command = new UpdatePasswordCommand(request, User.GetId()!.Value);
         var result = await _mediator.Send(command, ct);
-        return result switch
+        return result.ActionResult switch
         {
-            UpdateSecurityResultEnum.ContentNotExist => NotFound(),
-            UpdateSecurityResultEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
-            UpdateSecurityResultEnum.DbConflict => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
-            UpdateSecurityResultEnum.Successful => NoContent()
+            AppUserSecurityActionResultEnum.Successful => NoContent(),
+            AppUserSecurityActionResultEnum.ContentNotExist => NotFound(),
+            _ => Conflict(result)
         };
     }
 
@@ -259,19 +250,18 @@ public class AuthController : ControllerBase
     [Recaptcha]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
+    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(DeleteExtraEmailResponseDTO))]
     [HttpPost("delete-extra-email")]
     [Authorize(Roles = "user")]
     public async Task<IActionResult> DeleteExtraEmail([FromBody] DeleteExtraEmailRequestDTO request, CancellationToken ct)
     {
         var command = new DeleteExtraEmailCommand(request, User.GetId()!.Value);
         var result = await _mediator.Send(command, ct);
-        return result switch
+        return result.ActionResult switch
         {
-            UpdateSecurityResultEnum.ContentNotExist => NotFound(),
-            UpdateSecurityResultEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
-            UpdateSecurityResultEnum.DbConflict => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
-            UpdateSecurityResultEnum.Successful => NoContent()
+            AppUserSecurityActionResultEnum.ContentNotExist => NotFound(),
+            AppUserSecurityActionResultEnum.Successful => NoContent(),
+            _ => Conflict(result)
         };
     }
 

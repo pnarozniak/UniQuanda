@@ -9,6 +9,7 @@ using UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProf
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Enums.Results;
 
 namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
 {

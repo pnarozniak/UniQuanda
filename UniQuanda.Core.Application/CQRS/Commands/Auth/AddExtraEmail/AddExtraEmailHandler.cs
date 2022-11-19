@@ -65,9 +65,9 @@ public class AddExtraEmailHandler : IRequestHandler<AddExtraEmailCommand, AddExt
 
         return addResult switch
         {
-            null => new AddExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.ContentNotExist},
-            false => new AddExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.UnSuccessful},
-            true => new AddExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.Successful}
+            null => new AddExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.ContentNotExist },
+            false => new AddExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.UnSuccessful },
+            true => new AddExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.Successful }
         };
     }
 }
