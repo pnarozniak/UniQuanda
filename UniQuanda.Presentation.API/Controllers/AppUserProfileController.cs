@@ -47,10 +47,7 @@ public class AppUserProfileController : ControllerBase
     public async Task<IActionResult> GetAppUserProfileSettings(
         CancellationToken ct)
     {
-        var idAppUser = User.GetId();
-        if (idAppUser == null)
-            return Unauthorized();
-        var query = new GetAppUserProfileSettingsQuery(idAppUser.Value);
+        var query = new GetAppUserProfileSettingsQuery(User.GetId()!.Value);
         var appUserData = await _mediator.Send(query, ct);
         if (appUserData == null)
             return NotFound();
@@ -71,11 +68,7 @@ public class AppUserProfileController : ControllerBase
         [FromForm] UpdateAppUserProfileRequestDTO request,
         CancellationToken ct)
     {
-        var idAppUser = User.GetId();
-        if (idAppUser == null)
-            return Unauthorized();
-
-        var command = new UpdateAppUserProfileCommand(request, idAppUser.Value);
+        var command = new UpdateAppUserProfileCommand(request, User.GetId()!.Value);
         var result = await _mediator.Send(command, ct);
         return result.AppUserUpdateStatus switch
         {

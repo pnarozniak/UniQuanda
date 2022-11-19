@@ -30,7 +30,7 @@ namespace UniQuanda.Presentation.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetReportTypes(
             [FromQuery] GetReportTypesRequestDTO request,
-            CancellationToken ct) 
+            CancellationToken ct)
         {
             var query = new GetReportTypesQuery(request);
             var reportTypes = await _mediator.Send(query, ct);
@@ -41,12 +41,12 @@ namespace UniQuanda.Presentation.API.Controllers
         ///     Creates new report
         /// </summary>
         [Recaptcha]
-        [HttpPost] 
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> CreateReport(
             [FromBody] CreateReportRequestDTO request,
-            CancellationToken ct) 
+            CancellationToken ct)
         {
             var command = new CreateReportCommand(request, User.GetId().Value);
             var isCreated = await _mediator.Send(command, ct);

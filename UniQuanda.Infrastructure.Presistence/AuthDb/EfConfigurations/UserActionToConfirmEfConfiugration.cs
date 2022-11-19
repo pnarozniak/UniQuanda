@@ -17,6 +17,8 @@ public class UserActionToConfirmEfConfiguration : IEntityTypeConfiguration<UserA
 
         builder.Property(ua => ua.ActionType).IsRequired();
 
+        builder.Property(ua => ua.IdUserEmail).IsRequired(false);
+
         builder.HasOne(ua => ua.IdUserNavigation)
             .WithMany(u => u.ActionsToConfirm)
             .HasForeignKey(ua => ua.IdUser)

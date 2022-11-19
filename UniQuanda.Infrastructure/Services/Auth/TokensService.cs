@@ -87,13 +87,18 @@ public class TokensService : ITokensService
         {
             return null;
         }
-    
-        if (securityToken is not JwtSecurityToken jwt || jwt == null 
-            || !jwt.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,StringComparison.InvariantCultureIgnoreCase))
+
+        if (securityToken is not JwtSecurityToken jwt || jwt == null
+            || !jwt.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
             return null;
 
         var idUser = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var canParse = int.TryParse(idUser, out var parsedIdUser);
         return canParse ? parsedIdUser : null;
+    }
+
+    public string GenerateNewEmailConfirmationToken()
+    {
+        return Guid.NewGuid().ToString();
     }
 }

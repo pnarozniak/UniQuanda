@@ -47,8 +47,8 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.RecoverPassword
 
             authRepository
                     .Setup(ar => ar.CreateUserActionToConfirmAsync(
-                            It.IsAny<int>(), UserActionToConfirmEnum.RECOVER_PASSWORD,
-                            PasswordRecoveryToken, It.IsAny<DateTime>(), CancellationToken.None))
+                            It.IsAny<int>(), UserActionToConfirmEnum.RecoverPassword,
+                            PasswordRecoveryToken, It.IsAny<DateTime>(), null, CancellationToken.None))
                     .ReturnsAsync(true);
 
             recoverPasswordCommand = new RecoverPasswordCommand(new RecoverPasswordDTO() { Email = Email });
