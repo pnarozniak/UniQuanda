@@ -9,7 +9,7 @@ using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Entities.Auth;
-using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Enums.Results;
 using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Tests.CQRS.Commands.Auth.UpdatePassword;
@@ -54,7 +54,7 @@ public class UpdatePasswordHandlerTests
 
         var result = await updatePasswordHandler.Handle(this.updatePasswordCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.Successful);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.Successful);
     }
 
     [Test]
@@ -69,7 +69,7 @@ public class UpdatePasswordHandlerTests
 
         var result = await updatePasswordHandler.Handle(this.updatePasswordCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.ContentNotExist);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.ContentNotExist);
     }
 
     [Test]
@@ -84,7 +84,7 @@ public class UpdatePasswordHandlerTests
 
         var result = await updatePasswordHandler.Handle(this.updatePasswordCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.DbConflict);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.UnSuccessful);
     }
 
     [Test]
@@ -97,7 +97,7 @@ public class UpdatePasswordHandlerTests
 
         var result = await updatePasswordHandler.Handle(this.updatePasswordCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.ContentNotExist);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.ContentNotExist);
     }
 
     [Test]
@@ -114,7 +114,7 @@ public class UpdatePasswordHandlerTests
 
         var result = await updatePasswordHandler.Handle(this.updatePasswordCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.InvalidPassword);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.InvalidPassword);
     }
 
     private void SetupUpdatePasswordCommand(string oldPlainPassword = OldPlainPassword)
