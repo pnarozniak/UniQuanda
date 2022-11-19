@@ -20,7 +20,7 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                 .HasAnnotation("ProductVersion", "6.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "user_action_to_confirm_enum", new[] { "recover_password" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "user_action_to_confirm_enum", new[] { "recover_password", "new_main_email", "new_extra_email" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.UserActionToConfirm", b =>
@@ -44,9 +44,15 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                     b.Property<int>("IdUser")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("IdUserEmail")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IdUser");
+
+                    b.HasIndex("IdUserEmail")
+                        .IsUnique();
 
                     b.HasIndex("ActionType", "IdUser")
                         .IsUnique();
@@ -176,6 +182,13 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("UniQuanda.Infrastructure.Presistence.AuthDb.Models.UserEmail", "IdUserEmailNavigation")
+                        .WithOne("IdUserActionToConfirmNavigation")
+                        .HasForeignKey("UniQuanda.Infrastructure.Presistence.AppDb.Models.UserActionToConfirm", "IdUserEmail")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("IdUserEmailNavigation");
+
                     b.Navigation("IdUserNavigation");
                 });
 
@@ -208,6 +221,12 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                     b.Navigation("Emails");
 
                     b.Navigation("IdTempUserNavigation")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AuthDb.Models.UserEmail", b =>
+                {
+                    b.Navigation("IdUserActionToConfirmNavigation")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

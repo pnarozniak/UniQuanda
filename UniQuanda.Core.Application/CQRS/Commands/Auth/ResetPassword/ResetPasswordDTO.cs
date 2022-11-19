@@ -12,5 +12,5 @@ public class ResetPaswordDTO
     [MaxLength(320)]
     public string Email { get; set; }
 
-    [Required] [PasswordValidator] public string NewPassword { get; set; }
+    [Required][PasswordValidator] public string NewPassword { get; set; }
 }

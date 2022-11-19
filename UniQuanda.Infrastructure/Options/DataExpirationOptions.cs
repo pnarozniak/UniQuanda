@@ -8,9 +8,11 @@ public class DataExpirationOptions
     {
         var section = configuration.GetSection("DataExpiration");
         NewUserExpirationInHours = int.Parse(section["NewUserExpirationInHours"]);
-				RecoverPasswordActionExpirationInMinutes = int.Parse(section["RecoverPasswordActionExpirationInMinutes"]);
+        RecoverPasswordActionExpirationInMinutes = int.Parse(section["RecoverPasswordActionExpirationInMinutes"]);
+        EmailConfirmationExpirationInHours = int.Parse(section["EmailConfirmationExpirationInHours"]);
     }
 
     public int NewUserExpirationInHours { get; set; }
-		public int RecoverPasswordActionExpirationInMinutes { get; set; }
+    public int RecoverPasswordActionExpirationInMinutes { get; set; }
+    public int EmailConfirmationExpirationInHours { get; set; }
 }
