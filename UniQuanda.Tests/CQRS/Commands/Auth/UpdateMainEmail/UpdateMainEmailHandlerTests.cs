@@ -248,7 +248,7 @@ public class UpdateMainEmailHandlerTests
             NewMainEmail = newMainEmail,
             Password = plainPassword
         };
-        this.updateMainEmailCommand = new(updateMainEmailRequestDTO, IdUser, new UserAgentInfo{});
+        this.updateMainEmailCommand = new(updateMainEmailRequestDTO, IdUser, new UserAgentInfo { });
     }
 
     private static UserSecurityEntity GetUserSecurityEntity()

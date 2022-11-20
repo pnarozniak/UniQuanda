@@ -27,12 +27,12 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, bool>
         if (!isSuccess)
             return false;
 
-        if (isMainEmail) 
+        if (isMainEmail)
         {
             var newMainEmail = user.Emails.SingleOrDefault(e => e.IsMain)!.Value;
             await _emailService.SendEmailAboutUpdatedMainEmailAsync(oldMainEmail, newMainEmail, request.UserAgentInfo);
         }
-        else 
+        else
         {
             await _emailService.SendEmailAboutAddedNewExtraEmailAsync(oldMainEmail, request.Email, request.UserAgentInfo);
         }

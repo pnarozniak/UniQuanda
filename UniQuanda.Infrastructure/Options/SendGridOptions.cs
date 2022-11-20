@@ -52,7 +52,7 @@ public class TemplatesOptions
 
     public class AccountActionFinishedData
     {
-       public string Title { get; set; }
+        public string Title { get; set; }
         public string Subtitle { get; set; }
         public string UserAgentBrowser { get; set; }
         public string UserAgentOs { get; set; }

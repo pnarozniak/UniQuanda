@@ -21,10 +21,11 @@ public class SendGridService : IEmailService
     public async Task SendRegisterConfirmationEmailAsync(string to, string confirmationToken)
     {
         var templateId = _options.Templates.RegisterConfirmationId;
-        var templateData = new TemplatesOptions.RegisterConfirmationData {
+        var templateData = new TemplatesOptions.RegisterConfirmationData
+        {
             ConfirmationCode = confirmationToken,
             ConfirmationLink = $"{_uniQuandaClientOptions.Url}/public/confirm-registration?email={to}&code={confirmationToken}",
-            TermsAndConditionsLink =  $"{_uniQuandaClientOptions.Url}/public/terms-and-conditions",
+            TermsAndConditionsLink = $"{_uniQuandaClientOptions.Url}/public/terms-and-conditions",
         };
 
         await SendEmailAsync(to, templateId, templateData);
@@ -33,7 +34,8 @@ public class SendGridService : IEmailService
     public async Task SendPasswordRecoveryEmailAsync(string to, string recoveryToken, UserAgentInfo userAgentInfo)
     {
         var templateId = _options.Templates.AccountActionToConfirmId;
-        var templateData = new TemplatesOptions.AccountActionToConfirmData {
+        var templateData = new TemplatesOptions.AccountActionToConfirmData
+        {
             Title = "Ustaw nowe hasło",
             Subtitle = "Otrzymaliśmy prośbę o zmianę Twojego hasła. Możesz to zrobić, klikając w poniższy  przycisk:",
             ButtonLabel = "Zmień hasło",
@@ -49,7 +51,8 @@ public class SendGridService : IEmailService
     public async Task SendEmailAboutUpdatedPasswordAsync(string to, string nickname, UserAgentInfo userAgentInfo)
     {
         var templateId = _options.Templates.AccountActionFinishedId;
-        var templateData = new TemplatesOptions.AccountActionFinishedData {
+        var templateData = new TemplatesOptions.AccountActionFinishedData
+        {
             Title = "Hasło zostało zmienione",
             Subtitle = $"Hasło powiązane z twoim kontem <strong>\"{nickname}\"</strong> zostało zmienione.",
             UserAgentBrowser = userAgentInfo.Browser ?? "???",
@@ -60,10 +63,11 @@ public class SendGridService : IEmailService
         await SendEmailAsync(to, templateId, templateData);
     }
 
-    public async Task SendConfirmationEmailToAddNewExtraEmailAsync(string to, string nickname, string token, UserAgentInfo userAgentInfo) 
+    public async Task SendConfirmationEmailToAddNewExtraEmailAsync(string to, string nickname, string token, UserAgentInfo userAgentInfo)
     {
         var templateId = _options.Templates.AccountActionToConfirmId;
-        var templateData = new TemplatesOptions.AccountActionToConfirmData {
+        var templateData = new TemplatesOptions.AccountActionToConfirmData
+        {
             Title = "Dodaj dodatkowy adres e-mail",
             Subtitle = $"Otrzymaliśmy prośbę o dodanie tego adresu e-mail jako dodatkowego do konta: <strong>\"{nickname}\"</strong>. Możesz to zrobić, klikając w poniższy  przycisk:",
             ButtonLabel = "Dodaj dodatkowy e-mail",
@@ -79,7 +83,8 @@ public class SendGridService : IEmailService
     public async Task SendEmailAboutAddedNewExtraEmailAsync(string to, string newExtraEmail, UserAgentInfo userAgentInfo)
     {
         var templateId = _options.Templates.AccountActionFinishedId;
-        var templateData = new TemplatesOptions.AccountActionFinishedData {
+        var templateData = new TemplatesOptions.AccountActionFinishedData
+        {
             Title = "Dodatkowy e-mail został dodany do konta",
             Subtitle = $"Do twojego konta został przypisany nowy dodatkowy e-mail: <strong>\"{newExtraEmail}\"</strong>.",
             UserAgentBrowser = userAgentInfo.Browser ?? "???",
@@ -93,7 +98,8 @@ public class SendGridService : IEmailService
     public async Task SendEmailAboutDeletedExtraEmailAsync(string to, string extraEmail, UserAgentInfo userAgentInfo)
     {
         var templateId = _options.Templates.AccountActionFinishedId;
-        var templateData = new TemplatesOptions.AccountActionFinishedData {
+        var templateData = new TemplatesOptions.AccountActionFinishedData
+        {
             Title = "Dodatkowy e-mail został usunięty",
             Subtitle = $"Z Twojego konta został usunięty dodatkowy e-mail: <strong>\"{extraEmail}\"</strong>.",
             UserAgentBrowser = userAgentInfo.Browser ?? "???",
@@ -104,10 +110,11 @@ public class SendGridService : IEmailService
         await SendEmailAsync(to, templateId, templateData);
     }
 
-    public async Task SendConfirmationEmailToUpdateMainEmailAsync(string to, string nickname, string token, UserAgentInfo userAgentInfo) 
+    public async Task SendConfirmationEmailToUpdateMainEmailAsync(string to, string nickname, string token, UserAgentInfo userAgentInfo)
     {
         var templateId = _options.Templates.AccountActionToConfirmId;
-        var templateData = new TemplatesOptions.AccountActionToConfirmData {
+        var templateData = new TemplatesOptions.AccountActionToConfirmData
+        {
             Title = "Zmień główny adres e-mail",
             Subtitle = $"Otrzymaliśmy prośbę o zmianę twojego głównego adresu e-mail powiązanego z kontem: <strong>\"{nickname}\"</strong>. Możesz to zrobić, klikając w poniższy  przycisk:",
             ButtonLabel = "Zmień głowy e-mail",
@@ -119,11 +126,12 @@ public class SendGridService : IEmailService
 
         await SendEmailAsync(to, templateId, templateData);
     }
-    
+
     public async Task SendEmailAboutUpdatedMainEmailAsync(string to, string newMainEmail, UserAgentInfo userAgentInfo)
     {
         var templateId = _options.Templates.AccountActionFinishedId;
-        var templateData = new TemplatesOptions.AccountActionFinishedData {
+        var templateData = new TemplatesOptions.AccountActionFinishedData
+        {
             Title = "Twój główny e-mail został zmieniony",
             Subtitle = $"Główny e-mail powiązany z Twoim kontem został zmieniony. Teraz głównym e-mailem twojego konta jest: <strong>\"{newMainEmail}\"</strong>.",
             UserAgentBrowser = userAgentInfo.Browser ?? "???",

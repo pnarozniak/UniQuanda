@@ -42,7 +42,8 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
         if (request.IdExtraEmail != null)
         {
             updateResult = await UpdateUserMainEmailByExistingOne(request, ct);
-            if (updateResult == true) {
+            if (updateResult == true)
+            {
                 await _emailService.SendEmailAboutUpdatedMainEmailAsync(
                     user.Emails.SingleOrDefault(ue => ue.IsMain)!.Value, request.NewMainEmail!, request.UserAgentInfo);
             }

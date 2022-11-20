@@ -124,7 +124,7 @@ public class DeleteExtraEmailHandlerTests
             IdExtraEmail = IdExtraEmail,
             Password = plainPassword
         };
-        this.deleteExtraEmailCommand = new(deleteExtraEmailRequestDTO, IdUser, new UserAgentInfo{});
+        this.deleteExtraEmailCommand = new(deleteExtraEmailRequestDTO, IdUser, new UserAgentInfo { });
     }
 
     private static UserSecurityEntity GetUserSecurityEntity()

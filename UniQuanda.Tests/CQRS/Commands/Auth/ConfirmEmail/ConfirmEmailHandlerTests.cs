@@ -108,7 +108,7 @@ public class ConfirmEmailHandlerTests
             Email = Email,
             ConfirmationCode = ConfirmationCode
         };
-        this.confirmEmailCommand = new ConfirmEmailCommand(request, 1, new UserAgentInfo{});
+        this.confirmEmailCommand = new ConfirmEmailCommand(request, 1, new UserAgentInfo { });
     }
 
     private static UserSecurityEntity GetUserSecurityEntity()

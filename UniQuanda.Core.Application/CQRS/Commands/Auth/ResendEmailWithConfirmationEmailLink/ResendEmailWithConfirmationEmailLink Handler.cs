@@ -48,10 +48,13 @@ public class ResendEmailWithConfirmationEmailLinkHandler : IRequestHandler<Resen
         if (!isUpdateSuccessful) return false;
 
         var recipient = user.Emails.SingleOrDefault(u => u.Id == idEmail).Value;
-        if (actionType == UserActionToConfirmEnum.NewExtraEmail) {
+        if (actionType == UserActionToConfirmEnum.NewExtraEmail)
+        {
             await _emailService.SendConfirmationEmailToAddNewExtraEmailAsync(
                 recipient, user.Nickname, userEmailToConfirm.ConfirmationToken, request.UserAgentInfo);
-        } else {
+        }
+        else
+        {
             await _emailService.SendConfirmationEmailToUpdateMainEmailAsync(
                 recipient, user.Nickname, userEmailToConfirm.ConfirmationToken, request.UserAgentInfo);
         }

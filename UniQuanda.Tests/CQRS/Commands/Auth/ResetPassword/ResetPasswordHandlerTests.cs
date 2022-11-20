@@ -52,7 +52,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ResetPassword
                 Email = Email,
                 RecoveryToken = PasswordRecoveryToken,
                 NewPassword = NewPassword
-            }, new UserAgentInfo(){});
+            }, new UserAgentInfo() { });
             resetPasswordHandler = new ResetPasswordHandler(authRepository.Object, emailService.Object, passwordsService.Object);
         }
 

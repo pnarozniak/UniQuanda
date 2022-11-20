@@ -125,7 +125,7 @@ public class UpdatePasswordHandlerTests
             NewPassword = NewPlainPassword,
             OldPassword = oldPlainPassword
         };
-        this.updatePasswordCommand = new(updatePasswordRequestDTO, IdUser, new UserAgentInfo{});
+        this.updatePasswordCommand = new(updatePasswordRequestDTO, IdUser, new UserAgentInfo { });
     }
 
     private static UserSecurityEntity GetUserSecurityEntity()

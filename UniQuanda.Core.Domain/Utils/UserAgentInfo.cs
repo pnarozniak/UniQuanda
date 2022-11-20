@@ -1,8 +1,8 @@
-namespace UniQuanda.Core.Domain.Utils 
+namespace UniQuanda.Core.Domain.Utils
 {
-	public class UserAgentInfo
-	{
-			public string? Browser { get; set; }
-			public string? Os { get; set; }
-	}
+    public class UserAgentInfo
+    {
+        public string? Browser { get; set; }
+        public string? Os { get; set; }
+    }
 }

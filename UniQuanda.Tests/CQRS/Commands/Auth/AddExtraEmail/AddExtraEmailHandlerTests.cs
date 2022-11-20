@@ -197,7 +197,7 @@ public class AddExtraEmailHandlerTests
             NewExtraEmail = newExtraEmail,
             Password = plainPassword
         };
-        this.addExtraEmailCommand = new(addExtraEmailRequestDTO, IdUser, new UserAgentInfo{});
+        this.addExtraEmailCommand = new(addExtraEmailRequestDTO, IdUser, new UserAgentInfo { });
     }
 
     private static UserSecurityEntity GetUserSecurityEntity()

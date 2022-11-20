@@ -47,7 +47,7 @@ public class ResendEmailWithConfirmationEmailLinkTests
 
         this.SetupEmailConfirmationToken();
         this.SetupExpirationService();
-        this.resendEmailWithConfirmationEmailLinkCommand = new(IdUser, new UserAgentInfo{});
+        this.resendEmailWithConfirmationEmailLinkCommand = new(IdUser, new UserAgentInfo { });
 
         this.resendEmailWithConfirmationEmailLinkHandler = new ResendEmailWithConfirmationEmailLinkHandler(this.authRepository.Object, this.emailService.Object, this.tokensService.Object, this.expirationService.Object);
     }

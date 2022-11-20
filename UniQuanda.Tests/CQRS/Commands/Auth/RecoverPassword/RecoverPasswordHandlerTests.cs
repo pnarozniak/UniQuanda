@@ -52,7 +52,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.RecoverPassword
                             PasswordRecoveryToken, It.IsAny<DateTime>(), null, CancellationToken.None))
                     .ReturnsAsync(true);
 
-            recoverPasswordCommand = new RecoverPasswordCommand(new RecoverPasswordDTO() { Email = Email }, new UserAgentInfo{});
+            recoverPasswordCommand = new RecoverPasswordCommand(new RecoverPasswordDTO() { Email = Email }, new UserAgentInfo { });
             recoverPasswordHandler = new RecoverPasswordHandler(authRepository.Object, emailService.Object, tokensService.Object, expirationService.Object);
         }
 
