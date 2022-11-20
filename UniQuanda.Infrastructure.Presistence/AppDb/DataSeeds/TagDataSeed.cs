@@ -853,13 +853,6 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds
                 },
                 new Tag
                 {
-                    Id = 125,
-                    Name = "Filozofia",
-                    ImageUrl = "https://dev.pl:2002/api/Image/Tags/filozofia.jpg",
-                    ParentTagId = 8
-                },
-                new Tag
-                {
                     Id = 126,
                     Name = "Nauki społeczne",
                     ImageUrl = "https://dev.pl:2002/api/Image/Tags/nauki_społeczne.jpg",
