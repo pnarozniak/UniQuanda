@@ -4,7 +4,6 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Models;
 
 public class AcademicTitle
 {
-    public AcademicTitle() { }
     public int Id { get; set; }
     public string Name { get; set; }
     public AcademicTitleEnum AcademicTitleType { get; set; }
