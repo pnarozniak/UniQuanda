@@ -132,7 +132,7 @@ public class AuthController : ControllerBase
         [FromBody] RecoverPasswordDTO request,
         CancellationToken ct)
     {
-        var command = new RecoverPasswordCommand(request);
+        var command = new RecoverPasswordCommand(request, HttpContext.GetUserAgentInfo());
         await _mediator.Send(command, ct);
         return NoContent();
     }
@@ -148,7 +148,7 @@ public class AuthController : ControllerBase
         [FromBody] ResetPaswordDTO request,
         CancellationToken ct)
     {
-        var command = new ResetPasswordCommand(request);
+        var command = new ResetPasswordCommand(request, HttpContext.GetUserAgentInfo());
         var success = await _mediator.Send(command, ct);
         return success ? NoContent() : Conflict();
     }
@@ -194,7 +194,7 @@ public class AuthController : ControllerBase
     [Authorize(Roles = "user")]
     public async Task<IActionResult> UpdateUserMainEmail([FromBody] UpdateMainEmailRequestDTO request, CancellationToken ct)
     {
-        var command = new UpdateMainEmailCommand(request, User.GetId()!.Value);
+        var command = new UpdateMainEmailCommand(request, User.GetId()!.Value, HttpContext.GetUserAgentInfo());
         var result = await _mediator.Send(command, ct);
         return result switch
         {
@@ -217,7 +217,7 @@ public class AuthController : ControllerBase
     [Authorize(Roles = "user")]
     public async Task<IActionResult> AddExtraEmail([FromBody] AddExtraEmailRequestDTO request, CancellationToken ct)
     {
-        var command = new AddExtraEmailCommand(request, User.GetId()!.Value);
+        var command = new AddExtraEmailCommand(request, User.GetId()!.Value, HttpContext.GetUserAgentInfo());
         var result = await _mediator.Send(command, ct);
         return result switch
         {
@@ -242,7 +242,7 @@ public class AuthController : ControllerBase
     [Authorize(Roles = "user")]
     public async Task<IActionResult> UpdateUserPassword([FromBody] UpdatePasswordRequestDTO request, CancellationToken ct)
     {
-        var command = new UpdatePasswordCommand(request, User.GetId()!.Value);
+        var command = new UpdatePasswordCommand(request, User.GetId()!.Value, HttpContext.GetUserAgentInfo());
         var result = await _mediator.Send(command, ct);
         return result switch
         {
@@ -264,7 +264,7 @@ public class AuthController : ControllerBase
     [Authorize(Roles = "user")]
     public async Task<IActionResult> DeleteExtraEmail([FromBody] DeleteExtraEmailRequestDTO request, CancellationToken ct)
     {
-        var command = new DeleteExtraEmailCommand(request, User.GetId()!.Value);
+        var command = new DeleteExtraEmailCommand(request, User.GetId()!.Value, HttpContext.GetUserAgentInfo());
         var result = await _mediator.Send(command, ct);
         return result switch
         {
@@ -285,7 +285,7 @@ public class AuthController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> ConfirmUserEmail([FromBody] ConfirmEmailRequestDTO request, CancellationToken ct)
     {
-        var command = new ConfirmEmailCommand(request);
+        var command = new ConfirmEmailCommand(request, User.GetId()!.Value, HttpContext.GetUserAgentInfo());
         var result = await _mediator.Send(command, ct);
         return result ? NoContent() : Conflict();
     }
@@ -300,7 +300,7 @@ public class AuthController : ControllerBase
     [Authorize(Roles = "user")]
     public async Task<IActionResult> ResendConfirmationEmail(CancellationToken ct)
     {
-        var command = new ResendEmailWithConfirmationEmailLinkCommand(User.GetId()!.Value);
+        var command = new ResendEmailWithConfirmationEmailLinkCommand(User.GetId()!.Value, HttpContext.GetUserAgentInfo());
         var result = await _mediator.Send(command, ct);
         return result ? NoContent() : Conflict();
     }

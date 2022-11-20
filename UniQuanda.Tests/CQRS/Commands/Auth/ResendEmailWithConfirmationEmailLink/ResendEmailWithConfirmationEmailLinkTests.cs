@@ -10,6 +10,8 @@ using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Entities.Auth;
+using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Tests.CQRS.Commands.Auth.ResendEmailWithConfirmationEmailLink;
@@ -45,7 +47,7 @@ public class ResendEmailWithConfirmationEmailLinkTests
 
         this.SetupEmailConfirmationToken();
         this.SetupExpirationService();
-        this.resendEmailWithConfirmationEmailLinkCommand = new(IdUser);
+        this.resendEmailWithConfirmationEmailLinkCommand = new(IdUser, new UserAgentInfo{});
 
         this.resendEmailWithConfirmationEmailLinkHandler = new ResendEmailWithConfirmationEmailLinkHandler(this.authRepository.Object, this.emailService.Object, this.tokensService.Object, this.expirationService.Object);
     }
@@ -99,8 +101,8 @@ public class ResendEmailWithConfirmationEmailLinkTests
             .Setup(ar => ar.GetUserWithEmailsByIdAsync(IdUser, CancellationToken.None))
             .ReturnsAsync(userSecurityEntity);
         this.authRepository
-            .Setup(ar => ar.GetIdEmailToConfirmAsync(IdUser, CancellationToken.None))
-            .ReturnsAsync((int?)null);
+            .Setup(ar => ar.GetEmailToConfirmAsync(IdUser, CancellationToken.None))
+            .ReturnsAsync((null, null));
 
         var result = await resendEmailWithConfirmationEmailLinkHandler.Handle(this.resendEmailWithConfirmationEmailLinkCommand, CancellationToken.None);
 
@@ -141,7 +143,7 @@ public class ResendEmailWithConfirmationEmailLinkTests
             .Setup(ar => ar.GetUserWithEmailsByIdAsync(IdUser, CancellationToken.None))
             .ReturnsAsync(userSecurityEntity);
         this.authRepository
-            .Setup(ar => ar.GetIdEmailToConfirmAsync(IdUser, CancellationToken.None))
-            .ReturnsAsync(idEmail);
+            .Setup(ar => ar.GetEmailToConfirmAsync(IdUser, CancellationToken.None))
+            .ReturnsAsync((idEmail, It.IsAny<UserActionToConfirmEnum>()));
     }
 }

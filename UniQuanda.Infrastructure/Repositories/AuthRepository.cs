@@ -522,9 +522,10 @@ public class AuthRepository : IAuthRepository
         return false;
     }
 
-    public async Task<int?> GetIdEmailToConfirmAsync(int idUser, CancellationToken ct)
+    public async Task<(int?, UserActionToConfirmEnum?)> GetEmailToConfirmAsync(int idUser, CancellationToken ct)
     {
-        var emailToConfirm = await _authContext.UsersActionsToConfirm.SingleOrDefaultAsync(u => u.IdUser == idUser && (u.ActionType == UserActionToConfirmEnum.NewMainEmail || u.ActionType == UserActionToConfirmEnum.NewExtraEmail), ct);
-        return emailToConfirm?.IdUserEmail;
+        var emailToConfirm = await _authContext.UsersActionsToConfirm
+            .SingleOrDefaultAsync(u => u.IdUser == idUser && (u.ActionType == UserActionToConfirmEnum.NewMainEmail || u.ActionType == UserActionToConfirmEnum.NewExtraEmail), ct);
+        return (emailToConfirm?.IdUserEmail, emailToConfirm?.ActionType);
     }
 }

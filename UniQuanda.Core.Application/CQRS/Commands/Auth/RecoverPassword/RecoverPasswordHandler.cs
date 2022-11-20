@@ -36,7 +36,7 @@ public class RecoverPasswordHandler : IRequestHandler<RecoverPasswordCommand, bo
             UserActionToConfirmEnum.RecoverPassword, recoveryToken, actionExp, null, ct);
         if (isActionCreated is null or false) return false;
 
-        await _emailService.SendPasswordRecoveryEmailAsync(command.Email, recoveryToken);
+        await _emailService.SendPasswordRecoveryEmailAsync(command.Email, recoveryToken, command.UserAgentInfo);
         return true;
     }
 }

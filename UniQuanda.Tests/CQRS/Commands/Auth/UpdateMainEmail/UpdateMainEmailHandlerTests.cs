@@ -11,6 +11,7 @@ using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Tests.CQRS.Commands.Auth.UpdateMainEmail;
@@ -247,7 +248,7 @@ public class UpdateMainEmailHandlerTests
             NewMainEmail = newMainEmail,
             Password = plainPassword
         };
-        this.updateMainEmailCommand = new(updateMainEmailRequestDTO, IdUser);
+        this.updateMainEmailCommand = new(updateMainEmailRequestDTO, IdUser, new UserAgentInfo{});
     }
 
     private static UserSecurityEntity GetUserSecurityEntity()

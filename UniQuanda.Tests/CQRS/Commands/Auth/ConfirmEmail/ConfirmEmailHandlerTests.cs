@@ -8,6 +8,7 @@ using UniQuanda.Core.Application.CQRS.Commands.Auth.ConfirmEmail;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Domain.Entities.Auth;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Tests.CQRS.Commands.Auth.ConfirmEmail;
@@ -107,7 +108,7 @@ public class ConfirmEmailHandlerTests
             Email = Email,
             ConfirmationCode = ConfirmationCode
         };
-        this.confirmEmailCommand = new ConfirmEmailCommand(request);
+        this.confirmEmailCommand = new ConfirmEmailCommand(request, 1, new UserAgentInfo{});
     }
 
     private static UserSecurityEntity GetUserSecurityEntity()
