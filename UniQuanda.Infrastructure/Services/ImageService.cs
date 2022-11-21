@@ -23,7 +23,7 @@ namespace UniQuanda.Infrastructure.Services
         {
             try
             {
-                using var s3Object = await _amazonS3.GetObjectAsync(bucket.Value, $"{FolderName.Value}/{ImageName}", ct);
+                var s3Object = await _amazonS3.GetObjectAsync(bucket.Value, $"{FolderName.Value}/{ImageName}", ct);
                 return s3Object.HttpStatusCode == System.Net.HttpStatusCode.OK ?
                     (s3Object.ResponseStream, s3Object.Headers.ContentType)
                     : default((Stream DataStream, string ContentType));
