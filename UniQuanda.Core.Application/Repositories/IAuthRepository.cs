@@ -234,5 +234,5 @@ public interface IAuthRepository
     /// <param name="idUser">Id user</param>
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>Id of email if exists and type of confirmation action. If not exists both are null</returns>
-    Task<(int?, UserActionToConfirmEnum?)> GetEmailToConfirmAsync(int idUser, CancellationToken ct);
+    Task<(int? idEmail, UserActionToConfirmEnum? actionType)> GetEmailToConfirmAsync(int idUser, CancellationToken ct);
 }
