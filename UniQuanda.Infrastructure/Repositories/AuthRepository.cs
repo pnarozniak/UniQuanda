@@ -531,10 +531,10 @@ public class AuthRepository : IAuthRepository
 
     public async Task<string?> GetMainEmailByEmailToConfirmAsync(string email, CancellationToken ct)
     {
-        var userEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(u => u.Value == email, ct);
-        if (userEmail is null)
-            return null;
-        var mainEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(u => u.IdUser == userEmail.IdUser && u.IsMain, ct);
-        return mainEmail?.Value;
+        var user = await _authContext.Users
+            .Include(ue => ue.Emails)
+            .SingleOrDefaultAsync(u => u.Emails.Any(e => EF.Functions.Like(e.Value, email)), ct);
+
+        return user is null ? null : user.Emails.SingleOrDefault(e => e.IsMain)!.Value;
     }
 }
