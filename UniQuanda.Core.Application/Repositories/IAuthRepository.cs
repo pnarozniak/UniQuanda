@@ -237,10 +237,10 @@ public interface IAuthRepository
     Task<(int? idEmail, UserActionToConfirmEnum? actionType)> GetEmailToConfirmAsync(int idUser, CancellationToken ct);
 
     /// <summary>
-    ///     Get main email by other email connected with user
+    ///     Get main email by to confirm email connected with user
     /// </summary>
-    /// <param name="email">Email connected with user</param>
+    /// <param name="emailToConfirm">Email connected with user to confirm</param>
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>Main email if email is valid, otherwise null</returns>
-    Task<string?> GetMainEmailByEmailToConfirmAsync(string email, CancellationToken ct);
+    Task<string?> GetMainEmailByEmailToConfirmAsync(string emailToConfirm, CancellationToken ct);
 }
