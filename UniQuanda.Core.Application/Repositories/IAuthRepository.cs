@@ -209,8 +209,8 @@ public interface IAuthRepository
     /// <param name="email">Email to confirm</param>
     /// <param name="confirmationCode">Confirmation code</param>
     /// <param name="ct">Operation cancellation token</param>
-    /// <returns>True with user id and action connected to main email if confirmation is successful, otherwise false.</returns>
-    Task<(bool isSuccess, bool isMainEmail, int? idUser)> ConfirmUserEmailAsync(string email, string confirmationCode, CancellationToken ct);
+    /// <returns>True with action connected to main email if confirmation is successful, otherwise false.</returns>
+    Task<(bool isSuccess, bool isMainEmail)> ConfirmUserEmailAsync(string email, string confirmationCode, CancellationToken ct);
 
     /// <summary>
     ///     Update token to confirm and date until it this token is valid
@@ -235,4 +235,12 @@ public interface IAuthRepository
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>Id of email if exists and type of confirmation action. If not exists both are null</returns>
     Task<(int? idEmail, UserActionToConfirmEnum? actionType)> GetEmailToConfirmAsync(int idUser, CancellationToken ct);
+
+    /// <summary>
+    ///     Get main email by other email connected with user
+    /// </summary>
+    /// <param name="email">Email connected with user</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>Main email if email is valid, otherwise null</returns>
+    Task<string?> GetMainEmailByEmailToConfirmAsync(string email, CancellationToken ct);
 }

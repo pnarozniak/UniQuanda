@@ -285,7 +285,7 @@ public class AuthController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> ConfirmUserEmail([FromBody] ConfirmEmailRequestDTO request, CancellationToken ct)
     {
-        var command = new ConfirmEmailCommand(request, User.GetId()!.Value, HttpContext.GetUserAgentInfo());
+        var command = new ConfirmEmailCommand(request, HttpContext.GetUserAgentInfo());
         var result = await _mediator.Send(command, ct);
         return result ? NoContent() : Conflict();
     }
