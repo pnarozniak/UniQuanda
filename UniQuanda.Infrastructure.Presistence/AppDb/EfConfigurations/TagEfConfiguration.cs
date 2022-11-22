@@ -26,7 +26,16 @@ public class TagEfConfiguration : IEntityTypeConfiguration<Tag>
             .HasForeignKey(ct => ct.ParentTagId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.HasGeneratedTsVectorColumn(
+            t => t.SearchVector,
+            "polish",
+            t => new { t.Name, t.Description })
+            .HasIndex(t => t.SearchVector)
+            .HasMethod("GIN");
+
         builder.Property(t => t.IsDeleted).HasDefaultValue(false).IsRequired();
         builder.Property(t => t.Name).HasMaxLength(100).IsRequired();
+        builder.Property(t => t.Description).HasMaxLength(500).IsRequired(false);
+        builder.Property(t => t.ImageUrl).HasMaxLength(500).IsRequired(false);
     }
 }

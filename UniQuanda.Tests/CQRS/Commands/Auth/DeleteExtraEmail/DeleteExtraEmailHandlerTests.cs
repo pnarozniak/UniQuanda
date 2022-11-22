@@ -9,6 +9,8 @@ using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Entities.Auth;
+using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Core.Domain.Enums.Results;
 using UniQuanda.Core.Domain.ValueObjects;
 
@@ -123,7 +125,7 @@ public class DeleteExtraEmailHandlerTests
             IdExtraEmail = IdExtraEmail,
             Password = plainPassword
         };
-        this.deleteExtraEmailCommand = new(deleteExtraEmailRequestDTO, IdUser);
+        this.deleteExtraEmailCommand = new(deleteExtraEmailRequestDTO, IdUser, new UserAgentInfo { });
     }
 
     private static UserSecurityEntity GetUserSecurityEntity()

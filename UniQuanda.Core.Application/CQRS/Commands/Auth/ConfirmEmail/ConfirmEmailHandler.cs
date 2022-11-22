@@ -17,19 +17,22 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, bool>
 
     public async Task<bool> Handle(ConfirmEmailCommand request, CancellationToken ct)
     {
+        var oldMainEmail = await _authRepository.GetMainEmailByEmailToConfirmAsync(request.Email, ct);
+        if (oldMainEmail is null)
+            return false;
 
-        var (isSuccess, isMainEmail, idUser) = await _authRepository.ConfirmUserEmailAsync(request.Email, request.ConfirmationCode, ct);
+        var (isSuccess, isMainEmail) = await _authRepository.ConfirmUserEmailAsync(request.Email, request.ConfirmationCode, ct);
         if (!isSuccess)
             return false;
 
-        var user = await _authRepository.GetUserWithEmailsByIdAsync(idUser.Value, ct);
-        if (user is null)
-            return false;
-        var mainEmail = user.Emails.SingleOrDefault(e => e.IsMain).Value;
         if (isMainEmail)
-            await _emailService.SendEmailAboutUpdatedMainEmailAsync(mainEmail, mainEmail);
+        {
+            await _emailService.SendEmailAboutUpdatedMainEmailAsync(oldMainEmail, request.Email, request.UserAgentInfo);
+        }
         else
-            await _emailService.SendEmailAboutAddedNewExtraEmailAsync(mainEmail, request.Email);
+        {
+            await _emailService.SendEmailAboutAddedNewExtraEmailAsync(oldMainEmail, request.Email, request.UserAgentInfo);
+        }
 
         return true;
     }

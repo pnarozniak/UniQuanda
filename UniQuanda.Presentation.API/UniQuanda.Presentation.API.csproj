@@ -17,6 +17,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="UAParser" Version="3.1.47" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,5 +25,10 @@
     <ProjectReference Include="..\UniQuanda.Infrastructure.Presistence\UniQuanda.Infrastructure.Presistence.csproj" />
     <ProjectReference Include="..\UniQuanda.Infrastructure\UniQuanda.Infrastructure.csproj" />
   </ItemGroup>
+
+  <PropertyGroup>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
 
 </Project>

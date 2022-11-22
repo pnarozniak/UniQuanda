@@ -455,21 +455,21 @@ public class AuthRepository : IAuthRepository
         return CheckOptionOfAddNewExtraEmail.AllowedToAdd;
     }
 
-    public async Task<(bool isSuccess, bool isMainEmail, int? idUser)> ConfirmUserEmailAsync(string email, string confirmationCode, CancellationToken ct)
+    public async Task<(bool isSuccess, bool isMainEmail)> ConfirmUserEmailAsync(string email, string confirmationCode, CancellationToken ct)
     {
         var userEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(ue => ue.Value == email, ct);
         if (userEmail is null)
-            return (isSuccess: false, isMainEmail: false, idUser: null);
+            return (isSuccess: false, isMainEmail: false);
 
         var userEmailActionToConfirm = await _authContext.UsersActionsToConfirm.SingleOrDefaultAsync(u => u.IdUserEmail == userEmail.Id && u.ConfirmationToken == confirmationCode, ct);
         if (userEmailActionToConfirm is null || userEmailActionToConfirm.ExistsUntil < new DateTime())
-            return (isSuccess: false, isMainEmail: false, idUser: null);
+            return (isSuccess: false, isMainEmail: false);
 
         if (userEmailActionToConfirm.ActionType == UserActionToConfirmEnum.NewMainEmail)
         {
             var userMainEmail = await _authContext.UsersEmails.SingleOrDefaultAsync(ue => ue.IdUser == userEmailActionToConfirm.IdUser && ue.IsMain, ct);
             if (userMainEmail is null)
-                return (isSuccess: false, isMainEmail: false, idUser: null);
+                return (isSuccess: false, isMainEmail: false);
 
             userEmail.IsMain = true;
             _authContext.UsersActionsToConfirm.Remove(userEmailActionToConfirm);
@@ -477,19 +477,19 @@ public class AuthRepository : IAuthRepository
 
             if (await _authContext.SaveChangesAsync(ct) == 3)
             {
-                return (isSuccess: true, isMainEmail: true, idUser: userEmail.IdUser);
+                return (isSuccess: true, isMainEmail: true);
             }
 
-            return (isSuccess: false, isMainEmail: false, idUser: null);
+            return (isSuccess: false, isMainEmail: false);
         }
         else if (userEmailActionToConfirm.ActionType == UserActionToConfirmEnum.NewExtraEmail)
         {
             _authContext.UsersActionsToConfirm.Remove(userEmailActionToConfirm);
             if (await _authContext.SaveChangesAsync(ct) == 0)
-                return (isSuccess: false, isMainEmail: false, idUser: null);
-            return (isSuccess: true, isMainEmail: false, idUser: userEmail.IdUser);
+                return (isSuccess: false, isMainEmail: false);
+            return (isSuccess: true, isMainEmail: false);
         }
-        return (isSuccess: false, isMainEmail: false, idUser: null);
+        return (isSuccess: false, isMainEmail: false);
     }
 
     public async Task<bool> UpdateActionToConfirmEmailAsync(UserEmailToConfirm userEmailToConfirm, CancellationToken ct)
@@ -523,9 +523,19 @@ public class AuthRepository : IAuthRepository
         return false;
     }
 
-    public async Task<int?> GetIdEmailToConfirmAsync(int idUser, CancellationToken ct)
+    public async Task<(int? idEmail, UserActionToConfirmEnum? actionType)> GetEmailToConfirmAsync(int idUser, CancellationToken ct)
     {
-        var emailToConfirm = await _authContext.UsersActionsToConfirm.SingleOrDefaultAsync(u => u.IdUser == idUser && (u.ActionType == UserActionToConfirmEnum.NewMainEmail || u.ActionType == UserActionToConfirmEnum.NewExtraEmail), ct);
-        return emailToConfirm?.IdUserEmail;
+        var emailToConfirm = await _authContext.UsersActionsToConfirm
+            .SingleOrDefaultAsync(u => u.IdUser == idUser && (u.ActionType == UserActionToConfirmEnum.NewMainEmail || u.ActionType == UserActionToConfirmEnum.NewExtraEmail), ct);
+        return (emailToConfirm?.IdUserEmail, emailToConfirm?.ActionType);
+    }
+
+    public async Task<string?> GetMainEmailByEmailToConfirmAsync(string email, CancellationToken ct)
+    {
+        var user = await _authContext.Users
+            .Include(ue => ue.Emails)
+            .SingleOrDefaultAsync(u => u.Emails.Any(e => EF.Functions.Like(e.Value, email)), ct);
+
+        return user is null ? null : user.Emails.SingleOrDefault(e => e.IsMain)!.Value;
     }
 }

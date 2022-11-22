@@ -9,6 +9,8 @@ using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Entities.Auth;
+using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Core.Domain.Enums.Results;
 using UniQuanda.Core.Domain.ValueObjects;
 
@@ -124,7 +126,7 @@ public class UpdatePasswordHandlerTests
             NewPassword = NewPlainPassword,
             OldPassword = oldPlainPassword
         };
-        this.updatePasswordCommand = new(updatePasswordRequestDTO, IdUser);
+        this.updatePasswordCommand = new(updatePasswordRequestDTO, IdUser, new UserAgentInfo { });
     }
 
     private static UserSecurityEntity GetUserSecurityEntity()

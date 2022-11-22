@@ -11,6 +11,7 @@ using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Tests.CQRS.Commands.Auth.ResetPassword
@@ -51,7 +52,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ResetPassword
                 Email = Email,
                 RecoveryToken = PasswordRecoveryToken,
                 NewPassword = NewPassword
-            });
+            }, new UserAgentInfo() { });
             resetPasswordHandler = new ResetPasswordHandler(authRepository.Object, emailService.Object, passwordsService.Object);
         }
 

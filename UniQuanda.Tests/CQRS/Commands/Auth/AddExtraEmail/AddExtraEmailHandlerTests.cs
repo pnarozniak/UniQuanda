@@ -10,6 +10,8 @@ using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Entities.Auth;
+using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Core.Domain.Enums.Results;
 using UniQuanda.Core.Domain.ValueObjects;
 
@@ -196,7 +198,7 @@ public class AddExtraEmailHandlerTests
             NewExtraEmail = newExtraEmail,
             Password = plainPassword
         };
-        this.addExtraEmailCommand = new(addExtraEmailRequestDTO, IdUser);
+        this.addExtraEmailCommand = new(addExtraEmailRequestDTO, IdUser, new UserAgentInfo { });
     }
 
     private static UserSecurityEntity GetUserSecurityEntity()

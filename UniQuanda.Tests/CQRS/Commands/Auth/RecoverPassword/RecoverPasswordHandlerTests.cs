@@ -11,6 +11,7 @@ using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Tests.CQRS.Commands.Auth.RecoverPassword
@@ -51,7 +52,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.RecoverPassword
                             PasswordRecoveryToken, It.IsAny<DateTime>(), null, CancellationToken.None))
                     .ReturnsAsync(true);
 
-            recoverPasswordCommand = new RecoverPasswordCommand(new RecoverPasswordDTO() { Email = Email });
+            recoverPasswordCommand = new RecoverPasswordCommand(new RecoverPasswordDTO() { Email = Email }, new UserAgentInfo { });
             recoverPasswordHandler = new RecoverPasswordHandler(authRepository.Object, emailService.Object, tokensService.Object, expirationService.Object);
         }
 
