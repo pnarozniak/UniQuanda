@@ -1,4 +1,6 @@
-﻿namespace UniQuanda.Core.Application.Services;
+﻿using UniQuanda.Core.Domain.Utils;
+
+namespace UniQuanda.Core.Application.Services;
 
 public interface IEmailService
 {
@@ -14,46 +16,56 @@ public interface IEmailService
     /// </summary>
     /// <param name="to">E-mail address of recipient</param>
     /// <param name="recoveryToken">Recovery token</param>
-    Task SendPasswordRecoveryEmailAsync(string to, string recoveryToken);
+    /// <param name="userAgentInfo">Info about user agent performing operation</param>
+    Task SendPasswordRecoveryEmailAsync(string to, string recoveryToken, UserAgentInfo userAgentInfo);
 
     /// <summary>
     ///     Send email about updated email
     /// </summary>
     /// <param name="to">E-mail address of recipient</param>
-    Task SendEmailAboutUpdatedPasswordAsync(string to);
+    /// <param name="nickname">Nickname of recipient</param>
+    /// <param name="userAgentInfo">Info about user agent performing operation</param>
+    Task SendEmailAboutUpdatedPasswordAsync(string to, string nickname, UserAgentInfo userAgentInfo);
 
     /// <summary>
-    ///     Sends email about updated user main email
+    ///     Sends confirmation email in order to add new extra email
     /// </summary>
-    /// <param name="to">Old main e-mail address of recipient</param>
-    /// <param name="newMainEmail">New main email</param>
-    Task SendEmailAboutUpdatedMainEmailAsync(string to, string newMainEmail);
+    /// <param name="to">E-mail address of recipient</param>
+    /// <param name="nickname">Nickname of recipient</param>
+    /// <param name="recoveryToken">Confirmation token</param>
+    /// <param name="userAgentInfo">Info about user agent performing operation</param>
+    Task SendConfirmationEmailToAddNewExtraEmailAsync(string to, string nickname, string token, UserAgentInfo userAgentInfo);
 
     /// <summary>
     ///  Sends email about adding new extra email for user
     /// </summary>
     /// <param name="to">E-mail address of recipient</param>
     /// <param name="newExtraEmail">New extra email</param>
-    Task SendEmailAboutAddedNewExtraEmailAsync(string to, string newExtraEmail);
+    /// <param name="userAgentInfo">Info about user agent performing operation</param>
+    Task SendEmailAboutAddedNewExtraEmailAsync(string to, string newExtraEmail, UserAgentInfo userAgentInfo);
 
     /// <summary>
     ///     Sends email about deleted extra email
     /// </summary>
     /// <param name="to">E-mail address of recipient</param>
     /// <param name="extraEmail">Extra email which was deleted</param>
-    Task SendEmailAboutDeletedExtraEmailAsync(string to, string extraEmail);
+    /// <param name="userAgentInfo">Info about user agent performing operation</param>
+    Task SendEmailAboutDeletedExtraEmailAsync(string to, string extraEmail, UserAgentInfo userAgentInfo);
 
     /// <summary>
-    ///     Sends email about updated user password
+    ///     Sends confirmation email in order to update main email
     /// </summary>
     /// <param name="to">E-mail address of recipient</param>
-    /// <param name="nickName"></param>
-    Task SendEmailAboutUpdatedPasswordAsync(string to, string nickName);
+    /// <param name="nickname">Nickname of recipient</param>
+    /// <param name="recoveryToken">Confirmation token</param>
+    /// <param name="userAgentInfo">Info about user agent performing operation</param>
+    Task SendConfirmationEmailToUpdateMainEmailAsync(string to, string nickname, string token, UserAgentInfo userAgentInfo);
 
     /// <summary>
-    ///     Sends email with link to confirm email
+    ///     Sends email about updated user main email
     /// </summary>
-    /// <param name="to">E-mail address of recipient</param>
-    /// <param name="token">Token required to confirm email</param>
-    Task SendEmailWithEmailConfirmationLinkAsync(string to, string token);
+    /// <param name="to">Old main e-mail address of recipient</param>
+    /// <param name="newMainEmail">New main email</param>
+    /// <param name="userAgentInfo">Info about user agent performing operation</param>
+    Task SendEmailAboutUpdatedMainEmailAsync(string to, string newMainEmail, UserAgentInfo userAgentInfo);
 }

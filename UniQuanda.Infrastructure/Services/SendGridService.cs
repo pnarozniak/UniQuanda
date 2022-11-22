@@ -1,6 +1,7 @@
 ﻿using SendGrid;
 using SendGrid.Helpers.Mail;
 using UniQuanda.Core.Application.Services;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Infrastructure.Options;
 
 namespace UniQuanda.Infrastructure.Services;
@@ -19,66 +20,139 @@ public class SendGridService : IEmailService
 
     public async Task SendRegisterConfirmationEmailAsync(string to, string confirmationToken)
     {
-        var emailMessage = $"<span>Your code is: <b>{confirmationToken}</b></span>";
-        var emailSubject = "Confirm your email to finish registration";
-        await SendEmailAsync(to, emailSubject, emailMessage);
+        var templateId = _options.Templates.RegisterConfirmationId;
+        var templateData = new TemplatesOptions.RegisterConfirmationData
+        {
+            ConfirmationCode = confirmationToken,
+            ConfirmationLink = $"{_uniQuandaClientOptions.Url}/public/confirm-registration?email={to}&code={confirmationToken}",
+            TermsAndConditionsLink = $"{_uniQuandaClientOptions.Url}/public/terms-and-conditions",
+        };
+
+        await SendEmailAsync(to, templateId, templateData);
     }
 
-    public async Task SendPasswordRecoveryEmailAsync(string to, string recoveryToken)
+    public async Task SendPasswordRecoveryEmailAsync(string to, string recoveryToken, UserAgentInfo userAgentInfo)
     {
-        var url = $"{_uniQuandaClientOptions.Url}/public/reset-password?email={to}&recoveryToken={recoveryToken}";
-        var emailMessage =
-            $"<span>Click following link, to reset your password: <a href=\"{url}\">Reset password</a></span>";
-        var emailSubject = "Password recovery";
-        await SendEmailAsync(to, emailSubject, emailMessage);
+        var templateId = _options.Templates.AccountActionToConfirmId;
+        var templateData = new TemplatesOptions.AccountActionToConfirmData
+        {
+            Title = "Ustaw nowe hasło",
+            Subtitle = "Otrzymaliśmy prośbę o zmianę Twojego hasła. Możesz to zrobić, klikając w poniższy  przycisk:",
+            ButtonLabel = "Zmień hasło",
+            ButtonLink = $"{_uniQuandaClientOptions.Url}/public/reset-password?email={to}&recoveryToken={recoveryToken}",
+            UserAgentBrowser = userAgentInfo.Browser ?? "???",
+            UserAgentOs = userAgentInfo.Os ?? "???",
+            SupportContactLink = $"{_uniQuandaClientOptions.Url}/public/support"
+        };
+
+        await SendEmailAsync(to, templateId, templateData);
     }
 
-    public async Task SendEmailAboutUpdatedPasswordAsync(string to)
+    public async Task SendEmailAboutUpdatedPasswordAsync(string to, string nickname, UserAgentInfo userAgentInfo)
     {
-        var emailMessage = "<span>Your password has been changed</span>";
-        var emailSubject = "Password has been changed";
-        await SendEmailAsync(to, emailSubject, emailMessage);
+        var templateId = _options.Templates.AccountActionFinishedId;
+        var templateData = new TemplatesOptions.AccountActionFinishedData
+        {
+            Title = "Hasło zostało zmienione",
+            Subtitle = $"Hasło powiązane z twoim kontem <strong>\"{nickname}\"</strong> zostało zmienione.",
+            UserAgentBrowser = userAgentInfo.Browser ?? "???",
+            UserAgentOs = userAgentInfo.Os ?? "???",
+            SupportContactLink = $"{_uniQuandaClientOptions.Url}/public/support"
+        };
+
+        await SendEmailAsync(to, templateId, templateData);
     }
 
-    public async Task SendEmailAboutAddedNewExtraEmailAsync(string to, string newExtraEmail)
+    public async Task SendConfirmationEmailToAddNewExtraEmailAsync(string to, string nickname, string token, UserAgentInfo userAgentInfo)
     {
-        var emailSubject = "Dodatkowy e-mail został dodany do konta";
-        var emailMessage = $"<span>Do Twojego konta został przypisany nowy e-mail dodatkowy: <b>{newExtraEmail}</b>.</span>";
-        await SendEmailAsync(to, emailSubject, emailMessage);
+        var templateId = _options.Templates.AccountActionToConfirmId;
+        var templateData = new TemplatesOptions.AccountActionToConfirmData
+        {
+            Title = "Dodaj dodatkowy adres e-mail",
+            Subtitle = $"Otrzymaliśmy prośbę o dodanie tego adresu e-mail jako dodatkowego do konta: <strong>\"{nickname}\"</strong>. Możesz to zrobić, klikając w poniższy  przycisk:",
+            ButtonLabel = "Dodaj dodatkowy e-mail",
+            ButtonLink = $"{_uniQuandaClientOptions.Url}/public/confirm-email?email={to}&token={token}",
+            UserAgentBrowser = userAgentInfo.Browser ?? "???",
+            UserAgentOs = userAgentInfo.Os ?? "???",
+            SupportContactLink = $"{_uniQuandaClientOptions.Url}/public/support"
+        };
+
+        await SendEmailAsync(to, templateId, templateData);
     }
 
-    public async Task SendEmailAboutDeletedExtraEmailAsync(string to, string extraEmail)
+    public async Task SendEmailAboutAddedNewExtraEmailAsync(string to, string newExtraEmail, UserAgentInfo userAgentInfo)
     {
-        var emailSubject = "Dodatkowy e-mail został usunięty z konta";
-        var emailMessage = $"<span>Z Twojego konta został usunięty dodatkowy e-mail: <b>{extraEmail}</b>.</span>";
-        await SendEmailAsync(to, emailSubject, emailMessage);
+        var templateId = _options.Templates.AccountActionFinishedId;
+        var templateData = new TemplatesOptions.AccountActionFinishedData
+        {
+            Title = "Dodatkowy e-mail został dodany do konta",
+            Subtitle = $"Do twojego konta został przypisany nowy dodatkowy e-mail: <strong>\"{newExtraEmail}\"</strong>.",
+            UserAgentBrowser = userAgentInfo.Browser ?? "???",
+            UserAgentOs = userAgentInfo.Os ?? "???",
+            SupportContactLink = $"{_uniQuandaClientOptions.Url}/public/support"
+        };
+
+        await SendEmailAsync(to, templateId, templateData);
     }
 
-    public async Task SendEmailAboutUpdatedMainEmailAsync(string to, string newMainEmail)
+    public async Task SendEmailAboutDeletedExtraEmailAsync(string to, string extraEmail, UserAgentInfo userAgentInfo)
     {
-        var emailSubject = "Twój główny e-mail został zmieniony";
-        var emailMessage = $"<span>Główny e-mail powiązany z Twoim kontem został zmieniony. Teraz głównym e-mailem twojego konta jest: <b>{newMainEmail}</b>.</span>";
-        await SendEmailAsync(to, emailSubject, emailMessage);
+        var templateId = _options.Templates.AccountActionFinishedId;
+        var templateData = new TemplatesOptions.AccountActionFinishedData
+        {
+            Title = "Dodatkowy e-mail został usunięty",
+            Subtitle = $"Z Twojego konta został usunięty dodatkowy e-mail: <strong>\"{extraEmail}\"</strong>.",
+            UserAgentBrowser = userAgentInfo.Browser ?? "???",
+            UserAgentOs = userAgentInfo.Os ?? "???",
+            SupportContactLink = $"{_uniQuandaClientOptions.Url}/public/support"
+        };
+
+        await SendEmailAsync(to, templateId, templateData);
     }
 
-    public async Task SendEmailAboutUpdatedPasswordAsync(string to, string nickName)
+    public async Task SendConfirmationEmailToUpdateMainEmailAsync(string to, string nickname, string token, UserAgentInfo userAgentInfo)
     {
-        var emailSubject = "Twoje hasło zostało zmienione";
-        var emailMessage = $"<span>Hasło powiązane z Twoim kontem <b>{nickName}</b> zostało zmienione.</span>";
-        await SendEmailAsync(to, emailSubject, emailMessage);
+        var templateId = _options.Templates.AccountActionToConfirmId;
+        var templateData = new TemplatesOptions.AccountActionToConfirmData
+        {
+            Title = "Zmień główny adres e-mail",
+            Subtitle = $"Otrzymaliśmy prośbę o zmianę twojego głównego adresu e-mail powiązanego z kontem: <strong>\"{nickname}\"</strong>. Możesz to zrobić, klikając w poniższy  przycisk:",
+            ButtonLabel = "Zmień głowy e-mail",
+            ButtonLink = $"{_uniQuandaClientOptions.Url}/public/confirm-email?email={to}&token={token}",
+            UserAgentBrowser = userAgentInfo.Browser ?? "???",
+            UserAgentOs = userAgentInfo.Os ?? "???",
+            SupportContactLink = $"{_uniQuandaClientOptions.Url}/public/support"
+        };
+
+        await SendEmailAsync(to, templateId, templateData);
     }
 
-    private async Task SendEmailAsync(string email, string subject, string message)
+    public async Task SendEmailAboutUpdatedMainEmailAsync(string to, string newMainEmail, UserAgentInfo userAgentInfo)
+    {
+        var templateId = _options.Templates.AccountActionFinishedId;
+        var templateData = new TemplatesOptions.AccountActionFinishedData
+        {
+            Title = "Twój główny e-mail został zmieniony",
+            Subtitle = $"Główny e-mail powiązany z Twoim kontem został zmieniony. Teraz głównym e-mailem twojego konta jest: <strong>\"{newMainEmail}\"</strong>.",
+            UserAgentBrowser = userAgentInfo.Browser ?? "???",
+            UserAgentOs = userAgentInfo.Os ?? "???",
+            SupportContactLink = $"{_uniQuandaClientOptions.Url}/public/support"
+        };
+
+        await SendEmailAsync(to, templateId, templateData);
+    }
+
+    private async Task SendEmailAsync(string email, string templateId, object templateData)
     {
         var client = new SendGridClient(_options.ApiKey);
         var emailMessage = new SendGridMessage
         {
             From = new EmailAddress(_options.SenderEmail, _options.SenderName),
-            Subject = subject,
-            PlainTextContent = message,
-            HtmlContent = message
         };
         emailMessage.AddTo(new EmailAddress(email));
+
+        emailMessage.SetTemplateId(templateId);
+        emailMessage.SetTemplateData(templateData);
 
         emailMessage.SetClickTracking(false, false);
         emailMessage.SetOpenTracking(false);
@@ -86,14 +160,5 @@ public class SendGridService : IEmailService
         emailMessage.SetSubscriptionTracking(false);
 
         await client.SendEmailAsync(emailMessage);
-    }
-
-    public async Task SendEmailWithEmailConfirmationLinkAsync(string to, string token)
-    {
-        var url = $"{_uniQuandaClientOptions.Url}/public/confirm-email?email={to}&token={token}";
-        var emailMessage =
-            $"<span>Kliknij w poniższy link by potwierdzić e-mail: <a href=\"{url}\">Potwiedź e-mail</a></span>";
-        var emailSubject = "Potwierdzenie e-mail'a";
-        await SendEmailAsync(to, emailSubject, emailMessage);
     }
 }
