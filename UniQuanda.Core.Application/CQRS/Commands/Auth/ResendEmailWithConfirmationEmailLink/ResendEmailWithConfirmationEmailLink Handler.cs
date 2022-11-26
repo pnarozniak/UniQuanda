@@ -2,6 +2,7 @@
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
+using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.ResendEmailWithConfirmationEmailLink;
@@ -31,7 +32,7 @@ public class ResendEmailWithConfirmationEmailLinkHandler : IRequestHandler<Resen
         if (user is null)
             return false;
 
-        var idEmail = await _authRepository.GetIdEmailToConfirmAsync(request.IdUser, ct);
+        var (idEmail, actionType) = await _authRepository.GetEmailToConfirmAsync(request.IdUser, ct);
         if (idEmail is null)
             return false;
 
@@ -44,9 +45,20 @@ public class ResendEmailWithConfirmationEmailLinkHandler : IRequestHandler<Resen
         };
 
         var isUpdateSuccessful = await _authRepository.UpdateActionToConfirmEmailAsync(userEmailToConfirm, ct);
-        if (isUpdateSuccessful)
-            await _emailService.SendEmailWithEmailConfirmationLinkAsync(user.Emails.SingleOrDefault(u => u.Id == idEmail).Value, userEmailToConfirm.ConfirmationToken);
+        if (!isUpdateSuccessful) return false;
 
-        return isUpdateSuccessful;
+        var recipient = user.Emails.SingleOrDefault(u => u.Id == idEmail).Value;
+        if (actionType == UserActionToConfirmEnum.NewExtraEmail)
+        {
+            await _emailService.SendConfirmationEmailToAddNewExtraEmailAsync(
+                recipient, user.Nickname, userEmailToConfirm.ConfirmationToken, request.UserAgentInfo);
+        }
+        else
+        {
+            await _emailService.SendConfirmationEmailToUpdateMainEmailAsync(
+                recipient, user.Nickname, userEmailToConfirm.ConfirmationToken, request.UserAgentInfo);
+        }
+
+        return true;
     }
 }

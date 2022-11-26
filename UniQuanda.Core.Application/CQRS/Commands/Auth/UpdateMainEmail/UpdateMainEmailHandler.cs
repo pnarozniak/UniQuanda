@@ -42,6 +42,11 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
         if (request.IdExtraEmail != null)
         {
             updateResult = await UpdateUserMainEmailByExistingOne(request, ct);
+            if (updateResult == true)
+            {
+                await _emailService.SendEmailAboutUpdatedMainEmailAsync(
+                    user.Emails.SingleOrDefault(ue => ue.IsMain)!.Value, request.NewMainEmail!, request.UserAgentInfo);
+            }
         }
         else
         {
@@ -49,7 +54,7 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
             if (!isEmailAvailable)
                 return UpdateSecurityResultEnum.EmailNotAvailable;
 
-            updateResult = await UpdateUserMainEmailByNewOne(request, ct);
+            updateResult = await UpdateUserMainEmailByNewOne(request, user.Nickname, ct);
         }
 
         return updateResult switch
@@ -72,7 +77,7 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
         return await _authRepository.UpdateUserMainEmailByExtraEmailAsync(userEmailToConfirm, ct);
     }
 
-    private async Task<bool?> UpdateUserMainEmailByNewOne(UpdateMainEmailCommand request, CancellationToken ct)
+    private async Task<bool?> UpdateUserMainEmailByNewOne(UpdateMainEmailCommand request, string nickname, CancellationToken ct)
     {
         bool? updateResult;
 
@@ -88,13 +93,13 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
         }
         else
         {
-            updateResult = await AddUserMainEmailToConfirm(request, ct);
+            updateResult = await AddUserMainEmailToConfirm(request, nickname, ct);
         }
         return updateResult;
     }
 
 
-    private async Task<bool?> AddUserMainEmailToConfirm(UpdateMainEmailCommand request, CancellationToken ct)
+    private async Task<bool?> AddUserMainEmailToConfirm(UpdateMainEmailCommand request, string nickname, CancellationToken ct)
     {
         var userEmailToConfirm = new UserEmailToConfirm
         {
@@ -106,7 +111,9 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
         var addResult = await _authRepository.AddUserMainEmailToConfirmAsync(userEmailToConfirm, ct);
 
         if (addResult == true)
-            await _emailService.SendEmailWithEmailConfirmationLinkAsync(userEmailToConfirm.Email, userEmailToConfirm.ConfirmationToken);
+            await _emailService.SendConfirmationEmailToUpdateMainEmailAsync(
+                userEmailToConfirm.Email, nickname, userEmailToConfirm.ConfirmationToken, request.UserAgentInfo);
+
         return addResult;
     }
 }

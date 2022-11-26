@@ -38,7 +38,7 @@ public class UpdatePasswordHandler : IRequestHandler<UpdatePasswordCommand, Upda
 
         var updateResult = await _authRepository.UpdateUserPasswordAsync(request.IdUser, request.NewPassword, ct);
         if (updateResult == true)
-            await _emailService.SendEmailAboutUpdatedPasswordAsync(user.Emails.SingleOrDefault(e => e.IsMain).Value, user.Nickname);
+            await _emailService.SendEmailAboutUpdatedPasswordAsync(user.Emails.SingleOrDefault(e => e.IsMain).Value, user.Nickname, request.UserAgentInfo);
 
         return updateResult switch
         {
