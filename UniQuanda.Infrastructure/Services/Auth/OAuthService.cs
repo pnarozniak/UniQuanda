@@ -62,7 +62,7 @@ public class OAuthService : IOAuthService
 
 		public string GetGoogleClientHandlerUrl()
 		{
-				return _oAuthOptions.GoogleOAuth.ClientHandlerUrl;
+				return $"{_uniquandaClientOptions.Url}/public/login/oauth/Google";
 		}
 
 		private class GoogleTokenResponse {
