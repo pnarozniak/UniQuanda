@@ -623,7 +623,7 @@ public class AuthRepository : IAuthRepository
             var success = await _authContext.SaveChangesAsync(ct) == 2;
             if (!success) return null;
 
-            var appUser = await _appContext.AppUsers.Where(u => u.Id == oAuthUser.IdUser).SingleOrDefaultAsync();
+            var appUser = await _appContext.AppUsers.Where(u => u.Id == oAuthUser.IdUser).SingleOrDefaultAsync(ct);
             if (appUser is null) {
                 await tran.RollbackAsync(ct);
                 return null;
