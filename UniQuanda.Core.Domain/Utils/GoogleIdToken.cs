@@ -4,6 +4,5 @@ namespace UniQuanda.Core.Domain.Utils
     {
         public string Id { get; set; }
         public string Email { get; set; }
-        public string Nickname { get; set; }
     }
 }

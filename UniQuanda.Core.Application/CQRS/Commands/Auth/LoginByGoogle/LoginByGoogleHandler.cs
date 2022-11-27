@@ -1,16 +1,12 @@
 using MediatR;
-using UniQuanda.Core.Application.CQRS.Commands.Auth.LoginByGoogle;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services.Auth;
-using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.Enums;
-using UniQuanda.Core.Domain.Utils;
 
-namespace UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
+namespace UniQuanda.Core.Application.CQRS.Commands.Auth.LoginByGoogle;
 
 public class LoginByGoogleHandler : IRequestHandler<LoginByGoogleCommand, string>
 {
-    private readonly IAppUserRepository _appUserRepository;
     private readonly IAuthRepository _authRepository;
     private readonly ITokensService _tokensService;
     private readonly IOAuthService _oAuthService;
@@ -19,13 +15,11 @@ public class LoginByGoogleHandler : IRequestHandler<LoginByGoogleCommand, string
     public LoginByGoogleHandler(
         IAuthRepository authRepository,
         ITokensService tokensService,
-        IAppUserRepository appUserRepository,
         IOAuthService oAuthService
     )
     {
         _authRepository = authRepository;
         _tokensService = tokensService;
-        _appUserRepository = appUserRepository;
         _oAuthService = oAuthService;
         _clientHandlerUrl = _oAuthService.GetGoogleClientHandlerUrl();
     }

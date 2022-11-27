@@ -54,7 +54,6 @@ public class OAuthService : IOAuthService
 					{
 							Id = jwt.Claims.First(c => c.Type == "sub").Value,
 							Email = jwt.Claims.First(c => c.Type == "email").Value,
-							Nickname = jwt.Claims.First(c => c.Type == "given_name").Value,
 					};
 			} catch {
 					return null;

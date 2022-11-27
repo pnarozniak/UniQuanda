@@ -566,7 +566,7 @@ public class AuthRepository : IAuthRepository
         using var tran = await _authContext.Database.BeginTransactionAsync(ct);
         try
         {
-            await _authContext.Users.AddAsync(newAuthUser);
+            await _authContext.Users.AddAsync(newAuthUser, ct);
             var isAdded = await _authContext.SaveChangesAsync(ct) == 3;
             if (!isAdded) return false;
 
@@ -576,10 +576,10 @@ public class AuthRepository : IAuthRepository
                 Nickname = newAuthUser.Nickname
             };
 
-            await _appContext.AppUsers.AddAsync(newAppUser);
+            await _appContext.AppUsers.AddAsync(newAppUser, ct);
             isAdded = await _appContext.SaveChangesAsync(ct) == 1;
             if (!isAdded) {
-                await tran.RollbackAsync();
+                await tran.RollbackAsync(ct);
                 return false;
             }
 
@@ -602,7 +602,7 @@ public class AuthRepository : IAuthRepository
         };
 
         _authContext.Entry(updatedOAuthUser).Property(ou => ou.OAuthRegisterConfirmationCode).IsModified = true;
-        await _authContext.SaveChangesAsync();
+        await _authContext.SaveChangesAsync(ct);
 	}
 
 	public async Task<int?> ConfirmOAuthRegisterAsync(string confirmationCode, NewUserEntity newUser, CancellationToken ct)
@@ -610,7 +610,7 @@ public class AuthRepository : IAuthRepository
 		var oAuthUser = await _authContext.OAuthUsers
             .Include(ou => ou.IdUserNavigation)
             .Where(ou => ou.OAuthRegisterConfirmationCode == confirmationCode)
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync(ct);
 
         if (oAuthUser is null) return null;
 
@@ -620,12 +620,12 @@ public class AuthRepository : IAuthRepository
             oAuthUser.OAuthRegisterConfirmationCode = null;
             oAuthUser.IdUserNavigation.Nickname = newUser.Nickname;
 
-            var success = await _authContext.SaveChangesAsync() == 2;
+            var success = await _authContext.SaveChangesAsync(ct) == 2;
             if (!success) return null;
 
             var appUser = await _appContext.AppUsers.Where(u => u.Id == oAuthUser.IdUser).SingleOrDefaultAsync();
             if (appUser is null) {
-                await tran.RollbackAsync();
+                await tran.RollbackAsync(ct);
                 return null;
             }
 
@@ -636,17 +636,17 @@ public class AuthRepository : IAuthRepository
             appUser.City = newUser.OptionalInfo.City;
             appUser.PhoneNumber = newUser.OptionalInfo.PhoneNumber;
             
-            success = await _appContext.SaveChangesAsync() == 1;
+            success = await _appContext.SaveChangesAsync(ct) == 1;
             if (!success) {
-                await tran.RollbackAsync();
+                await tran.RollbackAsync(ct);
                 return null;
             }
-            await tran.CommitAsync();
+            await tran.CommitAsync(ct);
             return appUser.Id;
         }
         catch
         {
-            await tran.RollbackAsync();
+            await tran.RollbackAsync(ct);
             return null;
         }
 	}
