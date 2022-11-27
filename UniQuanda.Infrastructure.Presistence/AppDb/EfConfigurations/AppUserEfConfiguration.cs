@@ -10,7 +10,7 @@ public class AppUserEfConfiguration : IEntityTypeConfiguration<AppUser>
     {
         builder.HasKey(u => u.Id);
 
-        builder.Property(u => u.Nickname).HasMaxLength(30).IsRequired();
+        builder.Property(u => u.Nickname).HasMaxLength(30).IsRequired(false);
         builder.HasIndex(u => u.Nickname).IsUnique();
 
         builder.Property(u => u.FirstName).HasMaxLength(35).IsRequired(false);

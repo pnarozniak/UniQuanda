@@ -26,11 +26,12 @@ public class LoginHandler : IRequestHandler<LoginCommand, LoginResponseDTO>
     public async Task<LoginResponseDTO> Handle(LoginCommand request, CancellationToken ct)
     {
         var appUser = await _authRepository.GetUserByEmailAsync(request.Email, ct);
-        if (appUser is null || !_passwordsService.VerifyPassword(request.Password, appUser.HashedPassword))
-            return new LoginResponseDTO
+        if (appUser is null || appUser.IsOAuthUser|| !_passwordsService.VerifyPassword(request.Password, appUser.HashedPassword)) {
+         return new LoginResponseDTO
             {
                 Status = LoginResponseDTO.LoginStatus.InvalidCredentials
             };
+        }
 
         if (!appUser.IsEmailConfirmed)
             return new LoginResponseDTO
@@ -38,7 +39,7 @@ public class LoginHandler : IRequestHandler<LoginCommand, LoginResponseDTO>
                 Status = LoginResponseDTO.LoginStatus.EmailNotConfirmed
             };
 
-        var accessToken = _tokensService.GenerateAccessToken(appUser);
+        var accessToken = _tokensService.GenerateAccessToken(appUser.Id);
         var (refreshToken, refreshTokenExp) = _tokensService.GenerateRefreshToken();
         await _authRepository.UpdateUserRefreshTokenAsync(appUser.Id, refreshToken, refreshTokenExp, ct);
         var avatar = await _appUserRepository.GetUserAvatarAsync(appUser.Id, ct);

@@ -11,7 +11,7 @@ public class UserEfConfiguration : IEntityTypeConfiguration<User>
         builder.HasKey(u => u.Id);
         builder.Property(u => u.Id).ValueGeneratedOnAdd();
 
-        builder.Property(u => u.Nickname).HasMaxLength(30).IsRequired();
+        builder.Property(u => u.Nickname).HasMaxLength(30).IsRequired(false);
         builder.HasIndex(u => u.Nickname).IsUnique();
 
         builder.Property(u => u.HashedPassword).IsRequired();

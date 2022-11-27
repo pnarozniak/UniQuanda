@@ -1,5 +1,6 @@
 ﻿using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Core.Application.Repositories;
@@ -243,4 +244,8 @@ public interface IAuthRepository
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>Main email if email is valid, otherwise null</returns>
     Task<string?> GetMainEmailByEmailToConfirmAsync(string emailToConfirm, CancellationToken ct);
+
+    Task<bool> RegisterOAuthUserAsync(string oAuthId, string oAuthEmail, string oAuthCode, OAuthProviderEnum provider, CancellationToken ct);
+    Task UpdateOAuthUserRegisterConfirmationCodeAsync(int userId, string oAuthCode, CancellationToken ct);
+    Task<int?> ConfirmOAuthRegisterAsync(string confirmationCode, NewUserEntity newUser, CancellationToken ct);
 }
