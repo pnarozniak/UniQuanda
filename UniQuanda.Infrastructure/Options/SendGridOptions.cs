@@ -26,11 +26,13 @@ public class TemplatesOptions
         RegisterConfirmationId = section["RegisterConfirmationId"];
         AccountActionToConfirmId = section["AccountActionToConfirmId"];
         AccountActionFinishedId = section["AccountActionFinishedId"];
+        OAuthRegisterSuccessId = section["OAuthRegisterSuccessId"];
     }
 
     public string RegisterConfirmationId { get; set; }
     public string AccountActionToConfirmId { get; set; }
     public string AccountActionFinishedId { get; set; }
+    public string OAuthRegisterSuccessId { get; set; }
 
     public class RegisterConfirmationData
     {
@@ -57,5 +59,10 @@ public class TemplatesOptions
         public string UserAgentBrowser { get; set; }
         public string UserAgentOs { get; set; }
         public string SupportContactLink { get; set; }
+    }
+
+    public class OAuthRegisterSuccessData
+    {
+        public string TermsAndConditionsLink { get; set; }
     }
 }

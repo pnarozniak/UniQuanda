@@ -2,7 +2,11 @@
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.Enums;
+<<<<<<< HEAD
 using UniQuanda.Core.Domain.Enums.Results;
+=======
+using UniQuanda.Core.Domain.Utils;
+>>>>>>> develop
 using UniQuanda.Core.Domain.ValueObjects;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
@@ -79,12 +83,15 @@ public class AuthRepository : IAuthRepository
     {
         var appUser = await _authContext.Users
             .Where(u => u.Emails.Any(ue => EF.Functions.ILike(ue.Value, email)))
+            .Include(u => u.IdOAuthUserNavigation)
             .Select(u => new UserEntity
             {
                 Id = u.Id,
                 Nickname = u.Nickname,
                 HashedPassword = u.HashedPassword,
-                IsEmailConfirmed = !_authContext.TempUsers.Any(tu => tu.IdUser == u.Id)
+                IsEmailConfirmed = !_authContext.TempUsers.Any(tu => tu.IdUser == u.Id),
+                IsOAuthUser = u.IdOAuthUserNavigation != null,
+                IsOAuthRegisterCompleted = u.IdOAuthUserNavigation != null && u.IdOAuthUserNavigation.OAuthRegisterConfirmationCode == null
             })
             .SingleOrDefaultAsync(ct);
 
@@ -249,11 +256,14 @@ public class AuthRepository : IAuthRepository
     {
         return await _authContext.Users
             .Where(u => u.Id == idUser)
+            .Include(u => u.IdTempUserNavigation)
             .Select(u => new UserEntity
             {
                 Id = u.Id,
+                Nickname = u.Nickname,
                 RefreshToken = u.RefreshToken,
-                RefreshTokenExp = u.RefreshTokenExp
+                RefreshTokenExp = u.RefreshTokenExp,
+                IsOAuthUser = u.IdOAuthUserNavigation != null
             })
             .SingleOrDefaultAsync(ct);
     }
@@ -537,5 +547,114 @@ public class AuthRepository : IAuthRepository
             .SingleOrDefaultAsync(u => u.Emails.Any(e => EF.Functions.Like(e.Value, email)), ct);
 
         return user is null ? null : user.Emails.SingleOrDefault(e => e.IsMain)!.Value;
+    }
+
+    public async Task<bool> RegisterOAuthUserAsync(string oAuthId, string oAuthEmail, string oAuthCode, OAuthProviderEnum provider, CancellationToken ct)
+    {
+        var newAuthUser = new User
+        {
+            Nickname = null,
+            HashedPassword = "",
+            IdOAuthUserNavigation = new OAuthUser
+            {
+                OAuthId = oAuthId,
+                OAuthProvider = provider,
+                OAuthRegisterConfirmationCode = oAuthCode
+            },
+            Emails = new List<UserEmail>
+            {
+                new() { IsMain = true, Value = oAuthEmail }
+            }
+        };
+
+        using var tran = await _authContext.Database.BeginTransactionAsync(ct);
+        try
+        {
+            await _authContext.Users.AddAsync(newAuthUser, ct);
+            var isAdded = await _authContext.SaveChangesAsync(ct) == 3;
+            if (!isAdded) return false;
+
+            var newAppUser = new AppUser
+            {
+                Id = newAuthUser.Id,
+                Nickname = newAuthUser.Nickname
+            };
+
+            await _appContext.AppUsers.AddAsync(newAppUser, ct);
+            isAdded = await _appContext.SaveChangesAsync(ct) == 1;
+            if (!isAdded)
+            {
+                await tran.RollbackAsync(ct);
+                return false;
+            }
+
+            await tran.CommitAsync(ct);
+            return true;
+        }
+        catch
+        {
+            await tran.RollbackAsync(ct);
+            return false;
+        }
+    }
+
+    public async Task UpdateOAuthUserRegisterConfirmationCodeAsync(int userId, string oAuthCode, CancellationToken ct)
+    {
+        var updatedOAuthUser = new OAuthUser
+        {
+            IdUser = userId,
+            OAuthRegisterConfirmationCode = oAuthCode
+        };
+
+        _authContext.Entry(updatedOAuthUser).Property(ou => ou.OAuthRegisterConfirmationCode).IsModified = true;
+        await _authContext.SaveChangesAsync(ct);
+    }
+
+    public async Task<int?> ConfirmOAuthRegisterAsync(string confirmationCode, NewUserEntity newUser, CancellationToken ct)
+    {
+        var oAuthUser = await _authContext.OAuthUsers
+            .Include(ou => ou.IdUserNavigation)
+            .Where(ou => ou.OAuthRegisterConfirmationCode == confirmationCode)
+            .SingleOrDefaultAsync(ct);
+
+        if (oAuthUser is null) return null;
+
+        using var tran = await _authContext.Database.BeginTransactionAsync(ct);
+        try
+        {
+            oAuthUser.OAuthRegisterConfirmationCode = null;
+            oAuthUser.IdUserNavigation.Nickname = newUser.Nickname;
+
+            var success = await _authContext.SaveChangesAsync(ct) == 2;
+            if (!success) return null;
+
+            var appUser = await _appContext.AppUsers.Where(u => u.Id == oAuthUser.IdUser).SingleOrDefaultAsync(ct);
+            if (appUser is null)
+            {
+                await tran.RollbackAsync(ct);
+                return null;
+            }
+
+            appUser.Nickname = newUser.Nickname;
+            appUser.FirstName = newUser.OptionalInfo.FirstName;
+            appUser.LastName = newUser.OptionalInfo.LastName;
+            appUser.Birthdate = newUser.OptionalInfo.Birthdate;
+            appUser.City = newUser.OptionalInfo.City;
+            appUser.PhoneNumber = newUser.OptionalInfo.PhoneNumber;
+
+            success = await _appContext.SaveChangesAsync(ct) == 1;
+            if (!success)
+            {
+                await tran.RollbackAsync(ct);
+                return null;
+            }
+            await tran.CommitAsync(ct);
+            return appUser.Id;
+        }
+        catch
+        {
+            await tran.RollbackAsync(ct);
+            return null;
+        }
     }
 }

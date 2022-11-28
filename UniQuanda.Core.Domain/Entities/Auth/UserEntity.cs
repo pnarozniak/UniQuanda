@@ -12,4 +12,6 @@ public class UserEntity
     public IEnumerable<string> Emails { get; set; }
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExp { get; set; }
+    public bool IsOAuthUser { get; set; }
+    public bool IsOAuthRegisterCompleted { get; set; }
 }

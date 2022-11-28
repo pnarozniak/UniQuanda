@@ -68,4 +68,10 @@ public interface IEmailService
     /// <param name="newMainEmail">New main email</param>
     /// <param name="userAgentInfo">Info about user agent performing operation</param>
     Task SendEmailAboutUpdatedMainEmailAsync(string to, string newMainEmail, UserAgentInfo userAgentInfo);
+
+    /// <summary>
+    ///     Send oauth register success notification email
+    /// </summary>
+    /// <param name="to">E-mail address of recipient</param>
+    Task SendOAuthRegisterSuccessEmail(string to);
 }

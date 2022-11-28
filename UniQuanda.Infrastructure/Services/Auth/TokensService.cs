@@ -3,7 +3,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using UniQuanda.Core.Application.Services.Auth;
-using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Infrastructure.Options;
 
 namespace UniQuanda.Infrastructure.Services.Auth;
@@ -38,21 +37,15 @@ public class TokensService : ITokensService
         return Guid.NewGuid().ToString();
     }
 
-    public string GenerateAccessToken(UserEntity user)
+    public string GenerateAccessToken(int idUser, bool isOAuthUser = false)
     {
         var userClaims = new List<Claim>
         {
-            new(ClaimTypes.NameIdentifier, user.Id.ToString())
+            new(ClaimTypes.NameIdentifier, idUser.ToString()),
         };
 
-        //TODO This is mocked part of the code, should be replaced in the future with bellow working code
         userClaims.Add(new Claim(ClaimTypes.Role, "user"));
-        /*
-        foreach (var role in user.Roles)
-        {
-            userClaims.Add(new Claim(ClaimTypes.Role, role));
-        }
-        */
+        userClaims.Add(new Claim(ClaimTypes.Role, isOAuthUser ? "oauth_account" : "uniquanda_account"));
 
         var key = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(_options.AccessToken.SecretKey));
