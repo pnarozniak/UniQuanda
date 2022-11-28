@@ -142,6 +142,17 @@ public class SendGridService : IEmailService
         await SendEmailAsync(to, templateId, templateData);
     }
 
+    public async Task SendOAuthRegisterSuccessEmail(string to)
+    {
+        var templateId = _options.Templates.OAuthRegisterSuccessId;
+        var templateData = new TemplatesOptions.OAuthRegisterSuccessData
+        {
+            TermsAndConditionsLink = $"{_uniQuandaClientOptions.Url}/public/terms-and-conditions"
+        };
+
+        await SendEmailAsync(to, templateId, templateData);
+    }
+
     private async Task SendEmailAsync(string email, string templateId, object templateData)
     {
         var client = new SendGridClient(_options.ApiKey);

@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.AddExtraEmail;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.CancelEmailConfirmation;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ConfirmEmail;
+using UniQuanda.Core.Application.CQRS.Commands.Auth.ConfirmOAuthRegister;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ConfirmRegister;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.DeleteExtraEmail;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
+using UniQuanda.Core.Application.CQRS.Commands.Auth.LoginByGoogle;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.RecoverPassword;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.RefreshToken;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Register;
@@ -16,6 +18,7 @@ using UniQuanda.Core.Application.CQRS.Commands.Auth.ResetPasword;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateMainEmail;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.UpdatePassword;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.GetUserEmails;
+using UniQuanda.Core.Application.CQRS.Queries.Auth.GetUserInfo;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.IsEmailAndNicknameAvailable;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Infrastructure.Enums;
@@ -87,6 +90,54 @@ public class AuthController : ControllerBase
             LoginResponseDTO.LoginStatus.InvalidCredentials => NotFound(),
             _ => Ok(loginResult)
         };
+    }
+
+    /// <summary>
+    ///     Performs login or register by google provider
+    /// </summary>
+    [HttpGet("login-by-google")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status307TemporaryRedirect)]
+    public async Task<IActionResult> LoginByGoogle(
+        [FromQuery] LoginByGoogleRequestDTO request,
+        CancellationToken ct)
+    {
+        var command = new LoginByGoogleCommand(request);
+        var redirectResultUrl = await _mediator.Send(command, ct);
+        return new RedirectResult(redirectResultUrl, false);
+    }
+
+    /// <summary>
+    ///     Performs login or register by google provider
+    /// </summary>
+    [Recaptcha]
+    [HttpPost("confirm-oauth-register")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConfirmOAuthRegisterResponseDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ConfirmOAuthRegister(
+        [FromBody] ConfirmOAuthRegisterRequestDTO request,
+        CancellationToken ct)
+    {
+        var command = new ConfirmOAuthRegisterCommand(request);
+        var response = await _mediator.Send(command, ct);
+        return response is null ? NotFound() : Ok(response);
+    }
+
+    /// <summary>
+    ///     Gets user info based on access token
+    /// </summary>
+    [Recaptcha]
+    [HttpGet("user-info")]
+    [Authorize(Roles = "user")]
+    [Authorize(Roles = "oauth_account")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UserInfo(CancellationToken ct)
+    {
+        var query = new GetUserInfoQuery(User.GetId()!.Value);
+        var userInfo = await _mediator.Send(query, ct);
+        return userInfo is null ? NotFound() : Ok(userInfo);
     }
 
     /// <summary>
@@ -176,6 +227,7 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("get-user-emails")]
     [Authorize(Roles = "user")]
+    [Authorize(Roles = "uniquanda_user")]
     public async Task<IActionResult> GetUserEmails(CancellationToken ct)
     {
         var command = new GetUserEmailsQuery(User.GetId()!.Value);
@@ -192,6 +244,7 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
     [HttpPut("update-main-email")]
     [Authorize(Roles = "user")]
+    [Authorize(Roles = "uniquanda_user")]
     public async Task<IActionResult> UpdateUserMainEmail([FromBody] UpdateMainEmailRequestDTO request, CancellationToken ct)
     {
         var command = new UpdateMainEmailCommand(request, User.GetId()!.Value, HttpContext.GetUserAgentInfo());
@@ -215,6 +268,7 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
     [HttpPost("add-extra-email")]
     [Authorize(Roles = "user")]
+    [Authorize(Roles = "uniquanda_user")]
     public async Task<IActionResult> AddExtraEmail([FromBody] AddExtraEmailRequestDTO request, CancellationToken ct)
     {
         var command = new AddExtraEmailCommand(request, User.GetId()!.Value, HttpContext.GetUserAgentInfo());
@@ -240,6 +294,7 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
     [HttpPut("update-user-password")]
     [Authorize(Roles = "user")]
+    [Authorize(Roles = "uniquanda_user")]
     public async Task<IActionResult> UpdateUserPassword([FromBody] UpdatePasswordRequestDTO request, CancellationToken ct)
     {
         var command = new UpdatePasswordCommand(request, User.GetId()!.Value, HttpContext.GetUserAgentInfo());
@@ -261,7 +316,7 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
     [HttpPost("delete-extra-email")]
-    [Authorize(Roles = "user")]
+    [Authorize(Roles = "user,uniquanda_account")]
     public async Task<IActionResult> DeleteExtraEmail([FromBody] DeleteExtraEmailRequestDTO request, CancellationToken ct)
     {
         var command = new DeleteExtraEmailCommand(request, User.GetId()!.Value, HttpContext.GetUserAgentInfo());
@@ -298,6 +353,7 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [HttpPost("resend-confirmation-email")]
     [Authorize(Roles = "user")]
+    [Authorize(Roles = "uniquanda_user")]
     public async Task<IActionResult> ResendConfirmationEmail(CancellationToken ct)
     {
         var command = new ResendEmailWithConfirmationEmailLinkCommand(User.GetId()!.Value, HttpContext.GetUserAgentInfo());
@@ -313,6 +369,7 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [HttpDelete("cancel-email-confirmation")]
     [Authorize(Roles = "user")]
+    [Authorize(Roles = "uniquanda_user")]
     public async Task<IActionResult> CancelEmailConfirmation(CancellationToken ct)
     {
         var command = new CancelEmailConfirmationCommand(User.GetId()!.Value);

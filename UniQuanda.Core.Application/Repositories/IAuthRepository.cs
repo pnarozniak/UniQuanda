@@ -1,5 +1,6 @@
 ﻿using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Core.Application.Repositories;
@@ -243,4 +244,32 @@ public interface IAuthRepository
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>Main email if email is valid, otherwise null</returns>
     Task<string?> GetMainEmailByEmailToConfirmAsync(string emailToConfirm, CancellationToken ct);
+    
+    /// <summary>
+    ///     Registers new oauth user
+    /// </summary>
+    /// <param name="oAuthId">User OAuth Id</param>
+    /// <param name="oAuthEmail">User OAuth Email</param>
+    /// <param name="oAuthCode">User OAuth register confirmation code</param>
+    /// <param name="provider">OAuth provider</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>True if register was successful, otherwise False</returns>
+    Task<bool> RegisterOAuthUserAsync(string oAuthId, string oAuthEmail, string oAuthCode, OAuthProviderEnum provider, CancellationToken ct);
+
+    /// <summary>
+    ///     Updates OAuthUser register confirmation code
+    /// </summary>
+    /// <param name="userId">Id of user to be updated</param>
+    /// <param name="oAuthCode">New OAuth register confirmation code</param>
+    /// <param name="ct">Operation cancellation token</param>
+    Task UpdateOAuthUserRegisterConfirmationCodeAsync(int userId, string oAuthCode, CancellationToken ct);
+
+    /// <summary>
+    ///     Confirms oauth registration
+    /// </summary>
+    /// <param name="confirmationCode">User OAuth register confirmation code</param>
+    /// <param name="newUser">New User Data</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>Id of user if confirmation was successful, otherwise Null</returns>
+    Task<int?> ConfirmOAuthRegisterAsync(string confirmationCode, NewUserEntity newUser, CancellationToken ct);
 }

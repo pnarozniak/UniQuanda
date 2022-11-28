@@ -26,7 +26,7 @@ public interface ITokensService
     ///     Generates access token for given user
     /// </summary>
     /// <returns>Access token as string</returns>
-    string GenerateAccessToken(UserEntity user);
+    string GenerateAccessToken(int idUser, bool isOAuthUser = false);
 
     /// <summary>
     ///     Validates access token, without its lifetime and parses its claims.
