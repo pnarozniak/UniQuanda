@@ -37,13 +37,13 @@ public class UpdateAppUserProfileRequestDTO
     public IFormFile? Avatar { get; set; }
 
     [Required]
-    public bool IsNewAvatar { get; set; }
+    public bool? IsNewAvatar { get; set; }
 
     [ImageUploadValidator("Banner")]
     public IFormFile? Banner { get; set; }
 
     [Required]
-    public bool IsNewBanner { get; set; }
+    public bool? IsNewBanner { get; set; }
 }
 
 public class UpdateAppUserProfileResponseDTO

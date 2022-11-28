@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.LoginByGoogle;
@@ -28,6 +29,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.LoginByGoogle
             Email = "email",
         };
         private string url = "url";
+        private Tuple<string, DateTime> refreshToken = new("", new DateTime());
 
         [SetUp]
         public void SetupTests()
@@ -43,8 +45,11 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.LoginByGoogle
                 .Setup(os => os.GetGoogleIdTokenAsync(It.IsAny<string>()))
                 .ReturnsAsync(googleIdToken);
             this.oauthService
-    .Setup(os => os.GetGoogleClientHandlerUrl())
-    .Returns(url);
+                .Setup(os => os.GetGoogleClientHandlerUrl())
+                .Returns(url);
+            this.tokensService
+                    .Setup(ts => ts.GenerateRefreshToken())
+                    .Returns(this.refreshToken);
 
             this.loginByGoogleCommand = new LoginByGoogleCommand(new LoginByGoogleRequestDTO { Code = "Code" });
             this.loginByGoogleHandler = new LoginByGoogleHandler(this.authRepository.Object, this.tokensService.Object, this.oauthService.Object);

@@ -23,8 +23,8 @@ public class UpdateAppUserProfileCommand : IRequest<UpdateAppUserProfileResponse
 
         Avatar = request.Avatar;
         Banner = request.Banner;
-        IsNewAvatar = request.IsNewAvatar;
-        IsNewBanner = request.IsNewBanner;
+        IsNewAvatar = request.IsNewAvatar!.Value;
+        IsNewBanner = request.IsNewBanner!.Value;
     }
 
     public AppUserEntity AppUser { get; set; }
