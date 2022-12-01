@@ -10,14 +10,14 @@ public class OAuthUserEfConfiguration : IEntityTypeConfiguration<OAuthUser>
     {
         builder.HasKey(ou => ou.IdUser);
 
-				builder.Property(ou => ou.OAuthId).IsRequired();
-				builder.Property(ou => ou.OAuthRegisterConfirmationCode).IsRequired(false);
+        builder.Property(ou => ou.OAuthId).IsRequired();
+        builder.Property(ou => ou.OAuthRegisterConfirmationCode).IsRequired(false);
 
-				builder.HasIndex(ou => new { ou.OAuthId, ou.OAuthProvider }).IsUnique();
+        builder.HasIndex(ou => new { ou.OAuthId, ou.OAuthProvider }).IsUnique();
 
-				builder.HasOne(ou => ou.IdUserNavigation)
-					.WithOne(u => u.IdOAuthUserNavigation)
-					.HasForeignKey<OAuthUser>(ou => ou.IdUser)
-					.OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(ou => ou.IdUserNavigation)
+            .WithOne(u => u.IdOAuthUserNavigation)
+            .HasForeignKey<OAuthUser>(ou => ou.IdUser)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

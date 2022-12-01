@@ -1,10 +1,9 @@
 ﻿using MediatR;
-using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Core.Domain.Utils;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.DeleteExtraEmail;
 
-public class DeleteExtraEmailCommand : IRequest<UpdateSecurityResultEnum>
+public class DeleteExtraEmailCommand : IRequest<DeleteExtraEmailResponseDTO>
 {
     public DeleteExtraEmailCommand(DeleteExtraEmailRequestDTO request, int idUser, UserAgentInfo userAgentInfo)
     {

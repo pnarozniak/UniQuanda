@@ -1,6 +1,4 @@
-﻿using UniQuanda.Core.Domain.Entities.Auth;
-
-namespace UniQuanda.Core.Application.Services.Auth;
+﻿namespace UniQuanda.Core.Application.Services.Auth;
 
 public interface ITokensService
 {

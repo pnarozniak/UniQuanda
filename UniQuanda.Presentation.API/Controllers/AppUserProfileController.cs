@@ -5,6 +5,8 @@ using UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProf
 using UniQuanda.Core.Application.CQRS.Queries.AppUser.Profile.GetAppUserProfileSettings;
 using UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile;
 using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Enums.Results;
+using UniQuanda.Infrastructure.Enums;
 using UniQuanda.Presentation.API.Extensions;
 
 namespace UniQuanda.Presentation.API.Controllers;
@@ -43,7 +45,7 @@ public class AppUserProfileController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet("settings")]
-    [Authorize(Roles = "user")]
+    [Authorize(Roles = JwtTokenRole.User)]
     public async Task<IActionResult> GetAppUserProfileSettings(
         CancellationToken ct)
     {
@@ -57,25 +59,24 @@ public class AppUserProfileController : ControllerBase
     /// <summary>
     ///     Update AppUser profile settings in Db
     /// </summary>
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UpdateAppUserProfileResponseDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(UpdateAppUserProfileResponseDTO))]
     [HttpPut("settings")]
     [RequestSizeLimit(21 * (int)ByteSizeEnum.MegaByte)]
-    [Authorize(Roles = "user")]
+    [Authorize(Roles = JwtTokenRole.User)]
     public async Task<IActionResult> UpdateAppUserProfileSettings(
         [FromForm] UpdateAppUserProfileRequestDTO request,
         CancellationToken ct)
     {
         var command = new UpdateAppUserProfileCommand(request, User.GetId()!.Value);
         var result = await _mediator.Send(command, ct);
-        return result.AppUserUpdateStatus switch
+
+        return result.UpdateStatus switch
         {
-            AppUserUpdateStatusEnum.AppUserNotExist => NotFound(),
-            AppUserUpdateStatusEnum.NickNameIsUsed => Conflict(new { isNickNameUsed = true }),
-            AppUserUpdateStatusEnum.NotSuccessful => Conflict(new { isNickNameUsed = false }),
-            AppUserUpdateStatusEnum.Successful => Ok(new { avatarUrl = result.AvatarUrl })
+            AppUserProfileUpdateResultEnum.ContentNotExist => NotFound(),
+            AppUserProfileUpdateResultEnum.Successful => Ok(result),
+            _ => Conflict(result)
         };
     }
 }

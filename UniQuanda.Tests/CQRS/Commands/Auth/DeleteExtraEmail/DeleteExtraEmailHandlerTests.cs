@@ -9,7 +9,7 @@ using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Entities.Auth;
-using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Enums.Results;
 using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Core.Domain.ValueObjects;
 
@@ -54,7 +54,7 @@ public class DeleteExtraEmailHandlerTests
 
         var result = await deleteExtraEmailHandler.Handle(this.deleteExtraEmailCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.Successful);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.Successful);
     }
 
     [Test]
@@ -67,7 +67,7 @@ public class DeleteExtraEmailHandlerTests
 
         var result = await deleteExtraEmailHandler.Handle(this.deleteExtraEmailCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.ContentNotExist);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.ContentNotExist);
     }
 
     [Test]
@@ -84,7 +84,7 @@ public class DeleteExtraEmailHandlerTests
 
         var result = await deleteExtraEmailHandler.Handle(this.deleteExtraEmailCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.InvalidPassword);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.InvalidPassword);
     }
 
     [Test]
@@ -99,7 +99,7 @@ public class DeleteExtraEmailHandlerTests
 
         var result = await deleteExtraEmailHandler.Handle(this.deleteExtraEmailCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.ContentNotExist);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.ContentNotExist);
     }
 
     [Test]
@@ -114,7 +114,7 @@ public class DeleteExtraEmailHandlerTests
 
         var result = await deleteExtraEmailHandler.Handle(this.deleteExtraEmailCommand, CancellationToken.None);
 
-        result.Should().Be(UpdateSecurityResultEnum.DbConflict);
+        result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.UnSuccessful);
     }
 
     private void SetupDeleteExtraEmailCommand(string plainPassword = PlainPassword, int idExtraEmail = IdExtraEmail)

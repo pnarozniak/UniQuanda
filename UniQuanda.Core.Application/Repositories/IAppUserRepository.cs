@@ -1,5 +1,4 @@
 ﻿using UniQuanda.Core.Domain.Entities.App;
-using UniQuanda.Core.Domain.Utils;
 
 namespace UniQuanda.Core.Application.Repositories;
 
@@ -33,12 +32,11 @@ public interface IAppUserRepository
     ///     Update AppUser information
     /// </summary>
     /// <param name="appUser">New data</param>
+    /// <param name="isNewAvatar">Information if new avatar is added</param>
+    /// <param name="isNewBanner">Information if new banner is added</param>
     /// <param name="ct">Operation cancellation token</param>
-    /// <returns>
-    ///     If AppUser isn't found then IsSuccessful NULL, otherwise true/false based on success of update. If it is
-    ///     successful, returned is avatar url
-    /// </returns>
-    Task<AppUserUpdateResult> UpdateAppUserAsync(AppUserEntity appUser, CancellationToken ct);
+    /// <returns> Null when data not exists, otherwise is success of update</returns>
+    Task<bool?> UpdateAppUserAsync(AppUserEntity appUser, bool isNewAvatar, bool isNewBanner, CancellationToken ct);
 
     /// <summary>
     ///     Checks if given nickname is currently used by any user

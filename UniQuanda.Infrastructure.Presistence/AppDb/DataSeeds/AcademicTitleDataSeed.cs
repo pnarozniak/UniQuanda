@@ -1,13 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Collections.Generic;
-using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 using static UniQuanda.Core.Domain.Enums.AcademicTitleEnum;
 
 namespace UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds
 {
-    public class AcademicTitleDataSeed: IEntityTypeConfiguration<AcademicTitle>
+    public class AcademicTitleDataSeed : IEntityTypeConfiguration<AcademicTitle>
     {
         public void Configure(EntityTypeBuilder<AcademicTitle> builder)
         {

@@ -2,12 +2,12 @@
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
-using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Enums.Results;
 using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.AddExtraEmail;
 
-public class AddExtraEmailHandler : IRequestHandler<AddExtraEmailCommand, UpdateSecurityResultEnum>
+public class AddExtraEmailHandler : IRequestHandler<AddExtraEmailCommand, AddExtraEmailResponseDTO>
 {
     private readonly IAuthRepository _authRepository;
     private readonly IPasswordsService _passwordsService;
@@ -29,26 +29,26 @@ public class AddExtraEmailHandler : IRequestHandler<AddExtraEmailCommand, Update
         _expirationService = expirationService;
     }
 
-    public async Task<UpdateSecurityResultEnum> Handle(AddExtraEmailCommand request, CancellationToken ct)
+    public async Task<AddExtraEmailResponseDTO> Handle(AddExtraEmailCommand request, CancellationToken ct)
     {
         var user = await _authRepository.GetUserWithEmailsByIdAsync(request.IdUser, ct);
         if (user is null)
-            return UpdateSecurityResultEnum.ContentNotExist;
+            return new AddExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.ContentNotExist };
 
         if (!_passwordsService.VerifyPassword(request.PlainPassword, user.HashedPassword))
-            return UpdateSecurityResultEnum.InvalidPassword;
+            return new AddExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.InvalidPassword };
 
         var isEmailAvailable = await _authRepository.IsEmailAvailableAsync(null, request.NewExtraEmail, ct);
         if (!isEmailAvailable)
-            return UpdateSecurityResultEnum.EmailNotAvailable;
+            return new AddExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.EmailNotAvailable };
 
         var isUserAllowed = await _authRepository.IsUserAllowedToAddExtraEmailAsync(request.IdUser, ct);
         if (isUserAllowed == CheckOptionOfAddNewExtraEmail.UserNotExist)
-            return UpdateSecurityResultEnum.ContentNotExist;
+            return new AddExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.ContentNotExist };
         else if (isUserAllowed == CheckOptionOfAddNewExtraEmail.OverLimitOfExtraEmails)
-            return UpdateSecurityResultEnum.OverLimitOfExtraEmails;
+            return new AddExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.OverLimitOfExtraEmails };
         else if (isUserAllowed == CheckOptionOfAddNewExtraEmail.UserHasActionToConfirm)
-            return UpdateSecurityResultEnum.UserHasActionToConfirm;
+            return new AddExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.UserHasActionToConfirm };
 
         var userEmailToConfirm = new UserEmailToConfirm
         {
@@ -66,9 +66,9 @@ public class AddExtraEmailHandler : IRequestHandler<AddExtraEmailCommand, Update
 
         return addResult switch
         {
-            null => UpdateSecurityResultEnum.ContentNotExist,
-            false => UpdateSecurityResultEnum.DbConflict,
-            true => UpdateSecurityResultEnum.Successful
+            null => new AddExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.ContentNotExist },
+            false => new AddExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.UnSuccessful },
+            true => new AddExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.Successful }
         };
     }
 }

@@ -31,7 +31,8 @@ public class LoginByGoogleHandler : IRequestHandler<LoginByGoogleCommand, string
         if (idToken is null) return $"{_clientHandlerUrl}?error=500";
 
         var user = await _authRepository.GetUserByEmailAsync(idToken.Email, ct);
-        if (user is null) {
+        if (user is null)
+        {
             var isRegistered = await _authRepository.RegisterOAuthUserAsync(
                 idToken.Id, idToken.Email, request.Code, OAuthProviderEnum.Google, ct);
             return _clientHandlerUrl + (isRegistered ? $"?confirmationCode={request.Code}" : "?error=409");
@@ -39,7 +40,8 @@ public class LoginByGoogleHandler : IRequestHandler<LoginByGoogleCommand, string
 
         if (!user.IsOAuthUser) return $"{_clientHandlerUrl}?error=409";
 
-        if (!user.IsOAuthRegisterCompleted) {
+        if (!user.IsOAuthRegisterCompleted)
+        {
             await _authRepository.UpdateOAuthUserRegisterConfirmationCodeAsync(user.Id, request.Code, ct);
             return $"{_clientHandlerUrl}?confirmationCode={request.Code}";
         }

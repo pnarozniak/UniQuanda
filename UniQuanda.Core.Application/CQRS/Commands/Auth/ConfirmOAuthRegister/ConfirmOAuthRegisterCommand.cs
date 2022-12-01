@@ -10,17 +10,17 @@ public class ConfirmOAuthRegisterCommand : IRequest<ConfirmOAuthRegisterResponse
     {
         ConfirmationCode = request.ConfirmationCode;
         NewUser = new NewUserEntity
+        {
+            Nickname = request.Nickname,
+            OptionalInfo = new UserOptionalInfo
             {
-                Nickname = request.Nickname,
-                OptionalInfo = new UserOptionalInfo
-                {
-                    Birthdate = request.Birthdate,
-                    City = request.City,
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    PhoneNumber = request.PhoneNumber
-                }
-            };
+                Birthdate = request.Birthdate,
+                City = request.City,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                PhoneNumber = request.PhoneNumber
+            }
+        };
     }
 
     public string ConfirmationCode { get; set; }

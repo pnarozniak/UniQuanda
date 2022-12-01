@@ -26,8 +26,9 @@ public class LoginHandler : IRequestHandler<LoginCommand, LoginResponseDTO>
     public async Task<LoginResponseDTO> Handle(LoginCommand request, CancellationToken ct)
     {
         var appUser = await _authRepository.GetUserByEmailAsync(request.Email, ct);
-        if (appUser is null || appUser.IsOAuthUser|| !_passwordsService.VerifyPassword(request.Password, appUser.HashedPassword)) {
-         return new LoginResponseDTO
+        if (appUser is null || appUser.IsOAuthUser || !_passwordsService.VerifyPassword(request.Password, appUser.HashedPassword))
+        {
+            return new LoginResponseDTO
             {
                 Status = LoginResponseDTO.LoginStatus.InvalidCredentials
             };

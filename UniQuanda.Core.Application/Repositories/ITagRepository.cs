@@ -14,7 +14,7 @@ namespace UniQuanda.Core.Application.Repositories
         /// <param name="ct">Cancelation token</param>
         /// <returns>IEnumerable of parent tags</returns>
         public Task<IEnumerable<TagEntity>> GetParentTagsAsync(int take, int skip, OrderDirectionEnum orderDirection, CancellationToken ct);
-        
+
         /// <summary>
         ///     Gets sub-tags using paging
         /// </summary>
@@ -25,7 +25,7 @@ namespace UniQuanda.Core.Application.Repositories
         /// <param name="ct">Cancelation token</param>
         /// <returns>IEnumerable of sub-tags</returns>
         public Task<IEnumerable<TagEntity>> GetSubTagsAsync(int take, int skip, int tagId, OrderDirectionEnum orderDirection, CancellationToken ct);
-        
+
         /// <summary>
         ///     Gets parent tags and subtags using keyword and paging
         /// </summary>
@@ -36,7 +36,7 @@ namespace UniQuanda.Core.Application.Repositories
         /// <param name="ct">Cancelation token</param>
         /// <returns>IEnumerable of all tags with keyword</returns>
         public Task<IEnumerable<TagEntity>> GetTagsByKeywordAsync(int take, int skip, string keyword, OrderDirectionEnum orderDirection, CancellationToken ct);
-        
+
         /// <summary>
         ///     Gets subtags using keyword and paging
         /// </summary>
@@ -48,14 +48,14 @@ namespace UniQuanda.Core.Application.Repositories
         /// <param name="ct">Cancelation token</param>
         /// <returns>IEnumerable of all tags with keyword</returns>
         public Task<IEnumerable<TagEntity>> GetSubTagsByKeywordAsync(int take, int skip, string keyword, int tagId, OrderDirectionEnum orderDirection, CancellationToken ct);
-        
+
         /// <summary>
         ///     Get parent tags count
         /// </summary>
         /// <param name="ct">Cancelation token</param>
         /// <returns>Amount of parent tags</returns>
         public Task<int> GetParentTagsCountAsync(CancellationToken ct);
-        
+
         /// <summary>
         ///     Gets sub-tags count
         /// </summary>

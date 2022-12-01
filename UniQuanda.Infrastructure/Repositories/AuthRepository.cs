@@ -2,7 +2,7 @@
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.Enums;
-using UniQuanda.Core.Domain.Utils;
+using UniQuanda.Core.Domain.Enums.Results;
 using UniQuanda.Core.Domain.ValueObjects;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
@@ -259,7 +259,7 @@ public class AuthRepository : IAuthRepository
                 Nickname = u.Nickname,
                 RefreshToken = u.RefreshToken,
                 RefreshTokenExp = u.RefreshTokenExp,
-                IsOAuthUser = u.IdOAuthUserNavigation != null 
+                IsOAuthUser = u.IdOAuthUserNavigation != null
             })
             .SingleOrDefaultAsync(ct);
     }
@@ -546,7 +546,7 @@ public class AuthRepository : IAuthRepository
     }
 
     public async Task<bool> RegisterOAuthUserAsync(string oAuthId, string oAuthEmail, string oAuthCode, OAuthProviderEnum provider, CancellationToken ct)
-	{
+    {
         var newAuthUser = new User
         {
             Nickname = null,
@@ -578,7 +578,8 @@ public class AuthRepository : IAuthRepository
 
             await _appContext.AppUsers.AddAsync(newAppUser, ct);
             isAdded = await _appContext.SaveChangesAsync(ct) == 1;
-            if (!isAdded) {
+            if (!isAdded)
+            {
                 await tran.RollbackAsync(ct);
                 return false;
             }
@@ -591,11 +592,11 @@ public class AuthRepository : IAuthRepository
             await tran.RollbackAsync(ct);
             return false;
         }
-	}
+    }
 
-	public async Task UpdateOAuthUserRegisterConfirmationCodeAsync(int userId, string oAuthCode, CancellationToken ct)
-	{
-		var updatedOAuthUser = new OAuthUser
+    public async Task UpdateOAuthUserRegisterConfirmationCodeAsync(int userId, string oAuthCode, CancellationToken ct)
+    {
+        var updatedOAuthUser = new OAuthUser
         {
             IdUser = userId,
             OAuthRegisterConfirmationCode = oAuthCode
@@ -603,11 +604,11 @@ public class AuthRepository : IAuthRepository
 
         _authContext.Entry(updatedOAuthUser).Property(ou => ou.OAuthRegisterConfirmationCode).IsModified = true;
         await _authContext.SaveChangesAsync(ct);
-	}
+    }
 
-	public async Task<int?> ConfirmOAuthRegisterAsync(string confirmationCode, NewUserEntity newUser, CancellationToken ct)
-	{
-		var oAuthUser = await _authContext.OAuthUsers
+    public async Task<int?> ConfirmOAuthRegisterAsync(string confirmationCode, NewUserEntity newUser, CancellationToken ct)
+    {
+        var oAuthUser = await _authContext.OAuthUsers
             .Include(ou => ou.IdUserNavigation)
             .Where(ou => ou.OAuthRegisterConfirmationCode == confirmationCode)
             .SingleOrDefaultAsync(ct);
@@ -624,7 +625,8 @@ public class AuthRepository : IAuthRepository
             if (!success) return null;
 
             var appUser = await _appContext.AppUsers.Where(u => u.Id == oAuthUser.IdUser).SingleOrDefaultAsync(ct);
-            if (appUser is null) {
+            if (appUser is null)
+            {
                 await tran.RollbackAsync(ct);
                 return null;
             }
@@ -635,9 +637,10 @@ public class AuthRepository : IAuthRepository
             appUser.Birthdate = newUser.OptionalInfo.Birthdate;
             appUser.City = newUser.OptionalInfo.City;
             appUser.PhoneNumber = newUser.OptionalInfo.PhoneNumber;
-            
+
             success = await _appContext.SaveChangesAsync(ct) == 1;
-            if (!success) {
+            if (!success)
+            {
                 await tran.RollbackAsync(ct);
                 return null;
             }
@@ -649,5 +652,5 @@ public class AuthRepository : IAuthRepository
             await tran.RollbackAsync(ct);
             return null;
         }
-	}
+    }
 }

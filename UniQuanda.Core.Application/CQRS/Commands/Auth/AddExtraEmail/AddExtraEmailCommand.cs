@@ -1,10 +1,9 @@
 ﻿using MediatR;
-using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Core.Domain.Utils;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.AddExtraEmail;
 
-public class AddExtraEmailCommand : IRequest<UpdateSecurityResultEnum>
+public class AddExtraEmailCommand : IRequest<AddExtraEmailResponseDTO>
 {
     public AddExtraEmailCommand(AddExtraEmailRequestDTO request, int idUser, UserAgentInfo userAgentInfo)
     {

@@ -2,11 +2,11 @@
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
-using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Enums.Results;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.UpdatePassword;
 
-public class UpdatePasswordHandler : IRequestHandler<UpdatePasswordCommand, UpdateSecurityResultEnum>
+public class UpdatePasswordHandler : IRequestHandler<UpdatePasswordCommand, UpdatePasswordResponseDTO>
 {
     private readonly IAuthRepository _authRepository;
     private readonly IPasswordsService _passwordsService;
@@ -22,17 +22,17 @@ public class UpdatePasswordHandler : IRequestHandler<UpdatePasswordCommand, Upda
         _emailService = emailService;
     }
 
-    public async Task<UpdateSecurityResultEnum> Handle(UpdatePasswordCommand request, CancellationToken ct)
+    public async Task<UpdatePasswordResponseDTO> Handle(UpdatePasswordCommand request, CancellationToken ct)
     {
         if (request.NewPassword == request.OldPassword)
-            return UpdateSecurityResultEnum.Successful;
+            return new UpdatePasswordResponseDTO { ActionResult = AppUserSecurityActionResultEnum.Successful };
 
         var user = await _authRepository.GetUserWithEmailsByIdAsync(request.IdUser, ct);
         if (user is null)
-            return UpdateSecurityResultEnum.ContentNotExist;
+            return new UpdatePasswordResponseDTO { ActionResult = AppUserSecurityActionResultEnum.ContentNotExist };
 
         if (!_passwordsService.VerifyPassword(request.OldPassword, user.HashedPassword))
-            return UpdateSecurityResultEnum.InvalidPassword;
+            return new UpdatePasswordResponseDTO { ActionResult = AppUserSecurityActionResultEnum.InvalidPassword };
 
         request.NewPassword = _passwordsService.HashPassword(request.NewPassword);
 
@@ -42,9 +42,9 @@ public class UpdatePasswordHandler : IRequestHandler<UpdatePasswordCommand, Upda
 
         return updateResult switch
         {
-            null => UpdateSecurityResultEnum.ContentNotExist,
-            false => UpdateSecurityResultEnum.DbConflict,
-            true => UpdateSecurityResultEnum.Successful
+            null => new UpdatePasswordResponseDTO { ActionResult = AppUserSecurityActionResultEnum.ContentNotExist },
+            false => new UpdatePasswordResponseDTO { ActionResult = AppUserSecurityActionResultEnum.UnSuccessful },
+            true => new UpdatePasswordResponseDTO { ActionResult = AppUserSecurityActionResultEnum.Successful }
         };
     }
 }

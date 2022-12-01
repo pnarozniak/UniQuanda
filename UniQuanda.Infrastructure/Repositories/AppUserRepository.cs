@@ -3,7 +3,6 @@ using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Domain.Entities.App;
 using UniQuanda.Core.Domain.Enums;
-using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 using UniQuanda.Infrastructure.Presistence.AuthDb;
 
@@ -166,11 +165,11 @@ public class AppUserRepository : IAppUserRepository
         return appUser;
     }
 
-    public async Task<AppUserUpdateResult> UpdateAppUserAsync(AppUserEntity appUserEntity, CancellationToken ct)
+    public async Task<bool?> UpdateAppUserAsync(AppUserEntity appUserEntity, bool isAvatarUpdated, bool isBannerUpdated, CancellationToken ct)
     {
         var appUser = await _appContext.AppUsers.SingleOrDefaultAsync(u => u.Id == appUserEntity.Id, ct);
         if (appUser is null)
-            return new AppUserUpdateResult { IsSuccessful = null };
+            return null;
 
         var isNickNameToUpdate = appUser.Nickname != appUserEntity.Nickname;
         appUser.Nickname = appUserEntity.Nickname;
@@ -179,13 +178,15 @@ public class AppUserRepository : IAppUserRepository
         appUser.City = appUserEntity.City;
         appUser.PhoneNumber = appUserEntity.PhoneNumber;
         appUser.Birthdate = appUserEntity.Birthdate;
-        appUser.Avatar = appUserEntity.Avatar;
-        appUser.Banner = appUserEntity.Banner;
+        if (isAvatarUpdated)
+            appUser.Avatar = appUserEntity.Avatar;
+        if (isBannerUpdated)
+            appUser.Banner = appUserEntity.Banner;
         appUser.SemanticScholarProfile = appUserEntity.SemanticScholarProfile;
         appUser.AboutText = appUserEntity.AboutText;
 
         if (!_appContext.ChangeTracker.HasChanges())
-            return new AppUserUpdateResult { IsSuccessful = true };
+            return true;
 
         if (isNickNameToUpdate)
         {
@@ -194,30 +195,30 @@ public class AppUserRepository : IAppUserRepository
             {
                 var user = await _authContext.Users.SingleOrDefaultAsync(au => au.Id == appUserEntity.Id, ct);
                 if (user is null)
-                    return new AppUserUpdateResult { IsSuccessful = null };
+                    return null;
 
                 user.Nickname = appUserEntity.Nickname;
                 if (await _authContext.SaveChangesAsync(ct) == 0)
-                    return new AppUserUpdateResult { IsSuccessful = false };
+                    return false;
 
                 if (await _appContext.SaveChangesAsync(ct) == 0)
-                    return new AppUserUpdateResult { IsSuccessful = false };
+                    return false;
 
                 await tran.CommitAsync(ct);
-                return new AppUserUpdateResult { IsSuccessful = true, AvatarUrl = appUser.Avatar };
+                return true;
             }
             catch (Exception exc)
             {
                 await tran.RollbackAsync(ct);
                 if (exc.InnerException is OperationCanceledException) throw;
-                return new AppUserUpdateResult { IsSuccessful = false };
+                return false;
             }
         }
         else
         {
             if (await _appContext.SaveChangesAsync(ct) == 0)
-                return new AppUserUpdateResult { IsSuccessful = false };
-            return new AppUserUpdateResult { IsSuccessful = true, AvatarUrl = appUser.Avatar };
+                return false;
+            return true;
         }
     }
 

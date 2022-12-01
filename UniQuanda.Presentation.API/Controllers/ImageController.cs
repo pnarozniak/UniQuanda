@@ -22,6 +22,7 @@ public class ImageController : ControllerBase
     ///     Gets image by url
     /// </summary>
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(File))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("{FolderName}/{ImageName}")]
     public async Task<IActionResult> GetImage(
         [FromRoute] string FolderName,
@@ -37,7 +38,8 @@ public class ImageController : ControllerBase
         };
         var query = new GetImageQuery(dto);
         var result = await _mediator.Send(query, ct);
-        if (object.Equals(result, default((Stream DataStream, string ContentType)))) return NotFound();
+        if (result.Image == null)
+            return NotFound();
         return File(result.Image, result.ContentType);
     }
 

@@ -1,10 +1,9 @@
 ﻿using MediatR;
-using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Core.Domain.Utils;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.UpdatePassword;
 
-public class UpdatePasswordCommand : IRequest<UpdateSecurityResultEnum>
+public class UpdatePasswordCommand : IRequest<UpdatePasswordResponseDTO>
 {
     public UpdatePasswordCommand(UpdatePasswordRequestDTO request, int idUser, UserAgentInfo userAgentInfo)
     {

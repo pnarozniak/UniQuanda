@@ -20,11 +20,10 @@ using UniQuanda.Core.Application.CQRS.Commands.Auth.UpdatePassword;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.GetUserEmails;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.GetUserInfo;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.IsEmailAndNicknameAvailable;
-using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Enums.Results;
 using UniQuanda.Infrastructure.Enums;
 using UniQuanda.Presentation.API.Attributes;
 using UniQuanda.Presentation.API.Extensions;
-using UniQuanda.Presentation.API.Utils;
 
 namespace UniQuanda.Presentation.API.Controllers;
 
@@ -129,8 +128,8 @@ public class AuthController : ControllerBase
     /// </summary>
     [Recaptcha]
     [HttpGet("user-info")]
-    [Authorize(Roles = "user")]
-    [Authorize(Roles = "oauth_account")]
+    [Authorize(Roles = JwtTokenRole.User)]
+    [Authorize(Roles = JwtTokenRole.OAuthAccount)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UserInfo(CancellationToken ct)
@@ -179,6 +178,7 @@ public class AuthController : ControllerBase
     [Recaptcha]
     [HttpPost("recover-password")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [AllowAnonymous]
     public async Task<IActionResult> RecoverPassword(
         [FromBody] RecoverPasswordDTO request,
         CancellationToken ct)
@@ -195,6 +195,7 @@ public class AuthController : ControllerBase
     [HttpPost("reset-password")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [AllowAnonymous]
     public async Task<IActionResult> ResetPassword(
         [FromBody] ResetPaswordDTO request,
         CancellationToken ct)
@@ -210,6 +211,7 @@ public class AuthController : ControllerBase
     [HttpPost("refresh-token")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RefreshTokenResponseDTO))]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [AllowAnonymous]
     public async Task<IActionResult> RefreshToken(
         [FromBody] RefreshTokenRequestDTO request,
         CancellationToken ct)
@@ -226,8 +228,8 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetUserEmailsReponseDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("get-user-emails")]
-    [Authorize(Roles = "user")]
-    [Authorize(Roles = "uniquanda_user")]
+    [Authorize(Roles = JwtTokenRole.User)]
+    [Authorize(Roles = JwtTokenRole.UniquandaAccount)]
     public async Task<IActionResult> GetUserEmails(CancellationToken ct)
     {
         var command = new GetUserEmailsQuery(User.GetId()!.Value);
@@ -241,21 +243,19 @@ public class AuthController : ControllerBase
     [Recaptcha]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
+    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(UpdateMainEmailResponseDTO))]
     [HttpPut("update-main-email")]
-    [Authorize(Roles = "user")]
-    [Authorize(Roles = "uniquanda_user")]
+    [Authorize(Roles = JwtTokenRole.User)]
+    [Authorize(Roles = JwtTokenRole.UniquandaAccount)]
     public async Task<IActionResult> UpdateUserMainEmail([FromBody] UpdateMainEmailRequestDTO request, CancellationToken ct)
     {
         var command = new UpdateMainEmailCommand(request, User.GetId()!.Value, HttpContext.GetUserAgentInfo());
         var result = await _mediator.Send(command, ct);
-        return result switch
+        return result.ActionResult switch
         {
-            UpdateSecurityResultEnum.ContentNotExist => NotFound(),
-            UpdateSecurityResultEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
-            UpdateSecurityResultEnum.EmailNotAvailable => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.EmailNotAvailable }),
-            UpdateSecurityResultEnum.DbConflict => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
-            UpdateSecurityResultEnum.Successful => NoContent()
+            AppUserSecurityActionResultEnum.Successful => NoContent(),
+            AppUserSecurityActionResultEnum.ContentNotExist => NotFound(),
+            _ => Conflict(result)
         };
     }
 
@@ -265,23 +265,19 @@ public class AuthController : ControllerBase
     [Recaptcha]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
+    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AddExtraEmailResponseDTO))]
     [HttpPost("add-extra-email")]
-    [Authorize(Roles = "user")]
-    [Authorize(Roles = "uniquanda_user")]
+    [Authorize(Roles = JwtTokenRole.User)]
+    [Authorize(Roles = JwtTokenRole.UniquandaAccount)]
     public async Task<IActionResult> AddExtraEmail([FromBody] AddExtraEmailRequestDTO request, CancellationToken ct)
     {
         var command = new AddExtraEmailCommand(request, User.GetId()!.Value, HttpContext.GetUserAgentInfo());
         var result = await _mediator.Send(command, ct);
-        return result switch
+        return result.ActionResult switch
         {
-            UpdateSecurityResultEnum.ContentNotExist => NotFound(),
-            UpdateSecurityResultEnum.EmailNotAvailable => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.EmailNotAvailable }),
-            UpdateSecurityResultEnum.OverLimitOfExtraEmails => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.OverLimitOfExtraEmails }),
-            UpdateSecurityResultEnum.UserHasActionToConfirm => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.UserHasActionToConfirm }),
-            UpdateSecurityResultEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
-            UpdateSecurityResultEnum.DbConflict => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
-            UpdateSecurityResultEnum.Successful => NoContent()
+            AppUserSecurityActionResultEnum.Successful => NoContent(),
+            AppUserSecurityActionResultEnum.ContentNotExist => NotFound(),
+            _ => Conflict(result)
         };
     }
 
@@ -291,20 +287,19 @@ public class AuthController : ControllerBase
     [Recaptcha]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
+    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(UpdatePasswordResponseDTO))]
     [HttpPut("update-user-password")]
-    [Authorize(Roles = "user")]
-    [Authorize(Roles = "uniquanda_user")]
+    [Authorize(Roles = JwtTokenRole.User)]
+    [Authorize(Roles = JwtTokenRole.UniquandaAccount)]
     public async Task<IActionResult> UpdateUserPassword([FromBody] UpdatePasswordRequestDTO request, CancellationToken ct)
     {
         var command = new UpdatePasswordCommand(request, User.GetId()!.Value, HttpContext.GetUserAgentInfo());
         var result = await _mediator.Send(command, ct);
-        return result switch
+        return result.ActionResult switch
         {
-            UpdateSecurityResultEnum.ContentNotExist => NotFound(),
-            UpdateSecurityResultEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
-            UpdateSecurityResultEnum.DbConflict => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
-            UpdateSecurityResultEnum.Successful => NoContent()
+            AppUserSecurityActionResultEnum.Successful => NoContent(),
+            AppUserSecurityActionResultEnum.ContentNotExist => NotFound(),
+            _ => Conflict(result)
         };
     }
 
@@ -314,19 +309,19 @@ public class AuthController : ControllerBase
     [Recaptcha]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(AuthConflictResponseDTO))]
+    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(DeleteExtraEmailResponseDTO))]
     [HttpPost("delete-extra-email")]
-    [Authorize(Roles = "user,uniquanda_account")]
+    [Authorize(Roles = JwtTokenRole.User)]
+    [Authorize(Roles = JwtTokenRole.UniquandaAccount)]
     public async Task<IActionResult> DeleteExtraEmail([FromBody] DeleteExtraEmailRequestDTO request, CancellationToken ct)
     {
         var command = new DeleteExtraEmailCommand(request, User.GetId()!.Value, HttpContext.GetUserAgentInfo());
         var result = await _mediator.Send(command, ct);
-        return result switch
+        return result.ActionResult switch
         {
-            UpdateSecurityResultEnum.ContentNotExist => NotFound(),
-            UpdateSecurityResultEnum.InvalidPassword => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.InvalidPassword }),
-            UpdateSecurityResultEnum.DbConflict => Conflict(new AuthConflictResponseDTO { Status = ConflictResponseStatus.DbConflict }),
-            UpdateSecurityResultEnum.Successful => NoContent()
+            AppUserSecurityActionResultEnum.ContentNotExist => NotFound(),
+            AppUserSecurityActionResultEnum.Successful => NoContent(),
+            _ => Conflict(result)
         };
     }
 
@@ -352,8 +347,8 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [HttpPost("resend-confirmation-email")]
-    [Authorize(Roles = "user")]
-    [Authorize(Roles = "uniquanda_user")]
+    [Authorize(Roles = JwtTokenRole.User)]
+    [Authorize(Roles = JwtTokenRole.UniquandaAccount)]
     public async Task<IActionResult> ResendConfirmationEmail(CancellationToken ct)
     {
         var command = new ResendEmailWithConfirmationEmailLinkCommand(User.GetId()!.Value, HttpContext.GetUserAgentInfo());
@@ -368,8 +363,8 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [HttpDelete("cancel-email-confirmation")]
-    [Authorize(Roles = "user")]
-    [Authorize(Roles = "uniquanda_user")]
+    [Authorize(Roles = JwtTokenRole.User)]
+    [Authorize(Roles = JwtTokenRole.UniquandaAccount)]
     public async Task<IActionResult> CancelEmailConfirmation(CancellationToken ct)
     {
         var command = new CancelEmailConfirmationCommand(User.GetId()!.Value);

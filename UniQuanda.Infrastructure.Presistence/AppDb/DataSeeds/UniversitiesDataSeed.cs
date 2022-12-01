@@ -9,10 +9,11 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds
         public void Configure(EntityTypeBuilder<University> builder)
         {
             builder.HasData(
-                new University() { 
-                    Id = 1, 
-                    Name = "Polsko-Japońska Akademia Technik Komputerowych", 
-                    Logo = "https://pja.edu.pl/templates/pjwstk/favicon.ico" 
+                new University()
+                {
+                    Id = 1,
+                    Name = "Polsko-Japońska Akademia Technik Komputerowych",
+                    Logo = "https://pja.edu.pl/templates/pjwstk/favicon.ico"
                 },
                 new University
                 {

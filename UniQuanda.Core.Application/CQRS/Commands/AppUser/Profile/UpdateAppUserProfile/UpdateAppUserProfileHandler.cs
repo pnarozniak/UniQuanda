@@ -2,6 +2,7 @@
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Enums.Results;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProfile;
 
@@ -20,36 +21,37 @@ public class UpdateAppUserProfileHandler : IRequestHandler<UpdateAppUserProfileC
     {
         var isNickNameUsed = await _appUserRepository.IsNicknameUsedAsync(request.AppUser.Id, request.AppUser.Nickname, ct);
         if (isNickNameUsed is null)
-            return new UpdateAppUserProfileResponseDTO() { AppUserUpdateStatus = AppUserUpdateStatusEnum.AppUserNotExist };
+            return new UpdateAppUserProfileResponseDTO() { UpdateStatus = AppUserProfileUpdateResultEnum.ContentNotExist };
         else if (isNickNameUsed == true)
-            return new UpdateAppUserProfileResponseDTO() { AppUserUpdateStatus = AppUserUpdateStatusEnum.NickNameIsUsed };
+            return new UpdateAppUserProfileResponseDTO() { UpdateStatus = AppUserProfileUpdateResultEnum.NickNameIsUsed };
 
-        if (request.Avatar != null || request.Banner != null)
+        var endpointURL = _imageService.GetImageURL();
+        if (request.Avatar != null && request.IsNewAvatar)
         {
-            var endpointURL = _imageService.GetImageURL();
-            if (request.Avatar != null)
-            {
-                var imageName = $"avatar-{request.AppUser.Id}";
-                request.AppUser.Avatar = $"{endpointURL}/{ImageFolder.Profile.Value}/{imageName}";
-                await _imageService.RemoveImageAsync(imageName, ImageFolder.Profile, ct);
-                await _imageService.SaveImageAsync(request.Avatar, imageName, ImageFolder.Profile, ct);
-            }
-            if (request.Banner != null)
-            {
-                var imageName = $"banner-{request.AppUser.Id}";
-                request.AppUser.Banner = $"{endpointURL}/{ImageFolder.Profile.Value}/{imageName}";
-                await _imageService.RemoveImageAsync(imageName, ImageFolder.Profile, ct);
-                await _imageService.SaveImageAsync(request.Banner, imageName, ImageFolder.Profile, ct);
-            }
-
+            var imageName = $"avatar-{request.AppUser.Id}";
+            request.AppUser.Avatar = $"{endpointURL}/{ImageFolder.Profile.Value}/{imageName}";
+            await _imageService.RemoveImageAsync(imageName, ImageFolder.Profile, ct);
+            var avatarSaveResult = await _imageService.SaveImageAsync(request.Avatar, imageName, ImageFolder.Profile, ct);
+            if (!avatarSaveResult)
+                return new UpdateAppUserProfileResponseDTO { UpdateStatus = AppUserProfileUpdateResultEnum.UnSuccessful };
         }
 
-        var repoResult = await _appUserRepository.UpdateAppUserAsync(request.AppUser, ct);
-        return repoResult.IsSuccessful switch
+        if (request.Banner != null && request.IsNewBanner)
         {
-            null => new UpdateAppUserProfileResponseDTO() { AppUserUpdateStatus = AppUserUpdateStatusEnum.AppUserNotExist },
-            false => new UpdateAppUserProfileResponseDTO() { AppUserUpdateStatus = AppUserUpdateStatusEnum.NotSuccessful },
-            true => new UpdateAppUserProfileResponseDTO() { AppUserUpdateStatus = AppUserUpdateStatusEnum.Successful, AvatarUrl = request.AppUser.Avatar }
+            var imageName = $"banner-{request.AppUser.Id}";
+            request.AppUser.Banner = $"{endpointURL}/{ImageFolder.Profile.Value}/{imageName}";
+            await _imageService.RemoveImageAsync(imageName, ImageFolder.Profile, ct);
+            var bannerSaveResult = await _imageService.SaveImageAsync(request.Banner, imageName, ImageFolder.Profile, ct);
+            if (!bannerSaveResult)
+                return new UpdateAppUserProfileResponseDTO { UpdateStatus = AppUserProfileUpdateResultEnum.UnSuccessful };
+        }
+
+        var updateResult = await _appUserRepository.UpdateAppUserAsync(request.AppUser, request.IsNewAvatar, request.IsNewBanner, ct);
+        return updateResult switch
+        {
+            null => new UpdateAppUserProfileResponseDTO() { UpdateStatus = AppUserProfileUpdateResultEnum.ContentNotExist },
+            false => new UpdateAppUserProfileResponseDTO() { UpdateStatus = AppUserProfileUpdateResultEnum.UnSuccessful },
+            true => new UpdateAppUserProfileResponseDTO() { UpdateStatus = AppUserProfileUpdateResultEnum.Successful, AvatarUrl = request.AppUser.Avatar }
         };
     }
 }

@@ -15,16 +15,16 @@ public class OAuthOptions
 
 public class GoogleOAuthOptions
 {
-		public GoogleOAuthOptions(IConfigurationSection section)
+    public GoogleOAuthOptions(IConfigurationSection section)
     {
         TokenUrl = section["TokenUrl"];
         ClientId = section["ClientId"];
-				ClientSecret = section["ClientSecret"];
+        ClientSecret = section["ClientSecret"];
         RedirectUri = section["RedirectUri"];
     }
 
     public string TokenUrl { get; set; }
     public string RedirectUri { get; set; }
-		public string ClientId { get; set; }
-		public string ClientSecret { get; set; }
+    public string ClientId { get; set; }
+    public string ClientSecret { get; set; }
 }

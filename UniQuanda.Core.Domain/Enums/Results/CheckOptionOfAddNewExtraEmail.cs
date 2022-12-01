@@ -1,4 +1,4 @@
-﻿namespace UniQuanda.Core.Domain.Enums;
+﻿namespace UniQuanda.Core.Domain.Enums.Results;
 
 public enum CheckOptionOfAddNewExtraEmail
 {
