@@ -18,10 +18,10 @@ public class AuthDbQuartzJobsSchedulesOptions
     {
         ClearRefreshTokens = section["ClearRefreshTokens"];
         ClearTempUsers = section["ClearTempUsers"];
-        ClearUserActionsToConfirm = section["ClearUserActionsToConfirm"];
+        ClearUsersActionsToConfirm = section["ClearUsersActionsToConfirm"];
     }
 
     public string ClearRefreshTokens { get; set; }
     public string ClearTempUsers { get; set; }
-    public string ClearUserActionsToConfirm { get; set; }
+    public string ClearUsersActionsToConfirm { get; set; }
 }

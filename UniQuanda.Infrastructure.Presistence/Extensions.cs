@@ -46,7 +46,7 @@ public static class Extensions
             q.AddTrigger(opts => opts
                 .ForJob(clearUserActionsToConfirmJob)
                 .WithIdentity("ClearUsersActionsToConfirmJob-Trigger")
-                .WithCronSchedule(quartzJobsSchedulesOptions.AuthDb.ClearUserActionsToConfirm)
+                .WithCronSchedule(quartzJobsSchedulesOptions.AuthDb.ClearUsersActionsToConfirm)
             );
 
             var clearRefreshTokensJob = new JobKey("ClearRefreshTokensJob");
