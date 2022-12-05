@@ -291,7 +291,7 @@ public class AuthController : ControllerBase
     }
 
     /// <summary>
-    ///     Confirm user email
+    ///     Resends confirmation email
     /// </summary>
     [Recaptcha]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

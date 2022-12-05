@@ -7,6 +7,7 @@
         }
         public static ImageFolder Profile { get { return new ImageFolder("Profile"); } }
         public static ImageFolder Tags { get { return new ImageFolder("Tags"); } }
+        public static ImageFolder Content { get { return new ImageFolder("Content"); } }
         /// <summary>
         ///     Gets ImageFolder by folder name
         /// </summary>
@@ -19,6 +20,7 @@
             {
                 case "Profile": return Profile;
                 case "Tags": return Tags;
+                case "Content": return Content;
                 default: throw new ArgumentOutOfRangeException("Unknown ImageFolder value");
             }
         }
