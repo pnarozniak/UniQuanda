@@ -32,7 +32,8 @@ public class AddQuestionHandler : IRequestHandler<AddQuestionCommand, AddQuestio
 
     public async Task<AddQuestionResponseDTO> Handle(AddQuestionCommand request, CancellationToken ct)
     {
-        var contentId = await _contentRepository.GetNextContentIdAsync();
+        var contentId = await _contentRepository.GetNextContentIdAsync(ct);
+
         var (html, images) = _htmlService.ConvertBase64ImagesToURLImages(
             request.RawText, 
             contentId, 
@@ -42,17 +43,32 @@ public class AddQuestionHandler : IRequestHandler<AddQuestionCommand, AddQuestio
         var text = _htmlService.ExtractTextFromHTML(html);
         if (!await _tagRepository.CheckIfAllTagIdsExistAsync(request.Tags, ct)) return new()
         {
-            QuestionId = null
+            QuestionId = null,
+            Status = "Nie wszystkie tagi istnieją"
         };
         var tags = request.Tags.Select((tag, index) => (index, tag));
-        var imageIds = await _imageService.UploadMultipleImagesAsync(images, ImageFolder.Content, ct);
+        await _imageService.UploadMultipleImagesAsStreamAsync(
+            images, 
+            ImageFolder.Content, 
+            ct
+        );
         var questionId = await _questionRepository.AddQuestionAsync(
             contentId, request.UserId,
             tags, request.Title, 
-            html, text, imageIds, ct);
+            html, text,
+            images.Keys
+                .Select(imgName => $"{_imageService.GetImageURL()}{ImageFolder.Content.Value}/{contentId}/{imgName}"),
+            request.CreationTime, ct);
+        if (questionId == 0) return new()
+        {
+            QuestionId = null,
+            Status = "Nie udało się dodać pytania"
+        };
+        
         return new()
         {
-            QuestionId = questionId
+            QuestionId = questionId,
+            Status = null
         };
     }
 }

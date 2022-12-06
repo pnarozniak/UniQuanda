@@ -2,6 +2,11 @@
 {
     public interface IContentRepository
     {
-        public Task<int> GetNextContentIdAsync();
+        /// <summary>
+        ///     Gets next sequence number for content
+        /// </summary>
+        /// <param name="ct"></param>
+        /// <returns>Id of next content</returns>
+        public Task<int> GetNextContentIdAsync(CancellationToken ct);
     }
 }

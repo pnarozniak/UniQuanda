@@ -13,10 +13,11 @@ public class AddQuestionCommand : IRequest<AddQuestionResponseDTO>
         this.RawText = request.RawText;
         this.UserId = UserId;
         this.Tags = request.TagIds;
-
+        this.CreationTime = DateTime.Now;
     }
     public string Title { get; set; }
     public string RawText { get; set; }
     public int UserId { get; set; }
     public IEnumerable<int> Tags { get; set; }
+    public DateTime CreationTime { get; set; }
 }

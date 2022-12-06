@@ -30,11 +30,13 @@ namespace UniQuanda.Core.Application.CQRS.Commands.Questions.AddQuestion
         /// </summary>
         [Required]
         [IEnumerableSizeValidation(1, 5)]
+        [IEnumerableUniqueValidator]
         public IEnumerable<int> TagIds { get; set; }
     }
 
     public class AddQuestionResponseDTO
     {      
         public int? QuestionId { get; set; }
+        public string? Status { get; set; }
     }
 }

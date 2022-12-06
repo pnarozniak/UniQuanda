@@ -45,7 +45,7 @@ namespace UniQuanda.Core.Application.Services
         /// <param name="images">List of all images to add. Key is file name and value is file </param>
         /// <param name="images">Folder name enum</param>
         /// <param name="ct"></param>
-        /// <returns>IEnumerable with IDs of added images</returns>
-        public Task<IEnumerable<int>> UploadMultipleImagesAsync(IDictionary<string, IFormFile> images, ImageFolder FolderName, CancellationToken ct);
+        /// <returns>Is success</returns>
+        public Task<bool> UploadMultipleImagesAsStreamAsync(IDictionary<string, Stream> images, ImageFolder FolderName, CancellationToken ct);
     }
 }

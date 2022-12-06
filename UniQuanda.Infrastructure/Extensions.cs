@@ -28,6 +28,8 @@ public static class Extensions
         services.AddScoped<IAppUserRepository, AppUserRepository>();
         services.AddScoped<ITagRepository, TagRepository>();
         services.AddScoped<IReportRepository, ReportRepository>();
+        services.AddScoped<IQuestionRepository, QuestionRepository> ();
+        services.AddScoped<IContentRepository, ContentRepository>();
 
         // Services
         services.AddScoped<IPasswordsService, PasswordsService>();
@@ -36,6 +38,7 @@ public static class Extensions
         services.AddScoped<IExpirationService, ExpirationService>();
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<IImageService, ImageService>();
+        services.AddScoped<IHtmlService, HtmlService>();
 
         // Cache
         services.AddStackExchangeRedisCache(options =>

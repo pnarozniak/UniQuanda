@@ -5,6 +5,8 @@ public class AppUserQuestionInteraction
     public int Id { get; set; }
     public int QuestionId { get; set; }
     public int AppUserId { get; set; }
+    public bool IsViewed { get; set; }
+    public bool IsFollowing { get; set; }
     public bool IsCreator { get; set; }
     public virtual AppUser AppUserIdNavigation { get; set; }
     public virtual Question QuestionIdNavigation { get; set; }

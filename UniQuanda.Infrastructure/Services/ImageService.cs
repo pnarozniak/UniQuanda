@@ -1,5 +1,6 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
+using Amazon.S3.Transfer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using UniQuanda.Core.Application.Services;
@@ -51,6 +52,25 @@ namespace UniQuanda.Infrastructure.Services
             request.Metadata.Add("Content-Type", image.ContentType);
             var response = await _amazonS3.PutObjectAsync(request, ct);
             return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
+        }
+
+        public async Task<bool> UploadMultipleImagesAsStreamAsync(IDictionary<string, Stream> images, ImageFolder FolderName, CancellationToken ct)
+        {
+            var result = true;
+            foreach (var image in images)
+            {
+                var request = new PutObjectRequest()
+                {
+                    BucketName = bucket.Value,
+                    Key = $"{FolderName.Value}/{image.Key}",
+                    InputStream = image.Value,
+                    ContentType = $"image/{image.Key.Split('.').Last()}"
+                };
+                request.Metadata.Add("Content-Type", request.ContentType);
+                var response = await _amazonS3.PutObjectAsync(request, ct);
+                result = response.HttpStatusCode == System.Net.HttpStatusCode.OK && result;
+            }
+            return result;
         }
     }
 }

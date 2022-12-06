@@ -3,6 +3,7 @@ using Npgsql;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds;
 using UniQuanda.Infrastructure.Presistence.AppDb.EfConfigurations;
+using UniQuanda.Infrastructure.Presistence.AppDb.Functions;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 using UniQuanda.Infrastructure.Presistence.AuthDb.Models;
 
@@ -36,6 +37,7 @@ public class AppDbContext : DbContext
     public DbSet<Content> Contents { get; set; }
     public DbSet<ImageInContent> ImagesInContent { get; set; }
     public DbSet<Image> Images { get; set; }
+    public DbSet<IntFunction> IntFunctionWrapper { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -66,6 +68,6 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new UniversitiesDataSeed());
         modelBuilder.ApplyConfiguration(new TagDataSeed());
 
-        modelBuilder.HasSequence<int>("SequenceContentId").StartsAt(0).IncrementsBy(1);
+        modelBuilder.Entity<IntFunction>().HasNoKey();
     }
 }

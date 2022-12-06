@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Domain.Entities.App;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Infrastructure.Presistence.AppDb;
-using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 using UniQuanda.Infrastructure.Presistence.ExtensionsEF;
 
 namespace UniQuanda.Infrastructure.Repositories
@@ -154,6 +152,13 @@ namespace UniQuanda.Infrastructure.Repositories
                    || EF.Functions.ILike(t.Name, $"%{keyword}%"))
                    && t.ParentTagId == tagId
                ).CountAsync(ct);
+        }
+
+        public async Task<bool> CheckIfAllTagIdsExistAsync(IEnumerable<int> tagIds, CancellationToken ct)
+        {
+            var count = await _context.Tags.Where(t => tagIds.Contains(t.Id))
+                .CountAsync(ct);
+            return count == tagIds.Count();
         }
     }
 }

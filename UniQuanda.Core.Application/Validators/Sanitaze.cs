@@ -1,6 +1,5 @@
 ﻿using Ganss.Xss;
 using System.ComponentModel.DataAnnotations;
-using UniQuanda.Core.Application.Shared.Models;
 
 namespace UniQuanda.Core.Application.Validators
 {
@@ -11,18 +10,14 @@ namespace UniQuanda.Core.Application.Validators
             if (value is null)
                 return ValidationResult.Success;
 
-            var content = value as IContent;
+            var content = value as string;
             if (content is null)
                 return new ValidationResult("Nie poprawny typ pola");
             var sanitizer = new HtmlSanitizer();
             sanitizer.AllowedAttributes.Add("class");
-            var sanitized = sanitizer.Sanitize(content.RawText);
-
-            if (sanitized != content.RawText)
-            {
-                content.RawText = sanitized;
-                return new ValidationResult("Pole zawiera niedozwolone znaki");
-            }
+            sanitizer.AllowedSchemes.Add("data");
+            var sanitized = sanitizer.Sanitize(content);
+            validationContext.ObjectType.GetProperty(validationContext.MemberName)?.SetValue(validationContext.ObjectInstance, sanitized);
             return ValidationResult.Success;
         }
     }

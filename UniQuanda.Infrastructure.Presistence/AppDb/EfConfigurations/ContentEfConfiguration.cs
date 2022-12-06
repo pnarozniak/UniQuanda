@@ -9,7 +9,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.EfConfigurations
         public void Configure(EntityTypeBuilder<Content> builder)
         {
             builder.HasKey(c => c.Id);
-            builder.Property(c => c.Id).HasDefaultValueSql("nextval('\"SequenceContentId\"')");
+            builder.Property(c => c.Id).ValueGeneratedOnAdd();
 
             builder.Property(c => c.Text).IsRequired();
             builder.Property(c => c.RawText).IsRequired();
