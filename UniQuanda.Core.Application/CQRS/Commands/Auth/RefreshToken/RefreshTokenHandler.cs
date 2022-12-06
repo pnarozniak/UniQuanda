@@ -30,7 +30,7 @@ public class RefreshTokenHandler : IRequestHandler<RefreshTokenCommand, RefreshT
         var isTokenValid = dbUser.RefreshTokenExp > DateTime.UtcNow;
         if (!isTokenValid) return null;
 
-        var accessToken = _tokensService.GenerateAccessToken(dbUser);
+        var accessToken = _tokensService.GenerateAccessToken(dbUser.Id, dbUser.IsOAuthUser);
         var (refreshToken, refreshTokenExp) = _tokensService.GenerateRefreshToken();
         await _authRepository.UpdateUserRefreshTokenAsync(dbUser.Id, refreshToken, refreshTokenExp, ct);
 

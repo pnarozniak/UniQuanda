@@ -16,6 +16,7 @@ public class AuthDbContext : DbContext
     public virtual DbSet<TempUser> TempUsers { get; set; }
     public virtual DbSet<UserEmail> UsersEmails { get; set; }
     public virtual DbSet<UserActionToConfirm> UsersActionsToConfirm { get; set; }
+    public virtual DbSet<OAuthUser> OAuthUsers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -23,7 +24,9 @@ public class AuthDbContext : DbContext
         modelBuilder.ApplyConfiguration(new TempUserEfConfiguration());
         modelBuilder.ApplyConfiguration(new UserEmailEfConfiguration());
         modelBuilder.ApplyConfiguration(new UserActionToConfirmEfConfiguration());
+        modelBuilder.ApplyConfiguration(new OAuthUserEfConfiguration());
 
         modelBuilder.HasPostgresEnum<UserActionToConfirmEnum>();
+        modelBuilder.HasPostgresEnum<OAuthProviderEnum>();
     }
 }

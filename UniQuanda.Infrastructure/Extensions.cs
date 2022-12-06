@@ -22,6 +22,7 @@ public static class Extensions
         services.AddSingleton(new DataExpirationOptions(configuration));
         services.AddSingleton(new TokensOptions(configuration));
         services.AddSingleton(new UniQuandaClientOptions(configuration));
+        services.AddSingleton(new OAuthOptions(configuration));
 
         // Repositories
         services.AddScoped<IAuthRepository, AuthRepository>();
@@ -38,6 +39,7 @@ public static class Extensions
         services.AddScoped<IExpirationService, ExpirationService>();
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<IImageService, ImageService>();
+        services.AddScoped<IOAuthService, OAuthService>();
         services.AddScoped<IHtmlService, HtmlService>();
 
         // Cache

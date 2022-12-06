@@ -22,11 +22,17 @@ namespace UniQuanda.Infrastructure.Services
 
         public async Task<(Stream DataStream, string ContentType)> GetImageAsync(string ImageName, ImageFolder FolderName, CancellationToken ct)
         {
-            var s3Object = await _amazonS3.GetObjectAsync(bucket.Value, $"{FolderName.Value}/{ImageName}", ct);
-
-            return s3Object.HttpStatusCode == System.Net.HttpStatusCode.OK ?
-                (s3Object.ResponseStream, s3Object.Headers.ContentType)
-                : default((Stream DataStream, string ContentType));
+            try
+            {
+                var s3Object = await _amazonS3.GetObjectAsync(bucket.Value, $"{FolderName.Value}/{ImageName}", ct);
+                return s3Object.HttpStatusCode == System.Net.HttpStatusCode.OK ?
+                    (s3Object.ResponseStream, s3Object.Headers.ContentType)
+                    : default((Stream DataStream, string ContentType));
+            }
+            catch (AmazonS3Exception)
+            {
+                return default;
+            }
         }
 
         public string GetImageURL()

@@ -14,10 +14,10 @@ namespace UniQuanda.Infrastructure.Repositories
         {
             _context = context;
         }
-        
+
         public async Task<IEnumerable<TagEntity>> GetParentTagsAsync(
-            int take, int skip, 
-            OrderDirectionEnum orderDirection, 
+            int take, int skip,
+            OrderDirectionEnum orderDirection,
             CancellationToken ct)
         {
             return await _context.Tags
@@ -44,8 +44,8 @@ namespace UniQuanda.Infrastructure.Repositories
         }
 
         public async Task<IEnumerable<TagEntity>> GetSubTagsAsync(
-            int take, int skip, int tagId, 
-            OrderDirectionEnum orderDirection, 
+            int take, int skip, int tagId,
+            OrderDirectionEnum orderDirection,
             CancellationToken ct)
         {
             return await _context.Tags
@@ -86,9 +86,9 @@ namespace UniQuanda.Infrastructure.Repositories
         }
 
         public async Task<IEnumerable<TagEntity>> GetTagsByKeywordAsync(
-            int take, int skip, 
-            string keyword, 
-            OrderDirectionEnum orderDirection, 
+            int take, int skip,
+            string keyword,
+            OrderDirectionEnum orderDirection,
             CancellationToken ct)
         {
             return await _context.Tags
@@ -109,7 +109,7 @@ namespace UniQuanda.Infrastructure.Repositories
                 .ToListAsync(ct);
 
         }
-        
+
         public async Task<int> GetTagsByKeywordCountAsync(string keyword, CancellationToken ct)
         {
             return await _context.Tags
@@ -118,11 +118,11 @@ namespace UniQuanda.Infrastructure.Repositories
                    || EF.Functions.ILike(t.Name, $"%{keyword}%")
                ).CountAsync(ct);
         }
-        
+
         public async Task<IEnumerable<TagEntity>> GetSubTagsByKeywordAsync(
             int take, int skip,
-            string keyword, int tagId, 
-            OrderDirectionEnum orderDirection, 
+            string keyword, int tagId,
+            OrderDirectionEnum orderDirection,
             CancellationToken ct)
         {
             return await _context.Tags
@@ -143,7 +143,7 @@ namespace UniQuanda.Infrastructure.Repositories
                     .Take(take)
                     .ToListAsync(ct);
         }
-        
+
         public async Task<int> GetSubTagsByKeywordCountAsync(string keyword, int tagId, CancellationToken ct)
         {
             return await _context.Tags

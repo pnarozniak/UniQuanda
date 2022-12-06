@@ -16,7 +16,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Tags.GetTags
         {
             if (request.Keyword != null)
             {
-                if(request.TagId != null)
+                if (request.TagId != null)
                 {
                     return await this.GetSubTagsByKeywordAsync(request, ct);
                 }

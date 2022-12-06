@@ -2,11 +2,11 @@
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
-using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Enums.Results;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.DeleteExtraEmail;
 
-public class DeleteExtraEmailHandler : IRequestHandler<DeleteExtraEmailCommand, UpdateSecurityResultEnum>
+public class DeleteExtraEmailHandler : IRequestHandler<DeleteExtraEmailCommand, DeleteExtraEmailResponseDTO>
 {
     private readonly IAuthRepository _authRepository;
     private readonly IPasswordsService _passwordsService;
@@ -22,14 +22,14 @@ public class DeleteExtraEmailHandler : IRequestHandler<DeleteExtraEmailCommand, 
         _emailService = emailService;
     }
 
-    public async Task<UpdateSecurityResultEnum> Handle(DeleteExtraEmailCommand request, CancellationToken ct)
+    public async Task<DeleteExtraEmailResponseDTO> Handle(DeleteExtraEmailCommand request, CancellationToken ct)
     {
         var user = await _authRepository.GetUserWithEmailsByIdAsync(request.IdUser, ct);
         if (user is null)
-            return UpdateSecurityResultEnum.ContentNotExist;
+            return new DeleteExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.ContentNotExist };
 
         if (!_passwordsService.VerifyPassword(request.Password, user.HashedPassword))
-            return UpdateSecurityResultEnum.InvalidPassword;
+            return new DeleteExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.InvalidPassword };
 
         var deleteResult = await _authRepository.DeleteExtraEmailAsync(request.IdUser, request.IdExtraEmail, ct);
         if (deleteResult == true)
@@ -41,9 +41,9 @@ public class DeleteExtraEmailHandler : IRequestHandler<DeleteExtraEmailCommand, 
 
         return deleteResult switch
         {
-            null => UpdateSecurityResultEnum.ContentNotExist,
-            false => UpdateSecurityResultEnum.DbConflict,
-            true => UpdateSecurityResultEnum.Successful
+            null => new DeleteExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.ContentNotExist },
+            false => new DeleteExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.UnSuccessful },
+            true => new DeleteExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.Successful }
         };
     }
 }

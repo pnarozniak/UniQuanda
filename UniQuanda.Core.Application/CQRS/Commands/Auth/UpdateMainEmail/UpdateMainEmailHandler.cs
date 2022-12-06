@@ -2,12 +2,12 @@
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
-using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Enums.Results;
 using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Auth.UpdateMainEmail;
 
-public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, UpdateSecurityResultEnum>
+public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, UpdateMainEmailResponseDTO>
 {
     private readonly IAuthRepository _authRepository;
     private readonly IPasswordsService _passwordsService;
@@ -29,14 +29,14 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
         this._expirationService = expirationService;
     }
 
-    public async Task<UpdateSecurityResultEnum> Handle(UpdateMainEmailCommand request, CancellationToken ct)
+    public async Task<UpdateMainEmailResponseDTO> Handle(UpdateMainEmailCommand request, CancellationToken ct)
     {
         var user = await _authRepository.GetUserWithEmailsByIdAsync(request.IdUser, ct);
         if (user is null)
-            return UpdateSecurityResultEnum.ContentNotExist;
+            return new UpdateMainEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.ContentNotExist };
 
         if (!_passwordsService.VerifyPassword(request.PlainPassword, user.HashedPassword))
-            return UpdateSecurityResultEnum.InvalidPassword;
+            return new UpdateMainEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.InvalidPassword };
 
         bool? updateResult;
         if (request.IdExtraEmail != null)
@@ -52,16 +52,16 @@ public class UpdateMainEmailHandler : IRequestHandler<UpdateMainEmailCommand, Up
         {
             var isEmailAvailable = await _authRepository.IsEmailAvailableAsync(request.IdUser, request.NewMainEmail, ct);
             if (!isEmailAvailable)
-                return UpdateSecurityResultEnum.EmailNotAvailable;
+                return new UpdateMainEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.EmailNotAvailable };
 
             updateResult = await UpdateUserMainEmailByNewOne(request, user.Nickname, ct);
         }
 
         return updateResult switch
         {
-            null => UpdateSecurityResultEnum.ContentNotExist,
-            false => UpdateSecurityResultEnum.DbConflict,
-            true => UpdateSecurityResultEnum.Successful
+            null => new UpdateMainEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.ContentNotExist },
+            false => new UpdateMainEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.UnSuccessful },
+            true => new UpdateMainEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.Successful }
         };
     }
 

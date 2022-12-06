@@ -26,7 +26,7 @@ namespace UniQuanda.Presentation.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetTagsResponseDTO))]
         [HttpGet]
         public async Task<IActionResult> GetTags(
-            [FromQuery]GetTagsRequestDTO request,
+            [FromQuery] GetTagsRequestDTO request,
             CancellationToken ct)
         {
             var query = new GetTagsQuery(request);

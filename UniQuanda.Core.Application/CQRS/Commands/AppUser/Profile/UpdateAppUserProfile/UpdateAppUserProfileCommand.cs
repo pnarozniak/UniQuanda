@@ -23,9 +23,13 @@ public class UpdateAppUserProfileCommand : IRequest<UpdateAppUserProfileResponse
 
         Avatar = request.Avatar;
         Banner = request.Banner;
+        IsNewAvatar = request.IsNewAvatar!.Value;
+        IsNewBanner = request.IsNewBanner!.Value;
     }
 
     public AppUserEntity AppUser { get; set; }
     public IFormFile? Avatar { get; set; }
     public IFormFile? Banner { get; set; }
+    public bool IsNewAvatar { get; set; }
+    public bool IsNewBanner { get; set; }
 }

@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Collections.Generic;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
-using static System.Net.WebRequestMethods;
 
 namespace UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds
 {

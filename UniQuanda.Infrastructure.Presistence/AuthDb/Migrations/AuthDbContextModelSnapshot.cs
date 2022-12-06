@@ -20,6 +20,7 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                 .HasAnnotation("ProductVersion", "6.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "o_auth_provider_enum", new[] { "google" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "user_action_to_confirm_enum", new[] { "recover_password", "new_main_email", "new_extra_email" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
@@ -58,6 +59,29 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                         .IsUnique();
 
                     b.ToTable("UsersActionsToConfirm");
+                });
+
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AuthDb.Models.OAuthUser", b =>
+                {
+                    b.Property<int>("IdUser")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("OAuthId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("OAuthProvider")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("OAuthRegisterConfirmationCode")
+                        .HasColumnType("text");
+
+                    b.HasKey("IdUser");
+
+                    b.HasIndex("OAuthId", "OAuthProvider")
+                        .IsUnique();
+
+                    b.ToTable("OAuthUsers");
                 });
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AuthDb.Models.TempUser", b =>
@@ -110,7 +134,6 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Nickname")
-                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("character varying(30)");
 
@@ -192,6 +215,17 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                     b.Navigation("IdUserNavigation");
                 });
 
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AuthDb.Models.OAuthUser", b =>
+                {
+                    b.HasOne("UniQuanda.Infrastructure.Presistence.AuthDb.Models.User", "IdUserNavigation")
+                        .WithOne("IdOAuthUserNavigation")
+                        .HasForeignKey("UniQuanda.Infrastructure.Presistence.AuthDb.Models.OAuthUser", "IdUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IdUserNavigation");
+                });
+
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AuthDb.Models.TempUser", b =>
                 {
                     b.HasOne("UniQuanda.Infrastructure.Presistence.AuthDb.Models.User", "IdUserNavigation")
@@ -219,6 +253,8 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                     b.Navigation("ActionsToConfirm");
 
                     b.Navigation("Emails");
+
+                    b.Navigation("IdOAuthUserNavigation");
 
                     b.Navigation("IdTempUserNavigation")
                         .IsRequired();

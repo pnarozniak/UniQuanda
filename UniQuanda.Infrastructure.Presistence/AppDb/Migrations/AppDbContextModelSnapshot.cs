@@ -206,7 +206,6 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         .HasColumnType("character varying(51)");
 
                     b.Property<string>("Nickname")
-                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("character varying(30)");
 
