@@ -30,6 +30,8 @@ public static class Extensions
         services.AddScoped<IAppUserRepository, AppUserRepository>();
         services.AddScoped<ITagRepository, TagRepository>();
         services.AddScoped<IReportRepository, ReportRepository>();
+        services.AddScoped<IQuestionRepository, QuestionRepository> ();
+        services.AddScoped<IContentRepository, ContentRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IPremiumPaymentRepository, PremiumPaymentRepository>();
 
@@ -41,6 +43,7 @@ public static class Extensions
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<IImageService, ImageService>();
         services.AddScoped<IOAuthService, OAuthService>();
+        services.AddScoped<IHtmlService, HtmlService>();
         services.AddScoped<IPaymentService, PayUService>();
 
         // Cache

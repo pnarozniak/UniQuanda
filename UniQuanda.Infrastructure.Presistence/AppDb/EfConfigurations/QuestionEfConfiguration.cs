@@ -10,6 +10,10 @@ public class QuestionEfConfiguration : IEntityTypeConfiguration<Question>
     {
         builder.HasKey(q => q.Id);
         builder.Property(q => q.Id).ValueGeneratedOnAdd();
+        builder.Property(q => q.Header).IsRequired().HasMaxLength(500);
+        builder.Property(q => q.CreatedAt).IsRequired();
+        builder.Property(q => q.ViewsCount).IsRequired().HasDefaultValue(0);
+
 
         builder.HasMany(q => q.AppUsersQuestionInteractions)
             .WithOne(aqi => aqi.QuestionIdNavigation)
@@ -25,5 +29,7 @@ public class QuestionEfConfiguration : IEntityTypeConfiguration<Question>
             .WithOne(tiq => tiq.QuestionIdNavigation)
             .HasForeignKey(tiq => tiq.QuestionId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        
     }
 }

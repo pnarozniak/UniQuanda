@@ -2,11 +2,11 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
 using UniQuanda.Core.Domain.Enums;
-using UniQuanda.Core.Domain.Enums.DbModel;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 
 #nullable disable
@@ -14,9 +14,10 @@ using UniQuanda.Infrastructure.Presistence.AppDb;
 namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221122182047_AddedContentTables")]
+    partial class AddedContentTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,18 +25,10 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "academic_title_enum", new[] { "engineer", "bachelor", "academic" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "content_text_type_enum", new[] { "html", "la_te_x", "markdown" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "content_type_enum", new[] { "question", "answer", "message" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "product_type_enum", new[] { "premium" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "report_category_enum", new[] { "user", "question", "answer" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Functions.IntFunction", b =>
-                {
-                    b.Property<int>("result")
-                        .HasColumnType("integer");
-
-                    b.ToTable("IntFunctionWrapper");
-                });
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.AcademicTitle", b =>
                 {
@@ -208,6 +201,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         .HasColumnType("character varying(51)");
 
                     b.Property<string>("Nickname")
+                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("character varying(30)");
 
@@ -305,12 +299,6 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.Property<bool>("IsCreator")
                         .HasColumnType("boolean");
 
-                    b.Property<bool>("IsFollowing")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsViewed")
-                        .HasColumnType("boolean");
-
                     b.Property<int>("QuestionId")
                         .HasColumnType("integer");
 
@@ -362,8 +350,15 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ContentTextType")
+                        .HasColumnType("integer");
+
                     b.Property<int>("ContentType")
                         .HasColumnType("integer");
+
+                    b.Property<string>("HtmlText")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("RawText")
                         .IsRequired()
@@ -430,26 +425,6 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.ToTable("ImagesInContent");
                 });
 
-            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Product", b =>
-                {
-                    b.Property<ProductTypeEnum>("ProductType")
-                        .HasColumnType("product_type_enum");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("money");
-
-                    b.HasKey("ProductType");
-
-                    b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            ProductType = ProductTypeEnum.Premium,
-                            Price = 19m
-                        });
-                });
-
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Question", b =>
                 {
                     b.Property<int>("Id")
@@ -462,7 +437,9 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValue(new DateTime(2022, 11, 22, 19, 20, 47, 364, DateTimeKind.Local).AddTicks(5746));
 
                     b.Property<string>("Header")
                         .IsRequired()

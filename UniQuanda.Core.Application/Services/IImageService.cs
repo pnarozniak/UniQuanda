@@ -38,5 +38,14 @@ namespace UniQuanda.Core.Application.Services
         /// </summary>
         /// <returns>string with image endpoint adress</returns>
         public string GetImageURL();
+
+        /// <summary>
+        ///    Function to Upload multiple images to S3 bucket
+        /// </summary>
+        /// <param name="images">List of all images to add. Key is file name and value is file </param>
+        /// <param name="images">Folder name enum</param>
+        /// <param name="ct"></param>
+        /// <returns>Is success</returns>
+        public Task<bool> UploadMultipleImagesAsStreamAsync(IDictionary<string, Stream> images, ImageFolder FolderName, CancellationToken ct);
     }
 }

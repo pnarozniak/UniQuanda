@@ -29,7 +29,7 @@ public class UpdateAppUserProfileHandler : IRequestHandler<UpdateAppUserProfileC
         if (request.Avatar != null && request.IsNewAvatar)
         {
             var imageName = $"avatar-{request.AppUser.Id}";
-            request.AppUser.Avatar = $"{endpointURL}/{ImageFolder.Profile.Value}/{imageName}";
+            request.AppUser.Avatar = $"{endpointURL}{ImageFolder.Profile.Value}/{imageName}";
             await _imageService.RemoveImageAsync(imageName, ImageFolder.Profile, ct);
             var avatarSaveResult = await _imageService.SaveImageAsync(request.Avatar, imageName, ImageFolder.Profile, ct);
             if (!avatarSaveResult)

@@ -153,5 +153,12 @@ namespace UniQuanda.Infrastructure.Repositories
                    && t.ParentTagId == tagId
                ).CountAsync(ct);
         }
+
+        public async Task<bool> CheckIfAllTagIdsExistAsync(IEnumerable<int> tagIds, CancellationToken ct)
+        {
+            var count = await _context.Tags.Where(t => tagIds.Contains(t.Id))
+                .CountAsync(ct);
+            return count == tagIds.Count();
+        }
     }
 }
