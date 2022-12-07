@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
 using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Enums.DbModel;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 
 #nullable disable
@@ -23,6 +24,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "academic_title_enum", new[] { "engineer", "bachelor", "academic" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "product_type_enum", new[] { "premium" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "report_category_enum", new[] { "user", "question", "answer" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
@@ -329,6 +331,26 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         .IsUnique();
 
                     b.ToTable("AppUsersTitles");
+                });
+
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Product", b =>
+                {
+                    b.Property<ProductTypeEnum>("ProductType")
+                        .HasColumnType("product_type_enum");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("money");
+
+                    b.HasKey("ProductType");
+
+                    b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            ProductType = ProductTypeEnum.Premium,
+                            Price = 19m
+                        });
                 });
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Question", b =>

@@ -32,6 +32,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile
             public string? City { get; set; }
             public DateTime? Birthdate { get; set; }
             public string? SemanticScholarProfile { get; set; }
+            public bool HasPremium { get; set; }
         }
         public class UniversityResponseDTO
         {

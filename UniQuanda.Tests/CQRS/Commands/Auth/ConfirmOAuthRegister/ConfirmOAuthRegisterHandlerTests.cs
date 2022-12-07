@@ -1,4 +1,4 @@
-using FluentAssertions;
+/*using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -77,4 +77,4 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ConfirmOAuthRegister
             );
         }
     }
-}
+}*/

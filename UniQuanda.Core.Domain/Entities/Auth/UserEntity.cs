@@ -14,4 +14,6 @@ public class UserEntity
     public DateTime? RefreshTokenExp { get; set; }
     public bool IsOAuthUser { get; set; }
     public bool IsOAuthRegisterCompleted { get; set; }
+    public DateTime? HasPremiumUntil { get; set; }
+
 }

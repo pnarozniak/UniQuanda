@@ -46,4 +46,12 @@ public interface IAppUserRepository
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>True if nickname is already in use, null when user is not exist, otherwise False</returns>
     Task<bool?> IsNicknameUsedAsync(int uid, string nickname, CancellationToken ct);
+
+    /// <summary>
+    ///     Returns status of user premium
+    /// </summary>
+    /// <param name="idUser">Id user to check</param>
+    /// <param name="ct">Operation cancellation token</param>
+    /// <returns>Premium status if exists, null if user not exists</returns>
+    Task<bool?> HasUserPremium(int idUser, CancellationToken ct);
 }

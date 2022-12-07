@@ -233,4 +233,12 @@ public class AppUserRepository : IAppUserRepository
         return await _authContext.Users
             .AnyAsync(u => EF.Functions.ILike(u.Nickname, nickname), ct);
     }
+
+    public async Task<bool?> HasUserPremium(int idUser, CancellationToken ct)
+    {
+        var user = await _authContext.Users.SingleOrDefaultAsync(u => u.Id == idUser, ct);
+        if (user is null)
+            return null;
+        return user.HasPremiumUntil > DateTime.UtcNow;
+    }
 }
