@@ -22,24 +22,6 @@ public class AppDbContext : DbContext
 
     }
 
-    public DbSet<AppUser> AppUsers { get; set; }
-    public DbSet<Question> Questions { get; set; }
-    public DbSet<Answer> Answers { get; set; }
-    public DbSet<AcademicTitle> AcademicTitles { get; set; }
-    public DbSet<University> Universities { get; set; }
-    public DbSet<Tag> Tags { get; set; }
-    public DbSet<AppUserInUniversity> AppUsersInUniversities { get; set; }
-    public DbSet<AppUserTitle> AppUsersTitles { get; set; }
-    public DbSet<AppUserQuestionInteraction> AppUsersQuestionsInteractions { get; set; }
-    public DbSet<AppUserAnswerInteraction> AppUsersAnswersInteractions { get; set; }
-    public DbSet<UserPointsInTag> UsersPointsInTags { get; set; }
-    public DbSet<TagInQuestion> TagsInQuestions { get; set; }
-    public DbSet<ReportType> ReportTypes { get; set; }
-    public DbSet<Report> Reports { get; set; }
-    public DbSet<Content> Contents { get; set; }
-    public DbSet<ImageInContent> ImagesInContent { get; set; }
-    public DbSet<Image> Images { get; set; }
-    public DbSet<IntFunction> IntFunctionWrapper { get; set; }
     public virtual DbSet<AppUser> AppUsers { get; set; }
     public virtual DbSet<Question> Questions { get; set; }
     public virtual DbSet<Answer> Answers { get; set; }
@@ -55,6 +37,10 @@ public class AppDbContext : DbContext
     public virtual DbSet<ReportType> ReportTypes { get; set; }
     public virtual DbSet<Report> Reports { get; set; }
     public virtual DbSet<Product> Products { get; set; }
+    public virtual DbSet<Content> Contents { get; set; }
+    public virtual DbSet<ImageInContent> ImagesInContent { get; set; }
+    public virtual DbSet<Image> Images { get; set; }
+    public virtual DbSet<IntFunction> IntFunctionWrapper { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
