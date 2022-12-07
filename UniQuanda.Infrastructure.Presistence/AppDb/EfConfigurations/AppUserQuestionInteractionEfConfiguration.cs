@@ -11,7 +11,11 @@ public class AppUserQuestionInteractionEfConfiguration : IEntityTypeConfiguratio
         builder.HasKey(uq => uq.Id);
         builder.Property(uq => uq.Id).ValueGeneratedOnAdd();
 
+        builder.Property(uq => uq.AppUserId).IsRequired();
+        builder.Property(uq => uq.QuestionId).IsRequired();
         builder.Property(uq => uq.IsCreator).IsRequired();
+        builder.Property(uq => uq.IsFollowing).IsRequired();
+        builder.Property(uq => uq.IsViewed).IsRequired();
 
         builder.HasIndex(uq => new { uq.AppUserId, uq.QuestionId }).IsUnique();
     }

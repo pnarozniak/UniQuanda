@@ -3,6 +3,7 @@ using Npgsql;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds;
 using UniQuanda.Infrastructure.Presistence.AppDb.EfConfigurations;
+using UniQuanda.Infrastructure.Presistence.AppDb.Functions;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 using UniQuanda.Infrastructure.Presistence.AuthDb.Models;
 
@@ -33,6 +34,10 @@ public class AppDbContext : DbContext
     public DbSet<TagInQuestion> TagsInQuestions { get; set; }
     public DbSet<ReportType> ReportTypes { get; set; }
     public DbSet<Report> Reports { get; set; }
+    public DbSet<Content> Contents { get; set; }
+    public DbSet<ImageInContent> ImagesInContent { get; set; }
+    public DbSet<Image> Images { get; set; }
+    public DbSet<IntFunction> IntFunctionWrapper { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -50,13 +55,19 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new TagInQuestionEfConfiguration());
         modelBuilder.ApplyConfiguration(new ReportTypeEfConfiguration());
         modelBuilder.ApplyConfiguration(new ReportEfConfiguration());
+        modelBuilder.ApplyConfiguration(new ContentEfConfiguration());
+        modelBuilder.ApplyConfiguration(new ImageInContentEfConfiguration());
+        modelBuilder.ApplyConfiguration(new ImageEfConfiguration());
 
         modelBuilder.HasPostgresEnum<AcademicTitleEnum>();
         modelBuilder.HasPostgresEnum<ReportCategoryEnum>();
+        modelBuilder.HasPostgresEnum<ContentTypeEnum>();
 
         modelBuilder.ApplyConfiguration(new ReportTypeDataSeed());
         modelBuilder.ApplyConfiguration(new AcademicTitleDataSeed());
         modelBuilder.ApplyConfiguration(new UniversitiesDataSeed());
         modelBuilder.ApplyConfiguration(new TagDataSeed());
+
+        modelBuilder.Entity<IntFunction>().HasNoKey();
     }
 }

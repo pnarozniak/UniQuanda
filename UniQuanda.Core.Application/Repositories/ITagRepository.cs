@@ -88,5 +88,13 @@ namespace UniQuanda.Core.Application.Repositories
         /// <param name="ct"></param>
         /// <returns>Cancelation token</returns>
         public Task<TagEntity> GetTagByIdAsync(int tagId, CancellationToken ct);
+
+        /// <summary>
+        ///     Checks if all tags in given list exist
+        /// </summary>
+        /// <param name="tagIds">List of tags</param>
+        /// <param name="ct"></param>
+        /// <returns>True if all tags exist</returns>
+        public Task<bool> CheckIfAllTagIdsExistAsync(IEnumerable<int> tagIds, CancellationToken ct);
     }
 }

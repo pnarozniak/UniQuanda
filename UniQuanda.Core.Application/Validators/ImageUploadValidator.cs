@@ -26,9 +26,9 @@ public class ImageUploadValidator : ValidationAttribute
         try
         {
             file = (IFormFile)value;
-        }
-        catch
-        {
+            }
+            catch
+            {
             return new ValidationResult($"The type of field {this._fieldName} can't be recognized and converted to IFormFile.");
         }
 
