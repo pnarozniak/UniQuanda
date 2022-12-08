@@ -21,6 +21,6 @@ namespace UniQuanda.Core.Application.Services
         /// <param name="duration">Enum that defines how long to store a object</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>True if saved, false otherwise</returns>
-        public Task<bool> SetToCacheAsync<T>(string key, T value, DurationEnum duration, CancellationToken ct);
+        public Task<bool> SaveToCacheAsync<T>(string key, T value, DurationEnum duration, CancellationToken ct);
     }
 }

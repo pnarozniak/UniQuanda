@@ -31,9 +31,9 @@ public class AppUserRepository : IAppUserRepository
 
     public async Task<AppUserEntity?> GetUserProfileAsync(int uid, CancellationToken ct)
     {
-        var cacheStatisticsKey = CacheKey.GetUserProfileStatistics(uid);
-        var cacheTopTagsKey = CacheKey.GetUserProfileTopTags(uid);
-        var cacheDuration = DurationEnum.ThreeHours;
+        var cacheStatisticsKey = CacheKey.GetUserProfileStatisticsKey(uid);
+        var cacheTopTagsKey = CacheKey.GetUserProfileTopTagsKey(uid);
+        var cacheDuration = DurationEnum.UserProfileTopTags;
 
         var query = _appContext.AppUsers.Where(u => u.Id == uid);
         var cacheStatisticsResult = await _cacheService.GetFromCacheAsync<(int Points, int QuestionAmount, int AnswersAmount)>(cacheStatisticsKey, ct);
@@ -92,8 +92,8 @@ public class AppUserRepository : IAppUserRepository
 
             (int Points, int QuestionAmount, int AnswersAmount) statistics = (user.Points ?? 0, user.QuestionsAmount ?? 0, user.AnswersAmount ?? 0);
             IEnumerable<(string Tag, int Amount)> topTags = user.Tags.Select(t => (t.Name, t.Points));
-            await _cacheService.SetToCacheAsync(cacheStatisticsKey, statistics, cacheDuration, ct);
-            await _cacheService.SetToCacheAsync(cacheTopTagsKey, topTags, cacheDuration, ct);
+            await _cacheService.SaveToCacheAsync(cacheStatisticsKey, statistics, cacheDuration, ct);
+            await _cacheService.SaveToCacheAsync(cacheTopTagsKey, topTags, cacheDuration, ct);
             return user;
         }
         else
