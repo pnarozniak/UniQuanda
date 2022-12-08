@@ -2,11 +2,11 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
 using UniQuanda.Core.Domain.Enums;
-using UniQuanda.Core.Domain.Enums.DbModel;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 
 #nullable disable
@@ -14,9 +14,10 @@ using UniQuanda.Infrastructure.Presistence.AppDb;
 namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221208025101_AddedAnswerConfig")]
+    partial class AddedAnswerConfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +26,6 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
 
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "academic_title_enum", new[] { "engineer", "bachelor", "academic" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "content_type_enum", new[] { "question", "answer", "message" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "product_type_enum", new[] { "premium" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "report_category_enum", new[] { "user", "question", "answer" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
@@ -446,26 +446,6 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.HasIndex("ImageId");
 
                     b.ToTable("ImagesInContent");
-                });
-
-            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Product", b =>
-                {
-                    b.Property<ProductTypeEnum>("ProductType")
-                        .HasColumnType("product_type_enum");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("money");
-
-                    b.HasKey("ProductType");
-
-                    b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            ProductType = ProductTypeEnum.Premium,
-                            Price = 19m
-                        });
                 });
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Question", b =>

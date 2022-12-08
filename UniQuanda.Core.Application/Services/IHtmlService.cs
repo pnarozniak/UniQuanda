@@ -13,7 +13,7 @@ namespace UniQuanda.Core.Application.Services
         /// <param name="endpointURL">URL to image endpoint from appsettings</param>
         /// <returns>
         ///     HTML text with img src in form {endpointURL}/{imageFolder}/{contentId}/{int(unique id in folder)}in first argument
-        ///     and dictionary where key is file name (in form {int(unique id in folder)}.{image type(jpg/png/etc.)}) and value is image in stream 
+        ///     and dictionary where key is file name (in form {ContentId}/{int(unique id in folder)}.{image type(jpg/png/etc.)}) and value is image in stream 
         /// </returns>
         public (string html, IDictionary<string, Stream> images) ConvertBase64ImagesToURLImages(string html, int contentId, ImageFolder imageFolder, string endpointURL);
         /// <summary>

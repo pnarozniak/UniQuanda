@@ -23,13 +23,23 @@ namespace UniQuanda.Presentation.API.Controllers
         /// <param name="ct">Cancellation Token</param>
         /// <returns>Max. pageSize tags that mached conditions</returns>
         /// <response code="200">When managed to get tags</response>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetTagsResponseDTO))]
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetTagsResponseDTO))]
         public async Task<IActionResult> GetTags(
             [FromQuery] GetTagsRequestDTO request,
             CancellationToken ct)
         {
             var query = new GetTagsQuery(request);
+            return Ok(await _mediator.Send(query, ct));
+        }
+
+        [HttpGet("names-by-ids")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<GetNamesByIdsResponseDTO>))]
+        public async Task<IActionResult> GetTagsNamesByIds(
+            [FromQuery] GetNamesByIdsRequestDTO request,
+            CancellationToken ct)
+        {
+            var query = new GetNamesByIdsQuery(request);
             return Ok(await _mediator.Send(query, ct));
         }
     }

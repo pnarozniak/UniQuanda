@@ -160,5 +160,17 @@ namespace UniQuanda.Infrastructure.Repositories
                 .CountAsync(ct);
             return count == tagIds.Count();
         }
+
+        public async Task<IEnumerable<TagEntity>> TranslateIdsToStringAsync(IEnumerable<int> tagIds, CancellationToken ct)
+        {
+            return await _context.Tags
+                .Where(t => tagIds.Contains(t.Id))
+                .Select(t => new TagEntity()
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                })
+                .ToListAsync(ct);
+        }
     }
 }
