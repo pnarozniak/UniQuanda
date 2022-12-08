@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProfile;
 using UniQuanda.Core.Application.CQRS.Commands.Questions.AddQuestion;
 using UniQuanda.Core.Application.CQRS.Queries.Questions;
+using UniQuanda.Core.Application.CQRS.Queries.Questions.GetQuestions;
 using UniQuanda.Presentation.API.Extensions;
 
 namespace UniQuanda.Presentation.API.Controllers
