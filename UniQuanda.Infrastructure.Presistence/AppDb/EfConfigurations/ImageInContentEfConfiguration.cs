@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 
 namespace UniQuanda.Infrastructure.Presistence.AppDb.EfConfigurations

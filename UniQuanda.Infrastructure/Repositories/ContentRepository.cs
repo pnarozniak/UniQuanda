@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Data;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 
@@ -19,7 +18,7 @@ namespace UniQuanda.Infrastructure.Repositories
                 .FromSqlRaw("SELECT nextval('\"Contents_Id_seq\"') AS result")
                 .FirstAsync(ct)
                 ).result;
-          
+
         }
     }
 }

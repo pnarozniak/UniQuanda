@@ -12,18 +12,19 @@ namespace UniQuanda.Infrastructure.Repositories
         {
             _context = context;
         }
-        
+
         public async Task<int> AddQuestionAsync(
-            int contentId, int userId, 
-            IEnumerable<(int order, int tagId)> tags, 
-            string title, string rawText, string text, 
+            int contentId, int userId,
+            IEnumerable<(int order, int tagId)> tags,
+            string title, string rawText, string text,
             IEnumerable<string> imageNames,
             DateTime creationTime,
             CancellationToken ct)
         {
             //create transaction 
             await using var ctx = await _context.Database.BeginTransactionAsync(ct);
-            try { 
+            try
+            {
                 //create content
                 var content = new Content
                 {
@@ -55,7 +56,7 @@ namespace UniQuanda.Infrastructure.Repositories
                     ContentId = contentId,
                     CreatedAt = creationTime,
                     Header = title,
-                
+
                 };
                 await _context.Questions.AddAsync(question, ct);
 

@@ -30,6 +30,6 @@ public class QuestionEfConfiguration : IEntityTypeConfiguration<Question>
             .HasForeignKey(tiq => tiq.QuestionId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        
+
     }
 }
