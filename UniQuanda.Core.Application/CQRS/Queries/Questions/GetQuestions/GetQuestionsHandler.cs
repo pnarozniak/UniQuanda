@@ -23,7 +23,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Questions.GetQuestions
                     HasCorrectAnswer = q.HasCorrectAnswer ?? false,
                     Header = q.Header,
                     Html = q.Content.RawText,
-                    IsPopular = false, // TODO: implement popular questions
+                    IsPopular = q.ViewsCount >= 1000,
                     Views = q.ViewsCount ?? 0,
                     AnswersCount = q.AnswersCount ?? 0,
                     CreationDate = q.CreatedAt ?? DateTime.Now,
