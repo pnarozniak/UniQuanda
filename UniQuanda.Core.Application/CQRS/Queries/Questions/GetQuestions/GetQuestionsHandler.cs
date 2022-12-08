@@ -31,7 +31,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Questions.GetQuestions
                     User = new GetQuestionsResponseDTOUser()
                     {
                         Id = q.User.Id,
-                        Name = "Test",
+                        Name = q.User.Nickname,
                         ProfilePictureURL = q.User.OptionalInfo.Avatar,
                     }
                 }),
