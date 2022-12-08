@@ -39,7 +39,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.LoginByGoogle
             this.oauthService = new Mock<IOAuthService>();
 
             this.tokensService
-                .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny<bool>()))
+                .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny<DateTime?>(), It.IsAny<bool>()))
                 .Returns(accessToken);
             this.oauthService
                 .Setup(os => os.GetGoogleIdTokenAsync(It.IsAny<string>()))
@@ -60,8 +60,8 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.LoginByGoogle
         {
             GoogleIdToken? googleIdToken = null;
             this.oauthService
-    .Setup(os => os.GetGoogleIdTokenAsync(It.IsAny<string>()))
-    .ReturnsAsync(googleIdToken);
+                .Setup(os => os.GetGoogleIdTokenAsync(It.IsAny<string>()))
+                .ReturnsAsync(googleIdToken);
 
             var result = await this.loginByGoogleHandler.Handle(this.loginByGoogleCommand, CancellationToken.None);
             result.Should().Be(url + "?error=500");

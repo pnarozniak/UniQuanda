@@ -18,6 +18,9 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile
             var user = await _appUserRepository.GetUserProfileAsync(request.UserId, cancellationToken);
             if (user == null) return null;
 
+            var userHasPremium = await _appUserRepository.HasUserPremium(request.UserId, cancellationToken);
+            if (userHasPremium == null) return null;
+
             return new GetProfileResponseDTO()
             {
                 UserData = new UserDataResponseDTO()
@@ -32,7 +35,8 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile
                     PhoneNumber = user.PhoneNumber,
                     City = user.City,
                     Birthdate = user.Birthdate,
-                    SemanticScholarProfile = user.SemanticScholarProfile
+                    SemanticScholarProfile = user.SemanticScholarProfile,
+                    HasPremium = userHasPremium.Value
                 },
                 HeaderStatistics = new HeaderStatisticsResponseDTO()
                 {

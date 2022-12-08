@@ -16,7 +16,7 @@ public static class Extensions
     {
         var dbConnectionOptions = new DbConnectionOptions(configuration);
         services.AddSingleton(dbConnectionOptions);
-        
+
         var quartzJobsSchedulesOptions = new QuartzJobsSchedulesOptions(configuration);
         services.AddSingleton(quartzJobsSchedulesOptions);
 
@@ -30,7 +30,7 @@ public static class Extensions
             options.UseNpgsql(dbConnectionOptions.AppDb.ConnectionString);
         });
 
-        services.AddQuartz(q => 
+        services.AddQuartz(q =>
         {
             q.UseMicrosoftDependencyInjectionJobFactory();
             var clearTempUsersJob = new JobKey("ClearTempUsersJob");

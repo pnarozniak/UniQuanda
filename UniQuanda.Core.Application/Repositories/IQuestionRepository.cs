@@ -19,9 +19,9 @@ namespace UniQuanda.Core.Application.Repositories
         /// <param name="ct">cancellation token</param>
         /// <returns></returns>
         public Task<int> AddQuestionAsync(
-            int contentId, int userId, 
-            IEnumerable<(int order, int tagId)> tags, 
-            string title, string rawText, 
+            int contentId, int userId,
+            IEnumerable<(int order, int tagId)> tags,
+            string title, string rawText,
             string text, IEnumerable<string> imageNames,
             DateTime creationTime,
             CancellationToken ct

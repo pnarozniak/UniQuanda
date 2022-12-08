@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using UniQuanda.Core.Domain.Enums;
+﻿using UniQuanda.Core.Domain.Enums;
 
 namespace UniQuanda.Core.Application.Services
 {

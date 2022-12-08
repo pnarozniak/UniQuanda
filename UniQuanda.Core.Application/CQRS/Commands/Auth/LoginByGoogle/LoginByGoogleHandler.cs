@@ -46,15 +46,15 @@ public class LoginByGoogleHandler : IRequestHandler<LoginByGoogleCommand, string
             return $"{_clientHandlerUrl}?confirmationCode={request.Code}";
         }
 
-        return await GoogleLoginSuccess(user.Id, ct);
+        return await GoogleLoginSuccess(user.Id, user.HasPremiumUntil, ct);
     }
 
-    private async Task<string> GoogleLoginSuccess(int idUser, CancellationToken ct)
+    private async Task<string> GoogleLoginSuccess(int idUser, DateTime? hasPremiumUntil, CancellationToken ct)
     {
         var (refreshTokenValue, refreshTokenExp) = _tokensService.GenerateRefreshToken();
         await _authRepository.UpdateUserRefreshTokenAsync(idUser, refreshTokenValue, refreshTokenExp, ct);
 
-        var accessToken = _tokensService.GenerateAccessToken(idUser, true);
+        var accessToken = _tokensService.GenerateAccessToken(idUser, hasPremiumUntil, true);
         return $"{_clientHandlerUrl}?accessToken={accessToken}";
     }
 }

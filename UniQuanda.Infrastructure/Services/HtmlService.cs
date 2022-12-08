@@ -1,5 +1,4 @@
 ﻿using HtmlAgilityPack;
-using Microsoft.AspNetCore.Http;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Domain.Enums;
 
@@ -8,7 +7,7 @@ namespace UniQuanda.Infrastructure.Services
     internal class HtmlService : IHtmlService
     {
         public (string html, IDictionary<string, Stream> images) ConvertBase64ImagesToURLImages(
-            string html, int contentId, 
+            string html, int contentId,
             ImageFolder imageFolder, string endpointURL)
         {
             int imageId = 1;

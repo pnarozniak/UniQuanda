@@ -52,6 +52,9 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
         {
             appUserRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(null as AppUserEntity);
+            appUserRepository
+                .Setup(aur => aur.HasUserPremium(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
 
             var getProfileHandler = new GetProfileHandler(appUserRepository.Object);
             var result = await getProfileHandler.Handle(getProfileQuery, new CancellationToken());
@@ -65,6 +68,9 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
             appUserEntity.Tags = GetTags(0);
             appUserRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(appUserEntity);
+            appUserRepository
+                .Setup(aur => aur.HasUserPremium(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
 
             var getProfileHandler = new GetProfileHandler(appUserRepository.Object);
             var result = await getProfileHandler.Handle(getProfileQuery, new CancellationToken());
@@ -96,6 +102,9 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
             appUserEntity.Tags = GetTags(2);
             appUserRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(appUserEntity);
+            appUserRepository
+                .Setup(aur => aur.HasUserPremium(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
 
             var getProfileHandler = new GetProfileHandler(appUserRepository.Object);
             var result = await getProfileHandler.Handle(getProfileQuery, new CancellationToken());
@@ -135,6 +144,9 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
 
             appUserRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(appUserEntity);
+            appUserRepository
+                .Setup(aur => aur.HasUserPremium(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
 
             var getProfileHandler = new GetProfileHandler(appUserRepository.Object);
             var result = await getProfileHandler.Handle(getProfileQuery, new CancellationToken());
