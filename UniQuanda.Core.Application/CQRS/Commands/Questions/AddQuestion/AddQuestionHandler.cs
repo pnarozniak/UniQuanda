@@ -15,9 +15,9 @@ public class AddQuestionHandler : IRequestHandler<AddQuestionCommand, AddQuestio
     private readonly ITagRepository _tagRepository;
 
     public AddQuestionHandler(
-        IImageService imageService, 
-        IHtmlService htmlService, 
-        IContentRepository contentRepository, 
+        IImageService imageService,
+        IHtmlService htmlService,
+        IContentRepository contentRepository,
         ITagRepository tagRepository,
         IQuestionRepository questionRepository
     )
@@ -35,9 +35,9 @@ public class AddQuestionHandler : IRequestHandler<AddQuestionCommand, AddQuestio
         var contentId = await _contentRepository.GetNextContentIdAsync(ct);
 
         var (html, images) = _htmlService.ConvertBase64ImagesToURLImages(
-            request.RawText, 
-            contentId, 
-            ImageFolder.Content, 
+            request.RawText,
+            contentId,
+            ImageFolder.Content,
             _imageService.GetImageURL()
         );
         var text = _htmlService.ExtractTextFromHTML(html);
@@ -48,13 +48,13 @@ public class AddQuestionHandler : IRequestHandler<AddQuestionCommand, AddQuestio
         };
         var tags = request.Tags.Select((tag, index) => (index, tag));
         await _imageService.UploadMultipleImagesAsStreamAsync(
-            images, 
-            ImageFolder.Content, 
+            images,
+            ImageFolder.Content,
             ct
         );
         var questionId = await _questionRepository.AddQuestionAsync(
             contentId, request.UserId,
-            tags, request.Title, 
+            tags, request.Title,
             html, text,
             images.Keys
                 .Select(imgName => $"{_imageService.GetImageURL()}{ImageFolder.Content.Value}/{contentId}/{imgName}"),
@@ -64,7 +64,7 @@ public class AddQuestionHandler : IRequestHandler<AddQuestionCommand, AddQuestio
             QuestionId = null,
             Status = "Nie udało się dodać pytania"
         };
-        
+
         return new()
         {
             QuestionId = questionId,

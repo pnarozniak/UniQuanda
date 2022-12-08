@@ -1,4 +1,3 @@
-using UniQuanda.Core.Application.CQRS.Commands.Report.CreateReport;
 using UniQuanda.Core.Domain.Entities.App;
 
 namespace UniQuanda.Core.Application.Repositories

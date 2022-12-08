@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 
 namespace UniQuanda.Infrastructure.Presistence.AppDb.EfConfigurations
@@ -24,7 +24,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.EfConfigurations
                 .WithOne(a => a.ContentIdNavigation)
                 .HasForeignKey<Answer>(a => a.ContentId)
                 .OnDelete(DeleteBehavior.Cascade);
-            
+
             builder.HasMany(c => c.ImagesInContent)
                 .WithOne(iic => iic.ContentIdNavigation)
                 .HasForeignKey(iic => iic.ContentId)
