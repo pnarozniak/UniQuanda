@@ -38,14 +38,17 @@ public class TokensService : ITokensService
         return Guid.NewGuid().ToString();
     }
 
-    public string GenerateAccessToken(int idUser, bool isOAuthUser = false)
+    public string GenerateAccessToken(int idUser, DateTime? hasPremiumUntil, bool isOAuthUser = false)
     {
+        var isActivePremium = hasPremiumUntil != null && hasPremiumUntil > DateTime.UtcNow;
         var userClaims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, idUser.ToString()),
             new Claim(ClaimTypes.Role, JwtTokenRole.User),
             new Claim(ClaimTypes.Role, isOAuthUser ? JwtTokenRole.OAuthAccount : JwtTokenRole.UniquandaAccount)
         };
+        if (isActivePremium)
+            userClaims.Add(new Claim(ClaimTypes.Role, JwtTokenRole.Premium));
 
         var key = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(_options.AccessToken.SecretKey));
@@ -54,11 +57,19 @@ public class TokensService : ITokensService
             _options.AccessToken.ValidIssuer,
             _options.AccessToken.ValidAudience,
             userClaims,
-            expires: DateTime.UtcNow.AddMinutes(_options.AccessToken.ValidityInMinutes),
+            expires: isActivePremium ? GetExpirationToken(hasPremiumUntil!.Value) : DateTime.UtcNow.AddMinutes(_options.AccessToken.ValidityInMinutes),
             signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
         );
 
         return new JwtSecurityTokenHandler().WriteToken(jwt);
+    }
+
+    private DateTime GetExpirationToken(DateTime hasPremiumUntil)
+    {
+        var minutesOfValid = (hasPremiumUntil - DateTime.UtcNow).TotalMinutes;
+        if (minutesOfValid > _options.AccessToken.ValidityInMinutes)
+            return DateTime.UtcNow.AddMinutes(_options.AccessToken.ValidityInMinutes);
+        return DateTime.UtcNow.AddMinutes(minutesOfValid);
     }
 
     public int? GetUserIdFromExpiredAccessToken(string accessToken)

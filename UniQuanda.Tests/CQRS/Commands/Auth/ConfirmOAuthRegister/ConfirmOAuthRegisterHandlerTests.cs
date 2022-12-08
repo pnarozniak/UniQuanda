@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,7 +33,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ConfirmOAuthRegister
             this.emailService = new Mock<IEmailService>();
 
             this.tokensService
-                .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny<bool>()))
+                .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny<DateTime?>(), It.IsAny<bool>()))
                 .Returns(accessToken);
 
             this.confirmOAuthRegisterCommand = new ConfirmOAuthRegisterCommand(new ConfirmOAuthRegisterRequestDTO());
