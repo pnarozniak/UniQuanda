@@ -30,8 +30,9 @@ public static class Extensions
         services.AddScoped<IAppUserRepository, AppUserRepository>();
         services.AddScoped<ITagRepository, TagRepository>();
         services.AddScoped<IReportRepository, ReportRepository>();
-        services.AddScoped<IQuestionRepository, QuestionRepository> ();
+        services.AddScoped<IQuestionRepository, QuestionRepository>();
         services.AddScoped<IContentRepository, ContentRepository>();
+        services.AddScoped<IRankingRepository, RankingRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IPremiumPaymentRepository, PremiumPaymentRepository>();
 

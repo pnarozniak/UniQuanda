@@ -7,7 +7,7 @@
         /// </summary>
         /// <param name="uid">Id of AppUser</param>
         /// <returns>String - name of key</returns>
-        public static string GetUserProfileStatistics(int uid)
+        public static string GetUserProfileStatisticsKey(int uid)
         {
             return "user-profile-statistics-" + uid;
         }
@@ -17,9 +17,18 @@
         /// </summary>
         /// <param name="uid">Id of AppUser</param>
         /// <returns>String - name of key</returns>
-        public static string GetUserProfileTopTags(int uid)
+        public static string GetUserProfileTopTagsKey(int uid)
         {
             return "user-profile-top-tags-" + uid;
+        }
+
+        /// <summary>
+        ///     Key for top 5 users
+        /// </summary>
+        /// <returns>String - name of key</returns>
+        public static string GetTop5UsersKey()
+        {
+            return "top-5-users";
         }
     }
 }

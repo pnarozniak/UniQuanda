@@ -20,7 +20,7 @@ public class CacheService : ICacheService
         return result != null ? JsonConvert.DeserializeObject<T>(result) : default;
     }
 
-    public async Task<bool> SetToCacheAsync<T>(string key, T value, DurationEnum duration, CancellationToken ct)
+    public async Task<bool> SaveToCacheAsync<T>(string key, T value, DurationEnum duration, CancellationToken ct)
     {
         try
         {
