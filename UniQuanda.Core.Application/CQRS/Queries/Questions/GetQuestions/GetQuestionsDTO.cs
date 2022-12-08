@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using UniQuanda.Core.Domain.Enums;
 
-namespace UniQuanda.Core.Application.CQRS.Queries.Questions
+namespace UniQuanda.Core.Application.CQRS.Queries.Questions.GetQuestions
 {
     public class GetQuestionsRequestDTO
     {

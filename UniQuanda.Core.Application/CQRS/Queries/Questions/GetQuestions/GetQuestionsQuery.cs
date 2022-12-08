@@ -1,18 +1,18 @@
 ﻿using MediatR;
 using UniQuanda.Core.Domain.Enums;
 
-namespace UniQuanda.Core.Application.CQRS.Queries.Questions
+namespace UniQuanda.Core.Application.CQRS.Queries.Questions.GetQuestions
 {
     public class GetQuestionsQuery : IRequest<GetQuestionsResponseDTO>
     {
         public GetQuestionsQuery(GetQuestionsRequestDTO request)
         {
-            this.Take = request.PageSize;
-            this.Skip = (request.Page - 1) * request.PageSize;
-            this.AddCount = request.AddCount;
-            this.Tags = request.Tags;
-            this.OrderBy = request.OrderBy;
-            this.SortBy = request.SortBy;
+            Take = request.PageSize;
+            Skip = (request.Page - 1) * request.PageSize;
+            AddCount = request.AddCount;
+            Tags = request.Tags;
+            OrderBy = request.OrderBy;
+            SortBy = request.SortBy;
         }
         public int Take { get; set; }
         public int Skip { get; set; }

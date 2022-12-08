@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using UniQuanda.Core.Application.Repositories;
 
-namespace UniQuanda.Core.Application.CQRS.Queries.Questions
+namespace UniQuanda.Core.Application.CQRS.Queries.Questions.GetQuestions
 {
     public class GetQuestionsHandler : IRequestHandler<GetQuestionsQuery, GetQuestionsResponseDTO>
     {
@@ -19,7 +19,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Questions
             {
                 Questions = questions.Select(q => new GetQuestionsResponseDTOQuestion()
                 {
-                    Id = q.Id??0,
+                    Id = q.Id ?? 0,
                     HasCorrectAnswer = q.HasCorrectAnswer ?? false,
                     Header = q.Header,
                     Html = q.Content.RawText,
