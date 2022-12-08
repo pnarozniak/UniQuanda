@@ -42,7 +42,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
 
             SetupLoginCommand();
             this.tokensService
-                .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny<bool>()))
+                .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny<DateTime>(), It.IsAny<bool>()))
                 .Returns(AccessToken);
             this.tokensService
                 .Setup(ts => ts.GenerateRefreshToken())
@@ -179,6 +179,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
                 HashedPassword = HashedPassword,
                 Emails = new List<string>() { UserEmail },
                 IsEmailConfirmed = isEmailConfirmed,
+                HasPremiumUntil = DateTime.UtcNow.AddMonths(1),
                 OptionalInfo = new UserOptionalInfo
                 {
                     Avatar = Avatar

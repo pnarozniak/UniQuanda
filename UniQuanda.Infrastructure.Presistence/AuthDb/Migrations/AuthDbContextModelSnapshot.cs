@@ -21,6 +21,7 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "o_auth_provider_enum", new[] { "google" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "premium_payment_status_enum", new[] { "new", "pending", "canceled", "completed" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "user_action_to_confirm_enum", new[] { "recover_password", "new_main_email", "new_extra_email" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
@@ -84,6 +85,55 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                     b.ToTable("OAuthUsers");
                 });
 
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AuthDb.Models.PremiumPayment", b =>
+                {
+                    b.Property<string>("IdPayment")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("IdTransaction")
+                        .HasColumnType("text");
+
+                    b.Property<int>("IdUser")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("PaymentDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PaymentUrl")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("numeric(5,2)");
+
+                    b.Property<DateTime?>("ValidUntil")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("IdPayment");
+
+                    b.HasIndex("IdPayment")
+                        .IsUnique();
+
+                    b.HasIndex("IdUser");
+
+                    b.HasIndex("PaymentUrl")
+                        .IsUnique();
+
+                    b.ToTable("PremiumPayments");
+                });
+
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AuthDb.Models.TempUser", b =>
                 {
                     b.Property<int>("IdUser")
@@ -128,6 +178,9 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("HasPremiumUntil")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("HashedPassword")
                         .IsRequired()
@@ -226,6 +279,17 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                     b.Navigation("IdUserNavigation");
                 });
 
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AuthDb.Models.PremiumPayment", b =>
+                {
+                    b.HasOne("UniQuanda.Infrastructure.Presistence.AuthDb.Models.User", "IdUserNavigation")
+                        .WithMany("PremiumPayments")
+                        .HasForeignKey("IdUser")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("IdUserNavigation");
+                });
+
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AuthDb.Models.TempUser", b =>
                 {
                     b.HasOne("UniQuanda.Infrastructure.Presistence.AuthDb.Models.User", "IdUserNavigation")
@@ -258,6 +322,8 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
 
                     b.Navigation("IdTempUserNavigation")
                         .IsRequired();
+
+                    b.Navigation("PremiumPayments");
                 });
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AuthDb.Models.UserEmail", b =>

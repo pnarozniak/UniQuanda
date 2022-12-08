@@ -16,7 +16,8 @@ public static class CORSExtensions
             opt.AddPolicy(PolicyName,
                 builder =>
                 {
-                    builder.WithOrigins(corsOptions.Url)
+                    builder.WithOrigins(corsOptions.Url,
+                        "185.68.14.10", "185.68.14.11", "185.68.14.12", "185.68.14.26", "185.68.14.27", "185.68.14.28")
                         .AllowCredentials()
                         .AllowAnyMethod()
                         .AllowAnyHeader();

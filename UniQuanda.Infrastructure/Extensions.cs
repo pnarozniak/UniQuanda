@@ -23,6 +23,7 @@ public static class Extensions
         services.AddSingleton(new TokensOptions(configuration));
         services.AddSingleton(new UniQuandaClientOptions(configuration));
         services.AddSingleton(new OAuthOptions(configuration));
+        services.AddSingleton(new PayUOptions(configuration));
 
         // Repositories
         services.AddScoped<IAuthRepository, AuthRepository>();
@@ -31,6 +32,8 @@ public static class Extensions
         services.AddScoped<IReportRepository, ReportRepository>();
         services.AddScoped<IQuestionRepository, QuestionRepository> ();
         services.AddScoped<IContentRepository, ContentRepository>();
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IPremiumPaymentRepository, PremiumPaymentRepository>();
 
         // Services
         services.AddScoped<IPasswordsService, PasswordsService>();
@@ -41,6 +44,7 @@ public static class Extensions
         services.AddScoped<IImageService, ImageService>();
         services.AddScoped<IOAuthService, OAuthService>();
         services.AddScoped<IHtmlService, HtmlService>();
+        services.AddScoped<IPaymentService, PayUService>();
 
         // Cache
         services.AddStackExchangeRedisCache(options =>

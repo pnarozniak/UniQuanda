@@ -32,7 +32,7 @@ public class ConfirmOAuthRegisterHandler : IRequestHandler<ConfirmOAuthRegisterC
         await this._emailService.SendOAuthRegisterSuccessEmail(user.Emails.Where(e => e.IsMain).SingleOrDefault()!.Value);
         return new ConfirmOAuthRegisterResponseDTO
         {
-            AccessToken = _tokensService.GenerateAccessToken(idUser.Value!, true)
+            AccessToken = _tokensService.GenerateAccessToken(idUser.Value!, null, true)
         };
     }
 }

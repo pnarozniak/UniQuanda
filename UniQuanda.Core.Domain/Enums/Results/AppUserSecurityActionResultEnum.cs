@@ -10,9 +10,3 @@ public enum AppUserSecurityActionResultEnum
     UnSuccessful,
     Successful
 }
-
-/*InvalidPassword,
-    DbConflict,
-    EmailNotAvailable,
-    OverLimitOfExtraEmails,
-    UserHasActionToConfirm*/
