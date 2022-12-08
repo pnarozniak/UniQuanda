@@ -10,6 +10,10 @@ public class AnswerEfConfiguration : IEntityTypeConfiguration<Answer>
     {
         builder.HasKey(a => a.Id);
         builder.Property(a => a.Id).ValueGeneratedOnAdd();
+        builder.Property(a => a.LikeCount).IsRequired().HasDefaultValue(0);
+        builder.Property(a => a.IsCorrect).IsRequired().HasDefaultValue(false);
+        builder.Property(a => a.HasBeenModified).IsRequired().HasDefaultValue(false);
+        builder.Property(a => a.CreatedAt).IsRequired();
 
         builder.HasMany(a => a.AppUsersAnswerInteractions)
             .WithOne(uai => uai.AnswerIdNavigation)

@@ -23,7 +23,7 @@ public class ImageController : ControllerBase
     /// </summary>
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(File))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [HttpGet("{FolderName}/{ImageName}")]
+    [HttpGet("{FolderName}/{*ImageName}")]
     public async Task<IActionResult> GetImage(
         [FromRoute] string FolderName,
         [FromRoute] string ImageName,

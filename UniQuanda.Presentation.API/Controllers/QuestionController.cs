@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProfile;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
 using UniQuanda.Core.Application.CQRS.Commands.Questions.AddQuestion;
+using UniQuanda.Core.Application.CQRS.Queries.Questions;
 using UniQuanda.Presentation.API.Attributes;
 using UniQuanda.Presentation.API.Extensions;
 
@@ -35,6 +36,21 @@ namespace UniQuanda.Presentation.API.Controllers
             var command = new AddQuestionCommand(request, User.GetId()!.Value);
             var result = await this._mediator.Send(command, ct);
             return result.QuestionId != null ? Ok(result) : BadRequest(result);
+        }
+
+        /// <summary>
+        ///     Gets questions from the database using filters
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetQuestionsResponseDTO))]
+        public async Task<IActionResult> GetQuestions([FromQuery] GetQuestionsRequestDTO request, CancellationToken ct)
+        {
+            var query = new GetQuestionsQuery(request);
+            var result = await this._mediator.Send(query, ct);
+            return Ok(result);
         }
     }
 }

@@ -1,7 +1,11 @@
-﻿using UniQuanda.Core.Application.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using UniQuanda.Core.Application.Repositories;
+using UniQuanda.Core.Domain.Entities.App;
+using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
+using UniQuanda.Infrastructure.Presistence.ExtensionsEF;
 
 namespace UniQuanda.Infrastructure.Repositories
 {
@@ -97,6 +101,98 @@ namespace UniQuanda.Infrastructure.Repositories
                 await ctx.RollbackAsync(ct);
                 return 0;
             }
+        }
+
+        public async Task<IEnumerable<QuestionEntity>> GetQuestionsAsync(int take, int skip, IEnumerable<int>? tags, OrderDirectionEnum orderBy, QuestionSortingEnum sortBy, CancellationToken ct)
+        {
+            IQueryable<Question> questions = _context.Questions;
+            if (tags != null)
+            {
+                foreach (var tag in tags)
+                {
+                    questions = questions
+                        .Where(q => q.TagsInQuestion
+                            .Select(tq => tq.TagId)
+                            .Contains(tag) ||
+                            q.TagsInQuestion
+                            .Select(tq => tq.TagIdNavigation.ParentTagId)
+                            .Contains(tag)
+                        );
+                }
+            }
+            switch (sortBy)
+            {
+                case QuestionSortingEnum.PublicationDate:
+                    questions = questions.OrderBy(q => q.CreatedAt, orderBy);
+                    break;
+                case QuestionSortingEnum.Views:
+                    questions = questions.OrderBy(q => q.ViewsCount, orderBy);
+                    break;
+                case QuestionSortingEnum.Answers:
+                    questions = questions.OrderBy(q => q.Answers.Count, orderBy);
+                    break;
+
+            }
+            var que = await questions
+                .Include(q => q.ContentIdNavigation)
+                .Include(q => q.TagsInQuestion).ThenInclude(qit=>qit.TagIdNavigation)
+                .Include(q => q.AppUsersQuestionInteractions).ThenInclude(aqi => aqi.AppUserIdNavigation)
+                .Include(q => q.Answers)
+                .Select(q => new QuestionEntity
+                {
+                    Id = q.Id,
+                    Header = q.Header,
+                    Content = new Core.Domain.ValueObjects.Content()
+                    {
+                        RawText = q.ContentIdNavigation.RawText
+                    },
+                    CreatedAt = q.CreatedAt,
+                    ViewsCount = q.ViewsCount,
+                    AnswersCount = q.Answers.Count(),
+                    Tags = q.TagsInQuestion.Select(t => new TagEntity
+                    {
+                        Name = t.TagIdNavigation.Name
+                    }),
+                    User = new UserEntity()
+                    {
+                        Id = q.AppUsersQuestionInteractions
+                            .Where(a => a.IsCreator)
+                            .Select(a => a.AppUserId)
+                            .FirstOrDefault(),
+                        Nickname = q.AppUsersQuestionInteractions
+                            .Where(a => a.IsCreator)
+                            .Select(a => a.AppUserIdNavigation.Nickname)
+                            .FirstOrDefault(),
+                        OptionalInfo = new Core.Domain.ValueObjects.UserOptionalInfo()
+                        {
+                            Avatar = q.AppUsersQuestionInteractions
+                                .Where(a => a.IsCreator)
+                                .Select(a => a.AppUserIdNavigation.Avatar)
+                                .FirstOrDefault(),
+                        }
+                    }
+                }).Skip(skip).Take(take).ToListAsync(ct);
+            return que;
+        }
+
+        public async Task<int> GetQuestionsCountAsync(IEnumerable<int>? tags, CancellationToken ct)
+        {
+            IQueryable<Question> questions = _context.Questions;
+            if (tags != null)
+            {
+                foreach (var tag in tags)
+                {
+                    questions = questions
+                        .Where(q => q.TagsInQuestion
+                            .Select(tq => tq.TagId)
+                            .Contains(tag) || 
+                            q.TagsInQuestion
+                            .Select(tq => tq.TagIdNavigation.ParentTagId)
+                            .Contains(tag)
+                        );
+                }
+            }
+            return await questions.CountAsync(ct);
         }
     }
 }

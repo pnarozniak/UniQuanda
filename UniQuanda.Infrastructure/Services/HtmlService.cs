@@ -12,7 +12,7 @@ namespace UniQuanda.Infrastructure.Services
             ImageFolder imageFolder, string endpointURL)
         {
             int imageId = 1;
-            var initialImagePath = $"{endpointURL}{imageFolder.Value}/{contentId}/";
+            var initialImagePath = $"{endpointURL}{imageFolder.Value}/";
             var imagesResult = new Dictionary<string, Stream>();
             var dom = new HtmlDocument();
             dom.LoadHtml(html);
@@ -26,7 +26,7 @@ namespace UniQuanda.Infrastructure.Services
                 var byteArr = Convert.FromBase64String(base64);
                 var stream = new MemoryStream(byteArr);
 
-                var imageIdString = $"{imageId}.{imageType}";
+                var imageIdString = $"{contentId}/{imageId}.{imageType}";
                 imagesResult.Add(imageIdString, stream);
                 imageNode.Attributes["src"].Value = $"{initialImagePath}{imageIdString}";
                 imageId++;
