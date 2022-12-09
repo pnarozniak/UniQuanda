@@ -135,10 +135,6 @@ namespace UniQuanda.Infrastructure.Repositories
 
             }
             var que = await questions
-                .Include(q => q.ContentIdNavigation)
-                .Include(q => q.TagsInQuestion).ThenInclude(qit=>qit.TagIdNavigation)
-                .Include(q => q.AppUsersQuestionInteractions).ThenInclude(aqi => aqi.AppUserIdNavigation)
-                .Include(q => q.Answers)
                 .Select(q => new QuestionEntity
                 {
                     Id = q.Id,
@@ -174,6 +170,8 @@ namespace UniQuanda.Infrastructure.Repositories
                     },
                     HasCorrectAnswer = q.Answers.Any(a => a.IsCorrect)
                 }).Skip(skip).Take(take).ToListAsync(ct);
+
+            
             return que;
         }
 
@@ -200,9 +198,6 @@ namespace UniQuanda.Infrastructure.Repositories
         public async Task<IEnumerable<QuestionEntity>> GetQuestionsOfUserAsync(int userId, int take, int skip, CancellationToken ct)
         {
             return await _context.AppUsersQuestionsInteractions
-                .Include(aqi => aqi.QuestionIdNavigation).ThenInclude(q => q.ContentIdNavigation)
-                .Include(aqi => aqi.QuestionIdNavigation).ThenInclude(q => q.TagsInQuestion).ThenInclude(qit => qit.TagIdNavigation)
-                .Include(aqi => aqi.QuestionIdNavigation).ThenInclude(q => q.Answers)
                 .Where(a => a.AppUserId == userId && a.IsCreator)
                 .Select(aqi => new QuestionEntity
                 {
