@@ -39,7 +39,7 @@ public class UpdateAppUserProfileHandler : IRequestHandler<UpdateAppUserProfileC
         if (request.Banner != null && request.IsNewBanner)
         {
             var imageName = $"banner-{request.AppUser.Id}";
-            request.AppUser.Banner = $"{endpointURL}/{ImageFolder.Profile.Value}/{imageName}";
+            request.AppUser.Banner = $"{endpointURL}{ImageFolder.Profile.Value}/{imageName}";
             await _imageService.RemoveImageAsync(imageName, ImageFolder.Profile, ct);
             var bannerSaveResult = await _imageService.SaveImageAsync(request.Banner, imageName, ImageFolder.Profile, ct);
             if (!bannerSaveResult)

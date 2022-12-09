@@ -200,7 +200,7 @@ namespace UniQuanda.Infrastructure.Repositories
         public async Task<IEnumerable<QuestionEntity>> GetQuestionsOfUserAsync(int userId, int take, int skip, CancellationToken ct)
         {
             return await _context.AppUsersQuestionsInteractions
-                .Include(aqi => aqi.QuestionIdNavigation).ThenInclude(q=>q.ContentIdNavigation)
+                .Include(aqi => aqi.QuestionIdNavigation).ThenInclude(q => q.ContentIdNavigation)
                 .Include(aqi => aqi.QuestionIdNavigation).ThenInclude(q => q.TagsInQuestion).ThenInclude(qit => qit.TagIdNavigation)
                 .Include(aqi => aqi.QuestionIdNavigation).ThenInclude(q => q.Answers)
                 .Where(a => a.AppUserId == userId && a.IsCreator)
