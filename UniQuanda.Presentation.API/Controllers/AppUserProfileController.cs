@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProfile;
 using UniQuanda.Core.Application.CQRS.Queries.AppUser.Profile.GetAppUserProfileSettings;
 using UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile;
+using UniQuanda.Core.Application.CQRS.Queries.Profile.GetQuestions;
+using UniQuanda.Core.Application.CQRS.Queries.Profile.GetAnswers;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Core.Domain.Enums.Results;
 using UniQuanda.Infrastructure.Enums;
@@ -78,5 +80,27 @@ public class AppUserProfileController : ControllerBase
             AppUserProfileUpdateResultEnum.Successful => Ok(result),
             _ => Conflict(result)
         };
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetQuestionsResponseDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet("questions")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetQuestionsOnProfile([FromQuery] GetQuestionsRequestDTO request, CancellationToken ct)
+    {
+        var query = new GetQuestionsQuery(request);
+        var result = await _mediator.Send(query, ct);
+        return result.Questions != null ? Ok(result) : NotFound();
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetAnswersResponseDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet("answers")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetAnswersOnProfile([FromQuery] GetAnswersRequestDTO request, CancellationToken ct)
+    {
+        var query = new GetAnswersQuery(request);
+        var result = await _mediator.Send(query, ct);
+        return result.Answers != null ? Ok(result) : NotFound();
     }
 }
