@@ -1,4 +1,5 @@
-﻿using UniQuanda.Core.Application.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Domain.Entities.App;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 
@@ -16,9 +17,9 @@ namespace UniQuanda.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<int> GetAnswersOfUserCountAsync(int userId, CancellationToken ct)
+        public async Task<int> GetAnswersOfUserCountAsync(int userId, CancellationToken ct)
         {
-            throw new NotImplementedException();
+            return await _context.AppUsersAnswersInteractions.Where(aai => aai.IsCreator && aai.AppUserId == userId).CountAsync(ct);
         }
     }
 }
