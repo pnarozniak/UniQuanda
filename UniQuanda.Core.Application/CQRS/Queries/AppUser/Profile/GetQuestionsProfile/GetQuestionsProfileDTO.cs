@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetQuestions
+namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetQuestionsProfile
 {
-    public class GetQuestionsRequestDTO
+    public class GetQuestionsProfileRequestDTO
     {
         [Required]
         public int UserId { get; set; }
@@ -15,13 +15,13 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetQuestions
         public bool AddCount { get; set; }
     }
 
-    public class GetQuestionsResponseDTO
+    public class GetQuestionsProfileResponseDTO
     {
-        public IEnumerable<GetQuestionsResponseDTOQuestion>? Questions { get; set; }
+        public IEnumerable<GetQuestionsProfileResponseDTOQuestion>? Questions { get; set; }
         public int? TotalCount { get; set; }
     }
 
-    public class GetQuestionsResponseDTOQuestion
+    public class GetQuestionsProfileResponseDTOQuestion
     {
         public int Id { get; set; }
         public string Header { get; set; }
@@ -29,6 +29,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetQuestions
         public int Views { get; set; }
         public int Answers { get; set; }
         public DateTime CreatedAt { get; set; }
+        public bool HasCorrectAnswer { get; set; }
         public IEnumerable<string> TagNames { get; set; }
     }
 }
