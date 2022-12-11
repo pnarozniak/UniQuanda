@@ -17,6 +17,8 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Questions.GetQuestions
         public OrderDirectionEnum OrderBy { get; set; }
         [Required]
         public QuestionSortingEnum SortBy { get; set; }
+        [MinLength(3)]
+        public string? SearchText { get; set; }
     }
 
     public class GetQuestionsResponseDTO

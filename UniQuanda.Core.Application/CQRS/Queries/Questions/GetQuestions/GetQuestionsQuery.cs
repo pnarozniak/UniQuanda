@@ -13,6 +13,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Questions.GetQuestions
             Tags = request.Tags;
             OrderBy = request.OrderBy;
             SortBy = request.SortBy;
+            SearchText = request.SearchText;
         }
         public int Take { get; set; }
         public int Skip { get; set; }
@@ -20,5 +21,6 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Questions.GetQuestions
         public IEnumerable<int>? Tags { get; set; }
         public OrderDirectionEnum OrderBy { get; set; }
         public QuestionSortingEnum SortBy { get; set; }
+        public string? SearchText { get; set; }
     }
 }

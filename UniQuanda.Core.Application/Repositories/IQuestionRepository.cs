@@ -28,29 +28,32 @@ namespace UniQuanda.Core.Application.Repositories
             );
 
         /// <summary>
-        ///     Gets questions from database using filtering
+        ///     Gets questions from database using filters
         /// </summary>
         /// <param name="take">How many elements to take from database</param>
         /// <param name="skip">How many first results to skip</param>
         /// <param name="tags">Ids of tags to include during getting questions</param>
         /// <param name="orderBy">Way of ordering results</param>
         /// <param name="sortBy">Direction of soring by direction</param>
-        /// <param name="ct">Cancellation token</param>
+        /// <param name="searchText">Search text by which questions should be selected</param>
+        /// <param name="ct">Operation cancellation token</param>
         /// <returns>List of questions that are met by filters</returns>
         public Task<IEnumerable<QuestionEntity>> GetQuestionsAsync(
             int take, int skip,
             IEnumerable<int>? tags,
             OrderDirectionEnum orderBy,
             QuestionSortingEnum sortBy,
+            string? searchText,
             CancellationToken ct
-            );
+        );
 
         /// <summary>
-        ///     Returns count of all questions by given filter
+        ///     Returns count of all questions by given filters
         /// </summary>
-        /// <param name="tags"></param>
-        /// <param name="ct"></param>
-        /// <returns></returns>
-        public Task<int> GetQuestionsCountAsync(IEnumerable<int>? tags, CancellationToken ct);
+        /// <param name="tags">Tags by which questions should be counted</param>
+        /// <param name="searchText">Search text by which questions should be counted</param>
+        /// <param name="ct">Operation cancellation token</param>
+        /// <returns>Count of all questions matching given filters</returns>
+        public Task<int> GetQuestionsCountAsync(IEnumerable<int>? tags, string? searchText, CancellationToken ct);
     }
 }
