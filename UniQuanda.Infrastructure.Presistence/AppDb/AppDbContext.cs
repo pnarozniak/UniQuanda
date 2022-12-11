@@ -41,6 +41,7 @@ public class AppDbContext : DbContext
     public virtual DbSet<ImageInContent> ImagesInContent { get; set; }
     public virtual DbSet<Image> Images { get; set; }
     public virtual DbSet<IntFunction> IntFunctionWrapper { get; set; }
+    public virtual DbSet<GlobalRanking> GlobalRankings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -62,6 +63,7 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new ImageInContentEfConfiguration());
         modelBuilder.ApplyConfiguration(new ImageEfConfiguration());
         modelBuilder.ApplyConfiguration(new ProductEfConfiguration());
+        modelBuilder.ApplyConfiguration(new GlobalRankingEfConfiguration());
 
         modelBuilder.HasPostgresEnum<AcademicTitleEnum>();
         modelBuilder.HasPostgresEnum<ReportCategoryEnum>();
