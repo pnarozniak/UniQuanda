@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Domain.Entities.App;
-using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
@@ -166,7 +165,7 @@ namespace UniQuanda.Infrastructure.Repositories
                     {
                         Name = t.TagIdNavigation.Name
                     }),
-                    User = new UserEntity()
+                    User = new AppUserEntity()
                     {
                         Id = q.AppUsersQuestionInteractions
                             .Where(a => a.IsCreator)
@@ -176,13 +175,10 @@ namespace UniQuanda.Infrastructure.Repositories
                             .Where(a => a.IsCreator)
                             .Select(a => a.AppUserIdNavigation.Nickname)
                             .FirstOrDefault(),
-                        OptionalInfo = new Core.Domain.ValueObjects.UserOptionalInfo()
-                        {
-                            Avatar = q.AppUsersQuestionInteractions
+                        Avatar = q.AppUsersQuestionInteractions
                                 .Where(a => a.IsCreator)
                                 .Select(a => a.AppUserIdNavigation.Avatar)
                                 .FirstOrDefault(),
-                        }
                     }
                 }).Skip(skip).Take(take).ToListAsync(ct);
             return que;

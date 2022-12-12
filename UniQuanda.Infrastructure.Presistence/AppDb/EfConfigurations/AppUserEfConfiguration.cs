@@ -55,6 +55,11 @@ public class AppUserEfConfiguration : IEntityTypeConfiguration<AppUser>
             .WithOne(ut => ut.AppUserIdNavigation)
             .HasForeignKey(ut => ut.AppUserId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasOne(u => u.GlobalRankingNavigation)
+            .WithOne(gr => gr.AppUserIdNavigation)
+            .HasForeignKey<GlobalRanking>(gr => gr.AppUserId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
         {

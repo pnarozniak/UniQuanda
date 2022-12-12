@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
+using UniQuanda.Infrastructure.HostedServices;
 using UniQuanda.Infrastructure.Options;
 using UniQuanda.Infrastructure.Repositories;
 using UniQuanda.Infrastructure.Services;
@@ -65,6 +66,9 @@ public static class Extensions
             Region = Amazon.RegionEndpoint.GetBySystemName(configuration.GetSection("AWS")["Region"])
         });
         services.AddAWSService<IAmazonS3>();
+
+        //Hosted Services
+        services.AddHostedService<CalculateRankingOnStartup>();
 
         return services;
     }

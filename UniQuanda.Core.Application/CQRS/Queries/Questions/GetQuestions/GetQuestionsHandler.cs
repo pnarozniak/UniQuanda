@@ -33,7 +33,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Questions.GetQuestions
                     {
                         Id = q.User.Id,
                         Name = q.User.Nickname,
-                        ProfilePictureURL = q.User.OptionalInfo.Avatar,
+                        ProfilePictureURL = q.User.Avatar,
                     }
                 }),
                 Count = addCount
