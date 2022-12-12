@@ -39,7 +39,8 @@ public class RankingRepository : IRankingRepository
                 PlaceInRanking = gr.Place,
                 Points = gr.Points,
                 Avatar = gr.AppUserIdNavigation.Avatar
-            }).ToListAsync(ct);
+            }).Skip(skip).Take(take)
+            .ToListAsync(ct);
     }
 
     public async Task<int> GetTagRankingCountAsync(int tagId, CancellationToken ct)
