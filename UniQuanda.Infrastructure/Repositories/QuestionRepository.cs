@@ -103,9 +103,21 @@ namespace UniQuanda.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<QuestionEntity>> GetQuestionsAsync(int take, int skip, IEnumerable<int>? tags, OrderDirectionEnum orderBy, QuestionSortingEnum sortBy, CancellationToken ct)
+        public async Task<IEnumerable<QuestionEntity>> GetQuestionsAsync(
+            int take, 
+            int skip, 
+            IEnumerable<int>? tags, 
+            OrderDirectionEnum orderBy, 
+            QuestionSortingEnum sortBy, 
+            string? searchText,
+            CancellationToken ct)
         {
             IQueryable<Question> questions = _context.Questions;
+
+            if (searchText is not null) {
+                questions = questions.Where(q => EF.Functions.ILike(q.Header, $"%{searchText}%"));
+            }
+
             if (tags != null)
             {
                 foreach (var tag in tags)
@@ -172,9 +184,14 @@ namespace UniQuanda.Infrastructure.Repositories
             return que;
         }
 
-        public async Task<int> GetQuestionsCountAsync(IEnumerable<int>? tags, CancellationToken ct)
+        public async Task<int> GetQuestionsCountAsync(IEnumerable<int>? tags, string? searchText, CancellationToken ct)
         {
             IQueryable<Question> questions = _context.Questions;
+
+            if (searchText is not null) {
+                questions = questions.Where(q => EF.Functions.ILike(q.Header, $"%{searchText}%"));
+            }
+
             if (tags != null)
             {
                 foreach (var tag in tags)
