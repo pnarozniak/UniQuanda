@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Domain.Entities.App;
-using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
@@ -104,9 +103,21 @@ namespace UniQuanda.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<QuestionEntity>> GetQuestionsAsync(int take, int skip, IEnumerable<int>? tags, OrderDirectionEnum orderBy, QuestionSortingEnum sortBy, CancellationToken ct)
+        public async Task<IEnumerable<QuestionEntity>> GetQuestionsAsync(
+            int take, 
+            int skip, 
+            IEnumerable<int>? tags, 
+            OrderDirectionEnum orderBy, 
+            QuestionSortingEnum sortBy, 
+            string? searchText,
+            CancellationToken ct)
         {
             IQueryable<Question> questions = _context.Questions;
+
+            if (searchText is not null) {
+                questions = questions.Where(q => EF.Functions.ILike(q.Header, $"%{searchText}%"));
+            }
+
             if (tags != null)
             {
                 foreach (var tag in tags)
@@ -150,7 +161,7 @@ namespace UniQuanda.Infrastructure.Repositories
                     {
                         Name = t.TagIdNavigation.Name
                     }),
-                    User = new UserEntity()
+                    User = new AppUserEntity()
                     {
                         Id = q.AppUsersQuestionInteractions
                             .Where(a => a.IsCreator)
@@ -160,13 +171,10 @@ namespace UniQuanda.Infrastructure.Repositories
                             .Where(a => a.IsCreator)
                             .Select(a => a.AppUserIdNavigation.Nickname)
                             .FirstOrDefault(),
-                        OptionalInfo = new Core.Domain.ValueObjects.UserOptionalInfo()
-                        {
-                            Avatar = q.AppUsersQuestionInteractions
+                        Avatar = q.AppUsersQuestionInteractions
                                 .Where(a => a.IsCreator)
                                 .Select(a => a.AppUserIdNavigation.Avatar)
                                 .FirstOrDefault(),
-                        }
                     },
                     HasCorrectAnswer = q.Answers.Any(a => a.IsCorrect)
                 }).Skip(skip).Take(take).ToListAsync(ct);
@@ -175,9 +183,14 @@ namespace UniQuanda.Infrastructure.Repositories
             return que;
         }
 
-        public async Task<int> GetQuestionsCountAsync(IEnumerable<int>? tags, CancellationToken ct)
+        public async Task<int> GetQuestionsCountAsync(IEnumerable<int>? tags, string? searchText, CancellationToken ct)
         {
             IQueryable<Question> questions = _context.Questions;
+
+            if (searchText is not null) {
+                questions = questions.Where(q => EF.Functions.ILike(q.Header, $"%{searchText}%"));
+            }
+
             if (tags != null)
             {
                 foreach (var tag in tags)

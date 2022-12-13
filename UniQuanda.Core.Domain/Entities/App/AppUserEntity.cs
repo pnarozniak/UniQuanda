@@ -12,6 +12,7 @@ public class AppUserEntity
     public int? QuestionsAmount { get; set; }
     public int? AnswersAmount { get; set; }
     public int? Points { get; set; }
+    public int? PlaceInRanking { get; set; }
     public string? PhoneNumber { get; set; }
     public string? City { get; set; }
     public DateTime? Birthdate { get; set; }

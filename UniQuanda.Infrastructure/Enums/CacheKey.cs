@@ -30,5 +30,16 @@
         {
             return "top-5-users";
         }
+
+        /// <summary>
+        ///     Key for ranking by tag.
+        /// </summary>
+        /// <param name="tagId"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
+        public static string GetTagRankingKey(int tagId, int page)
+        {
+            return "tag-ranking-" + tagId + "-" + page;
+        }
     }
 }
