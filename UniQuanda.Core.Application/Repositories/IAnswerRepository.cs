@@ -5,7 +5,7 @@ namespace UniQuanda.Core.Application.Repositories
     public interface IAnswerRepository
     {
         /// <summary>
-        ///     Gets answers on user profile using paging
+        ///     Gets answers created by user using paging
         /// </summary>
         /// <param name="userId">Id of user</param>
         /// <param name="take">How many results to take</param>
@@ -15,7 +15,7 @@ namespace UniQuanda.Core.Application.Repositories
         public Task<IEnumerable<AnswerEntity>> GetAnswersOfUserAsync(int userId, int take, int skip, CancellationToken ct);
 
         /// <summary>
-        ///     Get count of answers of user 
+        ///     Get total amount of answers created by user 
         /// </summary>
         /// <param name="userId">Id of user</param>
         /// <param name="ct"></param>

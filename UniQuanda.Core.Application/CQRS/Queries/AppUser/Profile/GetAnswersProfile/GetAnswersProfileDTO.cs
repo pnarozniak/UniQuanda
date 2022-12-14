@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetQuestionsProfile
+namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetAnswersProfile
 {
-    public class GetQuestionsProfileRequestDTO
+    public class GetAnswersProfileRequestDTO
     {
         /// <summary>
         /// Id of user
@@ -21,27 +21,30 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetQuestionsProfile
         [Range(1, 20)]
         public int PageSize { get; set; }
         /// <summary>
-        /// Should response contain amount of questions in database
+        /// Should response contain amount of answers in database
         /// </summary>
         [Required]
         public bool AddCount { get; set; }
     }
 
-    public class GetQuestionsProfileResponseDTO
+    public class GetAnswersProfileResponseDTO
     {
-        public IEnumerable<GetQuestionsProfileResponseDTOQuestion>? Questions { get; set; }
+        public IEnumerable<GetAnswersProfileResponseDTOAnswer> Answers { get; set; }
         public int? TotalCount { get; set; }
     }
 
-    public class GetQuestionsProfileResponseDTOQuestion
+    public class GetAnswersProfileResponseDTOAnswer
     {
         public int Id { get; set; }
+        public int? ParentId { get; set; }
+        public int QuestionId { get; set; }
         public string Header { get; set; }
         public string Html { get; set; }
-        public int Views { get; set; }
-        public int Answers { get; set; }
+        public int Likes { get; set; }
+        public bool IsCorrect { get; set; }
         public DateTime CreatedAt { get; set; }
-        public bool HasCorrectAnswer { get; set; }
         public IEnumerable<string> TagNames { get; set; }
     }
+
+
 }

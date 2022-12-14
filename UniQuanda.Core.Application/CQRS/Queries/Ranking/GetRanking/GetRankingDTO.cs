@@ -5,10 +5,19 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Ranking.GetRanking;
 
 public class GetRankingRequestDTO
 {
+    /// <summary>
+    /// Page number
+    /// </summary>
     [Required]
     public int Page { get; set; }
+    /// <summary>
+    /// Should response cointain amount of all avilable pages with users
+    /// </summary>
     [Required]
     public bool AddPagesCount { get; set; }
+    /// <summary>
+    /// If given, only users that have at least one point in given tag will be returned. Points will be sumed only from given tag.
+    /// </summary>
     public int? TagId { get; set; }
 }
 

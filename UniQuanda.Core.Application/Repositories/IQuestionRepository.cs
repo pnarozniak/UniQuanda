@@ -57,7 +57,7 @@ namespace UniQuanda.Core.Application.Repositories
         public Task<int> GetQuestionsCountAsync(IEnumerable<int>? tags, string? searchText, CancellationToken ct);
 
         /// <summary>
-        ///     Gets questions on user profile using pageing
+        ///     Gets questions created by user using paging
         /// </summary>
         /// <param name="userId">Id of user</param>
         /// <param name="take">How many results to take</param>
@@ -67,7 +67,7 @@ namespace UniQuanda.Core.Application.Repositories
         public Task<IEnumerable<QuestionEntity>> GetQuestionsOfUserAsync(int userId, int take, int skip, CancellationToken ct);
 
         /// <summary>
-        ///     Get count of questions on profile
+        ///     Gets amount of questions created by user
         /// </summary>
         /// <param name="userId">Id of user</param>
         /// <param name="ct"></param>
