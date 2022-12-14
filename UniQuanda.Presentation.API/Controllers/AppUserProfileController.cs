@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProfile;
 using UniQuanda.Core.Application.CQRS.Queries.AppUser.Profile.GetAppUserProfileSettings;
 using UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile;
+using UniQuanda.Core.Application.CQRS.Queries.Profile.GetQuestionsProfile;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Core.Domain.Enums.Results;
 using UniQuanda.Infrastructure.Enums;
 using UniQuanda.Presentation.API.Extensions;
+using UniQuanda.Core.Application.CQRS.Queries.Profile.GetAnswersProfile;
 
 namespace UniQuanda.Presentation.API.Controllers;
 
@@ -78,5 +80,33 @@ public class AppUserProfileController : ControllerBase
             AppUserProfileUpdateResultEnum.Successful => Ok(result),
             _ => Conflict(result)
         };
+    }
+
+    /// <summary>
+    ///     Gets user's questions on profile using paging
+    /// </summary>
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetQuestionsProfileResponseDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet("questions")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetQuestionsOnProfile([FromQuery] GetQuestionsProfileRequestDTO request, CancellationToken ct)
+    {
+        var query = new GetQuestionsProfileQuery(request);
+        var result = await _mediator.Send(query, ct);
+        return result.Questions != null ? Ok(result) : NotFound();
+    }
+
+    /// <summary>
+    ///     Gets user's answers on profile using paging
+    /// </summary>
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetAnswersProfileResponseDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpGet("answers")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetAnswersOnProfile([FromQuery] GetAnswersProfileRequestDTO request, CancellationToken ct)
+    {
+        var query = new GetAnswersProfileQuery(request);
+        var result = await _mediator.Send(query, ct);
+        return result.Answers != null ? Ok(result) : NotFound();
     }
 }

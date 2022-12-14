@@ -42,7 +42,7 @@ namespace UniQuanda.Core.Application.Repositories
         public Task<int> GetGlobalRankingCountAsync(CancellationToken ct);
 
         /// <summary>
-        ///     Get count of all users having points in tag
+        ///     Get amount of all users having points in tag
         /// </summary>
         /// <param name="tagId">Id of tag</param>
         /// <param name="ct"></param>
@@ -50,11 +50,11 @@ namespace UniQuanda.Core.Application.Repositories
         public Task<int> GetTagRankingCountAsync(int tagId, CancellationToken ct);
 
         /// <summary>
-        ///     Gets page with max 10 records of Tag ranking
+        ///     Gets page with max 10 users having points in given tag
         /// </summary>
-        /// <param name="tagId">How many records to take</param>
-        /// <param name="page">How many records to skip</param>
-        /// <param name="pageSize">amount of items on page</param>
+        /// <param name="tagId">Id of tag to find users</param>
+        /// <param name="page">Page number</param>
+        /// <param name="pageSize">Amount of items on page</param>
         /// <param name="ct"></param>
         /// <returns>List of users on given page</returns>
         public Task<IEnumerable<AppUserEntity>> GetTagRankingUsersAsync(int tagId, int page, int pageSize, CancellationToken ct);

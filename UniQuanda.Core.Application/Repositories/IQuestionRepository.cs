@@ -55,5 +55,23 @@ namespace UniQuanda.Core.Application.Repositories
         /// <param name="ct">Operation cancellation token</param>
         /// <returns>Count of all questions matching given filters</returns>
         public Task<int> GetQuestionsCountAsync(IEnumerable<int>? tags, string? searchText, CancellationToken ct);
+
+        /// <summary>
+        ///     Gets questions created by user using paging
+        /// </summary>
+        /// <param name="userId">Id of user</param>
+        /// <param name="take">How many results to take</param>
+        /// <param name="skip">How many first results to skip</param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        public Task<IEnumerable<QuestionEntity>> GetQuestionsOfUserAsync(int userId, int take, int skip, CancellationToken ct);
+
+        /// <summary>
+        ///     Gets amount of questions created by user
+        /// </summary>
+        /// <param name="userId">Id of user</param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        public Task<int> GetQuestionsOfUserCountAsync(int userId, CancellationToken ct);
     }
 }

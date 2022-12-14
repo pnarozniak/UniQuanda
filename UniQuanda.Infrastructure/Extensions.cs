@@ -36,6 +36,7 @@ public static class Extensions
         services.AddScoped<IRankingRepository, RankingRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IPremiumPaymentRepository, PremiumPaymentRepository>();
+        services.AddScoped<IAnswerRepository, AnswerRepository>();
         services.AddScoped<ISearchRepository, SearchRepository>();
 
         // Services

@@ -146,10 +146,6 @@ namespace UniQuanda.Infrastructure.Repositories
 
             }
             var que = await questions
-                .Include(q => q.ContentIdNavigation)
-                .Include(q => q.TagsInQuestion).ThenInclude(qit=>qit.TagIdNavigation)
-                .Include(q => q.AppUsersQuestionInteractions).ThenInclude(aqi => aqi.AppUserIdNavigation)
-                .Include(q => q.Answers)
                 .Select(q => new QuestionEntity
                 {
                     Id = q.Id,
@@ -179,8 +175,11 @@ namespace UniQuanda.Infrastructure.Repositories
                                 .Where(a => a.IsCreator)
                                 .Select(a => a.AppUserIdNavigation.Avatar)
                                 .FirstOrDefault(),
-                    }
+                    },
+                    HasCorrectAnswer = q.Answers.Any(a => a.IsCorrect)
                 }).Skip(skip).Take(take).ToListAsync(ct);
+
+            
             return que;
         }
 
@@ -207,6 +206,36 @@ namespace UniQuanda.Infrastructure.Repositories
                 }
             }
             return await questions.CountAsync(ct);
+        }
+
+        public async Task<IEnumerable<QuestionEntity>> GetQuestionsOfUserAsync(int userId, int take, int skip, CancellationToken ct)
+        {
+            return await _context.AppUsersQuestionsInteractions
+                .Where(a => a.AppUserId == userId && a.IsCreator)
+                .Select(aqi => new QuestionEntity
+                {
+                    Id = aqi.QuestionId,
+                    Header = aqi.QuestionIdNavigation.Header,
+                    Content = new Core.Domain.ValueObjects.Content()
+                    {
+                        RawText = aqi.QuestionIdNavigation.ContentIdNavigation.RawText
+                    },
+                    CreatedAt = aqi.QuestionIdNavigation.CreatedAt,
+                    ViewsCount = aqi.QuestionIdNavigation.ViewsCount,
+                    AnswersCount = aqi.QuestionIdNavigation.Answers.Count(),
+                    Tags = aqi.QuestionIdNavigation.TagsInQuestion.Select(t => new TagEntity
+                    {
+                        Name = t.TagIdNavigation.Name
+                    }),
+                    HasCorrectAnswer = aqi.QuestionIdNavigation.Answers.Any(a => a.IsCorrect)
+                }).Skip(skip).Take(take).ToListAsync(ct);
+        }
+
+        public Task<int> GetQuestionsOfUserCountAsync(int userId, CancellationToken ct)
+        {
+            return _context.AppUsersQuestionsInteractions
+                .Where(a => a.AppUserId == userId && a.IsCreator)
+                .CountAsync(ct);
         }
     }
 }
