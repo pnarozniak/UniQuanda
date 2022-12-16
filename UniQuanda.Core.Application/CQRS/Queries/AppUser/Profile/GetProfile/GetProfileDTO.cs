@@ -28,7 +28,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile
             public string? Avatar { get; set; }
             public string? Banner { get; set; }
             public string? AboutText { get; set; }
-            public string? PhoneNumber { get; set; }
+            public string? Contact { get; set; }
             public string? City { get; set; }
             public DateTime? Birthdate { get; set; }
             public string? SemanticScholarProfile { get; set; }

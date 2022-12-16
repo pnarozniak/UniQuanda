@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -14,9 +15,10 @@ using UniQuanda.Infrastructure.Presistence.AppDb;
 namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221215144836_AddedUniversitiesDataAndChangedPhoneToContant")]
+    partial class AddedUniversitiesDataAndChangedPhoneToContant
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2646,10 +2648,6 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<string>("Icon")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Logo")
                         .IsRequired()
                         .HasColumnType("text");
@@ -2671,28 +2669,25 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         {
                             Id = 1,
                             Contact = "Email: pjatk@pja.edu.pl",
-                            Icon = "https://dev.uniquanda.pl:2002/api/Image/University/1/icon.jpg",
-                            Logo = "https://dev.uniquanda.pl:2002/api/Image/University/1/logo.jpg",
+                            Logo = "https://pja.edu.pl/templates/pjwstk/favicon.ico",
                             Name = "Polsko-Japońska Akademia Technik Komputerowych",
-                            Regex = "(@(pjwstk|pja)\\.edu\\.pl$)"
+                            Regex = "(@(pjwstk|pja).edu.pl$)"
                         },
                         new
                         {
                             Id = 2,
                             Contact = "E-mail: info@us.edu.pl",
-                            Icon = "https://dev.uniquanda.pl:2002/api/Image/University/2/icon.jpg",
-                            Logo = "https://dev.uniquanda.pl:2002/api/Image/University/2/logo.jpg",
+                            Logo = "https://us.edu.pl/wp-content/uploads/strona-g%C5%82%C3%B3wna/favicon/cropped-favicon_navy_white-32x32.png",
                             Name = "Uniwersytet śląski w Katowicach",
-                            Regex = "(@.*us\\.edu\\.pl$)"
+                            Regex = "(@us.edu.pl$)"
                         },
                         new
                         {
                             Id = 3,
                             Contact = "Tel. (22) 234 7211",
-                            Icon = "https://dev.uniquanda.pl:2002/api/Image/University/3/icon.jpg",
-                            Logo = "https://dev.uniquanda.pl:2002/api/Image/University/3/logo.jpg",
+                            Logo = "https://www.pw.edu.pl/design/pw/images/favicon.ico",
                             Name = "Politechnika Warszawska",
-                            Regex = "(@.pw\\.edu\\.pl$)"
+                            Regex = "(@pw.edu.pl$)"
                         });
                 });
 

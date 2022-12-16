@@ -19,7 +19,7 @@ public class AppUserEfConfiguration : IEntityTypeConfiguration<AppUser>
 
         builder.Property(u => u.Birthdate).IsRequired(false);
 
-        builder.Property(u => u.PhoneNumber).HasMaxLength(22).IsRequired(false);
+        builder.Property(u => u.Contact).HasMaxLength(22).IsRequired(false);
 
         builder.Property(u => u.SemanticScholarProfile).IsRequired(false);
 

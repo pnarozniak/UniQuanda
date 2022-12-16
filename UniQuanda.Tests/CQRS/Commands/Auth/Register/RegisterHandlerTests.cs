@@ -84,7 +84,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Register
                 FirstName = "FirstName",
                 LastName = "LastName",
                 Birthdate = new DateTime(2000, 1, 1),
-                PhoneNumber = "123456789",
+                Contact = "123456789",
                 City = "City"
             };
             this.registerCommand = new(registerRequestDTO);

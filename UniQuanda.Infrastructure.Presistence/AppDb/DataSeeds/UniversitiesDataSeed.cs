@@ -13,19 +13,28 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds
                 {
                     Id = 1,
                     Name = "Polsko-Japońska Akademia Technik Komputerowych",
-                    Logo = "https://pja.edu.pl/templates/pjwstk/favicon.ico"
+                    Icon = "https://dev.uniquanda.pl:2002/api/Image/University/1/icon.jpg",
+                    Logo = "https://dev.uniquanda.pl:2002/api/Image/University/1/logo.jpg",
+                    Contact = "Email: pjatk@pja.edu.pl",
+                    Regex = "(@(pjwstk|pja)\\.edu\\.pl$)"
                 },
                 new University
                 {
                     Id = 2,
                     Name = "Uniwersytet śląski w Katowicach",
-                    Logo = "https://us.edu.pl/wp-content/uploads/strona-g%C5%82%C3%B3wna/favicon/cropped-favicon_navy_white-32x32.png"
+                    Icon = "https://dev.uniquanda.pl:2002/api/Image/University/2/icon.jpg",
+                    Logo = "https://dev.uniquanda.pl:2002/api/Image/University/2/logo.jpg",
+                    Contact = "E-mail: info@us.edu.pl",
+                    Regex = "(@.*us\\.edu\\.pl$)"
                 },
                 new University
                 {
                     Id = 3,
                     Name = "Politechnika Warszawska",
-                    Logo = "https://www.pw.edu.pl/design/pw/images/favicon.ico"
+                    Icon = "https://dev.uniquanda.pl:2002/api/Image/University/3/icon.jpg",
+                    Logo = "https://dev.uniquanda.pl:2002/api/Image/University/3/logo.jpg",
+                    Contact = "Tel. (22) 234 7211",
+                    Regex = "(@.pw\\.edu\\.pl$)"
                 }
             );
         }

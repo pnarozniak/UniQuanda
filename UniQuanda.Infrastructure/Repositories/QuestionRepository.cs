@@ -208,6 +208,70 @@ namespace UniQuanda.Infrastructure.Repositories
             return await questions.CountAsync(ct);
         }
 
+        public async Task<IEnumerable<QuestionEntity>> GetQuestionsOfUniversityAsync(int universityId, int take, int skip, CancellationToken ct)
+        {
+            return await _context.Questions
+                .Where(q => q.AppUsersQuestionInteractions
+                    .Where(a => a.IsCreator)
+                    .Select(a => 
+                        a.AppUserIdNavigation.AppUserInUniversities
+                        .Where(uu =>
+                            uu.UniversityId == universityId
+                        ).Any()
+                    )
+                    .FirstOrDefault())
+                .OrderByDescending(q => q.CreatedAt)
+                .Select(q => new QuestionEntity() {
+                    Id = q.Id,
+                    Header = q.Header,
+                    Content = new Core.Domain.ValueObjects.Content()
+                    {
+                        RawText = q.ContentIdNavigation.RawText
+                    },
+                    CreatedAt = q.CreatedAt,
+                    ViewsCount = q.ViewsCount,
+                    AnswersCount = q.Answers.Count(),
+                    Tags = q.TagsInQuestion.Select(t => new TagEntity
+                    {
+                        Name = t.TagIdNavigation.Name
+                    }),
+                    HasCorrectAnswer = q.Answers.Any(a => a.IsCorrect),
+                    User = new AppUserEntity()
+                    {
+                        Id = q.AppUsersQuestionInteractions
+                            .Where(a => a.IsCreator)
+                            .Select(a => a.AppUserId)
+                            .FirstOrDefault(),
+                        Nickname = q.AppUsersQuestionInteractions
+                            .Where(a => a.IsCreator)
+                            .Select(a => a.AppUserIdNavigation.Nickname)
+                            .FirstOrDefault(),
+                        Avatar = q.AppUsersQuestionInteractions
+                                .Where(a => a.IsCreator)
+                                .Select(a => a.AppUserIdNavigation.Avatar)
+                                .FirstOrDefault(),
+                    }
+                })
+                .Skip(skip)
+                .Take(take)
+                .ToListAsync(ct);
+        }
+
+        public async Task<int> GetQuestionsOfUniversityCountAsync(int universityId, CancellationToken ct)
+        {
+            return await _context.Questions
+                .Where(q => q.AppUsersQuestionInteractions
+                    .Where(a => a.IsCreator)
+                    .Select(a =>
+                        a.AppUserIdNavigation.AppUserInUniversities
+                        .Where(uu =>
+                            uu.UniversityId == universityId
+                        ).Any()
+                    )
+                    .FirstOrDefault())
+                .CountAsync(ct);
+        }
+
         public async Task<IEnumerable<QuestionEntity>> GetQuestionsOfUserAsync(int userId, int take, int skip, CancellationToken ct)
         {
             return await _context.AppUsersQuestionsInteractions

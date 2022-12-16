@@ -20,7 +20,7 @@ public class TempUserEfConfiguration : IEntityTypeConfiguration<TempUser>
 
         builder.Property(tu => tu.Birthdate).IsRequired(false);
 
-        builder.Property(tu => tu.PhoneNumber).HasMaxLength(22).IsRequired(false);
+        builder.Property(tu => tu.Contact).HasMaxLength(22).IsRequired(false);
 
         builder.Property(tu => tu.City).HasMaxLength(57).IsRequired(false);
     }
