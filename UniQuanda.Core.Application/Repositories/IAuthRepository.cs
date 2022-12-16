@@ -272,4 +272,12 @@ public interface IAuthRepository
     /// <param name="ct">Operation cancellation token</param>
     /// <returns>Id of user if confirmation was successful, otherwise Null</returns>
     Task<int?> ConfirmOAuthRegisterAsync(string confirmationCode, NewUserEntity newUser, CancellationToken ct);
+
+    /// <summary>
+    ///     Gets user id by email
+    /// </summary>
+    /// <param name="email"></param>
+    /// <param name="ct"></param>
+    /// <returns></returns>
+    public Task<int> GetUserIdByEmailAsync(string email, CancellationToken ct);
 }

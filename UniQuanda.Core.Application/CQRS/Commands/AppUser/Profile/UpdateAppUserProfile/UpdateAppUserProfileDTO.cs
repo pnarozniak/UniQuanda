@@ -19,7 +19,7 @@ public class UpdateAppUserProfileRequestDTO
     public string? LastName { get; set; }
 
     [MaxLength(22)]
-    public string? PhoneNumber { get; set; }
+    public string? Contact { get; set; }
 
     [MaxLength(57)]
     public string? City { get; set; }

@@ -17,7 +17,7 @@ public class UpdateAppUserProfileCommand : IRequest<UpdateAppUserProfileResponse
             Birthdate = request.Birthdate,
             AboutText = request.AboutText,
             City = request.City,
-            PhoneNumber = request.PhoneNumber,
+            Contact = request.Contact,
             SemanticScholarProfile = request.SemanticScholarProfile
         };
 

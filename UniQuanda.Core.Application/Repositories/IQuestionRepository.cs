@@ -63,7 +63,7 @@ namespace UniQuanda.Core.Application.Repositories
         /// <param name="take">How many results to take</param>
         /// <param name="skip">How many first results to skip</param>
         /// <param name="ct"></param>
-        /// <returns></returns>
+        /// <returns>List of questions asked by user</returns>
         public Task<IEnumerable<QuestionEntity>> GetQuestionsOfUserAsync(int userId, int take, int skip, CancellationToken ct);
 
         /// <summary>
@@ -71,7 +71,25 @@ namespace UniQuanda.Core.Application.Repositories
         /// </summary>
         /// <param name="userId">Id of user</param>
         /// <param name="ct"></param>
-        /// <returns></returns>
+        /// <returns>Amount of all questions asked by user</returns>
         public Task<int> GetQuestionsOfUserCountAsync(int userId, CancellationToken ct);
+
+        /// <summary>
+        ///     Gets questions of university using paging
+        /// </summary>
+        /// <param name="universityId">Id of university</param>
+        /// <param name="take">How many results to take</param>
+        /// <param name="skip">How many first results to skip</param>
+        /// <param name="ct"></param>
+        /// <returns>List of questions asked by univeristy users</returns>
+        public Task<IEnumerable<QuestionEntity>> GetQuestionsOfUniversityAsync(int universityId, int take, int skip, CancellationToken ct);
+
+        /// <summary>
+        ///    Gets amount of all questions of university
+        /// </summary>
+        /// <param name="universityId">Id of university</param>
+        /// <param name="ct"></param>
+        /// <returns>Amount of all questions asked by university</returns>
+        public Task<int> GetQuestionsOfUniversityCountAsync(int universityId, CancellationToken ct);
     }
 }

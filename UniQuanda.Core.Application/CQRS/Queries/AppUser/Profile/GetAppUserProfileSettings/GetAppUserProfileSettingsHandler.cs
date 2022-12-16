@@ -24,7 +24,7 @@ public class GetAppUserProfileSettingsHandler : IRequestHandler<GetAppUserProfil
             LastName = appUser.LastName,
             Birthdate = appUser.Birthdate,
             City = appUser.City,
-            PhoneNumber = appUser.PhoneNumber,
+            Contact = appUser.Contact,
             AboutText = appUser.AboutText,
             SemanticScholarProfile = appUser.SemanticScholarProfile,
             Avatar = appUser.Avatar,

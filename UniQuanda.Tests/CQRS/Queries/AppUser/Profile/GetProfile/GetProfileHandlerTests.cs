@@ -32,7 +32,7 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
         private string UniversityName = "UniversityName";
         private string Logo = "Logo";
         private string AboutText = "AboutText";
-        private string PhoneNumber = "PhoneNumber";
+        private string Contact = "Contact";
         private string City = "City";
         private string SemanticScholarProfile = "SemanticScholarProfile";
         private string TagName = "TagName";
@@ -87,7 +87,7 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
             result.UserData.Avatar.Should().Be(Avatar);
             result.UserData.Banner.Should().Be(Banner);
             result.UserData.AboutText.Should().Be(AboutText);
-            result.UserData.PhoneNumber.Should().Be(PhoneNumber);
+            result.UserData.Contact.Should().Be(Contact);
             result.UserData.City.Should().Be(City);
             result.UserData.SemanticScholarProfile.Should().Be(SemanticScholarProfile);
             result.PointsInTags.Should().HaveCount(0);
@@ -128,7 +128,7 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
             result.UserData.Avatar.Should().Be(Avatar);
             result.UserData.Banner.Should().Be(Banner);
             result.UserData.AboutText.Should().Be(AboutText);
-            result.UserData.PhoneNumber.Should().Be(PhoneNumber);
+            result.UserData.Contact.Should().Be(Contact);
             result.UserData.City.Should().Be(City);
             result.UserData.SemanticScholarProfile.Should().Be(SemanticScholarProfile);
             result.PointsInTags.Should().HaveCount(2);
@@ -167,7 +167,7 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
             result.UserData.Avatar.Should().Be(Avatar);
             result.UserData.Banner.Should().Be(Banner);
             result.UserData.AboutText.Should().Be(AboutText);
-            result.UserData.PhoneNumber.Should().Be(PhoneNumber);
+            result.UserData.Contact.Should().Be(Contact);
             result.UserData.City.Should().Be(City);
             result.UserData.SemanticScholarProfile.Should().Be(SemanticScholarProfile);
             result.PointsInTags.Should().HaveCount(3);
@@ -188,7 +188,7 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
                 Avatar = Avatar,
                 Banner = Banner,
                 AboutText = AboutText,
-                PhoneNumber = PhoneNumber,
+                Contact = Contact,
                 City = City,
                 SemanticScholarProfile = SemanticScholarProfile,
                 Titles = new List<AcademicTitleEntity>(),

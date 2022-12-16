@@ -7,7 +7,7 @@ public class TempUser
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     public DateTime? Birthdate { get; set; }
-    public string? PhoneNumber { get; set; }
+    public string? Contact { get; set; }
     public string? City { get; set; }
 
     public int IdUser { get; set; }

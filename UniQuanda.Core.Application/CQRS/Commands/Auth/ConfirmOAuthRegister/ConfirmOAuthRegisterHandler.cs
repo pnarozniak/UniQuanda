@@ -1,4 +1,5 @@
 using MediatR;
+using System.Text.RegularExpressions;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
@@ -10,15 +11,18 @@ public class ConfirmOAuthRegisterHandler : IRequestHandler<ConfirmOAuthRegisterC
     private readonly IAuthRepository _authRepository;
     private readonly ITokensService _tokensService;
     private readonly IEmailService _emailService;
+    private readonly IUniversityRepository _universityRepository;
     public ConfirmOAuthRegisterHandler(
         IAuthRepository authRepository,
         ITokensService tokensService,
-        IEmailService emailService
+        IEmailService emailService,
+        IUniversityRepository universityRepository
     )
     {
         _authRepository = authRepository;
         _tokensService = tokensService;
         _emailService = emailService;
+        _universityRepository = universityRepository;
     }
 
     public async Task<ConfirmOAuthRegisterResponseDTO?> Handle(ConfirmOAuthRegisterCommand request, CancellationToken ct)
@@ -28,6 +32,16 @@ public class ConfirmOAuthRegisterHandler : IRequestHandler<ConfirmOAuthRegisterC
 
         var user = await _authRepository.GetUserWithEmailsByIdAsync(idUser.Value!, ct);
         if (user is null) return null;
+
+        var universities = await _universityRepository.GetUniversitiresWhereUserIsNotPresentAsync(idUser ?? 0, ct);
+        foreach (var university in universities)
+        {
+            var regex = new Regex(university.Regex, RegexOptions.IgnoreCase);
+            if (regex.IsMatch(user?.Emails.ToList()[0].Value ?? ""))
+            {
+                await _universityRepository.AddUserToUniversityAsync(idUser?? 0, university.Id, ct);
+            }
+        }
 
         await this._emailService.SendOAuthRegisterSuccessEmail(user.Emails.Where(e => e.IsMain).SingleOrDefault()!.Value);
         return new ConfirmOAuthRegisterResponseDTO
