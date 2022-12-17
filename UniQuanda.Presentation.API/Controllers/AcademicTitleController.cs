@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UniQuanda.Core.Application.CQRS.Commands.Admin.Titles.AssignStatusToRequest;
 using UniQuanda.Core.Application.CQRS.Commands.AppUser.Settings.AddTitleRequest;
 using UniQuanda.Core.Application.CQRS.Commands.AppUser.Settings.ChangeTitleOrder;
+using UniQuanda.Core.Application.CQRS.Queries.Admin.TitleRequest.GetAllRequests;
 using UniQuanda.Core.Application.CQRS.Queries.AppUser.Settings.GetAllTitlesSettings;
 using UniQuanda.Core.Application.CQRS.Queries.AppUser.Settings.GetRequestedTitles;
 using UniQuanda.Core.Application.CQRS.Queries.AppUser.Settings.GetTitlesSettings;
@@ -88,6 +90,33 @@ namespace UniQuanda.Presentation.API.Controllers
         public async Task<IActionResult> AddRequestForTitles([FromForm] AddTitleRequestRequestDTO request,CancellationToken ct)
         {
             var command = new AddTitleRequestCommand(request, User.GetId()!.Value);
+            var result = await _mediator.Send(command, ct);
+            return result ? Ok() : BadRequest();
+        }
+
+        /// <summary>
+        ///     Gets pending requests for titles using paging
+        /// </summary>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetAllRequestsResponseDTO))]
+        [Authorize(Roles = JwtTokenRole.Admin)]
+        [HttpGet("pending-requested-titles")]
+        public async Task<IActionResult> GetRequestsForTitlesAdmin([FromQuery] GetAllRequestsRequestDTO request, CancellationToken ct)
+        {
+            var query = new GetAllRequestsQuery(request);
+            var result = await _mediator.Send(query, ct);
+            return Ok(result);
+        }
+
+        /// <summary>
+        ///     Sets status for request for academic title. If status == Accepted then assigns academic title to user
+        /// </summary>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = JwtTokenRole.Admin)]
+        [HttpPost("pending-requested-titles")]
+        public async Task<IActionResult> SetRequestForTitleStatusAdmin([FromBody] AssignStatusToRequestDTORequest request, CancellationToken ct)
+        {
+            var command = new AssignStatusToRequestCommand(request);
             var result = await _mediator.Send(command, ct);
             return result ? Ok() : BadRequest();
         }

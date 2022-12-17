@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Domain.Entities.App;
+using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 
@@ -48,6 +49,14 @@ namespace UniQuanda.Infrastructure.Repositories
             }
         }
 
+        public async Task<bool> AssingStatusToRequestForAcademicTitleAsync(int requestId, TitleRequestStatusEnum status, CancellationToken ct)
+        {
+            var request = await _context.TitleRequests.Where(tr => tr.Id == requestId).SingleOrDefaultAsync(ct);
+            if (request == null) return false;
+            request.TitleRequestStatus = status;
+            return await _context.SaveChangesAsync(ct) > 0;
+        }
+
         public async Task<IEnumerable<AcademicTitleEntity>> GetAcademicTitlesOfUserAsync(int uid, CancellationToken ct)
         {
             return await _context.AppUsersTitles.Where(ut => ut.AppUserId == uid)
@@ -68,6 +77,44 @@ namespace UniQuanda.Infrastructure.Repositories
                 ).result;
         }
 
+        public async Task<IEnumerable<AcademicTitleRequestEntity>> GetPendingRequestsAsync(int take, int skip, CancellationToken ct)
+        {
+            return await _context.TitleRequests
+                .Where(tr => tr.TitleRequestStatus == TitleRequestStatusEnum.Pending)
+                .OrderBy(tr => tr.CreatedAt)
+                .Select(tr => new AcademicTitleRequestEntity()
+                {
+                    Id = tr.Id,
+                    CreatedAt = tr.CreatedAt,
+                    AdditionalInfo = tr.AdditionalInfo,
+                    User = new AppUserEntity()
+                        {
+                            Id = tr.AppUserId,
+                            Nickname = tr.AppIdNavigationUser.Nickname
+                        },
+                    Title = new AcademicTitleEntity()
+                    {
+                        Id = tr.AcademicTitleId,
+                        Name = tr.AcademicTitleIdNavigation.Name
+                    },
+                    Scan = new Core.Domain.ValueObjects.Image()
+                    {
+                        URL = tr.ScanIdNavigation.URL
+                    }
+                })
+                .Skip(skip)
+                .Take(take)
+                .ToListAsync(ct);
+
+        }
+
+        public async Task<int> GetPendingRequestsCountAsync(CancellationToken ct)
+        {
+            return await _context.TitleRequests
+                .Where(tr => tr.TitleRequestStatus == TitleRequestStatusEnum.Pending)
+                .CountAsync(ct);
+        }
+
         public async Task<IEnumerable<AcademicTitleEntity>> GetRequestableAcademicTitlesAsync(CancellationToken ct)
         {
             return await _context.AcademicTitles.Where(t => t.AcademicTitleType != Core.Domain.Enums.AcademicTitleEnum.Academic)
@@ -77,6 +124,24 @@ namespace UniQuanda.Infrastructure.Repositories
                     Name = t.Name,
                     Type = t.AcademicTitleType
                 }).ToListAsync(ct);
+        }
+
+        public async Task<AcademicTitleRequestEntity?> GetRequestByIdAsync(int requestId, CancellationToken ct)
+        {
+            return await _context.TitleRequests.Where(tr => tr.Id == requestId)
+                .Select(tr => new AcademicTitleRequestEntity()
+                {
+                    Id = tr.Id,
+                    Title = new AcademicTitleEntity()
+                    {
+                        Id = tr.AcademicTitleId        
+                    },
+                    User = new AppUserEntity()
+                    {
+                        Id = tr.Id
+                    }
+                    
+                }).SingleOrDefaultAsync(ct);
         }
 
         public async Task<IEnumerable<AcademicTitleRequestEntity>> GetRequestedTitlesOfUserAsync(int uid, CancellationToken ct)
@@ -115,6 +180,35 @@ namespace UniQuanda.Infrastructure.Repositories
                 await tran.RollbackAsync(ct);
                 return false;
             }
+        }
+
+        public async Task<bool> SetAcademicTitleToUserAsync(int userId, int titleId, int? order, CancellationToken ct)
+        {
+            var titleToRemove = await _context.AppUsersTitles
+                .Where(ut => ut.AppUserId == userId &&
+                    ut.AcademicTitleIdNavigation.AcademicTitleType == _context
+                        .AcademicTitles
+                        .Where(t => t.Id == titleId)
+                        .Single().AcademicTitleType
+                    )
+                .FirstOrDefaultAsync(ct);
+
+            if (titleToRemove != null)
+                _context.AppUsersTitles.Remove(titleToRemove);
+
+            var intOrder = order;
+            if(intOrder == null)
+            {
+                intOrder = await _context.AppUsersTitles.Where(t => t.AppUserId == userId).MaxAsync(t => t.Order, ct);
+            }
+
+            await _context.AppUsersTitles.AddAsync(new AppUserTitle()
+            {
+                AcademicTitleId = titleId,
+                AppUserId = userId,
+                Order = intOrder ?? 0
+            });
+            return await _context.SaveChangesAsync(ct) > 0;
         }
     }
 }
