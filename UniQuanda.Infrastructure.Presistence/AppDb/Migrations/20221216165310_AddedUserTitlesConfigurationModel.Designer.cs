@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -14,9 +15,10 @@ using UniQuanda.Infrastructure.Presistence.AppDb;
 namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221216165310_AddedUserTitlesConfigurationModel")]
+    partial class AddedUserTitlesConfigurationModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2654,9 +2656,6 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("ScanId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("TitleRequestStatus")
                         .HasColumnType("integer");
 
@@ -2665,9 +2664,6 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.HasIndex("AcademicTitleId");
 
                     b.HasIndex("AppUserId");
-
-                    b.HasIndex("ScanId")
-                        .IsUnique();
 
                     b.ToTable("TitleRequests");
                 });
@@ -3093,17 +3089,9 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniQuanda.Infrastructure.Presistence.AppDb.Models.Image", "ScanIdNavigation")
-                        .WithOne("TitleRequest")
-                        .HasForeignKey("UniQuanda.Infrastructure.Presistence.AppDb.Models.TitleRequest", "ScanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("AcademicTitleIdNavigation");
 
                     b.Navigation("AppIdNavigationUser");
-
-                    b.Navigation("ScanIdNavigation");
                 });
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.UserPointsInTag", b =>
@@ -3216,9 +3204,6 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Image", b =>
                 {
                     b.Navigation("ImagesInContent");
-
-                    b.Navigation("TitleRequest")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Question", b =>
