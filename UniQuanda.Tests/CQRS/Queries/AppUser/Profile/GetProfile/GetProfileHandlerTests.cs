@@ -53,7 +53,7 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
             appUserRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(null as AppUserEntity);
             appUserRepository
-                .Setup(aur => aur.HasUserPremium(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                .Setup(aur => aur.HasUserPremiumAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
             var getProfileHandler = new GetProfileHandler(appUserRepository.Object);
@@ -69,7 +69,7 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
             appUserRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(appUserEntity);
             appUserRepository
-                .Setup(aur => aur.HasUserPremium(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                .Setup(aur => aur.HasUserPremiumAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
             var getProfileHandler = new GetProfileHandler(appUserRepository.Object);
@@ -103,7 +103,7 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
             appUserRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(appUserEntity);
             appUserRepository
-                .Setup(aur => aur.HasUserPremium(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                .Setup(aur => aur.HasUserPremiumAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
             var getProfileHandler = new GetProfileHandler(appUserRepository.Object);
@@ -145,7 +145,7 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
             appUserRepository.Setup(aur => aur.GetUserProfileAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(appUserEntity);
             appUserRepository
-                .Setup(aur => aur.HasUserPremium(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                .Setup(aur => aur.HasUserPremiumAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
             var getProfileHandler = new GetProfileHandler(appUserRepository.Object);
@@ -211,7 +211,7 @@ namespace UniQuanda.Tests.CQRS.Queries.Profile.GetProfile
                 {
                     Id = i,
                     Name = $"{Tiltle}{i}",
-                    Type = type,
+                    AcademicTitleType = type,
                     Order = i
                 });
             }
