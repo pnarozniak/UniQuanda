@@ -43,6 +43,12 @@ public class AppDbContext : DbContext
     public virtual DbSet<IntFunction> IntFunctionWrapper { get; set; }
     public virtual DbSet<GlobalRanking> GlobalRankings { get; set; }
     public virtual DbSet<TitleRequest> TitleRequests { get; set; }
+    public virtual DbSet<PermissionUsageByUser> PermissionUsageByUsers { get; set; }
+    public virtual DbSet<Permission> Permissions { get; set; }
+    public virtual DbSet<Role> Roles { get; set; }
+    public virtual DbSet<RolePermission> RolePermissions { get; set; }
+    public virtual DbSet<UserRole> UserRoles { get; set; }
+    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -66,19 +72,29 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new ProductEfConfiguration());
         modelBuilder.ApplyConfiguration(new GlobalRankingEfConfiguration());
         modelBuilder.ApplyConfiguration(new TitleRequestEfConfiguration());
+        modelBuilder.ApplyConfiguration(new PermissionUsageByUserEfConfiguration());
+        modelBuilder.ApplyConfiguration(new PermissionEfConfiguration());
+        modelBuilder.ApplyConfiguration(new RoleEfConfiguration());
+        modelBuilder.ApplyConfiguration(new RolePermissionEfConfiguration());
+        modelBuilder.ApplyConfiguration(new UserRoleEfConfiguration());
 
         modelBuilder.HasPostgresEnum<AcademicTitleEnum>();
         modelBuilder.HasPostgresEnum<ReportCategoryEnum>();
         modelBuilder.HasPostgresEnum<ContentTypeEnum>();
         modelBuilder.HasPostgresEnum<ProductTypeEnum>();
         modelBuilder.HasPostgresEnum<TitleRequestStatusEnum>();
+        modelBuilder.HasPostgresEnum<RoleNameEnum>();
 
         modelBuilder.ApplyConfiguration(new ReportTypeDataSeed());
         modelBuilder.ApplyConfiguration(new AcademicTitleDataSeed());
         modelBuilder.ApplyConfiguration(new UniversitiesDataSeed());
         modelBuilder.ApplyConfiguration(new TagDataSeed());
+        modelBuilder.ApplyConfiguration(new ProductDataSeed());
+        modelBuilder.ApplyConfiguration(new RoleDataSeed());
+        modelBuilder.ApplyConfiguration(new PermissionDataSeed());
+        modelBuilder.ApplyConfiguration(new RolePermissionDataSeed());
 
         modelBuilder.Entity<IntFunction>().HasNoKey();
-        modelBuilder.ApplyConfiguration(new ProductDataSeed());
+
     }
 }
