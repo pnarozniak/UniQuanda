@@ -113,7 +113,7 @@ namespace UniQuanda.Presentation.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = JwtTokenRole.Admin)]
-        [HttpPost("pending-requested-titles")]
+        [HttpPost("change-request-status")]
         public async Task<IActionResult> SetRequestForTitleStatusAdmin([FromBody] AssignStatusToRequestDTORequest request, CancellationToken ct)
         {
             var command = new AssignStatusToRequestCommand(request);

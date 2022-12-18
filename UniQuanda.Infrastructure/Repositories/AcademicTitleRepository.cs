@@ -138,7 +138,7 @@ namespace UniQuanda.Infrastructure.Repositories
                     },
                     User = new AppUserEntity()
                     {
-                        Id = tr.Id
+                        Id = tr.AppUserId
                     }
                     
                 }).SingleOrDefaultAsync(ct);
@@ -173,6 +173,7 @@ namespace UniQuanda.Infrastructure.Repositories
                     Order = o.Key
                 });
                 await _context.AppUsersTitles.AddRangeAsync(userTitles, ct);
+                await _context.SaveChangesAsync(ct);
                 await tran.CommitAsync(ct);
                 return true;
             } catch
@@ -186,12 +187,11 @@ namespace UniQuanda.Infrastructure.Repositories
         {
             var titleToRemove = await _context.AppUsersTitles
                 .Where(ut => ut.AppUserId == userId &&
-                    ut.AcademicTitleIdNavigation.AcademicTitleType == _context
-                        .AcademicTitles
+                    ut.AcademicTitleIdNavigation.AcademicTitleType == _context.AcademicTitles
                         .Where(t => t.Id == titleId)
-                        .Single().AcademicTitleType
+                        .SingleOrDefault().AcademicTitleType
                     )
-                .FirstOrDefaultAsync(ct);
+                .SingleOrDefaultAsync(ct);
 
             if (titleToRemove != null)
                 _context.AppUsersTitles.Remove(titleToRemove);
@@ -199,14 +199,15 @@ namespace UniQuanda.Infrastructure.Repositories
             var intOrder = order;
             if(intOrder == null)
             {
-                intOrder = await _context.AppUsersTitles.Where(t => t.AppUserId == userId).MaxAsync(t => t.Order, ct);
+                var result = await _context.AppUsersTitles.Where(t => t.AppUserId == userId).OrderByDescending(t => t.Order).Select(t => t.Order).FirstOrDefaultAsync(ct);
+                intOrder = result == 0 ? 1 : result+1;
             }
 
             await _context.AppUsersTitles.AddAsync(new AppUserTitle()
             {
                 AcademicTitleId = titleId,
                 AppUserId = userId,
-                Order = intOrder ?? 0
+                Order = intOrder ?? 1
             });
             return await _context.SaveChangesAsync(ct) > 0;
         }
