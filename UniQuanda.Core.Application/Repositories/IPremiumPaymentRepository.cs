@@ -21,8 +21,8 @@ public interface IPremiumPaymentRepository
     /// </summary>
     /// <param name="idUser">Id user</param>
     /// <param name="ct">Operation cancellation token</param>
-    /// <returns>Info if user exists and if exists additionaly until when has premium</returns>
-    Task<(bool isUserExists, DateTime? hasPremiumUntil)> GetUserPremiumInfoAsync(int idUser, CancellationToken ct);
+    /// <returns>AppUser with information about premium. null if user not found</returns>
+    Task<UserEntity?> GetUserPremiumInfoAsync(int idUser, CancellationToken ct);
 
     /// <summary>
     ///     Check if is any payment with status NEW

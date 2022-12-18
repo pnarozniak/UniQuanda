@@ -186,6 +186,11 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsAdmin")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
                     b.Property<string>("Nickname")
                         .HasMaxLength(30)
                         .HasColumnType("character varying(30)");
@@ -208,6 +213,7 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                         {
                             Id = 1,
                             HashedPassword = "$2a$12$bIkUNGSkHjgVl80kICadyezV4AgRo6oMwuIEC3X9ian.d7a6xJRIe",
+                            IsAdmin = true,
                             Nickname = "Programista"
                         });
                 });

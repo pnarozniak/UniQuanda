@@ -8,4 +8,5 @@ public class AcademicTitle
     public string Name { get; set; }
     public AcademicTitleEnum AcademicTitleType { get; set; }
     public virtual ICollection<AppUserTitle> UsersTitle { get; set; }
+    public virtual ICollection<TitleRequest> TitleRequests { get; set; }
 }

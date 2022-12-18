@@ -38,7 +38,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ConfirmOAuthRegister
             this.universityRepository = new Mock<IUniversityRepository>();
 
             this.tokensService
-                .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny<DateTime?>(), It.IsAny<bool>()))
+                .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<bool>()))
                 .Returns(accessToken);
 
             this.universityRepository

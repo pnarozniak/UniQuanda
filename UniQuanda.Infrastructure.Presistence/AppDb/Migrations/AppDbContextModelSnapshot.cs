@@ -27,6 +27,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "content_type_enum", new[] { "question", "answer", "message" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "product_type_enum", new[] { "premium" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "report_category_enum", new[] { "user", "question", "answer" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "title_request_status_enum", new[] { "accepted", "rejected", "pending", "action_required" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Functions.IntFunction", b =>
@@ -2633,6 +2634,44 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.ToTable("TagsInQuestions");
                 });
 
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.TitleRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AcademicTitleId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("AdditionalInfo")
+                        .HasColumnType("text");
+
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("ScanId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TitleRequestStatus")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AcademicTitleId");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("ScanId")
+                        .IsUnique();
+
+                    b.ToTable("TitleRequests");
+                });
+
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.University", b =>
                 {
                     b.Property<int>("Id")
@@ -3040,6 +3079,33 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.Navigation("TagIdNavigation");
                 });
 
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.TitleRequest", b =>
+                {
+                    b.HasOne("UniQuanda.Infrastructure.Presistence.AppDb.Models.AcademicTitle", "AcademicTitleIdNavigation")
+                        .WithMany("TitleRequests")
+                        .HasForeignKey("AcademicTitleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniQuanda.Infrastructure.Presistence.AppDb.Models.AppUser", "AppIdNavigationUser")
+                        .WithMany("TitleRequests")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniQuanda.Infrastructure.Presistence.AppDb.Models.Image", "ScanIdNavigation")
+                        .WithOne("TitleRequest")
+                        .HasForeignKey("UniQuanda.Infrastructure.Presistence.AppDb.Models.TitleRequest", "ScanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AcademicTitleIdNavigation");
+
+                    b.Navigation("AppIdNavigationUser");
+
+                    b.Navigation("ScanIdNavigation");
+                });
+
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.UserPointsInTag", b =>
                 {
                     b.HasOne("UniQuanda.Infrastructure.Presistence.AppDb.Models.AppUser", "AppUserIdNavigation")
@@ -3100,6 +3166,8 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.AcademicTitle", b =>
                 {
+                    b.Navigation("TitleRequests");
+
                     b.Navigation("UsersTitle");
                 });
 
@@ -3129,6 +3197,8 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
 
                     b.Navigation("Reports");
 
+                    b.Navigation("TitleRequests");
+
                     b.Navigation("UserPointsInTags");
                 });
 
@@ -3146,6 +3216,9 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Image", b =>
                 {
                     b.Navigation("ImagesInContent");
+
+                    b.Navigation("TitleRequest")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Question", b =>

@@ -10,6 +10,7 @@ public class User
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExp { get; set; }
     public DateTime? HasPremiumUntil { get; set; }
+    public bool IsAdmin { get; set; }
 
     public virtual OAuthUser? IdOAuthUserNavigation { get; set; }
     public virtual TempUser IdTempUserNavigation { get; set; }

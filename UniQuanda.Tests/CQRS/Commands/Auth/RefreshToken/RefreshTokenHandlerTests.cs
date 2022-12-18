@@ -114,7 +114,7 @@ public class RefreshTokenHandlerTests
             .Returns(new Tuple<string, DateTime>(newRefreshToken, newRefreshTokenExp));
 
         tokensService
-            .Setup(ts => ts.GenerateAccessToken(userEntity.Id, It.IsAny<DateTime?>(), It.IsAny<bool>()))
+            .Setup(ts => ts.GenerateAccessToken(userEntity.Id, It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<bool>()))
             .Returns(newAccessToken);
 
         authRepository
