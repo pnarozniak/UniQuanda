@@ -5,7 +5,7 @@ using UniQuanda.Core.Domain.Enums;
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Answers.AddAnswer;
 
-public class AddAnswerHandler : IRequestHandler<AddAnswerCommand, bool>
+public class AddAnswerHandler : IRequestHandler<AddAnswerCommand, AddAnswerResponseDTO>
 {
     private readonly IImageService _imageService;
     private readonly IHtmlService _htmlService;
@@ -25,7 +25,7 @@ public class AddAnswerHandler : IRequestHandler<AddAnswerCommand, bool>
         _answerRepository = answerRepository;
     }
 
-    public async Task<bool> Handle(AddAnswerCommand request, CancellationToken ct)
+    public async Task<AddAnswerResponseDTO> Handle(AddAnswerCommand request, CancellationToken ct)
     {
         var contentId = await _contentRepository.GetNextContentIdAsync(ct);
 
@@ -39,9 +39,12 @@ public class AddAnswerHandler : IRequestHandler<AddAnswerCommand, bool>
 
         var uploadResult = await _imageService.UploadMultipleImagesAsStreamAsync(images, ImageFolder.Content, ct);
         if (!uploadResult)
-            return false;
+            return new AddAnswerResponseDTO
+            {
+                Status = false
+            };
 
-        return await _answerRepository.AddAnswerAsync(
+        var (isSuccessful, idAnswer) = await _answerRepository.AddAnswerAsync(
             contentId,
             request.IdQuestion,
             request.ParentQuestionId,
@@ -49,5 +52,13 @@ public class AddAnswerHandler : IRequestHandler<AddAnswerCommand, bool>
             html, text,
             images.Keys.Select(imgName => $"{_imageService.GetImageURL()}{ImageFolder.Content.Value}/{contentId}/{imgName}"),
             request.CreationTime, ct);
+
+        return new AddAnswerResponseDTO()
+        {
+            Status = isSuccessful,
+            Page = isSuccessful ? await _answerRepository.GetAnswerPageAsync(request.IdQuestion, request.ParentQuestionId == null ? idAnswer.Value : request.ParentQuestionId.Value, ct) : 1,
+            IdAnswer = request.ParentQuestionId ?? idAnswer,
+            IdComment = idAnswer
+        };
     }
 }

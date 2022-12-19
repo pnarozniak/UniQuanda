@@ -55,7 +55,7 @@ public class AnswerRepository : IAnswerRepository
         return await _appContext.AppUsersAnswersInteractions.Where(aai => aai.IsCreator && aai.AppUserId == userId).CountAsync(ct);
     }
 
-    public async Task<bool> AddAnswerAsync(int idContent, int idQuestion, int? parentQuestionId, int idUser, string rawText, string text, IEnumerable<string> imageNames, DateTime creationTime, CancellationToken ct)
+    public async Task<(bool isSuccessful, int? idAnswer)> AddAnswerAsync(int idContent, int idQuestion, int? parentQuestionId, int idUser, string rawText, string text, IEnumerable<string> imageNames, DateTime creationTime, CancellationToken ct)
     {
         await using var ctx = await _appContext.Database.BeginTransactionAsync(ct);
         try
@@ -110,15 +110,15 @@ public class AnswerRepository : IAnswerRepository
             if (rowsAdded != totalCount)
             {
                 await ctx.RollbackAsync(ct);
-                return false;
+                return (isSuccessful: false, idAnswer: null);
             }
             await ctx.CommitAsync(ct);
-            return true;
+            return (isSuccessful: true, idAnswer: answer.Id);
         }
         catch (Exception ex)
         {
             await ctx.RollbackAsync(ct);
-            return false;
+            return (isSuccessful: false, idAnswer: null);
         }
     }
 
@@ -350,5 +350,11 @@ public class AnswerRepository : IAnswerRepository
                 })
             }).SingleOrDefault()!
         }).ToListAsync(ct);
+    }
+
+    public async Task<int> GetAnswerPageAsync(int idQuestion, int idAnswer, CancellationToken ct)
+    {
+        var answers = await _appContext.Answers.Where(a => a.ParentQuestionId == idQuestion && a.ParentAnswerId == null).OrderByDescending(a => a.IsCorrect).ThenByDescending(a => a.LikeCount).ToListAsync(ct);
+        return (answers.FindIndex(a => a.Id == idAnswer) / PageSize) + 1;
     }
 }

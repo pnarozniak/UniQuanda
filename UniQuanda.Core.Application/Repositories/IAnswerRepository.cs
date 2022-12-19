@@ -23,7 +23,7 @@ public interface IAnswerRepository
     /// <returns></returns>
     public Task<int> GetAnswersOfUserCountAsync(int userId, CancellationToken ct);
 
-    Task<bool> AddAnswerAsync(
+    Task<(bool isSuccessful, int? idAnswer)> AddAnswerAsync(
         int idContent,
         int idQuestion,
         int? parentAnswerId,
@@ -53,4 +53,6 @@ public interface IAnswerRepository
     Task<bool?> DeleteAnswerAsync(int idAnswer, int idLoggedUser, CancellationToken ct);
 
     Task<IEnumerable<AnswerDetails>> GetAllCommentsAsync(int idParentAnswer, int? idLoggedUser, CancellationToken ct);
+
+    Task<int> GetAnswerPageAsync(int idQuestion, int idAnswer, CancellationToken ct);
 }

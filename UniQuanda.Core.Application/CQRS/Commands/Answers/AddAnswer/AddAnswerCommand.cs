@@ -2,7 +2,7 @@
 
 namespace UniQuanda.Core.Application.CQRS.Commands.Answers.AddAnswer;
 
-public class AddAnswerCommand : IRequest<bool>
+public class AddAnswerCommand : IRequest<AddAnswerResponseDTO>
 {
     public AddAnswerCommand(AddAnswerRequestDTO request, int idLoggedUser)
     {

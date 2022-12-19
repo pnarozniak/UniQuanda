@@ -28,13 +28,13 @@ public class AnswersController : ControllerBase
     [HttpPost]
     [Recaptcha]
     [Authorize(Roles = JwtTokenRole.User)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AddAnswerResponseDTO))]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> AddAnswer([FromBody] AddAnswerRequestDTO request, CancellationToken ct)
     {
         var command = new AddAnswerCommand(request, User.GetId()!.Value);
         var result = await _mediator.Send(command, ct);
-        return result ? NoContent() : Conflict();
+        return result.Status ? Ok(result) : Conflict();
     }
 
     [HttpPut]

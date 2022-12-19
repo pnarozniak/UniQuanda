@@ -18,3 +18,11 @@ public class AddAnswerRequestDTO : IContent
 
     public int? ParentAnswerId { get; set; }
 }
+
+public class AddAnswerResponseDTO
+{
+    public bool Status { get; set; }
+    public int Page { get; set; }
+    public int? IdAnswer { get; set; }
+    public int? IdComment { get; set; }
+}
