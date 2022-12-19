@@ -1,5 +1,4 @@
-﻿using UniQuanda.Core.Domain.Entities.Auth;
-using UniQuanda.Core.Domain.ValueObjects;
+﻿using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Core.Domain.Entities.App
 {

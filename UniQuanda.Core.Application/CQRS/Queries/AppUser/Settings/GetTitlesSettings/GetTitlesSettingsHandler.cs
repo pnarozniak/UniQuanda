@@ -16,7 +16,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.AppUser.Settings.GetTitlesSett
             return titles.Select(t => new GetTitlesSettingsResponseDTO
             {
                 TitleId = t.Id,
-                Type = t.Type,
+                Type = t.AcademicTitleType,
                 Name = t.Name,
                 Order = t.Order
             });

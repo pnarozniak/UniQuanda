@@ -25,8 +25,8 @@ namespace UniQuanda.Core.Application.CQRS.Commands.AppUser.Settings.AddTitleRequ
             imageName = $"{imageEndpoint}{ImageFolder.TitleRequest.Value}/{imageName}";
             return await _academicTitleRepository.AddAcademicTitleRequestForUserAsync(
                 requestId, request.UserId,
-                imageName, request.AcademicTitleId, 
-                request.AdditionalInfo, request.CreatedAt, 
+                imageName, request.AcademicTitleId,
+                request.AdditionalInfo, request.CreatedAt,
                 ct
                 );
         }

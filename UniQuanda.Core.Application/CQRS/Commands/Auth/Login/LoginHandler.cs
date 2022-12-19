@@ -40,7 +40,7 @@ public class LoginHandler : IRequestHandler<LoginCommand, LoginResponseDTO>
                 Status = LoginResponseDTO.LoginStatus.EmailNotConfirmed
             };
 
-        var accessToken = _tokensService.GenerateAccessToken(appUser.Id, appUser.HasPremiumUntil, false, appUser.IsAdmin );
+        var accessToken = _tokensService.GenerateAccessToken(appUser.Id, appUser.HasPremiumUntil, false, appUser.IsAdmin);
         var (refreshToken, refreshTokenExp) = _tokensService.GenerateRefreshToken();
         await _authRepository.UpdateUserRefreshTokenAsync(appUser.Id, refreshToken, refreshTokenExp, ct);
         var avatar = await _appUserRepository.GetUserAvatarAsync(appUser.Id, ct);

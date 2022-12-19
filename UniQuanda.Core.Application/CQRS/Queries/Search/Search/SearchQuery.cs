@@ -8,6 +8,6 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Search.Search
         {
             SearchText = request.SearchText;
         }
-        public string SearchText {get; set;}
+        public string SearchText { get; set; }
     }
 }

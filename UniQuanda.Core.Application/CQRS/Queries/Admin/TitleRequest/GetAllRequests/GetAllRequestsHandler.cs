@@ -1,7 +1,5 @@
-﻿using System;
-using MediatR;
+﻿using MediatR;
 using UniQuanda.Core.Application.Repositories;
-using UniQuanda.Core.Domain.Entities.App;
 
 namespace UniQuanda.Core.Application.CQRS.Queries.Admin.TitleRequest.GetAllRequests
 {

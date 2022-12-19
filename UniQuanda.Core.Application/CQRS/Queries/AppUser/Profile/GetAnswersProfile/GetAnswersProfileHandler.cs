@@ -15,7 +15,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetAnswers
         }
         public async Task<GetAnswersProfileResponseDTO> Handle(GetAnswersProfileQuery request, CancellationToken ct)
         {
-            var user = await _authRepository.GetUserByIdAsync(request.UserId,ct);
+            var user = await _authRepository.GetUserByIdAsync(request.UserId, ct);
             if (user == null) return new()
             {
                 Answers = null,
@@ -38,7 +38,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetAnswers
                     }),
                 TotalCount = request.AddCount ? await _answerRepository.GetAnswersOfUserCountAsync(request.UserId, ct) : null
             };
-            
+
         }
     }
 }

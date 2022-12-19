@@ -39,7 +39,7 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, bool>
                 await _universityRepository.AddUserToUniversityAsync(idUser, university.Id, ct);
             }
         }
-        
+
         if (isMainEmail)
         {
             await _emailService.SendEmailAboutUpdatedMainEmailAsync(oldMainEmail, request.Email, request.UserAgentInfo);

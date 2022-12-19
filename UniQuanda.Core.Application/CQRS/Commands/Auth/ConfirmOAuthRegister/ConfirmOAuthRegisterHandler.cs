@@ -39,7 +39,7 @@ public class ConfirmOAuthRegisterHandler : IRequestHandler<ConfirmOAuthRegisterC
             var regex = new Regex(university.Regex, RegexOptions.IgnoreCase);
             if (regex.IsMatch(user?.Emails.ToList()[0].Value ?? ""))
             {
-                await _universityRepository.AddUserToUniversityAsync(idUser?? 0, university.Id, ct);
+                await _universityRepository.AddUserToUniversityAsync(idUser ?? 0, university.Id, ct);
             }
         }
 

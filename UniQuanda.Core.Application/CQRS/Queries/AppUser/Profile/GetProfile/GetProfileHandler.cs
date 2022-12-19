@@ -18,7 +18,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile
             var user = await _appUserRepository.GetUserProfileAsync(request.UserId, cancellationToken);
             if (user == null) return null;
 
-            var userHasPremium = await _appUserRepository.HasUserPremium(request.UserId, cancellationToken);
+            var userHasPremium = await _appUserRepository.HasUserPremiumAsync(request.UserId, cancellationToken);
             if (userHasPremium == null) return null;
 
             return new GetProfileResponseDTO()
@@ -47,7 +47,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile
                 AcademicTitles = user.Titles.Select(title => new AcademicTitleResponseDTO()
                 {
                     Name = title.Name,
-                    AcademicTitleType = title.Type,
+                    AcademicTitleType = title.AcademicTitleType,
                     Order = title.Order
                 }),
                 Universities = user.Universities.Select(u => new UniversityResponseDTO()

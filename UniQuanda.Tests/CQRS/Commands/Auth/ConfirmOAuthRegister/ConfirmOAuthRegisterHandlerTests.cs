@@ -47,7 +47,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ConfirmOAuthRegister
                     {
                         Id = UniversityId,
                         Regex = UniversityRegex
-                    } 
+                    }
                 });
 
             this.confirmOAuthRegisterCommand = new ConfirmOAuthRegisterCommand(new ConfirmOAuthRegisterRequestDTO());

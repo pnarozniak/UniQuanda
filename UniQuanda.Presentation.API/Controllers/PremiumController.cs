@@ -63,8 +63,6 @@ namespace UniQuanda.Presentation.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetPremiumPayments([FromQuery] GetPremiumPaymentsRequestDTO request, CancellationToken ct)
         {
-            /*            var command = new HandlePremiumPaymentStatusCommand(User.GetId()!.Value);
-                        await _mediator.Send(command, ct);*/
             var query = new GetPremiumPaymentsQuery(request, User.GetId()!.Value);
             var result = await _mediator.Send(query, ct);
             return result is null ? NotFound() : Ok(result);
