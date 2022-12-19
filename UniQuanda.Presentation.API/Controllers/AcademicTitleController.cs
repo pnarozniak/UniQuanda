@@ -8,8 +8,7 @@ using UniQuanda.Core.Application.CQRS.Queries.Admin.TitleRequest.GetAllRequests;
 using UniQuanda.Core.Application.CQRS.Queries.AppUser.Settings.GetAllTitlesSettings;
 using UniQuanda.Core.Application.CQRS.Queries.AppUser.Settings.GetRequestedTitles;
 using UniQuanda.Core.Application.CQRS.Queries.AppUser.Settings.GetTitlesSettings;
-using UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile;
-using UniQuanda.Infrastructure.Enums;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Presentation.API.Extensions;
 
 namespace UniQuanda.Presentation.API.Controllers
@@ -53,7 +52,7 @@ namespace UniQuanda.Presentation.API.Controllers
         ///     Gets all user requests for titles
         /// </summary>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<GetRequestedTitlesResponseDTO>))]
-        [Authorize(Roles = JwtTokenRole.User)]
+        [Authorize(Roles = AppRole.User)]
         [HttpGet("requested-titles-of-user")]
         public async Task<IActionResult> GetRequestedTitlesOfUser(CancellationToken ct)
         {
@@ -71,7 +70,7 @@ namespace UniQuanda.Presentation.API.Controllers
         /// </summary>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Roles = JwtTokenRole.User)]
+        [Authorize(Roles = AppRole.User)]
         [HttpPut("titles-order")]
         public async Task<IActionResult> SetOrderOfTitles([FromBody] IEnumerable<ChangeTitleOrderRequestDTO> request ,CancellationToken ct)
         {
@@ -85,7 +84,7 @@ namespace UniQuanda.Presentation.API.Controllers
         /// </summary>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Roles = JwtTokenRole.User)]
+        [Authorize(Roles = AppRole.User)]
         [HttpPost("add-request")]
         public async Task<IActionResult> AddRequestForTitles([FromForm] AddTitleRequestRequestDTO request,CancellationToken ct)
         {
@@ -98,7 +97,7 @@ namespace UniQuanda.Presentation.API.Controllers
         ///     Gets pending requests for titles using paging
         /// </summary>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetAllRequestsResponseDTO))]
-        [Authorize(Roles = JwtTokenRole.Admin)]
+        [Authorize(Roles = AppRole.Admin)]
         [HttpGet("pending-requested-titles")]
         public async Task<IActionResult> GetRequestsForTitlesAdmin([FromQuery] GetAllRequestsRequestDTO request, CancellationToken ct)
         {
@@ -112,7 +111,7 @@ namespace UniQuanda.Presentation.API.Controllers
         /// </summary>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Roles = JwtTokenRole.Admin)]
+        [Authorize(Roles = AppRole.Admin)]
         [HttpPost("change-request-status")]
         public async Task<IActionResult> SetRequestForTitleStatusAdmin([FromBody] AssignStatusToRequestDTORequest request, CancellationToken ct)
         {

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProfile;
 using UniQuanda.Core.Application.CQRS.Commands.Questions.AddQuestion;
 using UniQuanda.Core.Application.CQRS.Queries.Questions.GetQuestions;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Presentation.API.Extensions;
 
 namespace UniQuanda.Presentation.API.Controllers
@@ -26,7 +27,7 @@ namespace UniQuanda.Presentation.API.Controllers
         /// <param name="ct">Cancellation token</param>
         /// <returns>Id of added question if success, status info otherwise</returns>
         [HttpPost]
-        [Authorize(Roles = "user")]
+        [Authorize(Roles = AppRole.User)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AddQuestionResponseDTO))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(AddQuestionResponseDTO))]
         public async Task<IActionResult> AddContent([FromBody] AddQuestionRequestDTO request, CancellationToken ct)

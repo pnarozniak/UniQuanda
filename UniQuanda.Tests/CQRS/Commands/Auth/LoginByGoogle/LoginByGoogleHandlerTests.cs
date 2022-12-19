@@ -2,11 +2,13 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.LoginByGoogle;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services.Auth;
+using UniQuanda.Core.Domain.Entities.App;
 using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Core.Domain.Utils;
@@ -21,6 +23,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.LoginByGoogle
         private Mock<IAuthRepository> authRepository;
         private Mock<ITokensService> tokensService;
         private Mock<IOAuthService> oauthService;
+        private Mock<IRoleRepository> roleRepository;
 
         private string accessToken = "access-token";
         private GoogleIdToken googleIdToken = new GoogleIdToken
@@ -37,9 +40,10 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.LoginByGoogle
             this.authRepository = new Mock<IAuthRepository>();
             this.tokensService = new Mock<ITokensService>();
             this.oauthService = new Mock<IOAuthService>();
+            this.roleRepository = new Mock<IRoleRepository>();
 
             this.tokensService
-                .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny<IEnumerable<AppRoleEntity>>(), It.IsAny<IEnumerable<AuthRole>>()))
                 .Returns(accessToken);
             this.oauthService
                 .Setup(os => os.GetGoogleIdTokenAsync(It.IsAny<string>()))
@@ -52,7 +56,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.LoginByGoogle
                     .Returns(this.refreshToken);
 
             this.loginByGoogleCommand = new LoginByGoogleCommand(new LoginByGoogleRequestDTO { Code = "Code" });
-            this.loginByGoogleHandler = new LoginByGoogleHandler(this.authRepository.Object, this.tokensService.Object, this.oauthService.Object);
+            this.loginByGoogleHandler = new LoginByGoogleHandler(this.authRepository.Object, this.tokensService.Object, this.oauthService.Object, roleRepository.Object);
         }
 
         [Test]

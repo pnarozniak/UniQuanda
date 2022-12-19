@@ -87,9 +87,7 @@ public class AuthRepository : IAuthRepository
                 HashedPassword = u.HashedPassword,
                 IsEmailConfirmed = !_authContext.TempUsers.Any(tu => tu.IdUser == u.Id),
                 IsOAuthUser = u.IdOAuthUserNavigation != null,
-                IsOAuthRegisterCompleted = u.IdOAuthUserNavigation != null && u.IdOAuthUserNavigation.OAuthRegisterConfirmationCode == null,
-                HasPremiumUntil = u.HasPremiumUntil,
-                IsAdmin = u.IsAdmin,
+                IsOAuthRegisterCompleted = u.IdOAuthUserNavigation != null && u.IdOAuthUserNavigation.OAuthRegisterConfirmationCode == null
             })
             .SingleOrDefaultAsync(ct);
 
@@ -261,9 +259,7 @@ public class AuthRepository : IAuthRepository
                 Nickname = u.Nickname,
                 RefreshToken = u.RefreshToken,
                 RefreshTokenExp = u.RefreshTokenExp,
-                IsOAuthUser = u.IdOAuthUserNavigation != null,
-                HasPremiumUntil = u.HasPremiumUntil,
-                IsAdmin = u.IsAdmin
+                IsOAuthUser = u.IdOAuthUserNavigation != null
             })
             .SingleOrDefaultAsync(ct);
     }

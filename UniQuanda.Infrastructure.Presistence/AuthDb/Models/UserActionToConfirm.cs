@@ -1,7 +1,6 @@
 using UniQuanda.Core.Domain.Enums;
-using UniQuanda.Infrastructure.Presistence.AuthDb.Models;
 
-namespace UniQuanda.Infrastructure.Presistence.AppDb.Models;
+namespace UniQuanda.Infrastructure.Presistence.AuthDb.Models;
 
 public class UserActionToConfirm
 {

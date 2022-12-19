@@ -26,4 +26,5 @@ public class AppUser
     public virtual GlobalRanking GlobalRankingNavigation { get; set; }
     public virtual ICollection<PermissionUsageByUser> UsedLimitsByUsers { get; set; }
     public virtual ICollection<UserRole> UserRoles { get; set; }
+    public virtual ICollection<PremiumPayment> PremiumPayments { get; set; }
 }
