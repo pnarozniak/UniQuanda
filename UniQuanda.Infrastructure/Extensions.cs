@@ -38,6 +38,7 @@ public static class Extensions
         services.AddScoped<IPremiumPaymentRepository, PremiumPaymentRepository>();
         services.AddScoped<IAnswerRepository, AnswerRepository>();
         services.AddScoped<ISearchRepository, SearchRepository>();
+        services.AddScoped<ITestRepository, TestRepository>();
 
         // Services
         services.AddScoped<IPasswordsService, PasswordsService>();
