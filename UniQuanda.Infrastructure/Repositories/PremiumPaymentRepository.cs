@@ -123,14 +123,16 @@ public class PremiumPaymentRepository : IPremiumPaymentRepository
 
     public async Task<PremiumPaymentsEntity?> GetPremiumPaymentsAsync(int idUser, bool getAll, CancellationToken ct)
     {
-        var query = _context.UserRoles
-           .Where(ur => ur.AppUserId == idUser && ur.RoleIdNavigation.Name == AppRole.Premium);
+        var premiumEndDateQuery = _context.UserRoles.Where(ur => ur.AppUserId == idUser && ur.RoleIdNavigation.Name == AppRole.Premium)
+            .Select(ur => ur.ValidUnitl);
+
+        var query = _context.AppUsers.Where(u => u.Id == idUser);
         if (getAll)
             return await query.Select(ur => new PremiumPaymentsEntity()
             {
-                Nickname = ur.AppUserIdNavigation.Nickname,
-                HasPremiumUntil = ur.ValidUnitl,
-                Payments = ur.AppUserIdNavigation.PremiumPayments.OrderByDescending(p => p.PaymentDate).Select(p => new PremiumPaymentInfo
+                Nickname = ur.Nickname,
+                HasPremiumUntil = premiumEndDateQuery.FirstOrDefault(),
+                Payments = ur.PremiumPayments.OrderByDescending(p => p.PaymentDate).Select(p => new PremiumPaymentInfo
                 {
                     PaymentDate = p.PaymentDate,
                     IdTransaction = p.IdTransaction,
@@ -142,9 +144,9 @@ public class PremiumPaymentRepository : IPremiumPaymentRepository
 
         return await query.Select(ur => new PremiumPaymentsEntity()
         {
-            Nickname = ur.AppUserIdNavigation.Nickname,
-            HasPremiumUntil = ur.ValidUnitl,
-            Payments = ur.AppUserIdNavigation.PremiumPayments.OrderByDescending(p => p.PaymentDate).Select(p => new PremiumPaymentInfo
+            Nickname = ur.Nickname,
+            HasPremiumUntil = premiumEndDateQuery.FirstOrDefault(),
+            Payments = ur.PremiumPayments.OrderByDescending(p => p.PaymentDate).Select(p => new PremiumPaymentInfo
             {
                 PaymentDate = p.PaymentDate,
                 IdTransaction = p.IdTransaction,
@@ -152,7 +154,7 @@ public class PremiumPaymentRepository : IPremiumPaymentRepository
                 PaymentStatus = p.PaymentStatus == PremiumPaymentStatusEnum.New && p.ValidUntil < DateTime.UtcNow ? PremiumPaymentStatusEnum.Canceled : p.PaymentStatus,
                 PaymentUrl = p.PaymentStatus == PremiumPaymentStatusEnum.New && p.ValidUntil > DateTime.UtcNow ? p.PaymentUrl : null
             }).Take(6),
-            NumberOfPayments = ur.AppUserIdNavigation.PremiumPayments.Count
+            NumberOfPayments = ur.PremiumPayments.Count
         }).FirstOrDefaultAsync(ct);
     }
 }
