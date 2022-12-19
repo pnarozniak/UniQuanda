@@ -24,8 +24,8 @@ namespace UniQuanda.Core.Application.CQRS.Commands.Admin.Titles.AssignStatusToRe
 
             if(result && request.Status == Domain.Enums.TitleRequestStatusEnum.Accepted)
             {
-                return await _academicTitleRepository.SetAcademicTitleToUserAsync(requestedTitle.User.Id, requestedTitle.Title.Id, null, ct);
-                return await _roleRepository.AssignAppRoleToUserAsync(requestedTitle.User.Id, new AppRole() { Value = Domain.Utils.AppRole.TitledUser }, null, ct);
+                await _academicTitleRepository.SetAcademicTitleToUserAsync(requestedTitle.User.Id, requestedTitle.Title.Id, null, ct);
+                return await _roleRepository.AssignAppRoleToUserAsync(requestedTitle.User.Id, new AppRole() { Value = AppRole.TitledUser }, null, ct);
             }
             return result;
         }
