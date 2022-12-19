@@ -1,5 +1,6 @@
 ﻿using UniQuanda.Core.Domain.Entities.App;
 using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Enums.Results;
 
 namespace UniQuanda.Core.Application.Repositories
 {
@@ -63,7 +64,7 @@ namespace UniQuanda.Core.Application.Repositories
         /// <param name="take">How many results to take</param>
         /// <param name="skip">How many first results to skip</param>
         /// <param name="ct"></param>
-        /// <returns></returns>
+        /// <returns>List of questions asked by user</returns>
         public Task<IEnumerable<QuestionEntity>> GetQuestionsOfUserAsync(int userId, int take, int skip, CancellationToken ct);
 
         /// <summary>
@@ -71,7 +72,63 @@ namespace UniQuanda.Core.Application.Repositories
         /// </summary>
         /// <param name="userId">Id of user</param>
         /// <param name="ct"></param>
-        /// <returns></returns>
+        /// <returns>Amount of all questions asked by user</returns>
         public Task<int> GetQuestionsOfUserCountAsync(int userId, CancellationToken ct);
+
+        /// <summary>
+        ///     Gets questions of university using paging
+        /// </summary>
+        /// <param name="universityId">Id of university</param>
+        /// <param name="take">How many results to take</param>
+        /// <param name="skip">How many first results to skip</param>
+        /// <param name="ct"></param>
+        /// <returns>List of questions asked by univeristy users</returns>
+        public Task<IEnumerable<QuestionEntity>> GetQuestionsOfUniversityAsync(int universityId, int take, int skip, CancellationToken ct);
+
+        /// <summary>
+        ///    Gets amount of all questions of university
+        /// </summary>
+        /// <param name="universityId">Id of university</param>
+        /// <param name="ct"></param>
+        /// <returns>Amount of all questions asked by university</returns>
+        public Task<int> GetQuestionsOfUniversityCountAsync(int universityId, CancellationToken ct);
+
+        Task<QuestionDetailsEntity?> GetQuestionDetailsAsync(int idQuestion, int? idLoggedUser, CancellationToken ct);
+
+        Task<bool> IsQuestionFollowedByUserAsync(int idQuestion, int idLoggedUser, CancellationToken ct);
+
+        Task<bool> CreateOrUpdateQuestionViewFromAppUserAsync(int idQuestion, int idLoggedUser, CancellationToken ct);
+
+        Task<bool> UpdateQuestionFollowStatusAsync(int idQuestion, int idLoggedUser, CancellationToken ct);
+
+        Task<DeleteQuestionResultEnum> DeleteQuestionAsync(int idQuestion, int idLoggedUser, CancellationToken ct);
+
+        Task UpdateQuestionViewsCountAsync(int idQuestion, CancellationToken ct);
+
+        Task<QuestionDetailsEntity?> GetQuestionDetailsForUpdateAsync(int idQuestion, int idLoggedUser, CancellationToken ct);
+
+        /// <summary>
+        ///    Update question
+        /// </summary>
+        /// <param name="idQuestion">id of question</param>
+        /// <param name="contentId">id of content</param>
+        /// <param name="userId">id of creator</param>
+        /// <param name="tags">tag ids with order</param>
+        /// <param name="title">question title</param>
+        /// <param name="rawText">not modified, html text</param>
+        /// <param name="text">only text from html</param>
+        /// <param name="imageNames">urls to all images</param>
+        /// <param name="creationTime">creation time</param>
+        /// <param name="ct">cancellation token</param>
+        /// <returns>Null if question not exists, otherwise status of update</returns>
+        Task<bool?> UpdateQuestionAsync(
+            int idQuestion,
+            int contentId,
+            int userId,
+            IEnumerable<(int order, int tagId)> tags,
+            string title, string rawText, string text,
+            IEnumerable<string> imageNames,
+            DateTime creationTime,
+            CancellationToken ct);
     }
 }

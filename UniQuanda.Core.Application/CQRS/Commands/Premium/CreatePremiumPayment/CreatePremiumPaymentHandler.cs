@@ -20,17 +20,17 @@ public class CreatePremiumPaymentHandler : IRequestHandler<CreatePremiumPaymentC
 
     public async Task<CreatePremiumPaymentResponseDTO> Handle(CreatePremiumPaymentCommand request, CancellationToken ct)
     {
-        var (isUserExists, hasPremiumUntil) = await _premiumPaymentRepository.GetUserPremiumInfoAsync(request.IdUser, ct);
-        if (!isUserExists)
+        var dbUser = await _premiumPaymentRepository.GetUserPremiumInfoAsync(request.IdUser, ct);
+        if (dbUser == null)
             return new() { Status = CreatePremiumPaymentResultEnum.ContentNotExist };
 
         var paymentUrl = await _premiumPaymentRepository.CheckIfAnyPremiumPaymentIsStartedAsync(request.IdUser, ct);
         if (paymentUrl != null)
             return new() { PaymentUrl = paymentUrl, Status = CreatePremiumPaymentResultEnum.Successful };
 
-        if (hasPremiumUntil < DateTime.UtcNow)
+        if (dbUser.HasPremiumUntil < DateTime.UtcNow)
             request.IsContinuationPremium = false;
-        if ((hasPremiumUntil != null && !request.IsContinuationPremium) || (hasPremiumUntil > DateTime.UtcNow.AddMonths(1) && request.IsContinuationPremium))
+        if ((dbUser.HasPremiumUntil != null && !request.IsContinuationPremium) || (dbUser.HasPremiumUntil > DateTime.UtcNow.AddMonths(1) && request.IsContinuationPremium))
             return new() { Status = CreatePremiumPaymentResultEnum.NotAllowed };
 
         var token = await _paymentService.GetAuthenticationTokenAsync(ct);

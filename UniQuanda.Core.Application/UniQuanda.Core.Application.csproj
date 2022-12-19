@@ -19,11 +19,25 @@
   <ItemGroup>
     <None Remove="Services\IImageService.proto" />
     <None Remove="Microsoft.AspNetCore.Http.Features" />
+    <None Remove="CQRS\Queries\Admin\" />
+    <None Remove="CQRS\Queries\Admin\TitleRequest\" />
+    <None Remove="CQRS\Queries\Admin\TitleRequest\GetAllRequests\" />
+    <None Remove="CQRS\Commands\Admin\" />
+    <None Remove="CQRS\Commands\Admin\Titles\" />
+    <None Remove="CQRS\Commands\Admin\Titles\AssignStatusToRequest\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="NuGet.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CQRS\Queries\Admin\" />
+    <Folder Include="CQRS\Queries\Admin\TitleRequest\" />
+    <Folder Include="CQRS\Queries\Admin\TitleRequest\GetAllRequests\" />
+    <Folder Include="CQRS\Commands\Admin\" />
+    <Folder Include="CQRS\Commands\Admin\Titles\" />
+    <Folder Include="CQRS\Commands\Admin\Titles\AssignStatusToRequest\" />
   </ItemGroup>
   <PropertyGroup>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>

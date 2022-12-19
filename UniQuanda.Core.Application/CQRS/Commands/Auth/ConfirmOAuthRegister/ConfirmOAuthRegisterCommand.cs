@@ -18,7 +18,7 @@ public class ConfirmOAuthRegisterCommand : IRequest<ConfirmOAuthRegisterResponse
                 City = request.City,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                PhoneNumber = request.PhoneNumber
+                Contact = request.Contact
             }
         };
     }

@@ -13,6 +13,8 @@ public class AppUserAnswerInteractionEfConfiguration : IEntityTypeConfiguration<
 
         builder.Property(ua => ua.IsCreator).IsRequired();
 
+        builder.Property(ua => ua.LikeValue).IsRequired();
+
         builder.HasIndex(ua => new { ua.AppUserId, ua.AnswerId }).IsUnique();
     }
 }

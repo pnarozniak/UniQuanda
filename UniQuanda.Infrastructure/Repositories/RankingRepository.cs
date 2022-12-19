@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
@@ -27,13 +26,14 @@ public class RankingRepository : IRankingRepository
     public async Task<IEnumerable<AppUserEntity>> GetGlobalRankingUsersAsync(int take, int skip, CancellationToken ct)
     {
         return await _appContext.GlobalRankings
-            .Select(gr => new AppUserEntity() {
+            .Select(gr => new AppUserEntity()
+            {
                 Id = gr.AppUserId,
                 Nickname = gr.AppUserIdNavigation.Nickname,
                 Titles = gr.AppUserIdNavigation.AppUserTitles.Select(t => new AcademicTitleEntity()
                 {
                     Name = t.AcademicTitleIdNavigation.Name,
-                    Type = t.AcademicTitleIdNavigation.AcademicTitleType,
+                    AcademicTitleType = t.AcademicTitleIdNavigation.AcademicTitleType,
                     Order = t.Order
                 }),
                 PlaceInRanking = gr.Place,
@@ -65,7 +65,7 @@ public class RankingRepository : IRankingRepository
                     Titles = t.AppUserIdNavigation.AppUserTitles.Select(t => new AcademicTitleEntity()
                     {
                         Name = t.AcademicTitleIdNavigation.Name,
-                        Type = t.AcademicTitleIdNavigation.AcademicTitleType,
+                        AcademicTitleType = t.AcademicTitleIdNavigation.AcademicTitleType,
                         Order = t.Order
                     }),
                     Points = t.Points,
@@ -74,7 +74,7 @@ public class RankingRepository : IRankingRepository
                 .Skip(skip).Take(take).ToListAsync(ct);
 
             var maxIndex = pageSize > result.Count ? result.Count : pageSize;
-            for (int i=0; i< maxIndex; i++)
+            for (int i = 0; i < maxIndex; i++)
             {
                 result[i].PlaceInRanking = skip + i + 1;
             }
@@ -84,7 +84,9 @@ public class RankingRepository : IRankingRepository
             await _cacheService.SaveToCacheAsync<IEnumerable<AppUserEntity>>(cacheKey, result, DurationEnum.UntilMidnight, ct);
             return result;
 
-        } else {
+        }
+        else
+        {
             return cacheResult;
         }
     }

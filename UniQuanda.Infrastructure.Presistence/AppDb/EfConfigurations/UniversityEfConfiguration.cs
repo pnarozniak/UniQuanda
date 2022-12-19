@@ -17,6 +17,9 @@ public class UniversityEfConfiguration : IEntityTypeConfiguration<University>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(u => u.Name).IsRequired();
+        builder.Property(u => u.Icon).IsRequired();
         builder.Property(u => u.Logo).IsRequired();
+        builder.Property(u => u.Contact).IsRequired().HasMaxLength(200);
+        builder.Property(u => u.Regex).IsRequired();
     }
 }

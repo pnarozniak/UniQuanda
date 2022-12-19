@@ -8,7 +8,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetQuestionsProfile
             UserId = request.UserId;
             AddCount = request.AddCount;
             Take = request.PageSize;
-            Skip = (request.Page -1) * request.PageSize;
+            Skip = (request.Page - 1) * request.PageSize;
         }
         public int UserId { get; set; }
         public int Take { get; set; }

@@ -43,10 +43,10 @@ public class HandlePremiumPaymentStatusHandler : IRequestHandler<HandlePremiumPa
         else if (updateStatus == UpdatePremiumPaymentResultEnum.UnSuccessful)
             return new() { Status = HandlePremiumPaymentStatusResultEnum.UnSuccessful };
 
-        var (isUserExists, hasPremiumUntil) = await _premiumPaymentRepository.GetUserPremiumInfoAsync(request.IdUser, ct);
-        if (!isUserExists)
+        var user = await _premiumPaymentRepository.GetUserPremiumInfoAsync(request.IdUser, ct);
+        if (user == null)
             return new() { Status = HandlePremiumPaymentStatusResultEnum.ContentNotExist };
-        var accessToken = _tokensService.GenerateAccessToken(request.IdUser, hasPremiumUntil);
+        var accessToken = _tokensService.GenerateAccessToken(request.IdUser, user.HasPremiumUntil, user.IsOAuthUser, user.IsAdmin);
         var (refreshToken, refreshTokenExp) = _tokensService.GenerateRefreshToken();
         await _authRepository.UpdateUserRefreshTokenAsync(request.IdUser, refreshToken, refreshTokenExp, ct);
         return new()

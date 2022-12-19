@@ -229,7 +229,7 @@ namespace UniQuanda.Tests.CQRS.Commands.AppUser.Settings
                 City = "City",
                 AboutText = "AboutText",
                 Birthdate = new DateTime(2001, 1, 1),
-                PhoneNumber = "PhoneNumber",
+                Contact = "Contact",
                 SemanticScholarProfile = "SemanticScholarProfile",
                 Avatar = avatar,
                 IsNewAvatar = isNewAvatar,

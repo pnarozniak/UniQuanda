@@ -40,12 +40,16 @@ public class PremiumPaymentRepository : IPremiumPaymentRepository
         return await _authContext.SaveChangesAsync(ct) != 0;
     }
 
-    public async Task<(bool isUserExists, DateTime? hasPremiumUntil)> GetUserPremiumInfoAsync(int idUser, CancellationToken ct)
+    public async Task<UserEntity?> GetUserPremiumInfoAsync(int idUser, CancellationToken ct)
     {
-        var user = await _authContext.Users.SingleOrDefaultAsync(u => u.Id == idUser, ct);
-        if (user is null)
-            return (isUserExists: false, hasPremiumUntil: null);
-        return (isUserExists: true, hasPremiumUntil: user.HasPremiumUntil);
+        return await _authContext.Users.Where(u => u.Id == idUser)
+            .Select(u => new UserEntity
+            {
+                HasPremiumUntil = u.HasPremiumUntil,
+                IsOAuthUser = u.IdOAuthUserNavigation != null,
+                IsAdmin = u.IsAdmin
+            })
+            .SingleOrDefaultAsync(ct);
     }
 
     public async Task<string?> CheckIfAnyPremiumPaymentIsStartedAsync(int idUser, CancellationToken ct)
