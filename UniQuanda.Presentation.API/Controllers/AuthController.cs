@@ -128,7 +128,6 @@ public class AuthController : ControllerBase
     /// </summary>
     [Recaptcha]
     [HttpGet("user-info")]
-    [Authorize(Roles = AppRole.User)]
     [Authorize(Roles = AuthRole.OAuthAccount)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

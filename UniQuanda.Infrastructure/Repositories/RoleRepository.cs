@@ -19,12 +19,23 @@ namespace UniQuanda.Infrastructure.Repositories
             var roleDb = await _context.Roles.Where(r => r.Name == role.Value).SingleOrDefaultAsync(ct);
             if (roleDb == null) return false;
 
-            roleDb.UserRoles.Add(new UserRole()
+            var previousRole = await _context.UserRoles.Where(ur => ur.AppUserId == userId && ur.RoleId == roleDb.Id).SingleOrDefaultAsync(ct);
+            if (previousRole == null)
             {
-                AppUserId = userId,
-                ValidUnitl = validUntil
-            });
-
+                var userRole = new UserRole()
+                {
+                    AppUserId = userId,
+                    RoleId = roleDb.Id,
+                    ValidUnitl = validUntil
+                };
+                await _context.UserRoles.AddAsync(userRole, ct);
+            }
+            else
+            {
+                previousRole.ValidUnitl = validUntil;
+                _context.UserRoles.Update(previousRole);
+            }
+            
             return await _context.SaveChangesAsync(ct) != 0;
         }
 

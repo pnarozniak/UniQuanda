@@ -41,9 +41,15 @@ public class ConfirmOAuthRegisterHandler : IRequestHandler<ConfirmOAuthRegisterC
         foreach (var university in universities)
         {
             var regex = new Regex(university.Regex, RegexOptions.IgnoreCase);
+            var addEduRole = false;
             if (regex.IsMatch(user?.Emails.ToList()[0].Value ?? ""))
             {
                 await _universityRepository.AddUserToUniversityAsync(idUser?? 0, university.Id, ct);
+                addEduRole = true;
+            }
+            if (addEduRole)
+            {
+                await _roleRepository.AssignAppRoleToUserAsync(idUser ?? 0, new AppRole() { Value = AppRole.EduUser }, null, ct);
             }
         }
         var authRoles = new List<AuthRole>() { new AuthRole() { Value = AuthRole.OAuthAccount } };
