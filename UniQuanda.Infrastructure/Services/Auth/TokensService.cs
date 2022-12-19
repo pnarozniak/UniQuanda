@@ -38,7 +38,7 @@ public class TokensService : ITokensService
         return Guid.NewGuid().ToString();
     }
 
-    public string GenerateAccessToken(int idUser, DateTime? hasPremiumUntil, bool isOAuthUser = false)
+    public string GenerateAccessToken(int idUser, DateTime? hasPremiumUntil, bool isOAuthUser = false, bool isAdmin = false)
     {
         var isActivePremium = hasPremiumUntil != null && hasPremiumUntil > DateTime.UtcNow;
         var userClaims = new List<Claim>
@@ -49,6 +49,8 @@ public class TokensService : ITokensService
         };
         if (isActivePremium)
             userClaims.Add(new Claim(ClaimTypes.Role, JwtTokenRole.Premium));
+        if (isAdmin)
+            userClaims.Add(new Claim(ClaimTypes.Role, JwtTokenRole.Admin));
 
         var key = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(_options.AccessToken.SecretKey));

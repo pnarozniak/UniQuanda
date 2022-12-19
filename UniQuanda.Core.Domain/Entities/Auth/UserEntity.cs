@@ -15,5 +15,6 @@ public class UserEntity
     public bool IsOAuthUser { get; set; }
     public bool IsOAuthRegisterCompleted { get; set; }
     public DateTime? HasPremiumUntil { get; set; }
+    public bool IsAdmin { get; set; }
 
 }

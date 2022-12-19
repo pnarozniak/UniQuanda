@@ -146,6 +146,10 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                         .HasMaxLength(57)
                         .HasColumnType("character varying(57)");
 
+                    b.Property<string>("Contact")
+                        .HasMaxLength(22)
+                        .HasColumnType("character varying(22)");
+
                     b.Property<string>("EmailConfirmationCode")
                         .IsRequired()
                         .HasMaxLength(6)
@@ -161,10 +165,6 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                     b.Property<string>("LastName")
                         .HasMaxLength(51)
                         .HasColumnType("character varying(51)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(22)
-                        .HasColumnType("character varying(22)");
 
                     b.HasKey("IdUser");
 
@@ -185,6 +185,11 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                     b.Property<string>("HashedPassword")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsAdmin")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Nickname")
                         .HasMaxLength(30)
@@ -208,6 +213,7 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Migrations
                         {
                             Id = 1,
                             HashedPassword = "$2a$12$bIkUNGSkHjgVl80kICadyezV4AgRo6oMwuIEC3X9ian.d7a6xJRIe",
+                            IsAdmin = true,
                             Nickname = "Programista"
                         });
                 });

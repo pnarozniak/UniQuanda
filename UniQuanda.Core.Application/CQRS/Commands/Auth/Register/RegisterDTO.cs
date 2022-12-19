@@ -23,7 +23,7 @@ public class RegisterRequestDTO
 
     [DateTimeEarlierThanCurrentValidator] public DateTime? Birthdate { get; set; }
 
-    [MaxLength(22)] public string? PhoneNumber { get; set; }
+    [MaxLength(22)] public string? Contact { get; set; }
 
     [MaxLength(57)] public string? City { get; set; }
 }

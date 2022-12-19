@@ -19,7 +19,7 @@ public class AppUserEfConfiguration : IEntityTypeConfiguration<AppUser>
 
         builder.Property(u => u.Birthdate).IsRequired(false);
 
-        builder.Property(u => u.PhoneNumber).HasMaxLength(22).IsRequired(false);
+        builder.Property(u => u.Contact).HasMaxLength(22).IsRequired(false);
 
         builder.Property(u => u.SemanticScholarProfile).IsRequired(false);
 
@@ -55,6 +55,11 @@ public class AppUserEfConfiguration : IEntityTypeConfiguration<AppUser>
             .WithOne(ut => ut.AppUserIdNavigation)
             .HasForeignKey(ut => ut.AppUserId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(u => u.GlobalRankingNavigation)
+            .WithOne(gr => gr.AppUserIdNavigation)
+            .HasForeignKey<GlobalRanking>(gr => gr.AppUserId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
         {

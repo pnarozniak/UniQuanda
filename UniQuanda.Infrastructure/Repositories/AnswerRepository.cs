@@ -17,6 +17,43 @@ public class AnswerRepository : IAnswerRepository
         _appContext = appContext;
     }
 
+    public async Task<IEnumerable<AnswerEntity>> GetAnswersOfUserAsync(int userId, int take, int skip, CancellationToken ct)
+    {
+        return await _appContext.AppUsersAnswersInteractions.Where(
+            aai => aai.IsCreator && aai.AppUserId == userId
+            && aai.AnswerIdNavigation.IsDeleted == false
+            )
+            .Select(aai => new AnswerEntity()
+            {
+                Id = aai.AnswerId,
+                ParentAnswerId = aai.AnswerIdNavigation.ParentAnswerId,
+                Content = new Core.Domain.ValueObjects.Content()
+                {
+                    RawText = aai.AnswerIdNavigation.ContentIdNavigation.RawText,
+                },
+                Question = new QuestionEntity()
+                {
+                    Id = aai.AnswerIdNavigation.ParentQuestionId,
+                    Header = aai.AnswerIdNavigation.ParentQuestionIdNavigation.Header,
+                    Tags = aai.AnswerIdNavigation.ParentQuestionIdNavigation.TagsInQuestion.Select(tiq => new TagEntity()
+                    {
+                        Name = tiq.TagIdNavigation.Name,
+                    }),
+                },
+                CreatedAt = aai.AnswerIdNavigation.CreatedAt,
+                Likes = aai.AnswerIdNavigation.LikeCount,
+                IsCorrect = aai.AnswerIdNavigation.IsCorrect,
+            })
+            .Skip(skip)
+            .Take(take)
+            .ToListAsync(ct);
+    }
+
+    public async Task<int> GetAnswersOfUserCountAsync(int userId, CancellationToken ct)
+    {
+        return await _appContext.AppUsersAnswersInteractions.Where(aai => aai.IsCreator && aai.AppUserId == userId).CountAsync(ct);
+    }
+
     public async Task<bool> AddAnswerAsync(int idContent, int idQuestion, int? parentQuestionId, int idUser, string rawText, string text, IEnumerable<string> imageNames, DateTime creationTime, CancellationToken ct)
     {
         await using var ctx = await _appContext.Database.BeginTransactionAsync(ct);

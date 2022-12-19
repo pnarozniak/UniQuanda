@@ -42,7 +42,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
 
             SetupLoginCommand();
             this.tokensService
-                .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny<DateTime>(), It.IsAny<bool>()))
+                .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny<DateTime>(), It.IsAny<bool>(), It.IsAny<bool>()))
                 .Returns(AccessToken);
             this.tokensService
                 .Setup(ts => ts.GenerateRefreshToken())

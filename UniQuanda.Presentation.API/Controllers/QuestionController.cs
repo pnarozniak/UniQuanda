@@ -47,7 +47,7 @@ namespace UniQuanda.Presentation.API.Controllers
         /// <summary>
         ///     Gets questions from the database using filters
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="request">Request body</param>
         /// <param name="ct"></param>
         /// <returns></returns>
         [HttpGet]

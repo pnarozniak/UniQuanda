@@ -46,7 +46,7 @@ public class AuthRepository : IAuthRepository
                 Birthdate = newUser.OptionalInfo.Birthdate,
                 FirstName = newUser.OptionalInfo.FirstName,
                 LastName = newUser.OptionalInfo.LastName,
-                PhoneNumber = newUser.OptionalInfo.PhoneNumber,
+                Contact = newUser.OptionalInfo.Contact,
                 City = newUser.OptionalInfo.City,
                 ExistsUntil = newUser.ExistsUntil
             },
@@ -88,7 +88,8 @@ public class AuthRepository : IAuthRepository
                 IsEmailConfirmed = !_authContext.TempUsers.Any(tu => tu.IdUser == u.Id),
                 IsOAuthUser = u.IdOAuthUserNavigation != null,
                 IsOAuthRegisterCompleted = u.IdOAuthUserNavigation != null && u.IdOAuthUserNavigation.OAuthRegisterConfirmationCode == null,
-                HasPremiumUntil = u.HasPremiumUntil
+                HasPremiumUntil = u.HasPremiumUntil,
+                IsAdmin = u.IsAdmin,
             })
             .SingleOrDefaultAsync(ct);
 
@@ -144,7 +145,7 @@ public class AuthRepository : IAuthRepository
             FirstName = userToConfirm.IdTempUserNavigation.FirstName,
             LastName = userToConfirm.IdTempUserNavigation.LastName,
             Birthdate = userToConfirm.IdTempUserNavigation.Birthdate,
-            PhoneNumber = userToConfirm.IdTempUserNavigation.PhoneNumber,
+            Contact = userToConfirm.IdTempUserNavigation.Contact,
             City = userToConfirm.IdTempUserNavigation.City
         };
 
@@ -261,7 +262,8 @@ public class AuthRepository : IAuthRepository
                 RefreshToken = u.RefreshToken,
                 RefreshTokenExp = u.RefreshTokenExp,
                 IsOAuthUser = u.IdOAuthUserNavigation != null,
-                HasPremiumUntil = u.HasPremiumUntil
+                HasPremiumUntil = u.HasPremiumUntil,
+                IsAdmin = u.IsAdmin
             })
             .SingleOrDefaultAsync(ct);
     }
@@ -638,7 +640,7 @@ public class AuthRepository : IAuthRepository
             appUser.LastName = newUser.OptionalInfo.LastName;
             appUser.Birthdate = newUser.OptionalInfo.Birthdate;
             appUser.City = newUser.OptionalInfo.City;
-            appUser.PhoneNumber = newUser.OptionalInfo.PhoneNumber;
+            appUser.Contact = newUser.OptionalInfo.Contact;
 
             success = await _appContext.SaveChangesAsync(ct) == 1;
             if (!success)
@@ -654,5 +656,10 @@ public class AuthRepository : IAuthRepository
             await tran.RollbackAsync(ct);
             return null;
         }
+    }
+
+    public async Task<int> GetUserIdByEmailAsync(string email, CancellationToken ct)
+    {
+        return await _authContext.UsersEmails.Where(ue => EF.Functions.Like(ue.Value, email)).Select(ue => ue.IdUser).SingleOrDefaultAsync(ct);
     }
 }

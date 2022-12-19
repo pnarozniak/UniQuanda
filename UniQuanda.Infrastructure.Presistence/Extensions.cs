@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using UniQuanda.Infrastructure.Presistence.AppDb;
+using UniQuanda.Infrastructure.Presistence.AppDb.Jobs;
 using UniQuanda.Infrastructure.Presistence.AuthDb;
 using UniQuanda.Infrastructure.Presistence.AuthDb.Jobs;
 using UniQuanda.Infrastructure.Presistence.Options;
@@ -55,6 +56,14 @@ public static class Extensions
                 .ForJob(clearRefreshTokensJob)
                 .WithIdentity("ClearRefreshTokensJob-Trigger")
                 .WithCronSchedule(quartzJobsSchedulesOptions.AuthDb.ClearRefreshTokens)
+            );
+
+            var calculateGlobalRankingJob = new JobKey("CalculateGlobalRankingJob");
+            q.AddJob<CalculateGlobalRankingJob>(opts => opts.WithIdentity(calculateGlobalRankingJob));
+            q.AddTrigger(opts => opts
+                .ForJob(calculateGlobalRankingJob)
+                .WithIdentity("CalculateGlobalRankingJob-Trigger")
+                .WithCronSchedule(quartzJobsSchedulesOptions.AppDb.CalculateGlobalRanking)
             );
         });
         services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);

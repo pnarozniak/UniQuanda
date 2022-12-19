@@ -32,7 +32,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile
                     Avatar = user.Avatar,
                     Banner = user.Banner,
                     AboutText = user.AboutText,
-                    PhoneNumber = user.PhoneNumber,
+                    Contact = user.Contact,
                     City = user.City,
                     Birthdate = user.Birthdate,
                     SemanticScholarProfile = user.SemanticScholarProfile,
@@ -53,7 +53,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile
                 Universities = user.Universities.Select(u => new UniversityResponseDTO()
                 {
                     Id = u.Id,
-                    Logo = u.Logo,
+                    Logo = u.Icon,
                     Name = u.Name,
                     Order = u.Order
                 }),

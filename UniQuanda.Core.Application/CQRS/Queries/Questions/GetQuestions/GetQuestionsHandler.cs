@@ -13,8 +13,9 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Questions.GetQuestions
         public async Task<GetQuestionsResponseDTO> Handle(GetQuestionsQuery request, CancellationToken cancellationToken)
         {
             var questions = await _questionRepository.GetQuestionsAsync(
-                request.Take, request.Skip, request.Tags, request.OrderBy, request.SortBy, cancellationToken);
-            int? addCount = request.AddCount ? await _questionRepository.GetQuestionsCountAsync(request.Tags, cancellationToken) : null;
+                request.Take, request.Skip, request.Tags, request.OrderBy, request.SortBy, request.SearchText, cancellationToken);
+            int? addCount = request.AddCount ? await _questionRepository
+                .GetQuestionsCountAsync(request.Tags, request.SearchText, cancellationToken) : null;
             return new()
             {
                 Questions = questions.Select(q => new GetQuestionsResponseDTOQuestion()
@@ -32,7 +33,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Questions.GetQuestions
                     {
                         Id = q.User.Id,
                         Name = q.User.Nickname,
-                        ProfilePictureURL = q.User.OptionalInfo.Avatar,
+                        ProfilePictureURL = q.User.Avatar,
                     }
                 }),
                 Count = addCount

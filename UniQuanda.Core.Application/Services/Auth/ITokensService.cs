@@ -24,7 +24,7 @@ public interface ITokensService
     ///     Generates access token for given user
     /// </summary>
     /// <returns>Access token as string</returns>
-    string GenerateAccessToken(int idUser, DateTime? hasPremiumUntil, bool isOAuthUser = false);
+    string GenerateAccessToken(int idUser, DateTime? hasPremiumUntil, bool isOAuthUser = false, bool isAdmin = false);
 
     /// <summary>
     ///     Validates access token, without its lifetime and parses its claims.

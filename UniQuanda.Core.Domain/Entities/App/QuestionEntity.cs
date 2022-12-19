@@ -1,5 +1,4 @@
-﻿using UniQuanda.Core.Domain.Entities.Auth;
-using UniQuanda.Core.Domain.ValueObjects;
+﻿using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Core.Domain.Entities.App
 {
@@ -12,7 +11,7 @@ namespace UniQuanda.Core.Domain.Entities.App
         public Content? Content { get; set; }
         public bool? IsPopular { get; set; }
         public bool? HasCorrectAnswer { get; set; }
-        public UserEntity? User { get; set; }
+        public AppUserEntity? User { get; set; }
         public IEnumerable<TagEntity>? Tags { get; set; }
         public IEnumerable<AnswerEntity>? Answers { get; set; }
         public int? AnswersCount { get; set; }

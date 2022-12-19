@@ -61,7 +61,7 @@ public class AppUserRepository : IAppUserRepository
                 Birthdate = u.Birthdate,
                 City = u.City,
                 SemanticScholarProfile = u.SemanticScholarProfile,
-                PhoneNumber = u.PhoneNumber,
+                Contact = u.Contact,
                 Titles = u.AppUserTitles
                     .Where(ut => ut.AppUserId == u.Id)
                     .Select(t => new AcademicTitleEntity()
@@ -78,7 +78,7 @@ public class AppUserRepository : IAppUserRepository
                     {
                         Id = uu.UniversityId,
                         Name = uu.UniversityIdNavigation.Name,
-                        Logo = uu.UniversityIdNavigation.Logo,
+                        Icon = uu.UniversityIdNavigation.Icon,
                         Order = uu.Order
                     }).ToList(),
                 AnswersAmount = u.AppUserAnswersInteractions.Where(a => a.AppUserId == uid && a.IsCreator).Count(),
@@ -117,7 +117,7 @@ public class AppUserRepository : IAppUserRepository
                 Birthdate = u.Birthdate,
                 City = u.City,
                 SemanticScholarProfile = u.SemanticScholarProfile,
-                PhoneNumber = u.PhoneNumber,
+                Contact = u.Contact,
                 Titles = u.AppUserTitles
                     .Where(ut => ut.AppUserId == u.Id)
                     .Select(t => new AcademicTitleEntity()
@@ -162,7 +162,7 @@ public class AppUserRepository : IAppUserRepository
                 FirstName = u.FirstName,
                 LastName = u.LastName,
                 Birthdate = u.Birthdate,
-                PhoneNumber = u.PhoneNumber,
+                Contact = u.Contact,
                 City = u.City,
                 AboutText = u.AboutText,
                 Avatar = u.Avatar,
@@ -183,7 +183,7 @@ public class AppUserRepository : IAppUserRepository
         appUser.FirstName = appUserEntity.FirstName;
         appUser.LastName = appUserEntity.LastName;
         appUser.City = appUserEntity.City;
-        appUser.PhoneNumber = appUserEntity.PhoneNumber;
+        appUser.Contact = appUserEntity.Contact;
         appUser.Birthdate = appUserEntity.Birthdate;
         if (isAvatarUpdated)
             appUser.Avatar = appUserEntity.Avatar;
