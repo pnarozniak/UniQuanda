@@ -33,7 +33,7 @@ public class RankingRepository : IRankingRepository
                 Titles = gr.AppUserIdNavigation.AppUserTitles.Select(t => new AcademicTitleEntity()
                 {
                     Name = t.AcademicTitleIdNavigation.Name,
-                    Type = t.AcademicTitleIdNavigation.AcademicTitleType,
+                    AcademicTitleType = t.AcademicTitleIdNavigation.AcademicTitleType,
                     Order = t.Order
                 }),
                 PlaceInRanking = gr.Place,
@@ -65,7 +65,7 @@ public class RankingRepository : IRankingRepository
                     Titles = t.AppUserIdNavigation.AppUserTitles.Select(t => new AcademicTitleEntity()
                     {
                         Name = t.AcademicTitleIdNavigation.Name,
-                        Type = t.AcademicTitleIdNavigation.AcademicTitleType,
+                        AcademicTitleType = t.AcademicTitleIdNavigation.AcademicTitleType,
                         Order = t.Order
                     }),
                     Points = t.Points,

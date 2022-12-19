@@ -17,7 +17,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.AppUser.Settings.GetAllTitlesS
             {
                 TitleId = t.Id,
                 Name = t.Name,
-                Type = t.Type
+                Type = t.AcademicTitleType
             });
         }
     }

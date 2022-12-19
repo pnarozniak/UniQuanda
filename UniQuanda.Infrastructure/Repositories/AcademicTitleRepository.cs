@@ -65,7 +65,7 @@ namespace UniQuanda.Infrastructure.Repositories
                     Id = ut.AcademicTitleId,
                     Name = ut.AcademicTitleIdNavigation.Name,
                     Order = ut.Order,
-                    Type = ut.AcademicTitleIdNavigation.AcademicTitleType
+                    AcademicTitleType = ut.AcademicTitleIdNavigation.AcademicTitleType
                 }).ToListAsync(ct);
         }
 
@@ -122,7 +122,7 @@ namespace UniQuanda.Infrastructure.Repositories
                 {
                     Id = t.Id,
                     Name = t.Name,
-                    Type = t.AcademicTitleType
+                    AcademicTitleType = t.AcademicTitleType
                 }).ToListAsync(ct);
         }
 

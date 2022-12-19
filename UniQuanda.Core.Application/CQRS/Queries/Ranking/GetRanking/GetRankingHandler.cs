@@ -34,7 +34,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Ranking.GetRanking
                     Titles = r.Titles.Select(t => new GetRankingResponseDTOUserAcademicTitle()
                     {
                         Name = t.Name,
-                        AcademicTitleType = t.Type,
+                        AcademicTitleType = t.AcademicTitleType,
                         Order = t.Order
                     })
                 })
@@ -58,7 +58,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Ranking.GetRanking
                     Titles = r.Titles.Select(t => new GetRankingResponseDTOUserAcademicTitle()
                     {
                         Name = t.Name,
-                        AcademicTitleType = t.Type,
+                        AcademicTitleType = t.AcademicTitleType,
                         Order = t.Order
                     })
                 })
