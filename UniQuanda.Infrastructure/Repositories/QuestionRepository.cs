@@ -318,7 +318,7 @@ CancellationToken ct)
             Header = q.Header,
             Content = q.ContentIdNavigation.RawText,
             PublishDate = q.CreatedAt,
-            AmountOfAnswers = q.Answers.Count,
+            AmountOfAnswers = q.Answers.Where(a => a.ParentAnswerId == null).Count(),
             Views = q.ViewsCount,
             Author = q.AppUsersQuestionInteractions.Where(qi => qi.IsCreator).Select(u => new AuthorContent
             {

@@ -11,6 +11,7 @@ namespace UniQuanda.Infrastructure.Repositories;
 public class AnswerRepository : IAnswerRepository
 {
     private readonly AppDbContext _appContext;
+    private const int PageSize = 5;
 
     public AnswerRepository(AppDbContext appContext)
     {
@@ -121,7 +122,7 @@ public class AnswerRepository : IAnswerRepository
         }
     }
 
-    public async Task<IEnumerable<AnswerDetails>> GetQuestionAnswersAsync(int idQuestion, int? idLoggedUser, CancellationToken ct)
+    public async Task<IEnumerable<AnswerDetails>> GetQuestionAnswersAsync(int idQuestion, int page, int? idLoggedUser, CancellationToken ct)
     {
         return await _appContext.Answers.Where(a => a.ParentQuestionId == idQuestion && a.ParentAnswerId == null).OrderByDescending(a => a.IsCorrect).ThenByDescending(a => a.LikeCount).Select(a => new AnswerDetails
         {
@@ -168,7 +169,7 @@ public class AnswerRepository : IAnswerRepository
                     })
                 }).SingleOrDefault()!
             })
-        }).ToListAsync(ct);
+        }).Skip((page - 1) * PageSize).Take(PageSize).ToListAsync(ct);
     }
 
     public async Task<(bool? isSuccess, int? idAuthorPrevCorrectAnswer)> MarkAnswerAsCorrectAsync(int idAnswer, int idLoggedUser, CancellationToken ct)

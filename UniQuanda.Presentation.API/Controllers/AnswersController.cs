@@ -57,9 +57,9 @@ public class AnswersController : ControllerBase
 
     [HttpGet("question/{idQuestion}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetQuestionAnswersResponseDTO))]
-    public async Task<IActionResult> GetQuestionAnswers([FromRoute] int idQuestion, CancellationToken ct)
+    public async Task<IActionResult> GetQuestionAnswers([FromRoute] int idQuestion, [FromQuery] int page, CancellationToken ct)
     {
-        var query = new GetQuestionAnswersQuery(idQuestion, User.GetId());
+        var query = new GetQuestionAnswersQuery(idQuestion, page, User.GetId());
         var result = await _mediator.Send(query, ct);
         return Ok(result);
     }
