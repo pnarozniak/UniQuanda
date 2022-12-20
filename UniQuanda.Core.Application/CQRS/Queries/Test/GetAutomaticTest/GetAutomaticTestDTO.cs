@@ -28,6 +28,7 @@ namespace UniQuanda.Core.Application.CQRS.Commands.Test.GetAutomaticTest
             public int Id { get; set; }
             public string HTML { get; set; }
             public DateTime CreatedAt { get; set; }
+            public int CommentsCount { get; set; }
         }
     }
 }

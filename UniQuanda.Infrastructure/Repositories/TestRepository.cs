@@ -17,8 +17,11 @@ namespace UniQuanda.Infrastructure.Repositories
 		public async Task<IEnumerable<AutomaticTestQuestionEntity>> GetAutomaticTestQuestionsAsync(IEnumerable<int> tagsIds, CancellationToken ct)
 		{
 			return await _context.TagsInQuestions
-                .Where(tq => tagsIds.Contains(tq.TagId) && tq.QuestionIdNavigation.Answers.Any(a => a.IsCorrect))
-                .Take(20)
+                .Where(tq => tagsIds.Contains(tq.TagId) 
+                    || (tq.TagIdNavigation.ParentTagId != null && tagsIds.Contains(tq.TagIdNavigation.ParentTagId.Value)))
+                .Where(tq => tq.QuestionIdNavigation.Answers.Any(a => a.IsCorrect))
+                .OrderBy(tq => Guid.NewGuid())
+                .Take(10)
                 .Select(tq => new AutomaticTestQuestionEntity 
                 {
                     Id = tq.QuestionId,
@@ -30,7 +33,8 @@ namespace UniQuanda.Infrastructure.Repositories
                         .Select(a => new AutomaticTestAnswerEntity {
                             Id = a.Id,
                             HTML = a.ContentIdNavigation.RawText,
-                            CreatedAt = a.CreatedAt
+                            CreatedAt = a.CreatedAt,
+                            CommentsCount = a.Comments.Count()
                         })
                         .SingleOrDefault()!
                 })

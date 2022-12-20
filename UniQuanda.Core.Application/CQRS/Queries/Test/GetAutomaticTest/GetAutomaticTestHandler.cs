@@ -28,9 +28,10 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Test.GetAutomaticTest
 												HTML = q.HTML,
 												Answer = new GetAutomaticTestResponseDTO.AutomaticTestAnswerResponseDTO
 													{
-														Id = q.Id,
-														HTML = q.HTML,
-														CreatedAt = q.CreatedAt,
+														Id = q.Answer.Id,
+														HTML = q.Answer.HTML,
+														CreatedAt = q.Answer.CreatedAt,
+														CommentsCount = q.Answer.CommentsCount
 													}
 										})
 						};
