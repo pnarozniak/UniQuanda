@@ -93,16 +93,56 @@ namespace UniQuanda.Core.Application.Repositories
         /// <returns>Amount of all questions asked by university</returns>
         public Task<int> GetQuestionsOfUniversityCountAsync(int universityId, CancellationToken ct);
 
+        /// <summary>
+        ///     Gets question details
+        /// </summary>
+        /// <param name="idQuestion">Id question</param>
+        /// <param name="idLoggedUser">Id requested user</param>
+        /// <param name="ct">Operation cancellation token</param>
+        /// <returns>QuestionDetailsEntity if exists, otherwise NULL</returns>
         Task<QuestionDetailsEntity?> GetQuestionDetailsAsync(int idQuestion, int? idLoggedUser, CancellationToken ct);
 
-        Task<bool> IsQuestionFollowedByUserAsync(int idQuestion, int idLoggedUser, CancellationToken ct);
+        /// <summary>
+        ///     Check if question is followed by user
+        /// </summary>
+        /// <param name="idQuestion">Id question</param>
+        /// <param name="idUser">Id user</param>
+        /// <param name="ct">Operation cancellation token</param>
+        /// <returns>Result if question is followed by user</returns>
+        Task<bool> IsQuestionFollowedByUserAsync(int idQuestion, int idUser, CancellationToken ct);
 
+        /// <summary>
+        ///     Update question view value
+        /// </summary>
+        /// <param name="idQuestion">Id Question</param>
+        /// <param name="idLoggedUser">Id of user which visited question page</param>
+        /// <param name="ct">Operation cancellation token</param>
+        /// <returns>Result of update view is successful</returns>
         Task<bool> CreateOrUpdateQuestionViewFromAppUserAsync(int idQuestion, int idLoggedUser, CancellationToken ct);
 
+        /// <summary>
+        ///     Update question follow
+        /// </summary>
+        /// <param name="idQuestion">Id question</param>
+        /// <param name="idLoggedUser">Id of logged user</param>
+        /// <param name="ct">Operation cancellation token</param>
+        /// <returns>Result of update follow question is successful</returns>
         Task<bool> UpdateQuestionFollowStatusAsync(int idQuestion, int idLoggedUser, CancellationToken ct);
 
+        /// <summary>
+        ///     Delete question
+        /// </summary>
+        /// <param name="idQuestion">Id question</param>
+        /// <param name="idLoggedUser">Id of logged user</param>
+        /// <param name="ct">Operation cancellation token</param>
+        /// <returns>Enum DeleteQuestionResultEnum</returns>
         Task<DeleteQuestionResultEnum> DeleteQuestionAsync(int idQuestion, int idLoggedUser, CancellationToken ct);
 
+        /// <summary>
+        ///     Update question views count
+        /// </summary>
+        /// <param name="idQuestion">Id question</param>
+        /// <param name="ct">Operation cancellation token</param>
         Task UpdateQuestionViewsCountAsync(int idQuestion, CancellationToken ct);
 
         Task<QuestionDetailsEntity?> GetQuestionDetailsForUpdateAsync(int idQuestion, int idLoggedUser, CancellationToken ct);
