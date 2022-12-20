@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -14,9 +15,10 @@ using UniQuanda.Infrastructure.Presistence.AppDb;
 namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221220150504_FixedTitleHeaderLenght")]
+    partial class FixedTitleHeaderLenght
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -508,6 +510,11 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         new
                         {
                             Id = 3,
+                            Name = "solve-automatic-test"
+                        },
+                        new
+                        {
+                            Id = 4,
                             Name = "solve-course"
                         });
                 });
@@ -725,6 +732,12 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         new
                         {
                             Id = 2,
+                            PermissionId = 3,
+                            RoleId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
                             AllowedUsages = 3,
                             LimitRefreshPeriod = 604800,
                             PermissionId = 1,
@@ -732,13 +745,27 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 3,
+                            Id = 4,
+                            AllowedUsages = 1,
+                            LimitRefreshPeriod = 86400,
+                            PermissionId = 3,
+                            RoleId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
                             PermissionId = 1,
                             RoleId = 3
                         },
                         new
                         {
-                            Id = 4,
+                            Id = 6,
+                            PermissionId = 3,
+                            RoleId = 3
+                        },
+                        new
+                        {
+                            Id = 7,
                             AllowedUsages = 5,
                             LimitRefreshPeriod = 604800,
                             PermissionId = 1,
@@ -746,11 +773,25 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 5,
+                            Id = 8,
+                            PermissionId = 3,
+                            RoleId = 4
+                        },
+                        new
+                        {
+                            Id = 9,
                             AllowedUsages = 3,
                             LimitRefreshPeriod = 604800,
                             PermissionId = 1,
-                            RoleId = 3
+                            RoleId = 5
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AllowedUsages = 1,
+                            LimitRefreshPeriod = 86400,
+                            PermissionId = 3,
+                            RoleId = 5
                         });
                 });
 

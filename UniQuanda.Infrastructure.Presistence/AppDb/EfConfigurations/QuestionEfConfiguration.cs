@@ -10,7 +10,7 @@ public class QuestionEfConfiguration : IEntityTypeConfiguration<Question>
     {
         builder.HasKey(q => q.Id);
         builder.Property(q => q.Id).ValueGeneratedOnAdd();
-        builder.Property(q => q.Header).IsRequired().HasMaxLength(500);
+        builder.Property(q => q.Header).IsRequired().HasMaxLength(300);
         builder.Property(q => q.CreatedAt).IsRequired();
         builder.Property(q => q.ViewsCount).IsRequired().HasDefaultValue(0);
 
