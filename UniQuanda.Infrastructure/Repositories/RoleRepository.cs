@@ -21,8 +21,20 @@ namespace UniQuanda.Infrastructure.Repositories
             var usage = await _context.PermissionUsageByUsers
                 .Where(pu => pu.AppUserId == userId && pu.PermissionIdNavigation.Name == permission)
                 .FirstOrDefaultAsync(ct);
-
-            usage.UsedTimes += 1;
+            if (usage == null)
+            {
+                usage = new PermissionUsageByUser()
+                {
+                    AppUserId = userId,
+                    PermissionId = await _context.Permissions.Where(p => p.Name == permission).Select(p => p.Id).FirstOrDefaultAsync(ct),
+                    UsedTimes = 1
+                };
+                await _context.PermissionUsageByUsers.AddAsync(usage, ct);
+            } else
+            {
+                usage.UsedTimes += 1;
+            }
+            
             return await _context.SaveChangesAsync(ct) >= 1;
         }
 

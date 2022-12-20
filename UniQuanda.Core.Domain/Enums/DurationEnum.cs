@@ -2,7 +2,6 @@
 {
     public enum DurationEnum
     {
-        Top5Users = 300,
         UserProfileTopTags = 300,
         UserProfileQuestions = 300,
         UserProfileAnswers = 300,
