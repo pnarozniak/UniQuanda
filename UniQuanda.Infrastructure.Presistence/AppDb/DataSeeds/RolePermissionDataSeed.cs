@@ -17,13 +17,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds
                 },
                 new RolePermission()
                 {
-                    Id=2,
-                    RoleId = 1,
-                    PermissionId = 3,
-                },
-                new RolePermission()
-                {
-                    Id = 3,
+                    Id = 2,
                     RoleId = 2,
                     PermissionId = 1,
                     LimitRefreshPeriod = 604800,
@@ -31,27 +25,13 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds
                 },
                 new RolePermission()
                 {
-                    Id =4,
-                    RoleId = 2,
-                    PermissionId = 3,
-                    LimitRefreshPeriod = 86400,
-                    AllowedUsages = 1
-                },
-                new RolePermission()
-                {
-                    Id =5,
+                    Id = 3,
                     RoleId = 3,
                     PermissionId = 1,
                 },
                 new RolePermission()
                 {
-                    Id =6,
-                    RoleId = 3,
-                    PermissionId = 3,
-                },
-                new RolePermission()
-                {
-                    Id = 7,
+                    Id = 4,
                     RoleId = 4,
                     PermissionId = 1,
                     LimitRefreshPeriod = 604800,
@@ -59,25 +39,11 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds
                 },
                 new RolePermission()
                 {
-                    Id = 8,
-                    RoleId = 4,
-                    PermissionId = 3
-                },
-                new RolePermission()
-                {
-                    Id = 9,
-                    RoleId = 5,
+                    Id = 5,
+                    RoleId = 3,
                     PermissionId = 1,
                     LimitRefreshPeriod = 604800,
                     AllowedUsages = 3
-                },
-                new RolePermission()
-                {
-                    Id = 10,
-                    RoleId = 5,
-                    PermissionId = 3,
-                    LimitRefreshPeriod = 86400,
-                    AllowedUsages = 1
                 }
             );
             

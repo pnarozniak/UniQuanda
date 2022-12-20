@@ -16,12 +16,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Ranking.GetTop5Users
 
         public async Task<GetTop5UsersResponseDTO> Handle(GetTop5UsersQuery request, CancellationToken ct)
         {
-            var top5Users = await _rankingRepository.GetTop5UsersFromCacheAsync(ct);
-            if (top5Users is null)
-            {
-                top5Users = await _rankingRepository.GetTop5UsersAsync(ct);
-                await _rankingRepository.SaveTop5UsersToCacheAsync(top5Users, ct);
-            }
+            var top5Users = await _rankingRepository.GetTop5UsersAsync(ct);
             return new GetTop5UsersResponseDTO()
             {
                 Top5Users = top5Users.Select(u => new AppUserInRankingResponseDTO

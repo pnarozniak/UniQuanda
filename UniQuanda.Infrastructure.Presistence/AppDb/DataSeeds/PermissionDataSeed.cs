@@ -22,11 +22,6 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds
                 new Permission()
                 {
                     Id = 3,
-                    Name = "solve-automatic-test",
-                },
-                new Permission()
-                {
-                    Id = 4,
                     Name = "solve-course",
                 }
             );

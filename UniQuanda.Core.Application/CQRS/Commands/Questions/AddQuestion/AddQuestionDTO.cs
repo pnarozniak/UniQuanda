@@ -11,7 +11,7 @@ namespace UniQuanda.Core.Application.CQRS.Commands.Questions.AddQuestion
         ///     Question title
         /// </summary>
         [Required]
-        [StringLength(100, MinimumLength = 5)]
+        [StringLength(300, MinimumLength = 5)]
         public string Title { get; set; }
 
         /// <summary>
