@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 
@@ -23,7 +22,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds
                 },
                 new Role()
                 {
-                    Id =3,
+                    Id = 3,
                     Name = AppRole.Premium,
                 },
                 new Role()

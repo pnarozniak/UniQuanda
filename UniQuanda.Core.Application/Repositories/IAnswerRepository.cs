@@ -34,7 +34,7 @@ public interface IAnswerRepository
         DateTime creationTime,
         CancellationToken ct);
 
-    Task<IEnumerable<AnswerDetails>> GetQuestionAnswersAsync(int idQuestion, int page, int? idLoggedUser, CancellationToken ct);
+    Task<IEnumerable<AnswerDetails>> GetQuestionAnswersAsync(int idQuestion, int page, int? idComment, int? idLoggedUser, CancellationToken ct);
 
     Task<(bool? isSuccess, int? idAuthorPrevCorrectAnswer)> MarkAnswerAsCorrectAsync(int idAnswer, int idLoggedUser, CancellationToken ct);
 

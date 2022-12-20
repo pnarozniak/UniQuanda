@@ -44,7 +44,7 @@ public class ConfirmOAuthRegisterHandler : IRequestHandler<ConfirmOAuthRegisterC
             var addEduRole = false;
             if (regex.IsMatch(user?.Emails.ToList()[0].Value ?? ""))
             {
-                await _universityRepository.AddUserToUniversityAsync(idUser?? 0, university.Id, ct);
+                await _universityRepository.AddUserToUniversityAsync(idUser ?? 0, university.Id, ct);
                 addEduRole = true;
             }
             if (addEduRole)
@@ -53,7 +53,7 @@ public class ConfirmOAuthRegisterHandler : IRequestHandler<ConfirmOAuthRegisterC
             }
         }
         var authRoles = new List<AuthRole>() { new AuthRole() { Value = AuthRole.OAuthAccount } };
-        var appRoles = await _roleRepository.GetNotExpiredUserRolesAsync(idUser ?? 0,ct);
+        var appRoles = await _roleRepository.GetNotExpiredUserRolesAsync(idUser ?? 0, ct);
 
         await this._emailService.SendOAuthRegisterSuccessEmail(user.Emails.Where(e => e.IsMain).SingleOrDefault()!.Value);
         return new ConfirmOAuthRegisterResponseDTO

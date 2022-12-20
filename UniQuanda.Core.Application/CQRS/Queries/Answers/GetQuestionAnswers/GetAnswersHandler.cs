@@ -16,7 +16,7 @@ public class GetAnswersHandler : IRequestHandler<GetQuestionAnswersQuery, GetQue
     {
         return new GetQuestionAnswersResponseDTO
         {
-            Answers = await _answerRepository.GetQuestionAnswersAsync(request.IdQuestion, request.Page, request.IdLoggedUser, ct)
+            Answers = await _answerRepository.GetQuestionAnswersAsync(request.IdQuestion, request.Page, request.IdComment, request.IdLoggedUser, ct)
         };
     }
 }

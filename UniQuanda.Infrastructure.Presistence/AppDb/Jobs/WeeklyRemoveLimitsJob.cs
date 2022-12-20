@@ -15,14 +15,16 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Jobs
         {
             var tran = await _context.Database.BeginTransactionAsync();
             var weeklyEnum = (int)DurationEnum.OneWeek;
-            try { 
+            try
+            {
                 await _context.Database.ExecuteSqlInterpolatedAsync($@"
                     UPDATE uniquanda.""PermissionUsageByUsers"" SET ""UsedTimes"" = 0 WHERE ""PermissionId"" IN (
 	                    SELECT ""PermissionId"" FROM uniquanda.""RolePermissions"" WHERE ""LimitRefreshPeriod"" = {weeklyEnum}
                     );
                 ");
                 await tran.CommitAsync();
-            } catch
+            }
+            catch
             {
                 await tran.RollbackAsync();
             }

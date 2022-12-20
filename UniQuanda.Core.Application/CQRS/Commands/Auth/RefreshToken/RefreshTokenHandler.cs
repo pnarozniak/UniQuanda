@@ -34,9 +34,9 @@ public class RefreshTokenHandler : IRequestHandler<RefreshTokenCommand, RefreshT
         var isTokenValid = dbUser.RefreshTokenExp > DateTime.UtcNow;
         if (!isTokenValid) return null;
 
-        var authRoles = new List<AuthRole>() {};
+        var authRoles = new List<AuthRole>() { };
         authRoles.Add(dbUser.IsOAuthUser ? new AuthRole() { Value = AuthRole.OAuthAccount } : new AuthRole() { Value = AuthRole.UniquandaAccount });
-        var appRoles = await _roleRepository.GetNotExpiredUserRolesAsync(idUser??0, ct);
+        var appRoles = await _roleRepository.GetNotExpiredUserRolesAsync(idUser ?? 0, ct);
 
         var accessToken = _tokensService.GenerateAccessToken(dbUser.Id, appRoles, authRoles);
         var (refreshToken, refreshTokenExp) = _tokensService.GenerateRefreshToken();

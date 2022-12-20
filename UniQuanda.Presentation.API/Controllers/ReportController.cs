@@ -13,7 +13,7 @@ namespace UniQuanda.Presentation.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles =AppRole.User)]
+    [Authorize(Roles = AppRole.User)]
     public class ReportController : ControllerBase
     {
         private readonly IMediator _mediator;

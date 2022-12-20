@@ -16,7 +16,7 @@ public class HandlePremiumPaymentStatusHandler : IRequestHandler<HandlePremiumPa
     private readonly IRoleRepository _roleRepository;
 
     public HandlePremiumPaymentStatusHandler(
-        IPremiumPaymentRepository premiumPaymentRepository, IPaymentService paymentService, 
+        IPremiumPaymentRepository premiumPaymentRepository, IPaymentService paymentService,
         ITokensService tokensService, IAuthRepository authRepository, IRoleRepository roleRepository)
     {
         _premiumPaymentRepository = premiumPaymentRepository;
@@ -51,7 +51,7 @@ public class HandlePremiumPaymentStatusHandler : IRequestHandler<HandlePremiumPa
         var user = await _authRepository.GetUserByIdAsync(request.IdUser, ct);
         if (user == null)
             return new() { Status = HandlePremiumPaymentStatusResultEnum.ContentNotExist };
-        
+
         var authRoles = new List<AuthRole>() { };
         authRoles.Add(user.IsOAuthUser ? new AuthRole() { Value = AuthRole.OAuthAccount } : new AuthRole() { Value = AuthRole.UniquandaAccount });
         var appRoles = await _roleRepository.GetNotExpiredUserRolesAsync(request.IdUser, ct);
