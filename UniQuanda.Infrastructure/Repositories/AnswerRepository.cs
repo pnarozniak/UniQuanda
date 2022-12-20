@@ -269,7 +269,7 @@ public class AnswerRepository : IAnswerRepository
     public async Task<UpdateAnswerLikeValueEntity> UpdateAnswerLikeValueAsync(int idAnswer, int likeValue, int idLoggedUser, CancellationToken ct)
     {
         var answer = await _appContext.Answers.Include(a => a.AppUsersAnswerInteractions).SingleOrDefaultAsync(a => a.Id == idAnswer, ct);
-        if (answer == null || answer.AppUsersAnswerInteractions.Any(ai => ai.AppUserId == idLoggedUser && ai.AnswerId == idAnswer))
+        if (answer == null || answer.AppUsersAnswerInteractions.Any(ai => ai.AppUserId == idLoggedUser && ai.AnswerId == idAnswer && ai.IsCreator))
             return new UpdateAnswerLikeValueEntity { IsUpdateSuccessful = null };
 
         var answerInteraction = await _appContext.AppUsersAnswersInteractions.SingleOrDefaultAsync(ai => ai.AppUserId == idLoggedUser && ai.AnswerId == idAnswer, ct);
