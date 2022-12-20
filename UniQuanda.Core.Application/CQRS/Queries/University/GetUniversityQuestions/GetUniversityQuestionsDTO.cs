@@ -18,7 +18,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.University.GetUniversityQuesti
         ///     How many items should response have
         /// </summary>
         [Required]
-        [Range(1,20)]
+        [Range(1, 20)]
         public int PageSize { get; set; }
         /// <summary>
         ///     Should response contain total size of questions asked by 

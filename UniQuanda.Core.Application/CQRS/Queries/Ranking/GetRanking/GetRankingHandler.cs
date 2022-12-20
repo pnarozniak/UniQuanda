@@ -1,5 +1,4 @@
 using MediatR;
-using UniQuanda.Core.Application.CQRS.Queries.Auth.GetReportTypes;
 using UniQuanda.Core.Application.Repositories;
 
 namespace UniQuanda.Core.Application.CQRS.Queries.Ranking.GetRanking
@@ -35,7 +34,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Ranking.GetRanking
                     Titles = r.Titles.Select(t => new GetRankingResponseDTOUserAcademicTitle()
                     {
                         Name = t.Name,
-                        AcademicTitleType = t.Type,
+                        AcademicTitleType = t.AcademicTitleType,
                         Order = t.Order
                     })
                 })
@@ -44,8 +43,8 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Ranking.GetRanking
 
         private async Task<GetRankingResponseDTO> GetTagRanking(GetRankingQuery request, CancellationToken ct)
         {
-            var ranking = await _rankingRepository.GetTagRankingUsersAsync(request.TagId ?? 0, request.Page, request.Take,ct);
-            int? count = request.AddCount ? await _rankingRepository.GetTagRankingCountAsync(request.TagId ??0, ct) : null;
+            var ranking = await _rankingRepository.GetTagRankingUsersAsync(request.TagId ?? 0, request.Page, request.Take, ct);
+            int? count = request.AddCount ? await _rankingRepository.GetTagRankingCountAsync(request.TagId ?? 0, ct) : null;
             return new()
             {
                 PagesCount = count != null ? (int)Math.Ceiling((double)count / request.Take) : null,
@@ -59,7 +58,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Ranking.GetRanking
                     Titles = r.Titles.Select(t => new GetRankingResponseDTOUserAcademicTitle()
                     {
                         Name = t.Name,
-                        AcademicTitleType = t.Type,
+                        AcademicTitleType = t.AcademicTitleType,
                         Order = t.Order
                     })
                 })

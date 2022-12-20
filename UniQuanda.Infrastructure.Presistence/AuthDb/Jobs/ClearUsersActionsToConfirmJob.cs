@@ -5,7 +5,7 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Jobs;
 
 public class ClearUsersActionsToConfirmJob : IJob
 {
-    private AuthDbContext _authDbContext;
+    private readonly AuthDbContext _authDbContext;
     public ClearUsersActionsToConfirmJob(AuthDbContext authDbContext)
     {
         _authDbContext = authDbContext;

@@ -38,7 +38,7 @@ namespace UniQuanda.Presentation.API.Controllers
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetRankingResponseDTO))]
         [HttpGet("page")]
-        public async Task<IActionResult> GetRankingPage([FromQuery]GetRankingRequestDTO request,CancellationToken ct)
+        public async Task<IActionResult> GetRankingPage([FromQuery] GetRankingRequestDTO request, CancellationToken ct)
         {
             var query = new GetRankingQuery(request);
             var response = await this._mediator.Send(query, ct);

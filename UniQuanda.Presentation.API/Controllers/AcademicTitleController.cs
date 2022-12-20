@@ -72,7 +72,7 @@ namespace UniQuanda.Presentation.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = AppRole.User)]
         [HttpPut("titles-order")]
-        public async Task<IActionResult> SetOrderOfTitles([FromBody] IEnumerable<ChangeTitleOrderRequestDTO> request ,CancellationToken ct)
+        public async Task<IActionResult> SetOrderOfTitles([FromBody] IEnumerable<ChangeTitleOrderRequestDTO> request, CancellationToken ct)
         {
             var command = new ChangeTitleOrderCommand(request, User.GetId()!.Value);
             var result = await _mediator.Send(command, ct);
@@ -86,7 +86,7 @@ namespace UniQuanda.Presentation.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = AppRole.User)]
         [HttpPost("add-request")]
-        public async Task<IActionResult> AddRequestForTitles([FromForm] AddTitleRequestRequestDTO request,CancellationToken ct)
+        public async Task<IActionResult> AddRequestForTitles([FromForm] AddTitleRequestRequestDTO request, CancellationToken ct)
         {
             var command = new AddTitleRequestCommand(request, User.GetId()!.Value);
             var result = await _mediator.Send(command, ct);

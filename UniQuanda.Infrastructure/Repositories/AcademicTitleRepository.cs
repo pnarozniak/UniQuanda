@@ -65,7 +65,7 @@ namespace UniQuanda.Infrastructure.Repositories
                     Id = ut.AcademicTitleId,
                     Name = ut.AcademicTitleIdNavigation.Name,
                     Order = ut.Order,
-                    Type = ut.AcademicTitleIdNavigation.AcademicTitleType
+                    AcademicTitleType = ut.AcademicTitleIdNavigation.AcademicTitleType
                 }).ToListAsync(ct);
         }
 
@@ -88,10 +88,10 @@ namespace UniQuanda.Infrastructure.Repositories
                     CreatedAt = tr.CreatedAt,
                     AdditionalInfo = tr.AdditionalInfo,
                     User = new AppUserEntity()
-                        {
-                            Id = tr.AppUserId,
-                            Nickname = tr.AppIdNavigationUser.Nickname
-                        },
+                    {
+                        Id = tr.AppUserId,
+                        Nickname = tr.AppIdNavigationUser.Nickname
+                    },
                     Title = new AcademicTitleEntity()
                     {
                         Id = tr.AcademicTitleId,
@@ -122,7 +122,7 @@ namespace UniQuanda.Infrastructure.Repositories
                 {
                     Id = t.Id,
                     Name = t.Name,
-                    Type = t.AcademicTitleType
+                    AcademicTitleType = t.AcademicTitleType
                 }).ToListAsync(ct);
         }
 
@@ -134,13 +134,13 @@ namespace UniQuanda.Infrastructure.Repositories
                     Id = tr.Id,
                     Title = new AcademicTitleEntity()
                     {
-                        Id = tr.AcademicTitleId        
+                        Id = tr.AcademicTitleId
                     },
                     User = new AppUserEntity()
                     {
                         Id = tr.AppUserId
                     }
-                    
+
                 }).SingleOrDefaultAsync(ct);
         }
 
@@ -176,7 +176,8 @@ namespace UniQuanda.Infrastructure.Repositories
                 await _context.SaveChangesAsync(ct);
                 await tran.CommitAsync(ct);
                 return true;
-            } catch
+            }
+            catch
             {
                 await tran.RollbackAsync(ct);
                 return false;
@@ -197,10 +198,10 @@ namespace UniQuanda.Infrastructure.Repositories
                 _context.AppUsersTitles.Remove(titleToRemove);
 
             var intOrder = order;
-            if(intOrder == null)
+            if (intOrder == null)
             {
                 var result = await _context.AppUsersTitles.Where(t => t.AppUserId == userId).OrderByDescending(t => t.Order).Select(t => t.Order).FirstOrDefaultAsync(ct);
-                intOrder = result == 0 ? 1 : result+1;
+                intOrder = result == 0 ? 1 : result + 1;
             }
 
             await _context.AppUsersTitles.AddAsync(new AppUserTitle()

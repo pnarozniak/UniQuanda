@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using UniQuanda.Core.Domain.Enums;
-
-namespace UniQuanda.Core.Application.CQRS.Queries.Tags.GetTags
+﻿namespace UniQuanda.Core.Application.CQRS.Queries.Tags.GetTags
 {
     public class GetNamesByIdsRequestDTO
     {

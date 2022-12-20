@@ -13,8 +13,8 @@ namespace UniQuanda.Core.Application.CQRS.Commands.AppUser.Settings.ChangeTitleO
         public async Task<bool> Handle(ChangeTitleOrderCommand request, CancellationToken ct)
         {
             var curentUserTitles = await _academicTitleRepository.GetAcademicTitlesOfUserAsync(request.UserId, ct);
-            if (request.TitlesWithOrders.Values.Any(providedUserTitle => 
-                !curentUserTitles.Any(title => 
+            if (request.TitlesWithOrders.Values.Any(providedUserTitle =>
+                !curentUserTitles.Any(title =>
                     title.Id == providedUserTitle)
                 )
              || request.TitlesWithOrders.Values.Count != curentUserTitles.ToList().Count)

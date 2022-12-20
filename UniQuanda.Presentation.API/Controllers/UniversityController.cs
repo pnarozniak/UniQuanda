@@ -26,7 +26,7 @@ namespace UniQuanda.Presentation.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUniversity([FromRoute] int id, CancellationToken ct)
         {
-            var query = new GetUniversityQuery(new GetUniversityRequestDTO(){ Id = id });
+            var query = new GetUniversityQuery(new GetUniversityRequestDTO() { Id = id });
             var university = await _mediator.Send(query, ct);
             return university != null ? Ok(university) : NotFound();
         }

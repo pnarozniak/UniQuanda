@@ -4,7 +4,8 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Ranking.GetRanking;
 
 public class GetRankingQuery : IRequest<GetRankingResponseDTO>
 {
-    public GetRankingQuery(GetRankingRequestDTO request) {
+    public GetRankingQuery(GetRankingRequestDTO request)
+    {
         var pageSize = 10;
         Page = request.Page;
         AddCount = request.AddPagesCount;

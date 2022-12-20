@@ -13,7 +13,8 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Jobs
         public async Task Execute(IJobExecutionContext context)
         {
             var tran = await _context.Database.BeginTransactionAsync();
-            try { 
+            try
+            {
                 await _context.Database.ExecuteSqlRawAsync("TRUNCATE uniquanda.\"GlobalRankings\"");
                 await _context.Database.ExecuteSqlRawAsync(@"
                     INSERT INTO uniquanda.""GlobalRankings"" (""Place"", ""AppUserId"", ""Points"")
@@ -23,7 +24,8 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Jobs
                      ORDER BY SUM(""Points"") DESC
                 ");
                 await tran.CommitAsync();
-            } catch
+            }
+            catch
             {
                 await tran.RollbackAsync();
             }

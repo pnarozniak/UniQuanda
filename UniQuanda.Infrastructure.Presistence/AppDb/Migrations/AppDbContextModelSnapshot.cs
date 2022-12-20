@@ -270,6 +270,9 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.Property<bool>("IsCreator")
                         .HasColumnType("boolean");
 
+                    b.Property<int>("LikeValue")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AnswerId");

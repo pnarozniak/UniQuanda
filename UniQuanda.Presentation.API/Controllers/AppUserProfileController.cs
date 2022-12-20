@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniQuanda.Core.Application.CQRS.Commands.AppUser.Profile.UpdateAppUserProfile;
 using UniQuanda.Core.Application.CQRS.Queries.AppUser.Profile.GetAppUserProfileSettings;
+using UniQuanda.Core.Application.CQRS.Queries.Profile.GetAnswersProfile;
 using UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile;
 using UniQuanda.Core.Application.CQRS.Queries.Profile.GetQuestionsProfile;
 using UniQuanda.Core.Domain.Enums;

@@ -5,7 +5,7 @@ namespace UniQuanda.Infrastructure.Presistence.AuthDb.Jobs;
 
 public class ClearTempUsersJob : IJob
 {
-    private AuthDbContext _authDbContext;
+    private readonly AuthDbContext _authDbContext;
     public ClearTempUsersJob(AuthDbContext authDbContext)
     {
         _authDbContext = authDbContext;

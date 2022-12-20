@@ -41,7 +41,7 @@ namespace UniQuanda.Core.Application.Repositories
         /// <param name="createdAt">Time of creation</param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public Task<bool> AddAcademicTitleRequestForUserAsync(int id,int uid, string imageUrl, int titleId, string? additionalInfo, DateTime createdAt, CancellationToken ct);
+        public Task<bool> AddAcademicTitleRequestForUserAsync(int id, int uid, string imageUrl, int titleId, string? additionalInfo, DateTime createdAt, CancellationToken ct);
 
         /// <summary>
         ///    Gets all academic titles that have Type != Academic

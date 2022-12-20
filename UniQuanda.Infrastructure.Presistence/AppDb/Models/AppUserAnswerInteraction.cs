@@ -6,6 +6,7 @@ public class AppUserAnswerInteraction
     public int AnswerId { get; set; }
     public int AppUserId { get; set; }
     public bool IsCreator { get; set; }
+    public int LikeValue { get; set; }
     public virtual Answer AnswerIdNavigation { get; set; }
     public virtual AppUser AppUserIdNavigation { get; set; }
 }

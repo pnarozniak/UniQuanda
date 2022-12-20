@@ -53,5 +53,9 @@ public interface IAppUserRepository
     /// <param name="idUser">Id user to check</param>
     /// <param name="ct">Operation cancellation token</param>
     /// <returns></returns>
-    Task<bool> HasUserPremium(int idUser, CancellationToken ct);
+    Task<bool> HasUserPremiumAsync(int idUser, CancellationToken ct);
+
+    Task UpdateAppUserPointsForLikeValueInTagsAsync(int idAnswer, int LikesIncreasedBy, CancellationToken ct);
+
+    Task UpdateAppUserPointsForCorrectAnswerInTagsAsync(int idAnswer, int? idAuthorPrevCorrectAnswer, CancellationToken ct);
 }
