@@ -176,7 +176,7 @@ public class AnswerRepository : IAnswerRepository
         }).Skip((page - 1) * PageSize).Take(PageSize).ToListAsync(ct);
     }
 
-    public async Task<(bool? isSuccess, int? idAuthorPrevCorrectAnswer)> MarkAnswerAsCorrectAsync(int idAnswer, int idLoggedUser, CancellationToken ct)
+    public async Task<(bool? isSuccess, int? idAuthorPrevCorrectAnswer)> UpdateAnswerCorrectnessAsync(int idAnswer, int idLoggedUser, CancellationToken ct)
     {
         var answer = await _appContext.Answers.SingleOrDefaultAsync(a => a.Id == idAnswer, ct);
         if (answer == null || answer.ParentAnswerId != null)
