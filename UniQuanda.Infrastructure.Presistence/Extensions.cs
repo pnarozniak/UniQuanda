@@ -65,6 +65,22 @@ public static class Extensions
                 .WithIdentity("CalculateGlobalRankingJob-Trigger")
                 .WithCronSchedule(quartzJobsSchedulesOptions.AppDb.CalculateGlobalRanking)
             );
+
+            var dailyRemoveLimitsJob = new JobKey("DailyRemoveLimitsJob");
+            q.AddJob<DailyRemoveLimitsJob>(opts => opts.WithIdentity(dailyRemoveLimitsJob));
+            q.AddTrigger(opts => opts
+                .ForJob(dailyRemoveLimitsJob)
+                .WithIdentity("DailyRemoveLimitsJob-Trigger")
+                .WithCronSchedule(quartzJobsSchedulesOptions.AppDb.DailyRemoveLimits)
+            );
+
+            var weeklyRemoveLimitsJob = new JobKey("WeeklyRemoveLimitsJob");
+            q.AddJob<WeeklyRemoveLimitsJob>(opts => opts.WithIdentity(weeklyRemoveLimitsJob));
+            q.AddTrigger(opts => opts
+                .ForJob(weeklyRemoveLimitsJob)
+                .WithIdentity("WeeklyRemoveLimitsJob-Trigger")
+                .WithCronSchedule(quartzJobsSchedulesOptions.AppDb.WeeklyRemoveLimits)
+            );
         });
         services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
