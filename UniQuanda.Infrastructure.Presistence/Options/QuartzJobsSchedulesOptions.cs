@@ -33,7 +33,11 @@ public class AppDbQuartzJobsSchedulesOptions
     public AppDbQuartzJobsSchedulesOptions(IConfigurationSection section)
     {
         CalculateGlobalRanking = section["CalculateGlobalRanking"];
+        DailyRemoveLimits = section["DailyRemoveLimits"];
+        WeeklyRemoveLimits = section["WeeklyRemoveLimits"];
     }
 
     public string CalculateGlobalRanking { get; set; }
+    public string DailyRemoveLimits { get; set; }
+    public string WeeklyRemoveLimits { get; set; }
 }

@@ -17,14 +17,6 @@ public interface IPremiumPaymentRepository
     Task<bool> AddPremiumPaymentAsync(OrderCreateResponse order, decimal price, int idUser, CancellationToken ct);
 
     /// <summary>
-    ///     Return user premium information
-    /// </summary>
-    /// <param name="idUser">Id user</param>
-    /// <param name="ct">Operation cancellation token</param>
-    /// <returns>AppUser with information about premium. null if user not found</returns>
-    Task<UserEntity?> GetUserPremiumInfoAsync(int idUser, CancellationToken ct);
-
-    /// <summary>
     ///     Check if is any payment with status NEW
     /// </summary>
     /// <param name="idUser">Id user</param>

@@ -474,6 +474,124 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.ToTable("ImagesInContent");
                 });
 
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Permission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Permissions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "ask-question"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "create-course"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "solve-automatic-test"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "solve-course"
+                        });
+                });
+
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.PermissionUsageByUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UsedTimes")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("PermissionId");
+
+                    b.ToTable("PermissionUsageByUsers");
+                });
+
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.PremiumPayment", b =>
+                {
+                    b.Property<string>("IdPayment")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("IdTransaction")
+                        .HasColumnType("text");
+
+                    b.Property<int>("IdUser")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("PaymentDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PaymentUrl")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("numeric(5,2)");
+
+                    b.Property<DateTime?>("ValidUntil")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("IdPayment");
+
+                    b.HasIndex("IdPayment")
+                        .IsUnique();
+
+                    b.HasIndex("IdUser");
+
+                    b.HasIndex("PaymentUrl")
+                        .IsUnique();
+
+                    b.ToTable("PremiumPayments");
+                });
+
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Product", b =>
                 {
                     b.Property<ProductTypeEnum>("ProductType")
@@ -524,6 +642,155 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         .IsUnique();
 
                     b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "user"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "premium"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "eduUser"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "titledUser"
+                        });
+                });
+
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.RolePermission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AllowedUsages")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LimitRefreshPeriod")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PermissionId");
+
+                    b.HasIndex("RoleId", "PermissionId")
+                        .IsUnique();
+
+                    b.ToTable("RolePermissions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            PermissionId = 1,
+                            RoleId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            PermissionId = 3,
+                            RoleId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AllowedUsages = 3,
+                            LimitRefreshPeriod = 604800,
+                            PermissionId = 1,
+                            RoleId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AllowedUsages = 1,
+                            LimitRefreshPeriod = 86400,
+                            PermissionId = 3,
+                            RoleId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            PermissionId = 1,
+                            RoleId = 3
+                        },
+                        new
+                        {
+                            Id = 6,
+                            PermissionId = 3,
+                            RoleId = 3
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AllowedUsages = 5,
+                            LimitRefreshPeriod = 604800,
+                            PermissionId = 1,
+                            RoleId = 4
+                        },
+                        new
+                        {
+                            Id = 8,
+                            PermissionId = 3,
+                            RoleId = 4
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AllowedUsages = 3,
+                            LimitRefreshPeriod = 604800,
+                            PermissionId = 1,
+                            RoleId = 5
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AllowedUsages = 1,
+                            LimitRefreshPeriod = 86400,
+                            PermissionId = 3,
+                            RoleId = 5
+                        });
                 });
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Tag", b =>
@@ -2765,6 +3032,46 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.ToTable("UsersPointsInTags");
                 });
 
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.UserRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("ValidUnitl")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("UserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AppUserId = 1,
+                            RoleId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AppUserId = 1,
+                            RoleId = 2
+                        });
+                });
+
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AuthDb.Models.Report", b =>
                 {
                     b.Property<int>("Id")
@@ -3042,6 +3349,36 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.Navigation("ImageIdNavigation");
                 });
 
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.PermissionUsageByUser", b =>
+                {
+                    b.HasOne("UniQuanda.Infrastructure.Presistence.AppDb.Models.AppUser", "AppUserIdNavigation")
+                        .WithMany("UsedLimitsByUsers")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniQuanda.Infrastructure.Presistence.AppDb.Models.Permission", "PermissionIdNavigation")
+                        .WithMany("PermissionUsageByUsers")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUserIdNavigation");
+
+                    b.Navigation("PermissionIdNavigation");
+                });
+
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.PremiumPayment", b =>
+                {
+                    b.HasOne("UniQuanda.Infrastructure.Presistence.AppDb.Models.AppUser", "IdUserNavigation")
+                        .WithMany("PremiumPayments")
+                        .HasForeignKey("IdUser")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("IdUserNavigation");
+                });
+
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Question", b =>
                 {
                     b.HasOne("UniQuanda.Infrastructure.Presistence.AppDb.Models.Content", "ContentIdNavigation")
@@ -3051,6 +3388,25 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         .IsRequired();
 
                     b.Navigation("ContentIdNavigation");
+                });
+
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.RolePermission", b =>
+                {
+                    b.HasOne("UniQuanda.Infrastructure.Presistence.AppDb.Models.Permission", "PermissionIdNavigation")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniQuanda.Infrastructure.Presistence.AppDb.Models.Role", "RoleIdNavigation")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PermissionIdNavigation");
+
+                    b.Navigation("RoleIdNavigation");
                 });
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Tag", b =>
@@ -3128,6 +3484,25 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.Navigation("TagIdNavigation");
                 });
 
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.UserRole", b =>
+                {
+                    b.HasOne("UniQuanda.Infrastructure.Presistence.AppDb.Models.AppUser", "AppUserIdNavigation")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniQuanda.Infrastructure.Presistence.AppDb.Models.Role", "RoleIdNavigation")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUserIdNavigation");
+
+                    b.Navigation("RoleIdNavigation");
+                });
+
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AuthDb.Models.Report", b =>
                 {
                     b.HasOne("UniQuanda.Infrastructure.Presistence.AuthDb.Models.ReportType", "ReportTypeIdNavigation")
@@ -3198,11 +3573,17 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.Navigation("GlobalRankingNavigation")
                         .IsRequired();
 
+                    b.Navigation("PremiumPayments");
+
                     b.Navigation("Reports");
 
                     b.Navigation("TitleRequests");
 
+                    b.Navigation("UsedLimitsByUsers");
+
                     b.Navigation("UserPointsInTags");
+
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Content", b =>
@@ -3224,6 +3605,13 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Permission", b =>
+                {
+                    b.Navigation("PermissionUsageByUsers");
+
+                    b.Navigation("RolePermissions");
+                });
+
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Question", b =>
                 {
                     b.Navigation("Answers");
@@ -3233,6 +3621,13 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.Navigation("Reports");
 
                     b.Navigation("TagsInQuestion");
+                });
+
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Role", b =>
+                {
+                    b.Navigation("RolePermissions");
+
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Tag", b =>

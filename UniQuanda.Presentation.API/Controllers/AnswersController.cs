@@ -8,7 +8,7 @@ using UniQuanda.Core.Application.CQRS.Commands.Answers.UpdateAnswer;
 using UniQuanda.Core.Application.CQRS.Commands.Answers.UpdateAnswerLikeValue;
 using UniQuanda.Core.Application.CQRS.Queries.Answers.GetAllComments;
 using UniQuanda.Core.Application.CQRS.Queries.Answers.GetQuestionAnswers;
-using UniQuanda.Infrastructure.Enums;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Presentation.API.Attributes;
 using UniQuanda.Presentation.API.Extensions;
 
@@ -27,7 +27,7 @@ public class AnswersController : ControllerBase
 
     [HttpPost]
     [Recaptcha]
-    [Authorize(Roles = JwtTokenRole.User)]
+    [Authorize(Roles = AppRole.User)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AddAnswerResponseDTO))]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> AddAnswer([FromBody] AddAnswerRequestDTO request, CancellationToken ct)
@@ -39,7 +39,7 @@ public class AnswersController : ControllerBase
 
     [HttpPut]
     [Recaptcha]
-    [Authorize(Roles = JwtTokenRole.User)]
+    [Authorize(Roles = AppRole.User)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -75,7 +75,7 @@ public class AnswersController : ControllerBase
 
 
     [HttpPut("correct/{idAnswer}")]
-    [Authorize(Roles = JwtTokenRole.User)]
+    [Authorize(Roles = AppRole.User)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -93,7 +93,7 @@ public class AnswersController : ControllerBase
 
 
     [HttpPut("like-value")]
-    [Authorize(Roles = JwtTokenRole.User)]
+    [Authorize(Roles = AppRole.User)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -110,7 +110,7 @@ public class AnswersController : ControllerBase
     }
 
     [HttpDelete("{idAnswer}")]
-    [Authorize(Roles = JwtTokenRole.User)]
+    [Authorize(Roles = AppRole.User)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]

@@ -40,7 +40,7 @@ public static class Extensions
         services.AddScoped<ISearchRepository, SearchRepository>();
         services.AddScoped<IUniversityRepository, UniversityRepository>();
         services.AddScoped<IAcademicTitleRepository, AcademicTitleRepository>();
-        services.AddScoped<IQuestionRepository, QuestionRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IAnswerRepository, AnswerRepository>();
 
         // Services

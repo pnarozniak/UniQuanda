@@ -5,6 +5,7 @@ using UniQuanda.Core.Application.CQRS.Commands.Report.CreateReport;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.CreateReport;
 using UniQuanda.Core.Application.CQRS.Queries.Auth.GetReportTypes;
 using UniQuanda.Core.Application.CQRS.Queries.Report.GetReportTypes;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Presentation.API.Attributes;
 using UniQuanda.Presentation.API.Extensions;
 
@@ -12,7 +13,7 @@ namespace UniQuanda.Presentation.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "user")]
+    [Authorize(Roles =AppRole.User)]
     public class ReportController : ControllerBase
     {
         private readonly IMediator _mediator;

@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using UniQuanda.Core.Application.Shared.Models;
 using UniQuanda.Core.Application.Validators;
+using UniQuanda.Core.Domain.Enums.Results;
+
 namespace UniQuanda.Core.Application.CQRS.Commands.Questions.AddQuestion
 {
     public class AddQuestionRequestDTO : IContent
@@ -37,6 +39,6 @@ namespace UniQuanda.Core.Application.CQRS.Commands.Questions.AddQuestion
     public class AddQuestionResponseDTO
     {
         public int? QuestionId { get; set; }
-        public string? Status { get; set; }
+        public AskQuestionResultEnum Status { get; set; }
     }
 }

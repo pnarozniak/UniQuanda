@@ -4,6 +4,7 @@ using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Domain.Entities.App;
 using UniQuanda.Core.Domain.Enums;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 using UniQuanda.Infrastructure.Presistence.AuthDb;
@@ -241,12 +242,14 @@ public class AppUserRepository : IAppUserRepository
             .AnyAsync(u => EF.Functions.ILike(u.Nickname, nickname), ct);
     }
 
-    public async Task<bool?> HasUserPremiumAsync(int idUser, CancellationToken ct)
+    public async Task<bool> HasUserPremiumAsync(int idUser, CancellationToken ct)
     {
-        var user = await _authContext.Users.SingleOrDefaultAsync(u => u.Id == idUser, ct);
-        if (user is null)
-            return null;
-        return user.HasPremiumUntil > DateTime.UtcNow;
+        var role = await _appContext.UserRoles.Where(
+            ur => ur.AppUserId == idUser && ur.RoleIdNavigation.Name == AppRole.Premium)
+            .SingleOrDefaultAsync(ct);
+        if (role is null)
+            return false;
+        return role.ValidUnitl > DateTime.UtcNow;
     }
 
     public async Task UpdateAppUserPointsForLikeValueInTagsAsync(int idAnswer, int LikesIncreasedBy, CancellationToken ct)

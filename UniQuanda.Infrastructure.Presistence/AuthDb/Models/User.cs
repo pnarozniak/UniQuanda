@@ -9,12 +9,9 @@ public class User
     public string HashedPassword { get; set; }
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExp { get; set; }
-    public DateTime? HasPremiumUntil { get; set; }
-    public bool IsAdmin { get; set; }
 
     public virtual OAuthUser? IdOAuthUserNavigation { get; set; }
     public virtual TempUser IdTempUserNavigation { get; set; }
     public virtual ICollection<UserEmail> Emails { get; set; }
     public virtual ICollection<UserActionToConfirm> ActionsToConfirm { get; set; }
-    public virtual ICollection<PremiumPayment> PremiumPayments { get; set; }
 }
