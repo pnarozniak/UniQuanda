@@ -11,13 +11,13 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds
             builder.HasData(
                 new RolePermission()
                 {
-                    Id=1,
+                    Id = 1,
                     RoleId = 1,
                     PermissionId = 1,
                 },
                 new RolePermission()
                 {
-                    Id=2,
+                    Id = 2,
                     RoleId = 1,
                     PermissionId = 3,
                 },
@@ -31,7 +31,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds
                 },
                 new RolePermission()
                 {
-                    Id =4,
+                    Id = 4,
                     RoleId = 2,
                     PermissionId = 3,
                     LimitRefreshPeriod = 86400,
@@ -39,13 +39,13 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds
                 },
                 new RolePermission()
                 {
-                    Id =5,
+                    Id = 5,
                     RoleId = 3,
                     PermissionId = 1,
                 },
                 new RolePermission()
                 {
-                    Id =6,
+                    Id = 6,
                     RoleId = 3,
                     PermissionId = 3,
                 },
@@ -80,7 +80,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds
                     AllowedUsages = 1
                 }
             );
-            
+
         }
     }
 }

@@ -1,7 +1,6 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,7 +40,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ConfirmOAuthRegister
             this.roleRepository = new Mock<IRoleRepository>();
 
             this.tokensService
-                .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny <IEnumerable<AppRoleEntity>>(), It.IsAny<IEnumerable<AuthRole>>()))
+                .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny<IEnumerable<AppRoleEntity>>(), It.IsAny<IEnumerable<AuthRole>>()))
                 .Returns(accessToken);
 
             this.universityRepository

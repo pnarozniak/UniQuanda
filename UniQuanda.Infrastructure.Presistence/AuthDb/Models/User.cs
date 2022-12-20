@@ -1,5 +1,3 @@
-using UniQuanda.Infrastructure.Presistence.AppDb.Models;
-
 namespace UniQuanda.Infrastructure.Presistence.AuthDb.Models;
 
 public class User

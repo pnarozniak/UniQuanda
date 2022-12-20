@@ -47,7 +47,7 @@ namespace UniQuanda.Infrastructure.Repositories
                 previousRole.ValidUnitl = validUntil;
                 _context.UserRoles.Update(previousRole);
             }
-            
+
             return await _context.SaveChangesAsync(ct) != 0;
         }
 
@@ -57,7 +57,7 @@ namespace UniQuanda.Infrastructure.Repositories
             var rolesSettings = await _context.RolePermissions
                 .Join(_context.UserRoles, rp => rp.RoleId, ur => ur.RoleId, (rp, ur) => new { rp, ur })
                 .Where(x => x.rp.PermissionIdNavigation.Name == permission && x.ur.AppUserId == userId)
-                .Select(x => new { maxAmount = x.rp.AllowedUsages, refreshPeriod = x.rp.LimitRefreshPeriod })            
+                .Select(x => new { maxAmount = x.rp.AllowedUsages, refreshPeriod = x.rp.LimitRefreshPeriod })
                 .ToListAsync(ct);
 
             if (rolesSettings.Count == 0)
@@ -68,7 +68,7 @@ namespace UniQuanda.Infrastructure.Repositories
             var closestClearInterval = rolesSettings.OrderBy(rs => rs.refreshPeriod).First().refreshPeriod;
             var maxAmount = rolesSettings.OrderByDescending(rs => rs.maxAmount).First().maxAmount;
             var usage = await _context.PermissionUsageByUsers.Where(pu => pu.PermissionIdNavigation.Name == permission && pu.AppUserId == userId).SingleOrDefaultAsync(ct);
-            if(usage == null)
+            if (usage == null)
             {
                 usage = new PermissionUsageByUser()
                 {
@@ -80,7 +80,7 @@ namespace UniQuanda.Infrastructure.Repositories
                 await _context.SaveChangesAsync();
             }
             var usedAmount = usage.UsedTimes;
-            return (maxAmount, usedAmount, (DurationEnum) closestClearInterval);
+            return (maxAmount, usedAmount, (DurationEnum)closestClearInterval);
         }
 
         public async Task<IEnumerable<AppRoleEntity>> GetNotExpiredUserRolesAsync(int userId, CancellationToken ct)

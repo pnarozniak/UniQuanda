@@ -25,7 +25,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.EfConfigurations
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasIndex(rp => new { rp.RoleId, rp.PermissionId }).IsUnique();
-            
+
         }
     }
 }

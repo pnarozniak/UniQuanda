@@ -125,9 +125,9 @@ public class AnswerRepository : IAnswerRepository
     public async Task<IEnumerable<AnswerDetails>> GetQuestionAnswersAsync(int idQuestion, int page, int? idComment, int? idLoggedUser, CancellationToken ct)
     {
         int numberOfComments = 3;
-        if(idComment != null)
-            numberOfComments = await _appContext.Answers.Where(a => a.Id == idComment && a.ParentQuestionId == idQuestion).Select(a => a.ParentAnswerIdNavigation.Comments.Count ).SingleOrDefaultAsync(ct);
-            
+        if (idComment != null)
+            numberOfComments = await _appContext.Answers.Where(a => a.Id == idComment && a.ParentQuestionId == idQuestion).Select(a => a.ParentAnswerIdNavigation.Comments.Count).SingleOrDefaultAsync(ct);
+
         return await _appContext.Answers.Where(a => a.ParentQuestionId == idQuestion && a.ParentAnswerId == null).OrderByDescending(a => a.IsCorrect).ThenByDescending(a => a.LikeCount).Select(a => new AnswerDetails
         {
             Id = a.Id,

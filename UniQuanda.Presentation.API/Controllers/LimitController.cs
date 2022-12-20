@@ -27,7 +27,7 @@ namespace UniQuanda.Presentation.API.Controllers
         [HttpGet("question-add")]
         public async Task<IActionResult> GetAskQuestionPermissionsUsages(CancellationToken ct)
         {
-            var query = new AskQuestionPermission(User.GetId()??0);
+            var query = new AskQuestionPermission(User.GetId() ?? 0);
             var result = await _mediator.Send(query, ct);
             return Ok(result);
         }

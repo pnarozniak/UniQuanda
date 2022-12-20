@@ -13,7 +13,7 @@ public class CreatePremiumPaymentHandler : IRequestHandler<CreatePremiumPaymentC
     private readonly IAuthRepository _authRepository;
 
     public CreatePremiumPaymentHandler(
-        IPaymentService paymentService, IProductRepository productRepository, 
+        IPaymentService paymentService, IProductRepository productRepository,
         IPremiumPaymentRepository premiumPaymentRepository,
         IAuthRepository authRepository)
     {

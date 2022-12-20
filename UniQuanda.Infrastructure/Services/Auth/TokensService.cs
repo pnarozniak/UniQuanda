@@ -61,16 +61,16 @@ public class TokensService : ITokensService
             _options.AccessToken.ValidIssuer,
             _options.AccessToken.ValidAudience,
             userClaims,
-            expires: GenerateExpirationTime(appRoles.Select(r=> r.ValidUntil)),
+            expires: GenerateExpirationTime(appRoles.Select(r => r.ValidUntil)),
             signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
         );
-        
+
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
     private DateTime GenerateExpirationTime(IEnumerable<DateTime?>? roleExpirationDates = null)
     {
         if (roleExpirationDates == null) return DateTime.UtcNow.AddMinutes(_options.AccessToken.ValidityInMinutes);
-        var closetDate = roleExpirationDates.Where(r=> r != null).OrderBy(r => r).FirstOrDefault();
+        var closetDate = roleExpirationDates.Where(r => r != null).OrderBy(r => r).FirstOrDefault();
         if (closetDate == null) return DateTime.UtcNow.AddMinutes(_options.AccessToken.ValidityInMinutes);
         var minutesOfValid = (closetDate - DateTime.UtcNow)?.TotalMinutes ?? 0;
         if (minutesOfValid > _options.AccessToken.ValidityInMinutes)
