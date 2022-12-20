@@ -1,4 +1,6 @@
-﻿namespace UniQuanda.Core.Application.Services.Auth;
+﻿using UniQuanda.Core.Domain.Entities.App;
+using UniQuanda.Core.Domain.Utils;
+namespace UniQuanda.Core.Application.Services.Auth;
 
 public interface ITokensService
 {
@@ -24,7 +26,7 @@ public interface ITokensService
     ///     Generates access token for given user
     /// </summary>
     /// <returns>Access token as string</returns>
-    string GenerateAccessToken(int idUser, DateTime? hasPremiumUntil, bool isOAuthUser = false, bool isAdmin = false);
+    string GenerateAccessToken(int idUser, IEnumerable<AppRoleEntity> appRoles, IEnumerable<AuthRole> authRoles);
 
     /// <summary>
     ///     Validates access token, without its lifetime and parses its claims.

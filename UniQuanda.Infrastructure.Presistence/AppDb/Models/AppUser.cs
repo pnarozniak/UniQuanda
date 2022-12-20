@@ -24,4 +24,7 @@ public class AppUser
     public virtual ICollection<Report> Reports { get; set; }
     public virtual ICollection<TitleRequest> TitleRequests { get; set; }
     public virtual GlobalRanking GlobalRankingNavigation { get; set; }
+    public virtual ICollection<PermissionUsageByUser> UsedLimitsByUsers { get; set; }
+    public virtual ICollection<UserRole> UserRoles { get; set; }
+    public virtual ICollection<PremiumPayment> PremiumPayments { get; set; }
 }

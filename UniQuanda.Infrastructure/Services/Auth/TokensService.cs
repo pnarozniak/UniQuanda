@@ -3,7 +3,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using UniQuanda.Core.Application.Services.Auth;
-using UniQuanda.Infrastructure.Enums;
+using UniQuanda.Core.Domain.Entities.App;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Infrastructure.Options;
 
 namespace UniQuanda.Infrastructure.Services.Auth;
@@ -38,19 +39,20 @@ public class TokensService : ITokensService
         return Guid.NewGuid().ToString();
     }
 
-    public string GenerateAccessToken(int idUser, DateTime? hasPremiumUntil, bool isOAuthUser = false, bool isAdmin = false)
+    public string GenerateAccessToken(int idUser, IEnumerable<AppRoleEntity> appRoles, IEnumerable<AuthRole> authRoles)
     {
-        var isActivePremium = hasPremiumUntil != null && hasPremiumUntil > DateTime.UtcNow;
         var userClaims = new List<Claim>
         {
-            new(ClaimTypes.NameIdentifier, idUser.ToString()),
-            new Claim(ClaimTypes.Role, JwtTokenRole.User),
-            new Claim(ClaimTypes.Role, isOAuthUser ? JwtTokenRole.OAuthAccount : JwtTokenRole.UniquandaAccount)
+            new Claim(ClaimTypes.NameIdentifier, idUser.ToString()),
         };
-        if (isActivePremium)
-            userClaims.Add(new Claim(ClaimTypes.Role, JwtTokenRole.Premium));
-        if (isAdmin)
-            userClaims.Add(new Claim(ClaimTypes.Role, JwtTokenRole.Admin));
+        foreach (var authRole in authRoles)
+        {
+            userClaims.Add(new Claim(ClaimTypes.Role, authRole.Value));
+        }
+        foreach (var appRole in appRoles)
+        {
+            userClaims.Add(new Claim(ClaimTypes.Role, appRole.Name.Value));
+        }
 
         var key = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(_options.AccessToken.SecretKey));
@@ -59,16 +61,18 @@ public class TokensService : ITokensService
             _options.AccessToken.ValidIssuer,
             _options.AccessToken.ValidAudience,
             userClaims,
-            expires: isActivePremium ? GetExpirationToken(hasPremiumUntil!.Value) : DateTime.UtcNow.AddMinutes(_options.AccessToken.ValidityInMinutes),
+            expires: GenerateExpirationTime(appRoles.Select(r=> r.ValidUntil)),
             signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
         );
-
+        
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
-
-    private DateTime GetExpirationToken(DateTime hasPremiumUntil)
+    private DateTime GenerateExpirationTime(IEnumerable<DateTime?>? roleExpirationDates = null)
     {
-        var minutesOfValid = (hasPremiumUntil - DateTime.UtcNow).TotalMinutes;
+        if (roleExpirationDates == null) return DateTime.UtcNow.AddMinutes(_options.AccessToken.ValidityInMinutes);
+        var closetDate = roleExpirationDates.Where(r=> r != null).OrderBy(r => r).FirstOrDefault();
+        if (closetDate == null) return DateTime.UtcNow.AddMinutes(_options.AccessToken.ValidityInMinutes);
+        var minutesOfValid = (closetDate - DateTime.UtcNow)?.TotalMinutes ?? 0;
         if (minutesOfValid > _options.AccessToken.ValidityInMinutes)
             return DateTime.UtcNow.AddMinutes(_options.AccessToken.ValidityInMinutes);
         return DateTime.UtcNow.AddMinutes(minutesOfValid);

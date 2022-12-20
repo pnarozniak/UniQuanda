@@ -8,8 +8,9 @@ using UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile;
 using UniQuanda.Core.Application.CQRS.Queries.Profile.GetQuestionsProfile;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Core.Domain.Enums.Results;
-using UniQuanda.Infrastructure.Enums;
 using UniQuanda.Presentation.API.Extensions;
+using UniQuanda.Core.Application.CQRS.Queries.Profile.GetAnswersProfile;
+using UniQuanda.Core.Domain.Utils;
 
 namespace UniQuanda.Presentation.API.Controllers;
 
@@ -47,7 +48,7 @@ public class AppUserProfileController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet("settings")]
-    [Authorize(Roles = JwtTokenRole.User)]
+    [Authorize(Roles = AppRole.User)]
     public async Task<IActionResult> GetAppUserProfileSettings(
         CancellationToken ct)
     {
@@ -66,7 +67,7 @@ public class AppUserProfileController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(UpdateAppUserProfileResponseDTO))]
     [HttpPut("settings")]
     [RequestSizeLimit(21 * (int)ByteSizeEnum.MegaByte)]
-    [Authorize(Roles = JwtTokenRole.User)]
+    [Authorize(Roles = AppRole.User)]
     public async Task<IActionResult> UpdateAppUserProfileSettings(
         [FromForm] UpdateAppUserProfileRequestDTO request,
         CancellationToken ct)

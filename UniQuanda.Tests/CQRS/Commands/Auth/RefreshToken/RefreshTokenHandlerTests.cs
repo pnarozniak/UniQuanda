@@ -2,13 +2,16 @@
 using Moq;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.ConfirmRegister;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.RefreshToken;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services.Auth;
+using UniQuanda.Core.Domain.Entities.App;
 using UniQuanda.Core.Domain.Entities.Auth;
+using UniQuanda.Core.Domain.Utils;
 
 namespace UniQuanda.Tests.CQRS.Commands.Auth.RecoverPassword;
 
@@ -20,10 +23,11 @@ public class RefreshTokenHandlerTests
     {
         authRepository = new Mock<IAuthRepository>();
         tokensService = new Mock<ITokensService>();
+        roleRepository = new Mock<IRoleRepository>();
 
         refreshTokenCommand = new RefreshTokenCommand(new RefreshTokenRequestDTO
         { AccessToken = AccessToken, RefreshToken = RefreshToken });
-        refreshTokenHandler = new RefreshTokenHandler(authRepository.Object, tokensService.Object);
+        refreshTokenHandler = new RefreshTokenHandler(authRepository.Object, tokensService.Object, roleRepository.Object);
     }
 
     private const string RefreshToken = "RefreshToken";
@@ -33,6 +37,7 @@ public class RefreshTokenHandlerTests
     private RefreshTokenHandler refreshTokenHandler;
     private Mock<IAuthRepository> authRepository;
     private Mock<ITokensService> tokensService;
+    private Mock<IRoleRepository> roleRepository;
 
     [Test]
     public async Task RefreshToken_ShouldReturnNull_WhenAccessTokenIsInvalid()
@@ -114,7 +119,7 @@ public class RefreshTokenHandlerTests
             .Returns(new Tuple<string, DateTime>(newRefreshToken, newRefreshTokenExp));
 
         tokensService
-            .Setup(ts => ts.GenerateAccessToken(userEntity.Id, It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<bool>()))
+            .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny<IEnumerable<AppRoleEntity>>(), It.IsAny<IEnumerable<AuthRole>>()))
             .Returns(newAccessToken);
 
         authRepository

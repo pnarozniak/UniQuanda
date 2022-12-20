@@ -19,9 +19,6 @@ public class UserEfConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.RefreshToken).IsRequired(false);
         builder.Property(u => u.RefreshTokenExp).IsRequired(false);
 
-        builder.Property(u => u.HasPremiumUntil).IsRequired(false);
-        builder.Property(u => u.IsAdmin).IsRequired(true).HasDefaultValue(false);
-
         builder
             .HasOne(u => u.IdTempUserNavigation)
             .WithOne(tu => tu.IdUserNavigation)
@@ -43,8 +40,6 @@ public class UserEfConfiguration : IEntityTypeConfiguration<User>
                     Id = 1, Nickname = "Programista",
                     HashedPassword = "$2a$12$bIkUNGSkHjgVl80kICadyezV4AgRo6oMwuIEC3X9ian.d7a6xJRIe",
                     RefreshToken = null, RefreshTokenExp = null,
-                    HasPremiumUntil = null,
-                    IsAdmin = true
                 } //Password "Admin1234"
             };
 

@@ -10,17 +10,22 @@ public class CreatePremiumPaymentHandler : IRequestHandler<CreatePremiumPaymentC
     private readonly IPaymentService _paymentService;
     private readonly IProductRepository _productRepository;
     private readonly IPremiumPaymentRepository _premiumPaymentRepository;
+    private readonly IAuthRepository _authRepository;
 
-    public CreatePremiumPaymentHandler(IPaymentService paymentService, IProductRepository productRepository, IPremiumPaymentRepository premiumPaymentRepository)
+    public CreatePremiumPaymentHandler(
+        IPaymentService paymentService, IProductRepository productRepository, 
+        IPremiumPaymentRepository premiumPaymentRepository,
+        IAuthRepository authRepository)
     {
         _paymentService = paymentService;
         _productRepository = productRepository;
         _premiumPaymentRepository = premiumPaymentRepository;
+        _authRepository = authRepository;
     }
 
     public async Task<CreatePremiumPaymentResponseDTO> Handle(CreatePremiumPaymentCommand request, CancellationToken ct)
     {
-        var dbUser = await _premiumPaymentRepository.GetUserPremiumInfoAsync(request.IdUser, ct);
+        var dbUser = await _authRepository.GetUserByIdAsync(request.IdUser, ct);
         if (dbUser == null)
             return new() { Status = CreatePremiumPaymentResultEnum.ContentNotExist };
 
