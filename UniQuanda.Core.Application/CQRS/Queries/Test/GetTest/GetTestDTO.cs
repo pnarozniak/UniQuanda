@@ -6,9 +6,9 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Test.GetTest
         public DateTime CreatedAt { get; set; }
         public bool IsFinished { get; set; }
         public IEnumerable<TestQuestionResponseDTO> Questions { get; set; }
-        public IEnumerable<TestTagResponseDTO> Tags { get; set; }
+        public IEnumerable<GetTestResponseDTOTag> Tags { get; set; }
 
-        public class TestTagResponseDTO
+        public class GetTestResponseDTOTag
         {
             public int Id { get; set; }
             public string Name { get; set; }

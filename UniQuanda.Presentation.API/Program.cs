@@ -81,6 +81,8 @@ if (app.Environment.IsProduction())
     app.UseHttpsRedirection();
 }
 
+app.UseLogger();
+
 app.UseCORS();
 
 app.UseRecaptcha();

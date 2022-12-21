@@ -40,7 +40,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds
                 new RolePermission()
                 {
                     Id = 5,
-                    RoleId = 3,
+                    RoleId = 5,
                     PermissionId = 1,
                     LimitRefreshPeriod = 604800,
                     AllowedUsages = 3

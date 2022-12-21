@@ -52,6 +52,7 @@ public class AppDbContext : DbContext
     public virtual DbSet<RolePermission> RolePermissions { get; set; }
     public virtual DbSet<UserRole> UserRoles { get; set; }
     public virtual DbSet<PremiumPayment> PremiumPayments { get; set; }
+    public virtual DbSet<Log> Logs { get; set; }
     public IEnumerable<object> AppUserRoles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -85,6 +86,7 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new RolePermissionEfConfiguration());
         modelBuilder.ApplyConfiguration(new UserRoleEfConfiguration());
         modelBuilder.ApplyConfiguration(new PremiumPaymentEfConfiguration());
+        modelBuilder.ApplyConfiguration(new LogEfConfiguration());
 
         modelBuilder.HasPostgresEnum<AcademicTitleEnum>();
         modelBuilder.HasPostgresEnum<ReportCategoryEnum>();

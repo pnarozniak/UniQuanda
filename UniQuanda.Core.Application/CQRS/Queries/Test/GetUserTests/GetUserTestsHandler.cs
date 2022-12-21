@@ -22,8 +22,8 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Test.GetUserTests
 										Id = t.Id,
 										CreatedAt = t.CreatedAt,
 										IsFinished = t.IsFinished,
-										Tags = t.Tags!.Select(t => new GetUserTestsResponseDTO.TestTagResponseDTO
-										{
+										Tags = t.Tags!.Select(t => new GetUserTestsResponseDTO.GetUserTestsResponseDTOTag
+                                        {
 												Id = t.Id,
 												Name = t.Name,
 										})

@@ -474,6 +474,47 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.ToTable("ImagesInContent");
                 });
 
+            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Log", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Body")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Client")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Endpoint")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Exception")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Headers")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("QueryParams")
+                        .HasColumnType("text");
+
+                    b.Property<string>("StackTrace")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Logs");
+                });
+
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Permission", b =>
                 {
                     b.Property<int>("Id")
@@ -750,7 +791,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                             AllowedUsages = 3,
                             LimitRefreshPeriod = 604800,
                             PermissionId = 1,
-                            RoleId = 3
+                            RoleId = 5
                         });
                 });
 

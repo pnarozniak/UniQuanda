@@ -54,6 +54,7 @@ public static class Extensions
         services.AddScoped<IOAuthService, OAuthService>();
         services.AddScoped<IHtmlService, HtmlService>();
         services.AddScoped<IPaymentService, PayUService>();
+        services.AddScoped<ILoggerService, LoggerService>();
 
         // Cache
         services.AddStackExchangeRedisCache(options =>
