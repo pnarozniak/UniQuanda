@@ -36,8 +36,8 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Test.GetTest
 														CommentsCount = q.Answer.CommentsCount
 													}
 										}),
-									Tags = test.Tags!.Select(t => new GetTestResponseDTO.TestTagResponseDTO
-									{
+									Tags = test.Tags!.Select(t => new GetTestResponseDTO.GetTestResponseDTOTag
+                                    {
 											Id = t.Id,
 											Name = t.Name,
 									})

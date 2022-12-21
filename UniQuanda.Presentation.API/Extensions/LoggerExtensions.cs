@@ -1,4 +1,5 @@
-﻿using UniQuanda.Presentation.API.Middlewares;
+﻿using UniQuanda.Core.Application.Services;
+using UniQuanda.Presentation.API.Middlewares;
 
 namespace UniQuanda.Presentation.API.Extensions
 {
@@ -7,7 +8,6 @@ namespace UniQuanda.Presentation.API.Extensions
         public static IApplicationBuilder UseLogger(this IApplicationBuilder app)
         {
             app.UseMiddleware<LogMiddleware>();
-    /*        app.UseMiddleware<NLogRequestPostedBodyMiddleware>();*/
             return app;
         }
     }

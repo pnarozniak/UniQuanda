@@ -13,7 +13,7 @@ namespace UniQuanda.Infrastructure.Services
             _context = context;
         }
 
-        public async Task LogAppErrorAsync(Exception ex, string headers, string endpoint, string? body, string? client)
+        public async Task LogAppErrorAsync(Exception ex, string headers, string endpoint, string? body, string? client, string? queryParams)
         {
             var log = new Log
             {
@@ -23,6 +23,7 @@ namespace UniQuanda.Infrastructure.Services
                 Body = body,
                 Headers = headers,
                 Client = client,
+                QueryParams = queryParams,
                 CreatedAt = DateTime.UtcNow
             };
 

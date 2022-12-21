@@ -5,15 +5,12 @@ namespace UniQuanda.Presentation.API.Middlewares
     public class LogMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILoggerService _logger;
-
-        public LogMiddleware(RequestDelegate next, ILoggerService logger)
+        public LogMiddleware(RequestDelegate next)
         {
             _next = next;
-            _logger = logger;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, ILoggerService logger)
         {
             try
             {
@@ -25,7 +22,8 @@ namespace UniQuanda.Presentation.API.Middlewares
                 var headersAsString = context.Request.Headers.Select(x => $"{x.Key}: {x.Value}").Aggregate((x, y) => $"{x}, {y}");
                 var endpoint = context.Request.Path;
                 var client = context.Connection.RemoteIpAddress.ToString();
-                await _logger.LogAppErrorAsync(ex, headersAsString, endpoint, body, client);
+                var queryParams = context.Request.QueryString.Value;
+                await logger.LogAppErrorAsync(ex, headersAsString, endpoint, body, client, queryParams);
                 throw ex;
             }
         }

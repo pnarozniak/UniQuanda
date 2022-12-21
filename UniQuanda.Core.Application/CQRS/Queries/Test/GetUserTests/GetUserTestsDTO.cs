@@ -9,10 +9,10 @@ namespace UniQuanda.Core.Application.CQRS.Commands.Test.GetUserTests
             public int Id { get; set; }
             public DateTime CreatedAt { get; set; }
             public bool IsFinished { get; set; }
-            public IEnumerable<TestTagResponseDTO> Tags { get; set; }
+            public IEnumerable<GetUserTestsResponseDTOTag> Tags { get; set; }
         }
 
-        public class TestTagResponseDTO
+        public class GetUserTestsResponseDTOTag
         {
             public int Id { get; set; }
             public string Name { get; set; }

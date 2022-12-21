@@ -503,6 +503,9 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("QueryParams")
+                        .HasColumnType("text");
+
                     b.Property<string>("StackTrace")
                         .IsRequired()
                         .HasColumnType("text");

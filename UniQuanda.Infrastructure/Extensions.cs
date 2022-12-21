@@ -43,7 +43,6 @@ public static class Extensions
         services.AddScoped<IAcademicTitleRepository, AcademicTitleRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IAnswerRepository, AnswerRepository>();
-        services.AddScoped<ILoggerService, LoggerService>();
 
         // Services
         services.AddScoped<IPasswordsService, PasswordsService>();
@@ -55,6 +54,7 @@ public static class Extensions
         services.AddScoped<IOAuthService, OAuthService>();
         services.AddScoped<IHtmlService, HtmlService>();
         services.AddScoped<IPaymentService, PayUService>();
+        services.AddScoped<ILoggerService, LoggerService>();
 
         // Cache
         services.AddStackExchangeRedisCache(options =>

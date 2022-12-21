@@ -8,6 +8,7 @@
         public string Endpoint { get; set; }
         public string? Body { get; set; }
         public string? Client { get; set; }
+        public string? QueryParams { get; set; }
         public string Headers { get; set; }
         public DateTime CreatedAt { get; set; }
     }
