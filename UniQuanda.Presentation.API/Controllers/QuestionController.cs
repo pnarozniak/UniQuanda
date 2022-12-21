@@ -11,7 +11,7 @@ using UniQuanda.Core.Application.CQRS.Queries.Questions.GetQuestionDetails;
 using UniQuanda.Core.Application.CQRS.Queries.Questions.GetQuestionDetailsForUpdate;
 using UniQuanda.Core.Application.CQRS.Queries.Questions.GetQuestions;
 using UniQuanda.Core.Domain.Enums.Results;
-using UniQuanda.Infrastructure.Enums;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Presentation.API.Extensions;
 
 namespace UniQuanda.Presentation.API.Controllers
@@ -34,14 +34,24 @@ namespace UniQuanda.Presentation.API.Controllers
         /// <param name="ct">Cancellation token</param>
         /// <returns>Id of added question if success, status info otherwise</returns>
         [HttpPost]
-        [Authorize(Roles = JwtTokenRole.User)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AddQuestionResponseDTO))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(AddQuestionResponseDTO))]
+        [Authorize(Roles = AppRole.User)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+
         public async Task<IActionResult> AddContent([FromBody] AddQuestionRequestDTO request, CancellationToken ct)
         {
             var command = new AddQuestionCommand(request, User.GetId()!.Value);
             var result = await this._mediator.Send(command, ct);
-            return result.QuestionId != null ? Ok(result) : BadRequest(result);
+            if (result.Status == AskQuestionResultEnum.QuestionAsked)
+                return Ok(result.QuestionId);
+            if (result.Status == AskQuestionResultEnum.PermissionDenied) return Unauthorized();
+            if (result.Status == AskQuestionResultEnum.LimitsExceeded) return Forbid();
+            if (result.Status == AskQuestionResultEnum.TagsNotFound) return BadRequest("Tags not found");
+            return Conflict();
+
         }
 
         /// <summary>
@@ -72,7 +82,7 @@ namespace UniQuanda.Presentation.API.Controllers
         }
 
         [HttpPut("follow/{idQuestion}")]
-        [Authorize(Roles = JwtTokenRole.User)]
+        [Authorize(Roles = AppRole.User)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> FollowQuestion([FromRoute] int idQuestion, CancellationToken ct)
@@ -83,7 +93,7 @@ namespace UniQuanda.Presentation.API.Controllers
         }
 
         [HttpDelete("{idQuestion}")]
-        [Authorize(Roles = JwtTokenRole.User)]
+        [Authorize(Roles = AppRole.User)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -111,7 +121,7 @@ namespace UniQuanda.Presentation.API.Controllers
         }
 
         [HttpGet("update/{idQuestion}")]
-        [Authorize(Roles = JwtTokenRole.User)]
+        [Authorize(Roles = AppRole.User)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetQuestionDetailsForUpdateResponseDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetQuestionDetailsForUpdate([FromRoute] int idQuestion, CancellationToken ct)
@@ -124,7 +134,7 @@ namespace UniQuanda.Presentation.API.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = JwtTokenRole.User)]
+        [Authorize(Roles = AppRole.User)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]

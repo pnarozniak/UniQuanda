@@ -41,7 +41,7 @@ public static class Extensions
         services.AddScoped<ITestRepository, TestRepository>();
         services.AddScoped<IUniversityRepository, UniversityRepository>();
         services.AddScoped<IAcademicTitleRepository, AcademicTitleRepository>();
-        services.AddScoped<IQuestionRepository, QuestionRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IAnswerRepository, AnswerRepository>();
 
         // Services

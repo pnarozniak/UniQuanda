@@ -5,7 +5,7 @@ using UniQuanda.Core.Application.CQRS.Commands.Premium.CreatePremiumPayment;
 using UniQuanda.Core.Application.CQRS.Commands.Premium.HandlePremiumPaymentStatus;
 using UniQuanda.Core.Application.CQRS.Queries.Premium.GetPremiumPayments;
 using UniQuanda.Core.Domain.Enums.Results;
-using UniQuanda.Infrastructure.Enums;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Presentation.API.Attributes;
 using UniQuanda.Presentation.API.Extensions;
 
@@ -13,7 +13,7 @@ namespace UniQuanda.Presentation.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = JwtTokenRole.User)]
+    [Authorize(Roles = AppRole.User)]
     public class PremiumController : ControllerBase
     {
         private readonly IMediator _mediator;

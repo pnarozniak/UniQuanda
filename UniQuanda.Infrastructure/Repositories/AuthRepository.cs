@@ -3,6 +3,7 @@ using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Core.Domain.Enums.Results;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Core.Domain.ValueObjects;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
@@ -87,9 +88,7 @@ public class AuthRepository : IAuthRepository
                 HashedPassword = u.HashedPassword,
                 IsEmailConfirmed = !_authContext.TempUsers.Any(tu => tu.IdUser == u.Id),
                 IsOAuthUser = u.IdOAuthUserNavigation != null,
-                IsOAuthRegisterCompleted = u.IdOAuthUserNavigation != null && u.IdOAuthUserNavigation.OAuthRegisterConfirmationCode == null,
-                HasPremiumUntil = u.HasPremiumUntil,
-                IsAdmin = u.IsAdmin,
+                IsOAuthRegisterCompleted = u.IdOAuthUserNavigation != null && u.IdOAuthUserNavigation.OAuthRegisterConfirmationCode == null
             })
             .SingleOrDefaultAsync(ct);
 
@@ -146,13 +145,24 @@ public class AuthRepository : IAuthRepository
             LastName = userToConfirm.IdTempUserNavigation.LastName,
             Birthdate = userToConfirm.IdTempUserNavigation.Birthdate,
             Contact = userToConfirm.IdTempUserNavigation.Contact,
-            City = userToConfirm.IdTempUserNavigation.City
+            City = userToConfirm.IdTempUserNavigation.City,
+        };
+
+        var role = await _appContext.Roles
+            .Where(r => r.Name == AppRole.User)
+            .SingleOrDefaultAsync(ct);
+
+        var userRole = new UserRole
+        {
+            AppUserId = userToConfirm.Id,
+            RoleIdNavigation = role
         };
 
         await using var tran = await _authContext.Database.BeginTransactionAsync(ct);
         try
         {
             await _appContext.AppUsers.AddAsync(appUser, ct);
+            await _appContext.UserRoles.AddAsync(userRole, ct);
             var isAdded = await _appContext.SaveChangesAsync(ct) >= 1;
             if (!isAdded) return false;
 
@@ -261,9 +271,7 @@ public class AuthRepository : IAuthRepository
                 Nickname = u.Nickname,
                 RefreshToken = u.RefreshToken,
                 RefreshTokenExp = u.RefreshTokenExp,
-                IsOAuthUser = u.IdOAuthUserNavigation != null,
-                HasPremiumUntil = u.HasPremiumUntil,
-                IsAdmin = u.IsAdmin
+                IsOAuthUser = u.IdOAuthUserNavigation != null
             })
             .SingleOrDefaultAsync(ct);
     }
@@ -580,8 +588,16 @@ public class AuthRepository : IAuthRepository
                 Nickname = newAuthUser.Nickname
             };
 
+            var role = await _appContext.Roles.SingleOrDefaultAsync(r => r.Name == AppRole.User, ct);
+            var userRole = new UserRole()
+            {
+                RoleIdNavigation = role,
+                AppUserId = newAppUser.Id
+            };
+
             await _appContext.AppUsers.AddAsync(newAppUser, ct);
-            isAdded = await _appContext.SaveChangesAsync(ct) == 1;
+            await _appContext.UserRoles.AddAsync(userRole, ct);
+            isAdded = await _appContext.SaveChangesAsync(ct) >= 2;
             if (!isAdded)
             {
                 await tran.RollbackAsync(ct);

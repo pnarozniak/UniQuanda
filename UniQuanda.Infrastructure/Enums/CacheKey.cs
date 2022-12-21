@@ -23,15 +23,6 @@
         }
 
         /// <summary>
-        ///     Key for top 5 users
-        /// </summary>
-        /// <returns>String - name of key</returns>
-        public static string GetTop5UsersKey()
-        {
-            return "top-5-users";
-        }
-
-        /// <summary>
         ///     Key for ranking by tag.
         /// </summary>
         /// <param name="tagId"></param>

@@ -1,7 +1,6 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +10,7 @@ using UniQuanda.Core.Application.Services;
 using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Core.Domain.Entities.App;
 using UniQuanda.Core.Domain.Entities.Auth;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Tests.CQRS.Commands.Auth.ConfirmOAuthRegister
@@ -24,6 +24,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ConfirmOAuthRegister
         private Mock<ITokensService> tokensService;
         private Mock<IEmailService> emailService;
         private Mock<IUniversityRepository> universityRepository;
+        private Mock<IRoleRepository> roleRepository;
 
         private string accessToken = "access-token";
         private const int UniversityId = 1;
@@ -36,9 +37,10 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ConfirmOAuthRegister
             this.tokensService = new Mock<ITokensService>();
             this.emailService = new Mock<IEmailService>();
             this.universityRepository = new Mock<IUniversityRepository>();
+            this.roleRepository = new Mock<IRoleRepository>();
 
             this.tokensService
-                .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny<DateTime?>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny<IEnumerable<AppRoleEntity>>(), It.IsAny<IEnumerable<AuthRole>>()))
                 .Returns(accessToken);
 
             this.universityRepository
@@ -51,7 +53,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.ConfirmOAuthRegister
                 });
 
             this.confirmOAuthRegisterCommand = new ConfirmOAuthRegisterCommand(new ConfirmOAuthRegisterRequestDTO());
-            this.confirmOAuthRegisterHandler = new ConfirmOAuthRegisterHandler(this.authRepository.Object, this.tokensService.Object, this.emailService.Object, this.universityRepository.Object);
+            this.confirmOAuthRegisterHandler = new ConfirmOAuthRegisterHandler(this.authRepository.Object, this.tokensService.Object, this.emailService.Object, this.universityRepository.Object, this.roleRepository.Object);
         }
 
         [Test]

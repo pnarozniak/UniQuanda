@@ -3,27 +3,28 @@ using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Domain.Entities.Auth;
 using UniQuanda.Core.Domain.Enums.DbModel;
 using UniQuanda.Core.Domain.Enums.Results;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Core.Domain.Utils.PayU;
 using UniQuanda.Core.Domain.ValueObjects;
 using UniQuanda.Infrastructure.Options;
-using UniQuanda.Infrastructure.Presistence.AuthDb;
-using UniQuanda.Infrastructure.Presistence.AuthDb.Models;
+using UniQuanda.Infrastructure.Presistence.AppDb;
+using UniQuanda.Infrastructure.Presistence.AppDb.Models;
 
 namespace UniQuanda.Infrastructure.Repositories;
 
 public class PremiumPaymentRepository : IPremiumPaymentRepository
 {
-    private readonly AuthDbContext _authContext;
+    private readonly AppDbContext _context;
     private readonly PayUOptions _options;
 
-    public PremiumPaymentRepository(AuthDbContext authDbContext, PayUOptions options)
+    public PremiumPaymentRepository(AppDbContext context, PayUOptions options)
     {
-        _authContext = authDbContext;
+        _context = context;
         _options = options;
     }
     public async Task<bool> AddPremiumPaymentAsync(OrderCreateResponse order, decimal price, int idUser, CancellationToken ct)
     {
-        if (await _authContext.PremiumPayments.AnyAsync(p => p.IdPayment == order.OrderId, ct))
+        if (await _context.PremiumPayments.AnyAsync(p => p.IdPayment == order.OrderId, ct))
             return false;
 
         var payment = new PremiumPayment
@@ -36,25 +37,13 @@ public class PremiumPaymentRepository : IPremiumPaymentRepository
             PaymentDate = DateTime.UtcNow,
             ValidUntil = DateTime.UtcNow.AddSeconds(_options.OrderCreateRequest.ValidityTime)
         };
-        await _authContext.AddAsync(payment, ct);
-        return await _authContext.SaveChangesAsync(ct) != 0;
-    }
-
-    public async Task<UserEntity?> GetUserPremiumInfoAsync(int idUser, CancellationToken ct)
-    {
-        return await _authContext.Users.Where(u => u.Id == idUser)
-            .Select(u => new UserEntity
-            {
-                HasPremiumUntil = u.HasPremiumUntil,
-                IsOAuthUser = u.IdOAuthUserNavigation != null,
-                IsAdmin = u.IsAdmin
-            })
-            .SingleOrDefaultAsync(ct);
+        await _context.AddAsync(payment, ct);
+        return await _context.SaveChangesAsync(ct) != 0;
     }
 
     public async Task<string?> CheckIfAnyPremiumPaymentIsStartedAsync(int idUser, CancellationToken ct)
     {
-        var newPremiumPayment = await _authContext.PremiumPayments.SingleOrDefaultAsync(p => p.IdUser == idUser && p.PaymentStatus == PremiumPaymentStatusEnum.New, ct);
+        var newPremiumPayment = await _context.PremiumPayments.SingleOrDefaultAsync(p => p.IdUser == idUser && p.PaymentStatus == PremiumPaymentStatusEnum.New, ct);
         if (newPremiumPayment is null)
             return null;
 
@@ -63,7 +52,7 @@ public class PremiumPaymentRepository : IPremiumPaymentRepository
             newPremiumPayment.PaymentStatus = PremiumPaymentStatusEnum.Canceled;
             newPremiumPayment.ValidUntil = null;
             newPremiumPayment.PaymentUrl = null;
-            await _authContext.SaveChangesAsync(ct);
+            await _context.SaveChangesAsync(ct);
             return null;
         }
         return newPremiumPayment.PaymentUrl;
@@ -71,7 +60,7 @@ public class PremiumPaymentRepository : IPremiumPaymentRepository
 
     public async Task<string?> GetPremiumPaymentIdAsync(int idUser, CancellationToken ct)
     {
-        var newPremiumPayment = await _authContext.PremiumPayments.SingleOrDefaultAsync(p => p.IdUser == idUser && p.PaymentStatus == PremiumPaymentStatusEnum.New, ct);
+        var newPremiumPayment = await _context.PremiumPayments.SingleOrDefaultAsync(p => p.IdUser == idUser && p.PaymentStatus == PremiumPaymentStatusEnum.New, ct);
         if (newPremiumPayment is null)
             return null;
 
@@ -80,7 +69,7 @@ public class PremiumPaymentRepository : IPremiumPaymentRepository
             newPremiumPayment.PaymentStatus = PremiumPaymentStatusEnum.Canceled;
             newPremiumPayment.ValidUntil = null;
             newPremiumPayment.PaymentUrl = null;
-            await _authContext.SaveChangesAsync(ct);
+            await _context.SaveChangesAsync(ct);
             return null;
         }
         return newPremiumPayment.IdPayment;
@@ -88,7 +77,7 @@ public class PremiumPaymentRepository : IPremiumPaymentRepository
 
     public async Task<UpdatePremiumPaymentResultEnum> UpdatePremiumPaymentAsync(PayUModel order, CancellationToken ct)
     {
-        var userPremiumPayment = await _authContext.PremiumPayments.Include(p => p.IdUserNavigation).SingleOrDefaultAsync(p => p.IdPayment == order.Orders.First().OrderId, ct);
+        var userPremiumPayment = await _context.PremiumPayments.Include(p => p.IdUserNavigation).SingleOrDefaultAsync(p => p.IdPayment == order.Orders.First().OrderId, ct);
         if (userPremiumPayment is null)
             return UpdatePremiumPaymentResultEnum.ContentNotExist;
 
@@ -105,25 +94,46 @@ public class PremiumPaymentRepository : IPremiumPaymentRepository
             userPremiumPayment.LastName = order.Orders.First().Buyer.LastName;
             userPremiumPayment.Email = order.Orders.First().Buyer.Email;
 
-            var hasPremiumUntil = userPremiumPayment.IdUserNavigation.HasPremiumUntil;
-            var hasPremium = hasPremiumUntil != null && hasPremiumUntil > DateTime.UtcNow;
-            userPremiumPayment.IdUserNavigation.HasPremiumUntil = hasPremium ? hasPremiumUntil!.Value.AddMonths(1) : order.Orders.First().OrderCreateDate.AddMonths(1);
+            var role = await _context.UserRoles
+                .Where(ur => ur.AppUserId == userPremiumPayment.IdUserNavigation.Id && ur.RoleIdNavigation.Name == AppRole.Premium)
+                .FirstOrDefaultAsync(ct);
+
+            if (role == null)
+            {
+                role = new UserRole()
+                {
+                    AppUserId = userPremiumPayment.IdUser,
+                    ValidUnitl = order.Orders.First().OrderCreateDate.AddMonths(1),
+                    RoleIdNavigation = await _context.Roles.Where(r => r.Name == AppRole.Premium).FirstOrDefaultAsync(ct)
+                };
+                await _context.UserRoles.AddAsync(role, ct);
+            }
+            else
+            {
+                var hasPremium = role.ValidUnitl > DateTime.UtcNow;
+                role.ValidUnitl = hasPremium ? role.ValidUnitl.Value.AddMonths(1) : order.Orders.First().OrderCreateDate.AddMonths(1);
+            }
+
             userPremiumPayment.PaymentUrl = null;
             userPremiumPayment.ValidUntil = null;
-            return await _authContext.SaveChangesAsync(ct) == 2 ? UpdatePremiumPaymentResultEnum.Successful : UpdatePremiumPaymentResultEnum.UnSuccessful;
+            return await _context.SaveChangesAsync(ct) == 2 ? UpdatePremiumPaymentResultEnum.Successful : UpdatePremiumPaymentResultEnum.UnSuccessful;
         }
 
-        return await _authContext.SaveChangesAsync(ct) == 1 ? UpdatePremiumPaymentResultEnum.Successful : UpdatePremiumPaymentResultEnum.UnSuccessful;
+        return await _context.SaveChangesAsync(ct) == 1 ? UpdatePremiumPaymentResultEnum.Successful : UpdatePremiumPaymentResultEnum.UnSuccessful;
     }
 
     public async Task<PremiumPaymentsEntity?> GetPremiumPaymentsAsync(int idUser, bool getAll, CancellationToken ct)
     {
+        var premiumEndDateQuery = _context.UserRoles.Where(ur => ur.AppUserId == idUser && ur.RoleIdNavigation.Name == AppRole.Premium)
+            .Select(ur => ur.ValidUnitl);
+
+        var query = _context.AppUsers.Where(u => u.Id == idUser);
         if (getAll)
-            return await _authContext.Users.Where(u => u.Id == idUser).Select(u => new PremiumPaymentsEntity
+            return await query.Select(ur => new PremiumPaymentsEntity()
             {
-                Nickname = u.Nickname,
-                HasPremiumUntil = u.HasPremiumUntil,
-                Payments = u.PremiumPayments.OrderByDescending(p => p.PaymentDate).Select(p => new PremiumPaymentInfo
+                Nickname = ur.Nickname,
+                HasPremiumUntil = premiumEndDateQuery.FirstOrDefault(),
+                Payments = ur.PremiumPayments.OrderByDescending(p => p.PaymentDate).Select(p => new PremiumPaymentInfo
                 {
                     PaymentDate = p.PaymentDate,
                     IdTransaction = p.IdTransaction,
@@ -131,13 +141,13 @@ public class PremiumPaymentRepository : IPremiumPaymentRepository
                     PaymentStatus = p.PaymentStatus == PremiumPaymentStatusEnum.New && p.ValidUntil < DateTime.UtcNow ? PremiumPaymentStatusEnum.Canceled : p.PaymentStatus,
                     PaymentUrl = p.PaymentStatus == PremiumPaymentStatusEnum.New && p.ValidUntil > DateTime.UtcNow ? p.PaymentUrl : null
                 })
-            }).SingleOrDefaultAsync(ct);
+            }).FirstOrDefaultAsync(ct);
 
-        return await _authContext.Users.Where(u => u.Id == idUser).Select(u => new PremiumPaymentsEntity
+        return await query.Select(ur => new PremiumPaymentsEntity()
         {
-            Nickname = u.Nickname,
-            HasPremiumUntil = u.HasPremiumUntil,
-            Payments = u.PremiumPayments.OrderByDescending(p => p.PaymentDate).Select(p => new PremiumPaymentInfo
+            Nickname = ur.Nickname,
+            HasPremiumUntil = premiumEndDateQuery.FirstOrDefault(),
+            Payments = ur.PremiumPayments.OrderByDescending(p => p.PaymentDate).Select(p => new PremiumPaymentInfo
             {
                 PaymentDate = p.PaymentDate,
                 IdTransaction = p.IdTransaction,
@@ -145,7 +155,7 @@ public class PremiumPaymentRepository : IPremiumPaymentRepository
                 PaymentStatus = p.PaymentStatus == PremiumPaymentStatusEnum.New && p.ValidUntil < DateTime.UtcNow ? PremiumPaymentStatusEnum.Canceled : p.PaymentStatus,
                 PaymentUrl = p.PaymentStatus == PremiumPaymentStatusEnum.New && p.ValidUntil > DateTime.UtcNow ? p.PaymentUrl : null
             }).Take(6),
-            NumberOfPayments = u.PremiumPayments.Count
-        }).SingleOrDefaultAsync(ct);
+            NumberOfPayments = ur.PremiumPayments.Count
+        }).FirstOrDefaultAsync(ct);
     }
 }

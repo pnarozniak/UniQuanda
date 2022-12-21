@@ -2,10 +2,13 @@
 {
     public enum DurationEnum
     {
-        Top5Users = 300,
         UserProfileTopTags = 300,
         UserProfileQuestions = 300,
         UserProfileAnswers = 300,
+
+        //time based duration
+        OneWeek = 604800,
+        OneDay = 86400,
 
         // dynamic enums (needs to be calculated in GetTimeSpan function)
         UntilMidnight = -1

@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using UniQuanda.Core.Application.CQRS.Commands.Auth.Login;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Application.Services.Auth;
+using UniQuanda.Core.Domain.Entities.App;
 using UniQuanda.Core.Domain.Entities.Auth;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Core.Domain.ValueObjects;
 
 namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
@@ -31,6 +33,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
         private Mock<IPasswordsService> passwordsService;
         private Mock<ITokensService> tokensService;
         private Mock<IAppUserRepository> appUserProfileRepository;
+        private Mock<IRoleRepository> roleRepository;
 
         [SetUp]
         public void SetupTests()
@@ -39,10 +42,11 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
             this.passwordsService = new Mock<IPasswordsService>();
             this.tokensService = new Mock<ITokensService>();
             this.appUserProfileRepository = new Mock<IAppUserRepository>();
+            this.roleRepository = new Mock<IRoleRepository>();
 
             SetupLoginCommand();
             this.tokensService
-                .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny<DateTime>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                .Setup(ts => ts.GenerateAccessToken(It.IsAny<int>(), It.IsAny<IEnumerable<AppRoleEntity>>(), It.IsAny<IEnumerable<AuthRole>>()))
                 .Returns(AccessToken);
             this.tokensService
                 .Setup(ts => ts.GenerateRefreshToken())
@@ -51,7 +55,7 @@ namespace UniQuanda.Tests.CQRS.Commands.Auth.Login
                 .Setup(aur => aur.GetUserAvatarAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Avatar);
 
-            this.loginHandler = new LoginHandler(this.authRepository.Object, this.passwordsService.Object, this.tokensService.Object, this.appUserProfileRepository.Object);
+            this.loginHandler = new LoginHandler(this.authRepository.Object, this.passwordsService.Object, this.tokensService.Object, this.appUserProfileRepository.Object, this.roleRepository.Object);
         }
 
         [Test]

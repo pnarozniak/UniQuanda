@@ -37,4 +37,14 @@ public static class JwtBearerExtensions
             return null;
         return parsedIdAppUser;
     }
+
+    /// <summary>
+    ///     Gets all user roles
+    /// </summary>
+    /// <param name="claimPrincipal"></param>
+    /// <returns></returns>
+    public static IEnumerable<string> GetRoles(this ClaimsPrincipal claimPrincipal)
+    {
+        return claimPrincipal.FindAll(ClaimTypes.Role).Select(x => x.Value);
+    }
 }

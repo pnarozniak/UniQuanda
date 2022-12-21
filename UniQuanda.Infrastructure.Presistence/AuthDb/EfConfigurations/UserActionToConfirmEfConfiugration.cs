@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using UniQuanda.Infrastructure.Presistence.AppDb.Models;
+using UniQuanda.Infrastructure.Presistence.AuthDb.Models;
 
 namespace UniQuanda.Infrastructure.Presistence.AuthDb.EfConfigurations;
 
