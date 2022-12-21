@@ -14,4 +14,5 @@ public class Question
     public virtual ICollection<Answer> Answers { get; set; }
     public virtual ICollection<Report> Reports { get; set; }
     public virtual Content ContentIdNavigation { get; set; }
+    public virtual ICollection<TestQuestion> TestsQuestions { get; set; }
 }

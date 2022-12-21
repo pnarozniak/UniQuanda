@@ -1,4 +1,5 @@
-﻿using UniQuanda.Core.Application.Services.Auth;
+﻿
+using UniQuanda.Core.Application.Services.Auth;
 using UniQuanda.Infrastructure.Options;
 
 namespace UniQuanda.Infrastructure.Services.Auth;

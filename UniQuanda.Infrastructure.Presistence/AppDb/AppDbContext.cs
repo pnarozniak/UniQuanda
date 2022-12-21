@@ -43,6 +43,9 @@ public class AppDbContext : DbContext
     public virtual DbSet<IntFunction> IntFunctionWrapper { get; set; }
     public virtual DbSet<GlobalRanking> GlobalRankings { get; set; }
     public virtual DbSet<TitleRequest> TitleRequests { get; set; }
+    public virtual DbSet<Test> Tests { get; set; }
+    public virtual DbSet<TestQuestion> TestsQuestion { get; set; }
+    public virtual DbSet<TestTag> TestsTags { get; set; }
     public virtual DbSet<PermissionUsageByUser> PermissionUsageByUsers { get; set; }
     public virtual DbSet<Permission> Permissions { get; set; }
     public virtual DbSet<Role> Roles { get; set; }
@@ -73,6 +76,9 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new ProductEfConfiguration());
         modelBuilder.ApplyConfiguration(new GlobalRankingEfConfiguration());
         modelBuilder.ApplyConfiguration(new TitleRequestEfConfiguration());
+        modelBuilder.ApplyConfiguration(new TestEfConfiguration());
+        modelBuilder.ApplyConfiguration(new TestQuestionEfConfiguration());
+        modelBuilder.ApplyConfiguration(new TestTagEfConfiguration());
         modelBuilder.ApplyConfiguration(new PermissionUsageByUserEfConfiguration());
         modelBuilder.ApplyConfiguration(new PermissionEfConfiguration());
         modelBuilder.ApplyConfiguration(new RoleEfConfiguration());

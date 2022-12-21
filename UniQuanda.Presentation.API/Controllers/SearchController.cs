@@ -17,6 +17,9 @@ public class SearchController : ControllerBase
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Searches database for Users, Questions, Universities matching given search phrase
+    /// </summary>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SearchResponseDTO))]
     public async Task<IActionResult> Search(
