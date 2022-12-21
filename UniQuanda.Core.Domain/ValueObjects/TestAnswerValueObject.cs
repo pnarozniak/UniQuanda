@@ -1,6 +1,6 @@
-namespace UniQuanda.Core.Domain.Entities.App
+namespace UniQuanda.Core.Domain.ValueObjects
 {
-    public class AutomaticTestAnswerEntity
+    public class TestAnswerValueObject
     {
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; }

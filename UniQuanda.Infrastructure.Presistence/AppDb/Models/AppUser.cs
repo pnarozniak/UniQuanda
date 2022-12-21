@@ -24,4 +24,5 @@ public class AppUser
     public virtual ICollection<Report> Reports { get; set; }
     public virtual ICollection<TitleRequest> TitleRequests { get; set; }
     public virtual GlobalRanking GlobalRankingNavigation { get; set; }
+    public virtual ICollection<Test> Tests { get; set; }
 }

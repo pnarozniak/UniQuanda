@@ -43,6 +43,9 @@ public class AppDbContext : DbContext
     public virtual DbSet<IntFunction> IntFunctionWrapper { get; set; }
     public virtual DbSet<GlobalRanking> GlobalRankings { get; set; }
     public virtual DbSet<TitleRequest> TitleRequests { get; set; }
+    public virtual DbSet<Test> Tests { get; set; }
+    public virtual DbSet<TestQuestion> TestsQuestion { get; set; }
+    public virtual DbSet<TestTag> TestsTags { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -66,6 +69,9 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new ProductEfConfiguration());
         modelBuilder.ApplyConfiguration(new GlobalRankingEfConfiguration());
         modelBuilder.ApplyConfiguration(new TitleRequestEfConfiguration());
+        modelBuilder.ApplyConfiguration(new TestEfConfiguration());
+        modelBuilder.ApplyConfiguration(new TestQuestionEfConfiguration());
+        modelBuilder.ApplyConfiguration(new TestTagEfConfiguration());
 
         modelBuilder.HasPostgresEnum<AcademicTitleEnum>();
         modelBuilder.HasPostgresEnum<ReportCategoryEnum>();

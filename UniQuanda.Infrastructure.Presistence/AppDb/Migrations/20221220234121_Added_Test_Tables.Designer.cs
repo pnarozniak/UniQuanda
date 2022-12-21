@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -14,9 +15,10 @@ using UniQuanda.Infrastructure.Presistence.AppDb;
 namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221220234121_Added_Test_Tables")]
+    partial class Added_Test_Tables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2686,29 +2688,6 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.ToTable("TestsQuestion");
                 });
 
-            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.TestTag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("IdTag")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("IdTest")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdTag");
-
-                    b.HasIndex("IdTest");
-
-                    b.ToTable("TestsTags");
-                });
-
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.TitleRequest", b =>
                 {
                     b.Property<int>("Id")
@@ -3184,25 +3163,6 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.Navigation("IdTestNavigation");
                 });
 
-            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.TestTag", b =>
-                {
-                    b.HasOne("UniQuanda.Infrastructure.Presistence.AppDb.Models.Tag", "IdTagNavigation")
-                        .WithMany("TagInTests")
-                        .HasForeignKey("IdTag")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UniQuanda.Infrastructure.Presistence.AppDb.Models.Test", "IdTestNavigation")
-                        .WithMany("TestTags")
-                        .HasForeignKey("IdTest")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("IdTagNavigation");
-
-                    b.Navigation("IdTestNavigation");
-                });
-
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.TitleRequest", b =>
                 {
                     b.HasOne("UniQuanda.Infrastructure.Presistence.AppDb.Models.AcademicTitle", "AcademicTitleIdNavigation")
@@ -3366,16 +3326,12 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
 
                     b.Navigation("TagInQuestions");
 
-                    b.Navigation("TagInTests");
-
                     b.Navigation("UsersPointsInTag");
                 });
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Test", b =>
                 {
                     b.Navigation("TestQuestions");
-
-                    b.Navigation("TestTags");
                 });
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.University", b =>
