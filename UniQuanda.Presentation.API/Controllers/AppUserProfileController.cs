@@ -8,9 +8,8 @@ using UniQuanda.Core.Application.CQRS.Queries.Profile.GetProfile;
 using UniQuanda.Core.Application.CQRS.Queries.Profile.GetQuestionsProfile;
 using UniQuanda.Core.Domain.Enums;
 using UniQuanda.Core.Domain.Enums.Results;
-using UniQuanda.Presentation.API.Extensions;
-using UniQuanda.Core.Application.CQRS.Queries.Profile.GetAnswersProfile;
 using UniQuanda.Core.Domain.Utils;
+using UniQuanda.Presentation.API.Extensions;
 
 namespace UniQuanda.Presentation.API.Controllers;
 

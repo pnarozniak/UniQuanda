@@ -58,7 +58,7 @@ public class AddAnswerHandler : IRequestHandler<AddAnswerCommand, AddAnswerRespo
             Status = isSuccessful,
             Page = isSuccessful ? await _answerRepository.GetAnswerPageAsync(request.IdQuestion, request.ParentQuestionId == null ? idAnswer.Value : request.ParentQuestionId.Value, ct) : 1,
             IdAnswer = request.ParentQuestionId ?? idAnswer,
-            IdComment = idAnswer
+            IdComment = request.ParentQuestionId != null ? idAnswer : null
         };
     }
 }

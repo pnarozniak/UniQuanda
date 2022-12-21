@@ -98,7 +98,7 @@ public class PremiumPaymentRepository : IPremiumPaymentRepository
                 .Where(ur => ur.AppUserId == userPremiumPayment.IdUserNavigation.Id && ur.RoleIdNavigation.Name == AppRole.Premium)
                 .FirstOrDefaultAsync(ct);
 
-            if(role == null)
+            if (role == null)
             {
                 role = new UserRole()
                 {
@@ -107,12 +107,13 @@ public class PremiumPaymentRepository : IPremiumPaymentRepository
                     RoleIdNavigation = await _context.Roles.Where(r => r.Name == AppRole.Premium).FirstOrDefaultAsync(ct)
                 };
                 await _context.UserRoles.AddAsync(role, ct);
-            } else
+            }
+            else
             {
                 var hasPremium = role.ValidUnitl > DateTime.UtcNow;
                 role.ValidUnitl = hasPremium ? role.ValidUnitl.Value.AddMonths(1) : order.Orders.First().OrderCreateDate.AddMonths(1);
             }
-            
+
             userPremiumPayment.PaymentUrl = null;
             userPremiumPayment.ValidUntil = null;
             return await _context.SaveChangesAsync(ct) == 2 ? UpdatePremiumPaymentResultEnum.Successful : UpdatePremiumPaymentResultEnum.UnSuccessful;

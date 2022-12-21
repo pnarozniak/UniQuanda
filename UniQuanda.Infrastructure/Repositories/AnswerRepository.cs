@@ -122,8 +122,12 @@ public class AnswerRepository : IAnswerRepository
         }
     }
 
-    public async Task<IEnumerable<AnswerDetails>> GetQuestionAnswersAsync(int idQuestion, int page, int? idLoggedUser, CancellationToken ct)
+    public async Task<IEnumerable<AnswerDetails>> GetQuestionAnswersAsync(int idQuestion, int page, int? idComment, int? idLoggedUser, CancellationToken ct)
     {
+        int numberOfComments = 3;
+        if (idComment != null)
+            numberOfComments = await _appContext.Answers.Where(a => a.Id == idComment && a.ParentQuestionId == idQuestion).Select(a => a.ParentAnswerIdNavigation.Comments.Count).SingleOrDefaultAsync(ct);
+
         return await _appContext.Answers.Where(a => a.ParentQuestionId == idQuestion && a.ParentAnswerId == null).OrderByDescending(a => a.IsCorrect).ThenByDescending(a => a.LikeCount).Select(a => new AnswerDetails
         {
             Id = a.Id,
@@ -147,7 +151,7 @@ public class AnswerRepository : IAnswerRepository
                     AcademicTitleType = t.AcademicTitleIdNavigation.AcademicTitleType
                 })
             }).SingleOrDefault()!,
-            Comments = a.Comments.OrderBy(c => c.LikeCount).Take(3).Select(c => new AnswerDetails
+            Comments = a.Comments.OrderBy(c => c.LikeCount).Take(idComment != null ? numberOfComments : 3).Select(c => new AnswerDetails
             {
                 Id = c.Id,
                 ParentId = c.ParentAnswerId,
@@ -172,7 +176,7 @@ public class AnswerRepository : IAnswerRepository
         }).Skip((page - 1) * PageSize).Take(PageSize).ToListAsync(ct);
     }
 
-    public async Task<(bool? isSuccess, int? idAuthorPrevCorrectAnswer)> MarkAnswerAsCorrectAsync(int idAnswer, int idLoggedUser, CancellationToken ct)
+    public async Task<(bool? isSuccess, int? idAuthorPrevCorrectAnswer)> UpdateAnswerCorrectnessAsync(int idAnswer, int idLoggedUser, CancellationToken ct)
     {
         var answer = await _appContext.Answers.SingleOrDefaultAsync(a => a.Id == idAnswer, ct);
         if (answer == null || answer.ParentAnswerId != null)
@@ -265,7 +269,7 @@ public class AnswerRepository : IAnswerRepository
     public async Task<UpdateAnswerLikeValueEntity> UpdateAnswerLikeValueAsync(int idAnswer, int likeValue, int idLoggedUser, CancellationToken ct)
     {
         var answer = await _appContext.Answers.Include(a => a.AppUsersAnswerInteractions).SingleOrDefaultAsync(a => a.Id == idAnswer, ct);
-        if (answer == null || answer.AppUsersAnswerInteractions.Any(ai => ai.AppUserId == idLoggedUser && ai.AnswerId == idAnswer))
+        if (answer == null || answer.AppUsersAnswerInteractions.Any(ai => ai.AppUserId == idLoggedUser && ai.AnswerId == idAnswer && ai.IsCreator))
             return new UpdateAnswerLikeValueEntity { IsUpdateSuccessful = null };
 
         var answerInteraction = await _appContext.AppUsersAnswersInteractions.SingleOrDefaultAsync(ai => ai.AppUserId == idLoggedUser && ai.AnswerId == idAnswer, ct);

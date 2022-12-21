@@ -11,7 +11,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds
             builder.HasData(
                 new RolePermission()
                 {
-                    Id=1,
+                    Id = 1,
                     RoleId = 1,
                     PermissionId = 1,
                 },
@@ -46,7 +46,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.DataSeeds
                     AllowedUsages = 3
                 }
             );
-            
+
         }
     }
 }

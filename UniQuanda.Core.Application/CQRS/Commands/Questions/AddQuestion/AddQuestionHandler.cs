@@ -35,12 +35,12 @@ public class AddQuestionHandler : IRequestHandler<AddQuestionCommand, AddQuestio
     }
 
     public async Task<AddQuestionResponseDTO> Handle(AddQuestionCommand request, CancellationToken ct)
-    {       
+    {
         var getQuestionPermission = await _roleRepository.GetExecutesOfPermissionByUserAsync(request.UserId, "ask-question", ct);
-        if (getQuestionPermission.maxAmount == 0) 
-            return new () { Status = AskQuestionResultEnum.PermissionDenied };
-        if (getQuestionPermission.maxAmount != null && getQuestionPermission.maxAmount == getQuestionPermission.usedAmount ) 
-            return new () { Status = AskQuestionResultEnum.LimitsExceeded };
+        if (getQuestionPermission.maxAmount == 0)
+            return new() { Status = AskQuestionResultEnum.PermissionDenied };
+        if (getQuestionPermission.maxAmount != null && getQuestionPermission.maxAmount == getQuestionPermission.usedAmount)
+            return new() { Status = AskQuestionResultEnum.LimitsExceeded };
         var contentId = await _contentRepository.GetNextContentIdAsync(ct);
 
         var (html, images) = _htmlService.ConvertBase64ImagesToURLImages(

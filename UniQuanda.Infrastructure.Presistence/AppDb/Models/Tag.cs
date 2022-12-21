@@ -15,4 +15,5 @@ public class Tag
     public virtual ICollection<Tag> ChildTags { get; set; }
     public virtual ICollection<TagInQuestion> TagInQuestions { get; set; }
     public virtual ICollection<UserPointsInTag> UsersPointsInTag { get; set; }
+    public virtual ICollection<TestTag> TagInTests { get; set; }
 }

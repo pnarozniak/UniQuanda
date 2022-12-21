@@ -397,9 +397,9 @@ CancellationToken ct)
         return await _appContext.SaveChangesAsync(ct) == 0 ? DeleteQuestionResultEnum.UnSuccessful : DeleteQuestionResultEnum.Successful;
     }
 
-    public async Task<bool> IsQuestionFollowedByUserAsync(int idQuestion, int idLoggedUser, CancellationToken ct)
+    public async Task<bool> IsQuestionFollowedByUserAsync(int idQuestion, int idUser, CancellationToken ct)
     {
-        var questionInteraction = await _appContext.AppUsersQuestionsInteractions.SingleOrDefaultAsync(qi => qi.QuestionId == idQuestion && qi.AppUserId == idLoggedUser, ct);
+        var questionInteraction = await _appContext.AppUsersQuestionsInteractions.SingleOrDefaultAsync(qi => qi.QuestionId == idQuestion && qi.AppUserId == idUser, ct);
         return questionInteraction != null && questionInteraction.IsFollowing;
     }
 
@@ -409,7 +409,7 @@ CancellationToken ct)
         if (question is null)
             return;
         question.ViewsCount += 1;
-        var d = await _appContext.SaveChangesAsync(ct);
+        await _appContext.SaveChangesAsync(ct);
     }
 
     public async Task<QuestionDetailsEntity?> GetQuestionDetailsForUpdateAsync(int idQuestion, int idLoggedUser, CancellationToken ct)
