@@ -42,6 +42,7 @@ public static class Extensions
         services.AddScoped<IAcademicTitleRepository, AcademicTitleRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IAnswerRepository, AnswerRepository>();
+        services.AddScoped<ILoggerService, LoggerService>();
 
         // Services
         services.AddScoped<IPasswordsService, PasswordsService>();

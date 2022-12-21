@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -14,9 +15,10 @@ using UniQuanda.Infrastructure.Presistence.AppDb;
 namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221220222722_FixedSeeds")]
+    partial class FixedSeeds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -472,44 +474,6 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                     b.HasIndex("ImageId");
 
                     b.ToTable("ImagesInContent");
-                });
-
-            modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Log", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Body")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Client")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Endpoint")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Exception")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Headers")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("StackTrace")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Logs");
                 });
 
             modelBuilder.Entity("UniQuanda.Infrastructure.Presistence.AppDb.Models.Permission", b =>
