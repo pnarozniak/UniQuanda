@@ -6,13 +6,14 @@ using UniQuanda.Core.Application.CQRS.Commands.Test.GenerateTest;
 using UniQuanda.Core.Application.CQRS.Commands.Test.GetUserTests;
 using UniQuanda.Core.Application.CQRS.Queries.Test.GetTest;
 using UniQuanda.Core.Application.CQRS.Queries.Test.GetUserTests;
+using UniQuanda.Core.Domain.Utils;
 using UniQuanda.Presentation.API.Extensions;
 
 namespace UniQuanda.Presentation.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "user")]
+[Authorize(Roles = AppRole.User)]
 public class TestController : ControllerBase
 {
     private readonly IMediator _mediator;
