@@ -8,6 +8,7 @@ public class UpdateAnswerLikeValueRequestDTO
     public int? IdAnswer { get; set; }
 
     [Required]
+    [Range(-1, 1)]
     public int? LikeValue { get; set; }
 }
 
