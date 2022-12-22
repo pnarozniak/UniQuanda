@@ -9,7 +9,9 @@ namespace UniQuanda.Infrastructure.Repositories
 {
     public class TestRepository : ITestRepository
     {
-        private static readonly int UserTestLimit = 10;
+        private static readonly int UserTestsLimit = 10;
+        private static readonly int TestQuestionsLimit = 10;
+
         private readonly AppDbContext _context;
         public TestRepository(AppDbContext context)
         {
@@ -27,10 +29,10 @@ namespace UniQuanda.Infrastructure.Repositories
                 .Where(tq => tq.QuestionIdNavigation.Answers.Any(a => a.IsCorrect))
                 .Select(tq => tq.QuestionIdNavigation)
                 .OrderBy(tq => Guid.NewGuid())
-                .Take(10)
+                .Take(TestQuestionsLimit)
                 .ToListAsync(ct);
 
-            if (questions is null || questions.Count != 10) return null;
+            if (questions is null || questions.Count == 0) return null;
 
             var test = new Test
             {
@@ -49,7 +51,7 @@ namespace UniQuanda.Infrastructure.Repositories
                 .Where(t => t.IdCreator == idUser)
                 .ToListAsync(ct);
 
-            if (userTests.Count() >= UserTestLimit) {
+            if (userTests.Count() >= UserTestsLimit) {
                 var oldestTest = userTests.First()!;
                 _context.Tests.Remove(oldestTest);
             }
