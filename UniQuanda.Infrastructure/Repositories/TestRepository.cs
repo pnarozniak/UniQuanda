@@ -90,7 +90,7 @@ namespace UniQuanda.Infrastructure.Repositories
                                     CommentsCount = a.Comments.Count()
                                 })
                                 .SingleOrDefault()!
-                        })
+                        }).ToList()
                     })
                     .SingleOrDefaultAsync(ct);
 		}
