@@ -1052,7 +1052,215 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
+                            Id = 27,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/programowanie.jpg",
+                            IsDeleted = false,
+                            Name = "Programowanie",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 28,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/bazy_danych.jpg",
+                            IsDeleted = false,
+                            Name = "Bazy danych",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 29,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/sieci_komputerowe.jpg",
+                            IsDeleted = false,
+                            Name = "Sieci komputerowe",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 30,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/systemy_operacyjne.jpg",
+                            IsDeleted = false,
+                            Name = "Systemy operacyjne",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 31,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/angular.jpg",
+                            IsDeleted = false,
+                            Name = "Angular",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 32,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/asp_net.jpg",
+                            IsDeleted = false,
+                            Name = "ASP.NET",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 33,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/c_sharp.jpg",
+                            IsDeleted = false,
+                            Name = "C#",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 34,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/c_plus_plus.jpg",
+                            IsDeleted = false,
+                            Name = "C++",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 35,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/java.jpg",
+                            IsDeleted = false,
+                            Name = "Java",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 36,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/javascript.jpg",
+                            IsDeleted = false,
+                            Name = "JavaScript",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 37,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/php.jpg",
+                            IsDeleted = false,
+                            Name = "PHP",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 38,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/python.jpg",
+                            IsDeleted = false,
+                            Name = "Python",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 39,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/ruby.jpg",
+                            IsDeleted = false,
+                            Name = "Ruby",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 40,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/sql.jpg",
+                            IsDeleted = false,
+                            Name = "SQL",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 41,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/typescript.jpg",
+                            IsDeleted = false,
+                            Name = "TypeScript",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 42,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/wpf.jpg",
+                            IsDeleted = false,
+                            Name = "WPF",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 43,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/postgresql.jpg",
+                            IsDeleted = false,
+                            Name = "PostgreSQL",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
                             Id = 44,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/aws.jpg",
+                            IsDeleted = false,
+                            Name = "AWS",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 45,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/docker.jpg",
+                            IsDeleted = false,
+                            Name = "Docker",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 46,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/ada.jpg",
+                            IsDeleted = false,
+                            Name = "Ada",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 47,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/css.jpg",
+                            IsDeleted = false,
+                            Name = "CSS",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 48,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/html.jpg",
+                            IsDeleted = false,
+                            Name = "HTML",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 49,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/node.jpg",
+                            IsDeleted = false,
+                            Name = "Node",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 50,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/kafka.jpg",
+                            IsDeleted = false,
+                            Name = "Kafka",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 51,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/react.jpg",
+                            IsDeleted = false,
+                            Name = "React",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 52,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/xamarin.jpg",
+                            IsDeleted = false,
+                            Name = "Xamarin",
+                            ParentTagId = 1
+                        },
+                        new
+                        {
+                            Id = 53,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/inzynieria_oprogramowania.jpg",
                             IsDeleted = false,
                             Name = "Inżynieria oprogramowania",
@@ -1060,7 +1268,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 45,
+                            Id = 54,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/informatyka.jpg",
                             IsDeleted = false,
                             Name = "Architektura oprogramowania",
@@ -1068,7 +1276,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 46,
+                            Id = 55,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/informatyka.jpg",
                             IsDeleted = false,
                             Name = "Testowanie oprogramowania",
@@ -1076,7 +1284,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 47,
+                            Id = 56,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/sztuczna_inteligencja.jpg",
                             IsDeleted = false,
                             Name = "Sztuczna inteligencja",
@@ -1084,7 +1292,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 48,
+                            Id = 57,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/informatyka.jpg",
                             IsDeleted = false,
                             Name = "Programowanie obiektowe",
@@ -1092,7 +1300,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 49,
+                            Id = 58,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/informatyka.jpg",
                             IsDeleted = false,
                             Name = "Programowanie funkcyjne",
@@ -1100,7 +1308,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 50,
+                            Id = 59,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/informatyka.jpg",
                             IsDeleted = false,
                             Name = "Programowanie proceduralne",
@@ -1108,7 +1316,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 51,
+                            Id = 60,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/informatyka.jpg",
                             IsDeleted = false,
                             Name = "Programowanie zdarzeniowe",
@@ -1116,7 +1324,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 52,
+                            Id = 61,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/informatyka.jpg",
                             IsDeleted = false,
                             Name = "Programowanie asynchroniczne",
@@ -1124,7 +1332,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 53,
+                            Id = 62,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/informatyka.jpg",
                             IsDeleted = false,
                             Name = "Programowanie równoległe",
@@ -1132,7 +1340,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 54,
+                            Id = 63,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/informatyka.jpg",
                             IsDeleted = false,
                             Name = "Programowanie wielowątkowe",
@@ -1140,7 +1348,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 55,
+                            Id = 64,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/informatyka.jpg",
                             IsDeleted = false,
                             Name = "Programowanie wieloprocesowe",
@@ -1148,15 +1356,15 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 56,
+                            Id = 65,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/informatyka.jpg",
                             IsDeleted = false,
-                            Name = "Programowanie wielokomputerowe",
+                            Name = "Sieci komputerowe",
                             ParentTagId = 1
                         },
                         new
                         {
-                            Id = 57,
+                            Id = 66,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/informatyka.jpg",
                             IsDeleted = false,
                             Name = "Programowanie rozproszone",
@@ -1164,23 +1372,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 58,
-                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/informatyka.jpg",
-                            IsDeleted = false,
-                            Name = "Programowanie równoległe",
-                            ParentTagId = 1
-                        },
-                        new
-                        {
-                            Id = 59,
-                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/informatyka.jpg",
-                            IsDeleted = false,
-                            Name = "Programowanie wielowątkowe",
-                            ParentTagId = 1
-                        },
-                        new
-                        {
-                            Id = 60,
+                            Id = 67,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Matematyka dyskretna",
@@ -1188,7 +1380,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 61,
+                            Id = 68,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/planimetria.jpg",
                             IsDeleted = false,
                             Name = "Planimetria",
@@ -1196,7 +1388,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 62,
+                            Id = 69,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Analiza matematyczna",
@@ -1204,7 +1396,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 63,
+                            Id = 70,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Algebra liniowa",
@@ -1212,7 +1404,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 64,
+                            Id = 71,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/geometria.jpg",
                             IsDeleted = false,
                             Name = "Geometria",
@@ -1220,7 +1412,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 65,
+                            Id = 72,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/logika_matematyczna.jpg",
                             IsDeleted = false,
                             Name = "Logika matematyczna",
@@ -1228,7 +1420,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 66,
+                            Id = 73,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/teoria_liczb.jpg",
                             IsDeleted = false,
                             Name = "Teoria liczb",
@@ -1236,7 +1428,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 67,
+                            Id = 74,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Teoria mnogości",
@@ -1244,7 +1436,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 68,
+                            Id = 75,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Teoria grafów",
@@ -1252,7 +1444,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 69,
+                            Id = 76,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/teoria_gier.jpg",
                             IsDeleted = false,
                             Name = "Teoria gier",
@@ -1260,7 +1452,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 70,
+                            Id = 77,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/teoria_kodowania.jpg",
                             IsDeleted = false,
                             Name = "Teoria kodowania",
@@ -1268,7 +1460,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 71,
+                            Id = 78,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/teoria_obliczeń.jpg",
                             IsDeleted = false,
                             Name = "Teoria obliczeń",
@@ -1276,7 +1468,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 72,
+                            Id = 79,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Teoria algorytmów",
@@ -1284,7 +1476,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 73,
+                            Id = 80,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Algebra nieliniowa",
@@ -1292,7 +1484,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 74,
+                            Id = 81,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/staystyka.jpg",
                             IsDeleted = false,
                             Name = "Staystyka",
@@ -1300,7 +1492,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 75,
+                            Id = 82,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Matematyka stosowana",
@@ -1308,7 +1500,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 76,
+                            Id = 83,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Topologia",
@@ -1316,7 +1508,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 77,
+                            Id = 84,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Analiza numeryczna",
@@ -1324,7 +1516,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 78,
+                            Id = 85,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Analiza funkcjonalna",
@@ -1332,7 +1524,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 79,
+                            Id = 86,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Analiza zespolona",
@@ -1340,7 +1532,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 80,
+                            Id = 87,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Analiza Fouriera",
@@ -1348,7 +1540,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 81,
+                            Id = 88,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Analiza graniczna",
@@ -1356,7 +1548,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 82,
+                            Id = 89,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Analiza różnicowa",
@@ -1364,7 +1556,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 83,
+                            Id = 90,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Analiza integralna",
@@ -1372,7 +1564,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 84,
+                            Id = 91,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Analiza funkcji wielu zmiennych",
@@ -1380,7 +1572,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 85,
+                            Id = 92,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Analiza funkcji rzeczywistych",
@@ -1388,7 +1580,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 86,
+                            Id = 93,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/matematyka.jpg",
                             IsDeleted = false,
                             Name = "Analiza funkcji zespolonych",
@@ -1396,7 +1588,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 87,
+                            Id = 94,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/fizyka_kwantowa.jpg",
                             IsDeleted = false,
                             Name = "Fizyka Kwantowa",
@@ -1404,7 +1596,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 88,
+                            Id = 95,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/fizyka.jpg",
                             IsDeleted = false,
                             Name = "Fizyka atomowa",
@@ -1412,7 +1604,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 89,
+                            Id = 96,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/fizyka.jpg",
                             IsDeleted = false,
                             Name = "Fizyka molekularna",
@@ -1420,7 +1612,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 90,
+                            Id = 97,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/fizyka_ciała_stałego.jpg",
                             IsDeleted = false,
                             Name = "Fizyka ciała stałego",
@@ -1428,7 +1620,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 91,
+                            Id = 98,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/fizyka_ciała_płynnego.jpg",
                             IsDeleted = false,
                             Name = "Fizyka ciała płynnego",
@@ -1436,7 +1628,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 92,
+                            Id = 99,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/fizyka_ciała_gazowego.jpg",
                             IsDeleted = false,
                             Name = "Fizyka ciała gazowego",
@@ -1444,7 +1636,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 93,
+                            Id = 100,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/fizyka_ciała_promieniotwórczego.jpg",
                             IsDeleted = false,
                             Name = "Fizyka ciała promieniotwórczego",
@@ -1452,7 +1644,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 94,
+                            Id = 101,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/fizyka.jpg",
                             IsDeleted = false,
                             Name = "Fizyka ciała złożonego",
@@ -1460,7 +1652,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 95,
+                            Id = 102,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/chemia_organiczna.jpg",
                             IsDeleted = false,
                             Name = "Chemia organiczna",
@@ -1468,7 +1660,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 96,
+                            Id = 103,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/chemia_analityczna.jpg",
                             IsDeleted = false,
                             Name = "Chemia analityczna",
@@ -1476,7 +1668,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 97,
+                            Id = 104,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/chemia.jpg",
                             IsDeleted = false,
                             Name = "Chemia fizyczna",
@@ -1484,7 +1676,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 98,
+                            Id = 105,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/chemia.jpg",
                             IsDeleted = false,
                             Name = "Chemia inorganiczna",
@@ -1492,7 +1684,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 99,
+                            Id = 106,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/chemia_biologiczna.jpg",
                             IsDeleted = false,
                             Name = "Chemia biologiczna",
@@ -1500,7 +1692,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 100,
+                            Id = 107,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/biologia_molekularna.jpg",
                             IsDeleted = false,
                             Name = "Biologia molekularna",
@@ -1508,7 +1700,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 101,
+                            Id = 108,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/biologia_komórkowa.jpg",
                             IsDeleted = false,
                             Name = "Biologia komórkowa",
@@ -1516,7 +1708,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 102,
+                            Id = 109,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/biologia_ewolucyjna.jpg",
                             IsDeleted = false,
                             Name = "Biologia ewolucyjna",
@@ -1524,7 +1716,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 103,
+                            Id = 110,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/biologia.jpg",
                             IsDeleted = false,
                             Name = "Biologia systematyczna",
@@ -1532,7 +1724,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 104,
+                            Id = 111,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/biologia.jpg",
                             IsDeleted = false,
                             Name = "Biologia populacyjna",
@@ -1540,7 +1732,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 105,
+                            Id = 112,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/biologia_ekologiczna.jpg",
                             IsDeleted = false,
                             Name = "Biologia ekologiczna",
@@ -1548,7 +1740,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 106,
+                            Id = 113,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/biologia_roślin.jpg",
                             IsDeleted = false,
                             Name = "Biologia roślin",
@@ -1556,7 +1748,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 107,
+                            Id = 114,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/biologia_zwierząt.jpg",
                             IsDeleted = false,
                             Name = "Biologia zwierząt",
@@ -1564,7 +1756,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 108,
+                            Id = 115,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/geomorfologia.jpg",
                             IsDeleted = false,
                             Name = "Geomorfologia",
@@ -1572,7 +1764,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 109,
+                            Id = 116,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/geologia.jpg",
                             IsDeleted = false,
                             Name = "Geologia",
@@ -1580,7 +1772,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 110,
+                            Id = 117,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/geografia_fizyczna.jpg",
                             IsDeleted = false,
                             Name = "Geografia fizyczna",
@@ -1588,7 +1780,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 111,
+                            Id = 118,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/geografia.jpg",
                             IsDeleted = false,
                             Name = "Geografia polityczna",
@@ -1596,7 +1788,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 112,
+                            Id = 119,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/geografia.jpg",
                             IsDeleted = false,
                             Name = "Geografia ekonomiczna",
@@ -1604,7 +1796,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 113,
+                            Id = 120,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/geografia.jpg",
                             IsDeleted = false,
                             Name = "Geografia społeczna",
@@ -1612,7 +1804,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 114,
+                            Id = 121,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/geografia_kulturowa.jpg",
                             IsDeleted = false,
                             Name = "Geografia kulturowa",
@@ -1620,7 +1812,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 115,
+                            Id = 122,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/geografia_regionalna.jpg",
                             IsDeleted = false,
                             Name = "Geografia regionalna",
@@ -1628,7 +1820,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 116,
+                            Id = 123,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/geografia.jpg",
                             IsDeleted = false,
                             Name = "Geografia turystyki",
@@ -1636,7 +1828,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 117,
+                            Id = 124,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/historia_starożytna.jpg",
                             IsDeleted = false,
                             Name = "Historia starożytna",
@@ -1644,7 +1836,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 118,
+                            Id = 125,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/historia_średniowiecza.jpg",
                             IsDeleted = false,
                             Name = "Historia średniowiecza",
@@ -1652,7 +1844,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 119,
+                            Id = 126,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/historia_nowożytna.jpg",
                             IsDeleted = false,
                             Name = "Historia nowożytna",
@@ -1660,7 +1852,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 120,
+                            Id = 127,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/historia_współczesna.jpg",
                             IsDeleted = false,
                             Name = "Historia współczesna",
@@ -1668,7 +1860,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 121,
+                            Id = 128,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/nauki_społeczne.jpg",
                             IsDeleted = false,
                             Name = "Nauki społeczne",
@@ -1676,7 +1868,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 122,
+                            Id = 129,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/socjologia.jpg",
                             IsDeleted = false,
                             Name = "Socjologia",
@@ -1684,7 +1876,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 123,
+                            Id = 130,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/antropologia.jpg",
                             IsDeleted = false,
                             Name = "Antropologia",
@@ -1692,7 +1884,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 124,
+                            Id = 131,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/etnografia.jpg",
                             IsDeleted = false,
                             Name = "Etnografia",
@@ -1700,7 +1892,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 125,
+                            Id = 132,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/etnologia.jpg",
                             IsDeleted = false,
                             Name = "Etnologia",
@@ -1708,7 +1900,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 126,
+                            Id = 133,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/etnomuzykologia.jpg",
                             IsDeleted = false,
                             Name = "Etnomuzykologia",
@@ -1716,7 +1908,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 127,
+                            Id = 134,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/język_polski.jpg",
                             IsDeleted = false,
                             Name = "Język polski",
@@ -1724,7 +1916,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 128,
+                            Id = 135,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/język_angielski.jpg",
                             IsDeleted = false,
                             Name = "Język angielski",
@@ -1732,7 +1924,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 129,
+                            Id = 136,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/język_niemiecki.jpg",
                             IsDeleted = false,
                             Name = "Język niemiecki",
@@ -1740,7 +1932,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 130,
+                            Id = 137,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/język_rosyjski.jpg",
                             IsDeleted = false,
                             Name = "Język rosyjski",
@@ -1748,7 +1940,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 131,
+                            Id = 138,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/język_francuski.jpg",
                             IsDeleted = false,
                             Name = "Język francuski",
@@ -1756,7 +1948,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 132,
+                            Id = 139,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/język_hiszpański.jpg",
                             IsDeleted = false,
                             Name = "Język hiszpański",
@@ -1764,7 +1956,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 133,
+                            Id = 140,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/język_włoski.jpg",
                             IsDeleted = false,
                             Name = "Język włoski",
@@ -1772,7 +1964,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 134,
+                            Id = 141,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/język_japoński.jpg",
                             IsDeleted = false,
                             Name = "Język japoński",
@@ -1780,7 +1972,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 135,
+                            Id = 142,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/język_chiński.jpg",
                             IsDeleted = false,
                             Name = "Język chiński",
@@ -1788,7 +1980,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 136,
+                            Id = 143,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/język_koreański.jpg",
                             IsDeleted = false,
                             Name = "Język koreański",
@@ -1796,7 +1988,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 137,
+                            Id = 144,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/język_portugalski.jpg",
                             IsDeleted = false,
                             Name = "Język portugalski",
@@ -1804,7 +1996,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 138,
+                            Id = 145,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/psychologia_poznawcza.jpg",
                             IsDeleted = false,
                             Name = "Psychologia poznawcza",
@@ -1812,7 +2004,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 139,
+                            Id = 146,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/psychologia_rozwojowa.jpg",
                             IsDeleted = false,
                             Name = "Psychologia rozwojowa",
@@ -1820,7 +2012,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 140,
+                            Id = 147,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/psychologia.jpg",
                             IsDeleted = false,
                             Name = "Psychologia społeczna",
@@ -1828,7 +2020,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 141,
+                            Id = 148,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/psychologia_kliniczna.jpg",
                             IsDeleted = false,
                             Name = "Psychologia kliniczna",
@@ -1836,7 +2028,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 142,
+                            Id = 149,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/psychologia_pracy.jpg",
                             IsDeleted = false,
                             Name = "Psychologia pracy",
@@ -1844,7 +2036,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 143,
+                            Id = 150,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/psychologia.jpg",
                             IsDeleted = false,
                             Name = "Psychologia edukacyjna",
@@ -1852,7 +2044,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 144,
+                            Id = 151,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/psychologia_sportu.jpg",
                             IsDeleted = false,
                             Name = "Psychologia sportu",
@@ -1860,7 +2052,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 145,
+                            Id = 152,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/psychologia.jpg",
                             IsDeleted = false,
                             Name = "Psychologia kryminalna",
@@ -1868,7 +2060,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 146,
+                            Id = 153,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/psychologia.jpg",
                             IsDeleted = false,
                             Name = "Psychologia medyczna",
@@ -1876,7 +2068,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 147,
+                            Id = 154,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/malarstwo.jpg",
                             IsDeleted = false,
                             Name = "Malarstwo",
@@ -1884,7 +2076,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 148,
+                            Id = 155,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/rzeźba.jpg",
                             IsDeleted = false,
                             Name = "Rzeźba",
@@ -1892,7 +2084,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 149,
+                            Id = 156,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/grafika.jpg",
                             IsDeleted = false,
                             Name = "Grafika",
@@ -1900,7 +2092,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 150,
+                            Id = 157,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/fotografia.jpg",
                             IsDeleted = false,
                             Name = "Fotografia",
@@ -1908,7 +2100,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 151,
+                            Id = 158,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/film.jpg",
                             IsDeleted = false,
                             Name = "Film",
@@ -1916,7 +2108,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 152,
+                            Id = 159,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/muzyka.jpg",
                             IsDeleted = false,
                             Name = "Muzyka",
@@ -1924,7 +2116,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 153,
+                            Id = 160,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/teatr.jpg",
                             IsDeleted = false,
                             Name = "Teatr",
@@ -1932,7 +2124,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 154,
+                            Id = 161,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/literatura.jpg",
                             IsDeleted = false,
                             Name = "Literatura",
@@ -1940,7 +2132,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 155,
+                            Id = 162,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/prawo.jpg",
                             IsDeleted = false,
                             Name = "Prawo podatkowe",
@@ -1948,7 +2140,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 156,
+                            Id = 163,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/prawo.jpg",
                             IsDeleted = false,
                             Name = "Prawo cywilne",
@@ -1956,7 +2148,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 157,
+                            Id = 164,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/prawo.jpg",
                             IsDeleted = false,
                             Name = "Prawo karne",
@@ -1964,7 +2156,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 158,
+                            Id = 165,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/prawo.jpg",
                             IsDeleted = false,
                             Name = "Prawo administracyjne",
@@ -1972,7 +2164,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 159,
+                            Id = 166,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/prawo.jpg",
                             IsDeleted = false,
                             Name = "Prawo pracy",
@@ -1980,7 +2172,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 160,
+                            Id = 167,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/prawo.jpg",
                             IsDeleted = false,
                             Name = "Prawo gospodarcze",
@@ -1988,7 +2180,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 161,
+                            Id = 168,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/prawo.jpg",
                             IsDeleted = false,
                             Name = "Prawo handlowe",
@@ -1996,7 +2188,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 162,
+                            Id = 169,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/prawo.jpg",
                             IsDeleted = false,
                             Name = "Prawo traktatów",
@@ -2004,7 +2196,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 163,
+                            Id = 170,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/prawo.jpg",
                             IsDeleted = false,
                             Name = "Prawo dyplomatyczne",
@@ -2012,7 +2204,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 164,
+                            Id = 171,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/prawo.jpg",
                             IsDeleted = false,
                             Name = "Prawo konsularne",
@@ -2020,7 +2212,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 165,
+                            Id = 172,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/prawo.jpg",
                             IsDeleted = false,
                             Name = "Prawo kosmiczne",
@@ -2028,7 +2220,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 166,
+                            Id = 173,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/anatomia.jpg",
                             IsDeleted = false,
                             Name = "Anatomia",
@@ -2036,7 +2228,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 167,
+                            Id = 174,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/chirurgia.jpg",
                             IsDeleted = false,
                             Name = "Chirurgia",
@@ -2044,7 +2236,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 168,
+                            Id = 175,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/farmakologia.jpg",
                             IsDeleted = false,
                             Name = "Farmakologia",
@@ -2052,7 +2244,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 169,
+                            Id = 176,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/gastroenterologia.jpg",
                             IsDeleted = false,
                             Name = "Gastroenterologia",
@@ -2060,7 +2252,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 170,
+                            Id = 177,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/ginekologia.jpg",
                             IsDeleted = false,
                             Name = "Ginekologia",
@@ -2068,7 +2260,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 171,
+                            Id = 178,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/hematologia.jpg",
                             IsDeleted = false,
                             Name = "Hematologia",
@@ -2076,7 +2268,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 172,
+                            Id = 179,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/kardiologia.jpg",
                             IsDeleted = false,
                             Name = "Kardiologia",
@@ -2084,7 +2276,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 173,
+                            Id = 180,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/medycyna_rodzinna.jpg",
                             IsDeleted = false,
                             Name = "Medycyna rodzinna",
@@ -2092,7 +2284,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 174,
+                            Id = 181,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/medycyna_pracy.jpg",
                             IsDeleted = false,
                             Name = "Medycyna pracy",
@@ -2100,7 +2292,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 175,
+                            Id = 182,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/automatyka_i_robotyka.jpg",
                             IsDeleted = false,
                             Name = "Automatyka i robotyka",
@@ -2108,7 +2300,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 176,
+                            Id = 183,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/elektronika.jpg",
                             IsDeleted = false,
                             Name = "Elektronika",
@@ -2116,7 +2308,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 177,
+                            Id = 184,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/elektrotechnika.jpg",
                             IsDeleted = false,
                             Name = "Elektrotechnika",
@@ -2124,7 +2316,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 178,
+                            Id = 185,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/mechanika.jpg",
                             IsDeleted = false,
                             Name = "Mechanika",
@@ -2132,7 +2324,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 179,
+                            Id = 186,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/nauki_o_ziemi.jpg",
                             IsDeleted = false,
                             Name = "Nauki o Ziemi",
@@ -2140,7 +2332,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 180,
+                            Id = 187,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/inżynieria.jpg",
                             IsDeleted = false,
                             Name = "Nauki o materiałach",
@@ -2148,7 +2340,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 181,
+                            Id = 188,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/nauki_o_transportie.jpg",
                             IsDeleted = false,
                             Name = "Nauki o transportie",
@@ -2156,7 +2348,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 182,
+                            Id = 189,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/nauki_o_wodzie.jpg",
                             IsDeleted = false,
                             Name = "Nauki o wodzie",
@@ -2164,7 +2356,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 183,
+                            Id = 190,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/inżynieria.jpg",
                             IsDeleted = false,
                             Name = "Nauki o zrównoważonym rozwoju",
@@ -2172,7 +2364,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 184,
+                            Id = 191,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/kryptowaluty.jpg",
                             IsDeleted = false,
                             Name = "Kryptowaluty",
@@ -2180,7 +2372,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 185,
+                            Id = 192,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/ekonomia.jpg",
                             IsDeleted = false,
                             Name = "Giełda",
@@ -2188,7 +2380,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 186,
+                            Id = 193,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/finanse.jpg",
                             IsDeleted = false,
                             Name = "Finanse",
@@ -2196,7 +2388,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 187,
+                            Id = 194,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/podatki.jpg",
                             IsDeleted = false,
                             Name = "Podatki",
@@ -2204,7 +2396,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 188,
+                            Id = 195,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/polityka_społeczna.jpg",
                             IsDeleted = false,
                             Name = "Polityka społeczna",
@@ -2212,7 +2404,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 189,
+                            Id = 196,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/polityka.jpg",
                             IsDeleted = false,
                             Name = "Polityka zagraniczna",
@@ -2220,7 +2412,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 190,
+                            Id = 197,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/europeistyka.jpg",
                             IsDeleted = false,
                             Name = "Europeistyka",
@@ -2228,7 +2420,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 191,
+                            Id = 198,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/chrześcijaństwo.jpg",
                             IsDeleted = false,
                             Name = "Chrześcijaństwo",
@@ -2236,7 +2428,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 192,
+                            Id = 199,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/islam.jpg",
                             IsDeleted = false,
                             Name = "Islam",
@@ -2244,7 +2436,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 193,
+                            Id = 200,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/judaizm.jpg",
                             IsDeleted = false,
                             Name = "Judaizm",
@@ -2252,7 +2444,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 194,
+                            Id = 201,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/buddyzm.jpg",
                             IsDeleted = false,
                             Name = "Buddyzm",
@@ -2260,7 +2452,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 195,
+                            Id = 202,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/hinduizm.jpg",
                             IsDeleted = false,
                             Name = "Hinduizm",
@@ -2268,7 +2460,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 196,
+                            Id = 203,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/teologia.jpg",
                             IsDeleted = false,
                             Name = "Bahaizm",
@@ -2276,7 +2468,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 197,
+                            Id = 204,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/protestantyzm.jpg",
                             IsDeleted = false,
                             Name = "Protestantyzm",
@@ -2284,7 +2476,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 198,
+                            Id = 205,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/świadkowie_jehowy.jpg",
                             IsDeleted = false,
                             Name = "Świadkowie Jehowy",
@@ -2292,7 +2484,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 199,
+                            Id = 206,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/wychowanie_wczesnoszkolne.jpg",
                             IsDeleted = false,
                             Name = "Wychowanie wczesnoszkolne",
@@ -2300,7 +2492,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 200,
+                            Id = 207,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/wychowanie_przedszkolne.jpg",
                             IsDeleted = false,
                             Name = "Wychowanie przedszkolne",
@@ -2308,7 +2500,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 201,
+                            Id = 208,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/wychowanie_szkolne.jpg",
                             IsDeleted = false,
                             Name = "Wychowanie szkolne",
@@ -2316,7 +2508,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 202,
+                            Id = 209,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/wychowanie_gimnazjalne.jpg",
                             IsDeleted = false,
                             Name = "Wychowanie gimnazjalne",
@@ -2324,7 +2516,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 203,
+                            Id = 210,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/wychowanie_licealne.jpg",
                             IsDeleted = false,
                             Name = "Wychowanie licealne",
@@ -2332,7 +2524,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 204,
+                            Id = 211,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/wychowanie_studenckie.jpg",
                             IsDeleted = false,
                             Name = "Wychowanie studenckie",
@@ -2340,7 +2532,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 205,
+                            Id = 212,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/wychowanie_dorosłych.jpg",
                             IsDeleted = false,
                             Name = "Wychowanie dorosłych",
@@ -2348,7 +2540,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 206,
+                            Id = 213,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/wychowanie_specjalne.jpg",
                             IsDeleted = false,
                             Name = "Wychowanie specjalne",
@@ -2356,7 +2548,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 207,
+                            Id = 214,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/wychowanie_w_rodzinie.jpg",
                             IsDeleted = false,
                             Name = "Wychowanie w rodzinie",
@@ -2364,7 +2556,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 208,
+                            Id = 215,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/piłka_nożna.jpg",
                             IsDeleted = false,
                             Name = "Piłka nożna",
@@ -2372,7 +2564,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 209,
+                            Id = 216,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/koszykówka.jpg",
                             IsDeleted = false,
                             Name = "Koszykówka",
@@ -2380,7 +2572,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 210,
+                            Id = 217,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/siatkówka.jpg",
                             IsDeleted = false,
                             Name = "Siatkówka",
@@ -2388,7 +2580,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 211,
+                            Id = 218,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/tenis.jpg",
                             IsDeleted = false,
                             Name = "Tenis",
@@ -2396,7 +2588,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 212,
+                            Id = 219,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/siatkówka_plażowa.jpg",
                             IsDeleted = false,
                             Name = "Siatkówka plażowa",
@@ -2404,7 +2596,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 213,
+                            Id = 220,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/piłka_ręczna.jpg",
                             IsDeleted = false,
                             Name = "Piłka ręczna",
@@ -2412,7 +2604,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 214,
+                            Id = 221,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/piłka_wodna.jpg",
                             IsDeleted = false,
                             Name = "Piłka wodna",
@@ -2420,7 +2612,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 215,
+                            Id = 222,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/kolarstwo.jpg",
                             IsDeleted = false,
                             Name = "Kolarstwo",
@@ -2428,7 +2620,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 216,
+                            Id = 223,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/bieganie.jpg",
                             IsDeleted = false,
                             Name = "Bieganie",
@@ -2436,15 +2628,15 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 217,
-                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/turystyka_poznawczawa.jpg",
+                            Id = 224,
+                            ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/turystyka_poznawczawa.jpgjpg",
                             IsDeleted = false,
                             Name = "Turystyka poznawczawa",
                             ParentTagId = 21
                         },
                         new
                         {
-                            Id = 218,
+                            Id = 225,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/turystyka_rekreacyjna.jpg",
                             IsDeleted = false,
                             Name = "Turystyka rekreacyjna",
@@ -2452,7 +2644,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 219,
+                            Id = 226,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/turystyka_sportowa.jpg",
                             IsDeleted = false,
                             Name = "Turystyka sportowa",
@@ -2460,7 +2652,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 220,
+                            Id = 227,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/turystyka.jpg",
                             IsDeleted = false,
                             Name = "Turystyka biznesowa",
@@ -2468,7 +2660,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 221,
+                            Id = 228,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/turystyka.jpg",
                             IsDeleted = false,
                             Name = "Turystyka medyczna",
@@ -2476,7 +2668,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 222,
+                            Id = 229,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/turystyka_kulturowa.jpg",
                             IsDeleted = false,
                             Name = "Turystyka kulturowa",
@@ -2484,7 +2676,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 223,
+                            Id = 230,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/turystyka.jpg",
                             IsDeleted = false,
                             Name = "Turystyka religijna",
@@ -2492,7 +2684,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 224,
+                            Id = 231,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/transport_lotniczy.jpg",
                             IsDeleted = false,
                             Name = "Transport lotniczy",
@@ -2500,7 +2692,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 225,
+                            Id = 232,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/transport_drogowy.jpg",
                             IsDeleted = false,
                             Name = "Transport drogowy",
@@ -2508,7 +2700,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 226,
+                            Id = 233,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/transport_wodny.jpg",
                             IsDeleted = false,
                             Name = "Transport wodny",
@@ -2516,7 +2708,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 227,
+                            Id = 234,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/transport_kolejowy.jpg",
                             IsDeleted = false,
                             Name = "Transport kolejowy",
@@ -2524,7 +2716,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 228,
+                            Id = 235,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/transport_morski.jpg",
                             IsDeleted = false,
                             Name = "Transport morski",
@@ -2532,7 +2724,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 229,
+                            Id = 236,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/planowanie_trasy.jpg",
                             IsDeleted = false,
                             Name = "Planowanie trasy",
@@ -2540,7 +2732,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 230,
+                            Id = 237,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/a320.jpg",
                             IsDeleted = false,
                             Name = "Airbus A320",
@@ -2548,7 +2740,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 231,
+                            Id = 238,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/a380.jpg",
                             IsDeleted = false,
                             Name = "Airbus A380",
@@ -2556,7 +2748,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 232,
+                            Id = 239,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/boeing_747.jpg",
                             IsDeleted = false,
                             Name = "Boeing 747",
@@ -2564,7 +2756,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 233,
+                            Id = 240,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/boeing_777.jpg",
                             IsDeleted = false,
                             Name = "Boeing 777",
@@ -2572,7 +2764,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 234,
+                            Id = 241,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/boeing_787.jpg",
                             IsDeleted = false,
                             Name = "Boeing 787",
@@ -2580,7 +2772,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 235,
+                            Id = 242,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/boeing_737.jpg",
                             IsDeleted = false,
                             Name = "Boeing 737",
@@ -2588,7 +2780,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 236,
+                            Id = 243,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/boeing_767.jpg",
                             IsDeleted = false,
                             Name = "Boeing 767",
@@ -2596,7 +2788,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 237,
+                            Id = 244,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/a350.jpg",
                             IsDeleted = false,
                             Name = "Airbus A350",
@@ -2604,7 +2796,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 238,
+                            Id = 245,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/reklama.jpg",
                             IsDeleted = false,
                             Name = "Reklama",
@@ -2612,7 +2804,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 239,
+                            Id = 246,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/marketing.jpg",
                             IsDeleted = false,
                             Name = "PR",
@@ -2620,7 +2812,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 240,
+                            Id = 247,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/social_media.jpg",
                             IsDeleted = false,
                             Name = "Social Media",
@@ -2628,7 +2820,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 241,
+                            Id = 248,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/marketing.jpg",
                             IsDeleted = false,
                             Name = "E-mail marketing",
@@ -2636,7 +2828,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 242,
+                            Id = 249,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/marketing.jpg",
                             IsDeleted = false,
                             Name = "Marketing wizualny",
@@ -2644,7 +2836,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 243,
+                            Id = 250,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/marketing.jpg",
                             IsDeleted = false,
                             Name = "Marketing wewnętrzny",
@@ -2652,7 +2844,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 244,
+                            Id = 251,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/marketing.jpg",
                             IsDeleted = false,
                             Name = "Marketing internetowy",
@@ -2660,7 +2852,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 245,
+                            Id = 252,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/marketing_telewizyjny.jpg",
                             IsDeleted = false,
                             Name = "Marketing telewizyjny",
@@ -2668,7 +2860,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 246,
+                            Id = 253,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/marketing_mobilny.jpg",
                             IsDeleted = false,
                             Name = "Marketing mobilny",
@@ -2676,7 +2868,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 247,
+                            Id = 254,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/marketing.jpg",
                             IsDeleted = false,
                             Name = "Marketing bezpośredni",
@@ -2684,7 +2876,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 248,
+                            Id = 255,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/marketing.jpg",
                             IsDeleted = false,
                             Name = "Marketing relacji publicznych",
@@ -2692,7 +2884,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 249,
+                            Id = 256,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/marketing.jpg",
                             IsDeleted = false,
                             Name = "Marketing strategiczny",
@@ -2700,7 +2892,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 250,
+                            Id = 257,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/marketing.jpg",
                             IsDeleted = false,
                             Name = "Marketing operacyjny",
@@ -2708,7 +2900,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 251,
+                            Id = 258,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/marketing.jpg",
                             IsDeleted = false,
                             Name = "Marketing terytorialny",
@@ -2716,7 +2908,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 252,
+                            Id = 259,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/marketing.jpg",
                             IsDeleted = false,
                             Name = "Marketing usługowy",
@@ -2724,7 +2916,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 253,
+                            Id = 260,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/marketing.jpg",
                             IsDeleted = false,
                             Name = "Marketing produktowy",
@@ -2732,7 +2924,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 254,
+                            Id = 261,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/marketing.jpg",
                             IsDeleted = false,
                             Name = "Marketing segmentowy",
@@ -2740,7 +2932,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 255,
+                            Id = 262,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/marketing.jpg",
                             IsDeleted = false,
                             Name = "Marketing kanałowy",
@@ -2748,7 +2940,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 256,
+                            Id = 263,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/dziennikarstwo_sledcze.jpg",
                             IsDeleted = false,
                             Name = "Dziennikrastwo śledcze",
@@ -2756,7 +2948,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 257,
+                            Id = 264,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/dziennikarstwo_internetowe.jpg",
                             IsDeleted = false,
                             Name = "Dziennikarstwo internetowe",
@@ -2764,7 +2956,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 258,
+                            Id = 265,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/dziennikarstwo_lokalne.jpg",
                             IsDeleted = false,
                             Name = "Dziennikarstwo lokalne",
@@ -2772,7 +2964,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 259,
+                            Id = 266,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/dziennikarstwo.jpg",
                             IsDeleted = false,
                             Name = "Dziennikarstwo międzynarodowe",
@@ -2780,7 +2972,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 260,
+                            Id = 267,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/dziennikarstwo.jpg",
                             IsDeleted = false,
                             Name = "Dziennikarstwo prasowe",
@@ -2788,7 +2980,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 261,
+                            Id = 268,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/dziennikarstwo.jpg",
                             IsDeleted = false,
                             Name = "Dziennikarstwo publicystyczne",
@@ -2796,7 +2988,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 262,
+                            Id = 269,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/dziennikarstwo_radiowe.jpg",
                             IsDeleted = false,
                             Name = "Dziennikarstwo radiowe",
@@ -2804,7 +2996,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 263,
+                            Id = 270,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/dziennikarstwo_telewizyjne.jpg",
                             IsDeleted = false,
                             Name = "Dziennikarstwo telewizyjne",
@@ -2812,7 +3004,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 264,
+                            Id = 271,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/dziennikarstwo.jpg",
                             IsDeleted = false,
                             Name = "Dziennikarstwo wideo",
@@ -2820,7 +3012,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 265,
+                            Id = 272,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/dziennikarstwo_spoleczne.jpg",
                             IsDeleted = false,
                             Name = "Dziennikarstwo społeczne",
@@ -2828,7 +3020,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 266,
+                            Id = 273,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/architektura_mieszkalna.jpg",
                             IsDeleted = false,
                             Name = "Architektura mieszkalna",
@@ -2836,7 +3028,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 267,
+                            Id = 274,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/architektura_wnetrz.jpg",
                             IsDeleted = false,
                             Name = "Architektura wnętrz",
@@ -2844,7 +3036,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 268,
+                            Id = 275,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/architektura_krajobrazu.jpg",
                             IsDeleted = false,
                             Name = "Architektura krajobrazu",
@@ -2852,7 +3044,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 269,
+                            Id = 276,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/architektura_przestrzeni_publicznej.jpg",
                             IsDeleted = false,
                             Name = "Architektura przestrzeni publicznej",
@@ -2860,7 +3052,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 270,
+                            Id = 277,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/architektura_przemyslowa.jpg",
                             IsDeleted = false,
                             Name = "Architektura przemysłowa",
@@ -2868,7 +3060,7 @@ namespace UniQuanda.Infrastructure.Presistence.AppDb.Migrations
                         },
                         new
                         {
-                            Id = 271,
+                            Id = 278,
                             ImageUrl = "https://dev.uniquanda.pl:2002/api/Image/Tags/architektura_ogrodowa.jpg",
                             IsDeleted = false,
                             Name = "Architektura ogrodowa",
