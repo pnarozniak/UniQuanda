@@ -161,7 +161,7 @@ CancellationToken ct)
                 },
                 CreatedAt = q.CreatedAt,
                 ViewsCount = q.ViewsCount,
-                AnswersCount = q.Answers.Count(),
+                AnswersCount = q.Answers.Where(a => a.ParentAnswerId == null).Count(),
                 Tags = q.TagsInQuestion.Select(t => new TagEntity
                 {
                     Name = t.TagIdNavigation.Name
@@ -237,7 +237,7 @@ CancellationToken ct)
                 },
                 CreatedAt = q.CreatedAt,
                 ViewsCount = q.ViewsCount,
-                AnswersCount = q.Answers.Count(),
+                AnswersCount = q.Answers.Where(a => a.ParentAnswerId == null).Count(),
                 Tags = q.TagsInQuestion.Select(t => new TagEntity
                 {
                     Name = t.TagIdNavigation.Name

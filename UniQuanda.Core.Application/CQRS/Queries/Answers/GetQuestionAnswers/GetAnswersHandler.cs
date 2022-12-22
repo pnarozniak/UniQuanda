@@ -14,9 +14,13 @@ public class GetAnswersHandler : IRequestHandler<GetQuestionAnswersQuery, GetQue
 
     public async Task<GetQuestionAnswersResponseDTO> Handle(GetQuestionAnswersQuery request, CancellationToken ct)
     {
+        if (request.IdAnswer != null)
+            request.Page = await _answerRepository.GetAnswerPageAsync(request.IdQuestion, request.IdAnswer.Value, ct);
+
         return new GetQuestionAnswersResponseDTO
         {
-            Answers = await _answerRepository.GetQuestionAnswersAsync(request.IdQuestion, request.Page, request.IdComment, request.IdLoggedUser, ct)
+            Page = request.Page.Value,
+            Answers = await _answerRepository.GetQuestionAnswersAsync(request.IdQuestion, request.Page.Value, request.IdComment, request.IdLoggedUser, ct)
         };
     }
 }
