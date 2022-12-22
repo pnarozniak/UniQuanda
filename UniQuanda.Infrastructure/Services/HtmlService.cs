@@ -19,16 +19,21 @@ namespace UniQuanda.Infrastructure.Services
             if (imageNodes == null) return (html, imagesResult);
             foreach (var imageNode in imageNodes)
             {
-                var base64Image = imageNode.Attributes["src"].Value;
-                var imageType = base64Image.Substring(base64Image.IndexOf('/') + 1, base64Image.IndexOf(';') - base64Image.IndexOf('/') - 1);
-                var base64 = base64Image.Substring(base64Image.IndexOf(',') + 1);
-                var byteArr = Convert.FromBase64String(base64);
-                var stream = new MemoryStream(byteArr);
+                var imageString = imageNode.Attributes["src"].Value;
+                //check if image is base64
+                if (imageString.StartsWith("data:image"))
+                {
+                    var imageType = imageString.Substring(imageString.IndexOf('/') + 1, imageString.IndexOf(';') - imageString.IndexOf('/') - 1);
+                    var base64 = imageString.Substring(imageString.IndexOf(',') + 1);
+                    var byteArr = Convert.FromBase64String(base64);
+                    var stream = new MemoryStream(byteArr);
 
-                var imageIdString = $"{contentId}/{imageId}.{imageType}";
-                imagesResult.Add(imageIdString, stream);
-                imageNode.Attributes["src"].Value = $"{initialImagePath}{imageIdString}";
-                imageId++;
+                    var imageIdString = $"{contentId}/{imageId}.{imageType}";
+                    imagesResult.Add(imageIdString, stream);
+                    imageNode.Attributes["src"].Value = $"{initialImagePath}{imageIdString}";
+                    imageId++;
+                }
+
             }
             return (dom.DocumentNode.OuterHtml, imagesResult);
 
