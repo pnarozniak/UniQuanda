@@ -60,14 +60,12 @@ public interface IAppUserRepository
     /// </summary>
     /// <param name="idAnswer">Id answer</param>
     /// <param name="LikesIncreasedBy">Like increased by</param>
-    /// <param name="ct">Operation cancellation token</param>
-    Task UpdateAppUserPointsForLikeValueInTagsAsync(int idAnswer, int LikesIncreasedBy, CancellationToken ct);
+    Task UpdateAppUserPointsForLikeValueInTagsAsync(int idAnswer, int LikesIncreasedBy);
 
     /// <summary>
     ///     Update user points in tags for correct answer
     /// </summary>
     /// <param name="idAnswer">Id answer</param>
     /// <param name="idAuthorPrevCorrectAnswer">Id author previous correct answer</param>
-    /// <param name="ct"><Operation cancellation token/param>
-    Task UpdateAppUserPointsForCorrectAnswerInTagsAsync(int idAnswer, int? idAuthorPrevCorrectAnswer, CancellationToken ct);
+    Task UpdateAppUserPointsForCorrectAnswerInTagsAsync(int idAnswer, int? idAuthorPrevCorrectAnswer);
 }

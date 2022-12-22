@@ -252,7 +252,7 @@ public class AppUserRepository : IAppUserRepository
         return role.ValidUnitl > DateTime.UtcNow;
     }
 
-    public async Task UpdateAppUserPointsForLikeValueInTagsAsync(int idAnswer, int LikesIncreasedBy, CancellationToken ct)
+    public async Task UpdateAppUserPointsForLikeValueInTagsAsync(int idAnswer, int LikesIncreasedBy)
     {
         await using var scope = _serviceProvider.CreateAsyncScope();
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -263,13 +263,13 @@ public class AppUserRepository : IAppUserRepository
                 IdAuthor = a.AppUsersAnswerInteractions.SingleOrDefault(ai => ai.IsCreator).AppUserIdNavigation.Id,
                 Tags = a.ParentQuestionIdNavigation.TagsInQuestion.Select(t => t.TagId)
 
-            }).SingleOrDefaultAsync(ct);
+            }).SingleOrDefaultAsync();
             if (toUpdate == null)
                 return;
 
             foreach (var tagId in toUpdate.Tags)
             {
-                var userTagPoint = await context.UsersPointsInTags.SingleOrDefaultAsync(t => t.TagId == tagId && t.AppUserId == toUpdate.IdAuthor, ct);
+                var userTagPoint = await context.UsersPointsInTags.SingleOrDefaultAsync(t => t.TagId == tagId && t.AppUserId == toUpdate.IdAuthor);
                 if (userTagPoint != null)
                 {
                     userTagPoint.Points += LikesIncreasedBy;
@@ -282,11 +282,11 @@ public class AppUserRepository : IAppUserRepository
                         TagId = tagId,
                         Points = LikesIncreasedBy
                     };
-                    context.UsersPointsInTags.AddAsync(newUsersPointsInTags, ct);
+                    context.UsersPointsInTags.AddAsync(newUsersPointsInTags);
                 }
 
             }
-            await context.SaveChangesAsync(ct);
+            await context.SaveChangesAsync();
         }
         catch
         {
@@ -294,7 +294,7 @@ public class AppUserRepository : IAppUserRepository
         }
     }
 
-    public async Task UpdateAppUserPointsForCorrectAnswerInTagsAsync(int idAnswer, int? idAuthorPrevCorrectAnswer, CancellationToken ct)
+    public async Task UpdateAppUserPointsForCorrectAnswerInTagsAsync(int idAnswer, int? idAuthorPrevCorrectAnswer)
     {
         await using var scope = _serviceProvider.CreateAsyncScope();
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -306,7 +306,7 @@ public class AppUserRepository : IAppUserRepository
                 QuestionIdTags = a.ParentQuestionIdNavigation.TagsInQuestion.Select(t => t.TagId),
                 IdQuestionAuthor = a.ParentQuestionIdNavigation.AppUsersQuestionInteractions.SingleOrDefault(qi => qi.IsCreator).AppUserIdNavigation.Id,
                 IdAnswerAuthor = a.AppUsersAnswerInteractions.SingleOrDefault(ai => ai.IsCreator).AppUserIdNavigation.Id
-            }).SingleOrDefaultAsync(ct);
+            }).SingleOrDefaultAsync();
             if (data == null)
                 return;
 
@@ -314,7 +314,7 @@ public class AppUserRepository : IAppUserRepository
             {
                 var isAddingPoints = idAuthorPrevCorrectAnswer == null;
 
-                var userAnswerPointTags = await context.UsersPointsInTags.Where(p => p.AppUserId == data.IdAnswerAuthor && data.QuestionIdTags.Any(d => d == p.TagId)).ToListAsync(ct);
+                var userAnswerPointTags = await context.UsersPointsInTags.Where(p => p.AppUserId == data.IdAnswerAuthor && data.QuestionIdTags.Any(d => d == p.TagId)).ToListAsync();
                 var pointsForAnswerTag = isAddingPoints ? CorrectAnswerPointsForOwner : -CorrectAnswerPointsForOwner;
                 foreach (var tagId in data.QuestionIdTags)
                 {
@@ -331,11 +331,11 @@ public class AppUserRepository : IAppUserRepository
                             TagId = tagId,
                             Points = pointsForAnswerTag
                         };
-                        await context.UsersPointsInTags.AddAsync(newUsersPointsInTags, ct);
+                        await context.UsersPointsInTags.AddAsync(newUsersPointsInTags);
                     }
                 }
 
-                var userQuestionPointTags = await context.UsersPointsInTags.Where(p => p.AppUserId == data.IdQuestionAuthor && data.QuestionIdTags.Any(d => d == p.TagId)).ToListAsync(ct);
+                var userQuestionPointTags = await context.UsersPointsInTags.Where(p => p.AppUserId == data.IdQuestionAuthor && data.QuestionIdTags.Any(d => d == p.TagId)).ToListAsync();
                 var pointsForQuestionTag = isAddingPoints ? CorrectAnswerPointsForQuestionOwner : -CorrectAnswerPointsForQuestionOwner;
                 foreach (var tagId in data.QuestionIdTags)
                 {
@@ -352,14 +352,14 @@ public class AppUserRepository : IAppUserRepository
                             TagId = tagId,
                             Points = pointsForQuestionTag
                         };
-                        await context.UsersPointsInTags.AddAsync(newUsersPointsInTags, ct);
+                        await context.UsersPointsInTags.AddAsync(newUsersPointsInTags);
                     }
                 }
 
-                await context.SaveChangesAsync(ct);
+                await context.SaveChangesAsync();
                 return;
             }
-            var userAnswerPointTagsNew = await context.UsersPointsInTags.Where(p => p.AppUserId == data.IdAnswerAuthor && data.QuestionIdTags.Any(d => d == p.TagId)).ToListAsync(ct);
+            var userAnswerPointTagsNew = await context.UsersPointsInTags.Where(p => p.AppUserId == data.IdAnswerAuthor && data.QuestionIdTags.Any(d => d == p.TagId)).ToListAsync();
             foreach (var tagId in data.QuestionIdTags)
             {
                 var singlePointTag = userAnswerPointTagsNew.SingleOrDefault(p => p.TagId == tagId);
@@ -375,11 +375,11 @@ public class AppUserRepository : IAppUserRepository
                         TagId = tagId,
                         Points = CorrectAnswerPointsForOwner
                     };
-                    await context.UsersPointsInTags.AddAsync(newUsersPointsInTags, ct);
+                    await context.UsersPointsInTags.AddAsync(newUsersPointsInTags);
                 }
             }
 
-            var userQuestionPointTagsNew = await context.UsersPointsInTags.Where(p => p.AppUserId == data.IdQuestionAuthor && data.QuestionIdTags.Any(d => d == p.TagId)).ToListAsync(ct);
+            var userQuestionPointTagsNew = await context.UsersPointsInTags.Where(p => p.AppUserId == data.IdQuestionAuthor && data.QuestionIdTags.Any(d => d == p.TagId)).ToListAsync();
             foreach (var tagId in data.QuestionIdTags)
             {
                 var singlePointTag = userQuestionPointTagsNew.SingleOrDefault(p => p.TagId == tagId);
@@ -395,14 +395,14 @@ public class AppUserRepository : IAppUserRepository
                         TagId = tagId,
                         Points = CorrectAnswerPointsForQuestionOwner
                     };
-                    await context.UsersPointsInTags.AddAsync(newUsersPointsInTags, ct);
+                    await context.UsersPointsInTags.AddAsync(newUsersPointsInTags);
                 }
             }
 
-            var userAnswerPointTagsOld = await context.UsersPointsInTags.Where(p => p.AppUserId == idAuthorPrevCorrectAnswer && data.QuestionIdTags.Any(d => d == p.TagId)).ToListAsync(ct);
+            var userAnswerPointTagsOld = await context.UsersPointsInTags.Where(p => p.AppUserId == idAuthorPrevCorrectAnswer && data.QuestionIdTags.Any(d => d == p.TagId)).ToListAsync();
             foreach (var tagPoint in userAnswerPointTagsNew)
                 tagPoint.Points -= CorrectAnswerPointsForOwner;
-            var userQuestionPointTagsOld = await context.UsersPointsInTags.Where(p => p.AppUserId == idAuthorPrevCorrectAnswer && data.QuestionIdTags.Any(d => d == p.TagId)).ToListAsync(ct);
+            var userQuestionPointTagsOld = await context.UsersPointsInTags.Where(p => p.AppUserId == idAuthorPrevCorrectAnswer && data.QuestionIdTags.Any(d => d == p.TagId)).ToListAsync();
             foreach (var tagPoint in userQuestionPointTagsNew)
                 tagPoint.Points -= CorrectAnswerPointsForQuestionOwner;
             return;
