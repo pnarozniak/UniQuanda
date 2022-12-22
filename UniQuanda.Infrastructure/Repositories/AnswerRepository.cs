@@ -181,7 +181,7 @@ public class AnswerRepository : IAnswerRepository
         var answer = await _appContext.Answers.SingleOrDefaultAsync(a => a.Id == idAnswer, ct);
         if (answer == null || answer.ParentAnswerId != null)
             return (isSuccess: null, idAuthorPrevCorrectAnswer: null);
-        if (!await _appContext.Answers.AnyAsync(a => a.ParentQuestionIdNavigation.AppUsersQuestionInteractions.Any(qi => qi.Id == idLoggedUser && qi.IsCreator), ct))
+        if (!await _appContext.Answers.AnyAsync(a => a.ParentQuestionIdNavigation.AppUsersQuestionInteractions.Any(qi => qi.AppUserId == idLoggedUser && qi.IsCreator), ct))
             return (isSuccess: null, idAuthorPrevCorrectAnswer: null);
         var prevCorrectAnswer = await _appContext.Answers.SingleOrDefaultAsync(a => a.ParentQuestionId == answer.ParentQuestionId && a.IsCorrect, ct);
         if (prevCorrectAnswer == null)
