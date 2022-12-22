@@ -19,7 +19,7 @@ public class UpdateAnswerLikeValueHandler : IRequestHandler<UpdateAnswerLikeValu
         var repoResult = await _answerRepository.UpdateAnswerLikeValueAsync(request.IdAnswer, request.LikeValue, request.IdLoggedUser, ct);
 
         if (repoResult.IsUpdateSuccessful == true)
-            _ = Task.Run(async () => await _appUserRepository.UpdateAppUserPointsForLikeValueInTagsAsync(request.IdAnswer, repoResult.LikesIncreasedBy, ct));
+            _ = Task.Run(async () => await _appUserRepository.UpdateAppUserPointsForLikeValueInTagsAsync(request.IdAnswer, repoResult.LikesIncreasedBy));
 
         return new UpdateAnswerLikeValueResponseDTO()
         {
