@@ -27,7 +27,7 @@ namespace UniQuanda.Infrastructure.Repositories
                 .Where(q => q.Answers.Any(a => a.IsCorrect))
                 .Where(q => q.TagsInQuestion.Any(tq => 
                     tagsIds.Contains(tq.TagId)
-                    || tq.TagIdNavigation.ParentTagId != null && tagsIds.Contains(tq.TagIdNavigation.ParentTagId.Value))
+                    || (tq.TagIdNavigation.ParentTagId != null && tagsIds.Contains(tq.TagIdNavigation.ParentTagId.Value)))
                 )
                 .OrderBy(tq => Guid.NewGuid())
                 .Take(TestQuestionsLimit)
