@@ -23,11 +23,12 @@ namespace UniQuanda.Infrastructure.Repositories
             var tags = await _context.Tags.Where(t => tagsIds.Contains(t.Id)).ToListAsync(ct);
             if (tags is null || tags.Count() == 0) return null;
 
-			var questions = await _context.TagsInQuestions
-                .Where(tq => tagsIds.Contains(tq.TagId) 
-                    || (tq.TagIdNavigation.ParentTagId != null && tagsIds.Contains(tq.TagIdNavigation.ParentTagId.Value)))
-                .Where(tq => tq.QuestionIdNavigation.Answers.Any(a => a.IsCorrect))
-                .Select(tq => tq.QuestionIdNavigation)
+			var questions = await _context.Questions
+                .Where(q => q.Answers.Any(a => a.IsCorrect))
+                .Where(q => q.TagsInQuestion.Any(tq => 
+                    tagsIds.Contains(tq.TagId)
+                    || tq.TagIdNavigation.ParentTagId != null && tagsIds.Contains(tq.TagIdNavigation.ParentTagId.Value))
+                )
                 .OrderBy(tq => Guid.NewGuid())
                 .Take(TestQuestionsLimit)
                 .ToListAsync(ct);
