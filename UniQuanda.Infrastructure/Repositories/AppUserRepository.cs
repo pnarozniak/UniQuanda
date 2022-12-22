@@ -135,7 +135,7 @@ public class AppUserRepository : IAppUserRepository
                     {
                         Id = uu.UniversityId,
                         Name = uu.UniversityIdNavigation.Name,
-                        Logo = uu.UniversityIdNavigation.Icon,
+                        Icon = uu.UniversityIdNavigation.Icon,
                         Order = uu.Order
                     }).ToList()
             }).SingleAsync(ct);
