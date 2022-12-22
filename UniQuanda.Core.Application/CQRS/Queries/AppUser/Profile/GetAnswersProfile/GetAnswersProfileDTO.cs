@@ -38,6 +38,7 @@ namespace UniQuanda.Core.Application.CQRS.Queries.Profile.GetAnswersProfile
         public int Id { get; set; }
         public int? ParentId { get; set; }
         public int QuestionId { get; set; }
+        public int Page { get; set; }
         public string Header { get; set; }
         public string Html { get; set; }
         public int Likes { get; set; }
