@@ -18,7 +18,7 @@ public class MarkAnswerAsCorrectHandler : IRequestHandler<MarkAnswerAsCorrectCom
     {
         var (isSuccess, idAuthorPrevCorrectAnswer) = await _answerRepository.UpdateAnswerCorrectnessAsync(request.IdAnswer, request.IdLoggedUser, ct);
         if (isSuccess == true)
-            _ = Task.Run(async () => await _appUserRepository.UpdateAppUserPointsForCorrectAnswerInTagsAsync(request.IdAnswer, idAuthorPrevCorrectAnswer));
+            await _appUserRepository.UpdateAppUserPointsForCorrectAnswerInTagsAsync(request.IdAnswer, idAuthorPrevCorrectAnswer, ct);
 
         return isSuccess;
     }
