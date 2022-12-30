@@ -11,15 +11,18 @@ public class DeleteExtraEmailHandler : IRequestHandler<DeleteExtraEmailCommand, 
     private readonly IAuthRepository _authRepository;
     private readonly IPasswordsService _passwordsService;
     private readonly IEmailService _emailService;
+    private readonly IUniversityRepository _universityRepository;
 
     public DeleteExtraEmailHandler(
         IAuthRepository authRepository,
         IPasswordsService passwordsService,
-        IEmailService emailService)
+        IEmailService emailService,
+        IUniversityRepository universityRepository)
     {
         _authRepository = authRepository;
         _passwordsService = passwordsService;
         _emailService = emailService;
+        _universityRepository = universityRepository;
     }
 
     public async Task<DeleteExtraEmailResponseDTO> Handle(DeleteExtraEmailCommand request, CancellationToken ct)
@@ -31,15 +34,18 @@ public class DeleteExtraEmailHandler : IRequestHandler<DeleteExtraEmailCommand, 
         if (!_passwordsService.VerifyPassword(request.Password, user.HashedPassword))
             return new DeleteExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.InvalidPassword };
 
-        var deleteResult = await _authRepository.DeleteExtraEmailAsync(request.IdUser, request.IdExtraEmail, ct);
-        if (deleteResult == true)
+        var(isSuccess, deletedEmail) = await _authRepository.DeleteExtraEmailAsync(request.IdUser, request.IdExtraEmail, ct);
+        if (isSuccess == true)
+        {
+            await _universityRepository.RemoveUserFromUniversityByEmailAsync(request.IdUser, deletedEmail, ct);
             await _emailService.SendEmailAboutDeletedExtraEmailAsync(
-                user.Emails.SingleOrDefault(e => e.IsMain).Value,
-                user.Emails.SingleOrDefault(e => e.Id == request.IdExtraEmail).Value,
-                request.UserAgentInfo
-            );
+                            user.Emails.SingleOrDefault(e => e.IsMain).Value,
+                            user.Emails.SingleOrDefault(e => e.Id == request.IdExtraEmail).Value,
+                            request.UserAgentInfo
+                        );
+        }
 
-        return deleteResult switch
+        return isSuccess switch
         {
             null => new DeleteExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.ContentNotExist },
             false => new DeleteExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.UnSuccessful },

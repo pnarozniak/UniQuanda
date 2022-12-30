@@ -158,8 +158,8 @@ public interface IAuthRepository
     /// <param name="idUser">Id of user to delete extra email</param>
     /// <param name="idExtraEmail">Extra email id</param>
     /// <param name="ct">Operation cancellation token</param>
-    /// <returns>True if succesful, NULL when extra email not exists or given email is main, false when delete is not succesful</returns>
-    Task<bool?> DeleteExtraEmailAsync(int idUser, int idExtraEmail, CancellationToken ct);
+    /// <returns>True if succesful plus email deteled value, NULL when extra email not exists or given email is main, false when delete is not succesful</returns>
+    Task<(bool? isSuccess, string? deletedEmail)> DeleteExtraEmailAsync(int idUser, int idExtraEmail, CancellationToken ct);
 
     /// <summary>
     ///     Creates UserActionConfirmation of given action type for given user

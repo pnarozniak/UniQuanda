@@ -1,17 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 using UniQuanda.Core.Application.Repositories;
 using UniQuanda.Core.Domain.Entities.App;
 using UniQuanda.Infrastructure.Presistence.AppDb;
 using UniQuanda.Infrastructure.Presistence.AppDb.Models;
+using UniQuanda.Infrastructure.Presistence.AuthDb;
 
 namespace UniQuanda.Infrastructure.Repositories
 {
     public class UniversityRepository : IUniversityRepository
     {
         private readonly AppDbContext _context;
-        public UniversityRepository(AppDbContext context)
+        private readonly AuthDbContext _authDbContext;
+        public UniversityRepository(AppDbContext context, AuthDbContext authDbContext)
         {
             _context = context;
+            _authDbContext = authDbContext;
         }
         public async Task<bool> AddUserToUniversityAsync(int userId, int universityId, CancellationToken ct)
         {
@@ -64,6 +68,40 @@ namespace UniQuanda.Infrastructure.Repositories
                 Contact = university.Contact,
                 Name = university.Name,
             };
+        }
+
+        public async Task RemoveUserFromUniversityByEmailAsync(int userId, string email, CancellationToken ct)
+        {
+            var universities = await _context.Universities.ToListAsync(ct);
+            University? emailUniversity = null;
+            foreach (var university in universities)
+            {
+                var regex = new Regex(@university.Regex, RegexOptions.IgnoreCase);
+                if (regex.IsMatch(email))
+                {
+                    emailUniversity = university;
+                }
+            }
+            if (emailUniversity == null)
+                return;
+
+            var userEmails = await _authDbContext.UsersEmails.Where(ue => ue.IdUser == userId).ToListAsync(ct);
+            int emailCount = 0;
+            foreach (var userEmail in userEmails)
+            {
+                var regex = new Regex(@emailUniversity.Regex, RegexOptions.IgnoreCase);
+                if (regex.IsMatch(userEmail.Value))
+                {
+                    emailCount += 1;
+                }
+            }
+
+            if(emailCount == 0)
+            {
+                var universityToRemove = await _context.AppUsersInUniversities.SingleOrDefaultAsync(a => a.UniversityId == emailUniversity.Id && a.AppUserId == userId, ct);
+                _context.AppUsersInUniversities.Remove(universityToRemove);
+                await _context.SaveChangesAsync(ct);
+            }
         }
     }
 }

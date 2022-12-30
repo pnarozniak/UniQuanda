@@ -448,16 +448,19 @@ public class AuthRepository : IAuthRepository
         return !(await _authContext.SaveChangesAsync(ct) == 0);
     }
 
-    public async Task<bool?> DeleteExtraEmailAsync(int idUser, int idExtraEmail, CancellationToken ct)
+    public async Task<(bool? isSuccess, string? deletedEmail)> DeleteExtraEmailAsync(int idUser, int idExtraEmail, CancellationToken ct)
     {
-        var userEmail = await _authContext.UsersEmails.Include(ue => ue.IdUserActionToConfirmNavigation).SingleOrDefaultAsync(ue => ue.IdUser == idUser && ue.Id == idExtraEmail && !ue.IsMain, ct);
+        var userEmail = await _authContext.UsersEmails
+            .Include(ue => ue.IdUserActionToConfirmNavigation)
+            .SingleOrDefaultAsync(ue => ue.IdUser == idUser && ue.Id == idExtraEmail && !ue.IsMain, ct);
+
         if (userEmail is null)
-            return null;
+            return (isSuccess: null, deletedEmail: null);
         if (userEmail.IdUserActionToConfirmNavigation != null)
-            return false;
+            return (isSuccess: false, deletedEmail: null);
 
         _authContext.UsersEmails.Remove(userEmail);
-        return !(await _authContext.SaveChangesAsync(ct) == 0);
+        return (isSuccess: !(await _authContext.SaveChangesAsync(ct) == 0), deletedEmail: userEmail.Value);
     }
 
     public async Task<CheckOptionOfAddNewExtraEmail> IsUserAllowedToAddExtraEmailAsync(int idUser, CancellationToken ct)
