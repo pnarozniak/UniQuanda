@@ -31,6 +31,7 @@ public class DeleteExtraEmailHandlerTests
     private Mock<IAuthRepository> authRepository;
     private Mock<IPasswordsService> passwordsService;
     private Mock<IEmailService> emailService;
+    private Mock<IUniversityRepository> universityRepository;
 
     [SetUp]
     public void SetupTests()
@@ -38,8 +39,9 @@ public class DeleteExtraEmailHandlerTests
         this.authRepository = new Mock<IAuthRepository>();
         this.passwordsService = new Mock<IPasswordsService>();
         this.emailService = new Mock<IEmailService>();
+        this.universityRepository = new Mock<IUniversityRepository>();
 
-        this.deleteExtraEmailHandler = new DeleteExtraEmailHandler(this.authRepository.Object, this.passwordsService.Object, this.emailService.Object);
+        this.deleteExtraEmailHandler = new DeleteExtraEmailHandler(this.authRepository.Object, this.passwordsService.Object, this.emailService.Object, this.universityRepository.Object);
     }
 
     [Test]
@@ -50,7 +52,7 @@ public class DeleteExtraEmailHandlerTests
         this.SetupValidPasswordFlow(userSecurityEntity);
         this.authRepository
             .Setup(ar => ar.DeleteExtraEmailAsync(IdUser, IdExtraEmail, CancellationToken.None))
-            .ReturnsAsync(true);
+            .ReturnsAsync((true, ExtraUserEmail));
 
         var result = await deleteExtraEmailHandler.Handle(this.deleteExtraEmailCommand, CancellationToken.None);
 
@@ -90,12 +92,12 @@ public class DeleteExtraEmailHandlerTests
     [Test]
     public async Task DeleteExtraEmail_ShouldReturnResultEnumNotExist_WhenGivenEmailIsMain()
     {
-        this.SetupDeleteExtraEmailCommand(PlainPassword, 1);
+        this.SetupDeleteExtraEmailCommand(PlainPassword);
         var userSecurityEntity = GetUserSecurityEntity();
         this.SetupValidPasswordFlow(userSecurityEntity);
         this.authRepository
             .Setup(ar => ar.DeleteExtraEmailAsync(IdUser, IdExtraEmail, CancellationToken.None))
-            .ReturnsAsync((bool?)null);
+            .ReturnsAsync(((bool?)null, null));
 
         var result = await deleteExtraEmailHandler.Handle(this.deleteExtraEmailCommand, CancellationToken.None);
 
@@ -110,14 +112,14 @@ public class DeleteExtraEmailHandlerTests
         this.SetupValidPasswordFlow(userSecurityEntity);
         this.authRepository
             .Setup(ar => ar.DeleteExtraEmailAsync(IdUser, IdExtraEmail, CancellationToken.None))
-            .ReturnsAsync(false);
+            .ReturnsAsync((false, null));
 
         var result = await deleteExtraEmailHandler.Handle(this.deleteExtraEmailCommand, CancellationToken.None);
 
         result.ActionResult.Should().Be(AppUserSecurityActionResultEnum.UnSuccessful);
     }
 
-    private void SetupDeleteExtraEmailCommand(string plainPassword = PlainPassword, int idExtraEmail = IdExtraEmail)
+    private void SetupDeleteExtraEmailCommand(string plainPassword = PlainPassword)
     {
         var deleteExtraEmailRequestDTO = new DeleteExtraEmailRequestDTO
         {

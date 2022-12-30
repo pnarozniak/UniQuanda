@@ -28,5 +28,13 @@ namespace UniQuanda.Core.Application.Repositories
         /// <param name="ct"></param>
         /// <returns>UniversityEntity if found, NULL otherwise</returns>
         public Task<UniversityEntity?> GetUniversityByIdAsync(int universityId, CancellationToken ct);
+
+        /// <summary>
+        ///     Remove user from university by deleted email
+        /// </summary>
+        /// <param name="userId">User id</param>
+        /// <param name="email">Deleted email</param>
+        /// <param name="ct">Operation cancellation token</param>
+        public Task RemoveUserFromUniversityByEmailAsync(int userId, string email, CancellationToken ct);
     }
 }
