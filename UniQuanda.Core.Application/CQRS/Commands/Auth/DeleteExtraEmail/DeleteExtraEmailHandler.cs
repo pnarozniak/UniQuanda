@@ -34,7 +34,7 @@ public class DeleteExtraEmailHandler : IRequestHandler<DeleteExtraEmailCommand, 
         if (!_passwordsService.VerifyPassword(request.Password, user.HashedPassword))
             return new DeleteExtraEmailResponseDTO { ActionResult = AppUserSecurityActionResultEnum.InvalidPassword };
 
-        var(isSuccess, deletedEmail) = await _authRepository.DeleteExtraEmailAsync(request.IdUser, request.IdExtraEmail, ct);
+        var (isSuccess, deletedEmail) = await _authRepository.DeleteExtraEmailAsync(request.IdUser, request.IdExtraEmail, ct);
         if (isSuccess == true)
         {
             await _universityRepository.RemoveUserFromUniversityByEmailAsync(request.IdUser, deletedEmail, ct);

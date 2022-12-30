@@ -98,7 +98,7 @@ namespace UniQuanda.Infrastructure.Repositories
                 }
             }
 
-            if(emailCount == 0)
+            if (emailCount == 0)
             {
                 var universityToRemove = await _context.AppUsersInUniversities.SingleOrDefaultAsync(a => a.UniversityId == emailUniversity.Id && a.AppUserId == userId, ct);
                 _context.AppUsersInUniversities.Remove(universityToRemove);

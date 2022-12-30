@@ -35,6 +35,6 @@ namespace UniQuanda.Core.Application.Repositories
         /// <param name="userId">User id</param>
         /// <param name="email">Deleted email</param>
         /// <param name="ct">Operation cancellation token</param>
-        public Task RemoveUserFromUniversityByEmailAsync(int userId, string email,  CancellationToken ct);
+        public Task RemoveUserFromUniversityByEmailAsync(int userId, string email, CancellationToken ct);
     }
 }
