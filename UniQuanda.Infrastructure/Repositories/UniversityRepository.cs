@@ -19,6 +19,8 @@ namespace UniQuanda.Infrastructure.Repositories
         }
         public async Task<bool> AddUserToUniversityAsync(int userId, int universityId, CancellationToken ct)
         {
+            if (await _context.AppUsersInUniversities.AnyAsync(au => au.UniversityId == universityId && au.AppUserId == userId, ct))
+                return false;
             var order = await _context.AppUsersInUniversities.Where(uu => uu.AppUserId == userId)
                 .OrderByDescending(uu => uu.Order)
                 .Select(uu => uu.Order).SingleOrDefaultAsync(ct);

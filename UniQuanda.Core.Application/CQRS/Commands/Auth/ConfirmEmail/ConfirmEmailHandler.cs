@@ -42,6 +42,7 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, bool>
 
         if (isMainEmail)
         {
+            await _universityRepository.RemoveUserFromUniversityByEmailAsync(idUser, oldMainEmail, ct);
             await _emailService.SendEmailAboutUpdatedMainEmailAsync(oldMainEmail, request.Email, request.UserAgentInfo);
         }
         else
