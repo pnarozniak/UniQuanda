@@ -5,6 +5,6 @@
         private BucketNames(string val) : base(val)
         {
         }
-        public static BucketNames Default { get { return new BucketNames("uniquanda-storage-bucket"); } }
+        public static BucketNames Default { get { return new BucketNames("uniquanda-bucket"); } }
     }
 }
