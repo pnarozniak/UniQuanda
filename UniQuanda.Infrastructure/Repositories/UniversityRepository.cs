@@ -39,21 +39,13 @@ namespace UniQuanda.Infrastructure.Repositories
         public async Task<IEnumerable<UniversityEntity>> GetUniversitiresWhereUserIsNotPresentAsync(int uid, CancellationToken ct)
         {
             return await _context.Universities
-            .GroupJoin(
-                _context.AppUsersInUniversities,
-                u => u.Id,
-                a => a.UniversityId,
-                (u, joined) => new { University = u, Joined = joined }
-            )
-            .SelectMany(
-                x => x.Joined.DefaultIfEmpty(),
-                (x, j) => new { University = x.University, AppUserInUniversity = j })
-            .Where(x => x.AppUserInUniversity == null || x.AppUserInUniversity.AppUserId != uid)
-            .Select(x => new UniversityEntity()
-            {
-                Id = x.University.Id,
-                Regex = x.University.Regex,
-            }).ToListAsync(ct);
+                .Where(u => !u.AppUsersInUniversity.Any(uu => uu.AppUserId == uid))
+                .Select(u => new UniversityEntity()
+                {
+                    Id = u.Id,
+                    Regex = u.Regex
+                })
+                .ToListAsync(ct);
         }
 
         public async Task<UniversityEntity?> GetUniversityByIdAsync(int universityId, CancellationToken ct)
