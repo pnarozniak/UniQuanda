@@ -151,7 +151,7 @@ public class AnswerRepository : IAnswerRepository
                     AcademicTitleType = t.AcademicTitleIdNavigation.AcademicTitleType
                 })
             }).SingleOrDefault()!,
-            Comments = a.Comments.OrderBy(c => c.LikeCount).Take(idComment != null ? numberOfComments : 3).Select(c => new AnswerDetails
+            Comments = a.Comments.OrderByDescending(c => c.LikeCount).ThenByDescending(c => c.Id).Take(idComment != null ? numberOfComments : 3).Select(c => new AnswerDetails
             {
                 Id = c.Id,
                 ParentId = c.ParentAnswerId,
@@ -332,7 +332,7 @@ public class AnswerRepository : IAnswerRepository
 
     public async Task<IEnumerable<AnswerDetails>> GetAllCommentsAsync(int idParentAnswer, int? idLoggedUser, CancellationToken ct)
     {
-        return await _appContext.Answers.Where(c => c.ParentAnswerId == idParentAnswer).Select(c => new AnswerDetails
+        return await _appContext.Answers.Where(c => c.ParentAnswerId == idParentAnswer).OrderByDescending(c => c.LikeCount).ThenByDescending(c => c.Id).Select(c => new AnswerDetails
         {
             Id = c.Id,
             ParentId = c.ParentAnswerId,
